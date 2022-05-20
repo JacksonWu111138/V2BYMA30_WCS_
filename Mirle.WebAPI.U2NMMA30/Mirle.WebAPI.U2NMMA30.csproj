@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{646741D4-DE4C-48EF-9B90-1785BD22CEFD}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mirle.WebAPI.U2NMMA30</RootNamespace>
+    <AssemblyName>Mirle.WebAPI.U2NMMA30</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="clsHost.cs" />
+    <Compile Include="clsTool.cs" />
+    <Compile Include="clsWriLog.cs" />
+    <Compile Include="Function\AutoPickup.cs" />
+    <Compile Include="Function\EmptyShelfQuery.cs" />
+    <Compile Include="Function\EQPStatusUpdate.cs" />
+    <Compile Include="Function\PickupQuery.cs" />
+    <Compile Include="Function\PositionReport.cs" />
+    <Compile Include="Function\PutawayCheck.cs" />
+    <Compile Include="Function\PutAwayComplete.cs" />
+    <Compile Include="Function\RetrieveComplete.cs" />
+    <Compile Include="Function\ShelfComplete.cs" />
+    <Compile Include="Function\ShelfReport.cs" />
+    <Compile Include="Function\ShelfRequest.cs" />
+    <Compile Include="Function\WcsCancel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReportInfo\AutoPickupInfo.cs" />
+    <Compile Include="ReportInfo\EmptyShelfQuery_WMS.cs" />
+    <Compile Include="ReportInfo\EmptyShelfQuery_WCS.cs" />
+    <Compile Include="ReportInfo\EQPStatusUpdateInfo.cs" />
+    <Compile Include="ReportInfo\PickupQuery_WCS.cs" />
+    <Compile Include="ReportInfo\PickupQuery_WMS.cs" />
+    <Compile Include="ReportInfo\PositionReportInfo.cs" />
+    <Compile Include="ReportInfo\PutawayCheckInfo.cs" />
+    <Compile Include="ReportInfo\PutAwayCompleteInfo.cs" />
+    <Compile Include="ReportInfo\RetrieveCompleteInfo.cs" />
+    <Compile Include="ReportInfo\RetrieveCompleteReturnInfo.cs" />
+    <Compile Include="ReportInfo\ReturnMsgInfo.cs" />
+    <Compile Include="ReportInfo\ReturnPutawayCheckInfo.cs" />
+    <Compile Include="ReportInfo\ReturnSlotListInfo.cs" />
+    <Compile Include="ReportInfo\ShelfCompleteInfo.cs" />
+    <Compile Include="ReportInfo\ShelfReportInfo.cs" />
+    <Compile Include="ReportInfo\ShelfReportReturnInfo.cs" />
+    <Compile Include="ReportInfo\ShelfRequestInfo.cs" />
+    <Compile Include="ReportInfo\SlotListInfo.cs" />
+    <Compile Include="ReportInfo\SlotListInfo_AutoPickup.cs" />
+    <Compile Include="ReportInfo\WcsCancelInfo.cs" />
+    <Compile Include="View\AutoPickupForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\AutoPickupForm.Designer.cs">
+      <DependentUpon>AutoPickupForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\MainTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\MainTestForm.Designer.cs">
+      <DependentUpon>MainTestForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\PickupQueryForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\PickupQueryForm.Designer.cs">
+      <DependentUpon>PickupQueryForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\PositionReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\PositionReportForm.Designer.cs">
+      <DependentUpon>PositionReportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\PutawayCheckForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\PutawayCheckForm.Designer.cs">
+      <DependentUpon>PutawayCheckForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\PutAwayCompleteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\PutAwayCompleteForm.Designer.cs">
+      <DependentUpon>PutAwayCompleteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\RetrieveCompleteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\RetrieveCompleteForm.Designer.cs">
+      <DependentUpon>RetrieveCompleteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\ShelfCompleteForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ShelfCompleteForm.Designer.cs">
+      <DependentUpon>ShelfCompleteForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\ShelfReportForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ShelfReportForm.Designer.cs">
+      <DependentUpon>ShelfReportForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="View\ShelfRequestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\ShelfRequestForm.Designer.cs">
+      <DependentUpon>ShelfRequestForm.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mirle.Def\Mirle.Def.csproj">
+      <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
+      <Name>Mirle.Def</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mirle.Log\Mirle.WriLog.csproj">
+      <Project>{fcb3bfde-2247-4aa4-a652-f87c081b63fc}</Project>
+      <Name>Mirle.WriLog</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Mirle">
+      <Version>1.3.9</Version>
+    </PackageReference>
+    <PackageReference Include="Mirle.MPLC.MCProtocol">
+      <Version>1.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Mirle.MPLC.MXComponent">
+      <Version>1.0.2</Version>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.1</Version>
+    </PackageReference>
+    <PackageReference Include="System.Net.Http.Formatting.Extension">
+      <Version>5.2.3</Version>
+    </PackageReference>
+    <PackageReference Include="Unity">
+      <Version>5.11.10</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="View\AutoPickupForm.resx">
+      <DependentUpon>AutoPickupForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\MainTestForm.resx">
+      <DependentUpon>MainTestForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\PickupQueryForm.resx">
+      <DependentUpon>PickupQueryForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\PositionReportForm.resx">
+      <DependentUpon>PositionReportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\PutawayCheckForm.resx">
+      <DependentUpon>PutawayCheckForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\PutAwayCompleteForm.resx">
+      <DependentUpon>PutAwayCompleteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\RetrieveCompleteForm.resx">
+      <DependentUpon>RetrieveCompleteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ShelfCompleteForm.resx">
+      <DependentUpon>ShelfCompleteForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ShelfReportForm.resx">
+      <DependentUpon>ShelfReportForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\ShelfRequestForm.resx">
+      <DependentUpon>ShelfRequestForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

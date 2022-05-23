@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLL", "DLL", "{58EC0D04-15AD-46AB-BE9C-1B871F4BCD1A}"
 	ProjectSection(SolutionItems) = preProject
 		Dll\Mirle.ASRS.Close.Program.exe = Dll\Mirle.ASRS.Close.Program.exe
+		Dll\Mirle.WriLog.dll = Dll\Mirle.WriLog.dll
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Structure", "Mirle.Structure\Mirle.Structure.csproj", "{0A0D222E-0C76-4838-A8B1-6CA6F26CB225}"
@@ -34,8 +35,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Def.U2NMMA30", "Mirle.Def.U2NMMA30\Mirle.Def.U2NMMA30.csproj", "{E6F732FE-3905-49A7-B2CF-B4FA79C2DC5D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Grid.U2NMMA30", "Mirle.Grid.U2NMMA30\Mirle.Grid.U2NMMA30.csproj", "{39A4C47B-C53B-4057-9DC5-93B8907639E8}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WriLog", "Mirle.Log\Mirle.WriLog.csproj", "{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.DB.Object", "Mirle.DB.Object\Mirle.DB.Object.csproj", "{25DDA85B-35BE-429D-81B4-025731C0E826}"
 EndProject
@@ -104,12 +103,6 @@ Global
 		{39A4C47B-C53B-4057-9DC5-93B8907639E8}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
 		{39A4C47B-C53B-4057-9DC5-93B8907639E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39A4C47B-C53B-4057-9DC5-93B8907639E8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}.R0K5M320|Any CPU.ActiveCfg = Release|Any CPU
-		{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
-		{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{25DDA85B-35BE-429D-81B4-025731C0E826}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{25DDA85B-35BE-429D-81B4-025731C0E826}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{25DDA85B-35BE-429D-81B4-025731C0E826}.R0K5M320|Any CPU.ActiveCfg = Release|Any CPU

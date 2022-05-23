@@ -48,6 +48,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTest", "UnitTest", "{3F
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APISendTest", "UnitTest\APISendTest\APISendTest.csproj", "{32376421-A5BC-4941-AB66-D845B17B763D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{61B183CF-3CA1-4B7A-8290-C4E19124C2CC}"
+	ProjectSection(SolutionItems) = preProject
+		Document\V2BYMA30_ASRS_FileLayOut_v1.0.doc = Document\V2BYMA30_ASRS_FileLayOut_v1.0.doc
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

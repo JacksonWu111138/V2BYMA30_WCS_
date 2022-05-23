@@ -30,13 +30,13 @@ namespace Mirle.DB.Fun
                 Stn_No = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Stn_No]),
                 Trn_User = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Trn_User]),
                 Zone_ID = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Zone]),
-                Avail = Convert.ToDouble(drTmp[Parameter.clsCmd_Mst.Column.Avail]),
-                WH_ID = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.WH_ID]),
+                //Avail = Convert.ToDouble(drTmp[Parameter.clsCmd_Mst.Column.Avail]),
+                //WH_ID = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.WH_ID]),
                 Cmd_Abnormal = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Cmd_Abnormal]),
-                Host_Name = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Host_Name]),
-                Mix_Qty = Convert.ToInt32(drTmp[Parameter.clsCmd_Mst.Column.Mix_Qty]),
-                Plt_Count = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Pallet_Count]),
-                Trace = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Trace])
+                //Host_Name = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Host_Name]),
+                //Mix_Qty = Convert.ToInt32(drTmp[Parameter.clsCmd_Mst.Column.Mix_Qty]),
+                //Plt_Count = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Pallet_Count]),
+                //Trace = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Trace])
             };
 
             return cmd;

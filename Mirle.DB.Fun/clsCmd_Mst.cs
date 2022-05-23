@@ -547,11 +547,11 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsCmd_Mst.Column.Cmd_Sts}, {Parameter.clsCmd_Mst.Column.Prty}, " +
                     $"{Parameter.clsCmd_Mst.Column.Cmd_Abnormal}, {Parameter.clsCmd_Mst.Column.Stn_No}, " +
                     $"{Parameter.clsCmd_Mst.Column.Cmd_Mode}, {Parameter.clsCmd_Mst.Column.IO_Type}, " +
-                    $"{Parameter.clsCmd_Mst.Column.WH_ID}, {Parameter.clsCmd_Mst.Column.Loc}, {Parameter.clsCmd_Mst.Column.New_Loc},";
-                sSQL += $"{Parameter.clsCmd_Mst.Column.Mix_Qty}, {Parameter.clsCmd_Mst.Column.Avail}, {Parameter.clsCmd_Mst.Column.Create_Date}, " +
+                    $"{Parameter.clsCmd_Mst.Column.Loc}, {Parameter.clsCmd_Mst.Column.New_Loc},";
+                sSQL += $"{Parameter.clsCmd_Mst.Column.Create_Date}, " +
                     $"{Parameter.clsCmd_Mst.Column.Expose_Date}, {Parameter.clsCmd_Mst.Column.End_Date}, {Parameter.clsCmd_Mst.Column.Trn_User}, " +
-                    $"{Parameter.clsCmd_Mst.Column.Host_Name}, {Parameter.clsCmd_Mst.Column.BoxID}, {Parameter.clsCmd_Mst.Column.Trace}, " +
-                    $"{Parameter.clsCmd_Mst.Column.Pallet_Count}, {Parameter.clsCmd_Mst.Column.Equ_No}, {Parameter.clsCmd_Mst.Column.CurLoc}, " +
+                    $"{Parameter.clsCmd_Mst.Column.BoxID}," +
+                    $"{Parameter.clsCmd_Mst.Column.Equ_No}, {Parameter.clsCmd_Mst.Column.CurLoc}, " +
                     $"{Parameter.clsCmd_Mst.Column.CurDeviceID}, {Parameter.clsCmd_Mst.Column.Zone}) values(";
                 sSQL += "'" + stuCmdMst.Cmd_Sno + "', ";
                 sSQL += "'" + clsConstValue.CmdSts.strCmd_Initial + "', ";
@@ -559,13 +559,13 @@ namespace Mirle.DB.Fun
                 sSQL += "'" + stuCmdMst.Stn_No + "', ";
                 sSQL += "'" + stuCmdMst.Cmd_Mode + "', ";
                 sSQL += "'" + stuCmdMst.IO_Type + "', ";
-                sSQL += $"'{stuCmdMst.WH_ID}', ";
+                //sSQL += $"'{stuCmdMst.WH_ID}', ";
                 sSQL += "'" + stuCmdMst.Loc + "', ";
                 sSQL += "'" + stuCmdMst.New_Loc + "', ";
-                sSQL += $"{stuCmdMst.Mix_Qty}, {stuCmdMst.Avail}, ";
+                //sSQL += $"{stuCmdMst.Mix_Qty}, {stuCmdMst.Avail}, ";
                 sSQL += "'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + $"', '', '', " +
-                    $"'{stuCmdMst.Trn_User}', '{stuCmdMst.Host_Name}', ";
-                sSQL += "'" + stuCmdMst.Loc_ID + $"', '{stuCmdMst.Trace}', '{stuCmdMst.Plt_Count}', ";
+                    $"'{stuCmdMst.Trn_User}', ";
+                sSQL += "'" + stuCmdMst.Loc_ID + $"',";
                 sSQL += "'" + stuCmdMst.Equ_No + "', ";
                 sSQL += $"'{stuCmdMst.CurLoc}', ";
                 sSQL += "'" + stuCmdMst.CurDeviceID + "',";

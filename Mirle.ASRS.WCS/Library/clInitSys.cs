@@ -39,9 +39,6 @@ namespace Mirle.ASRS.WCS
                 FunDbConfig(lcsini);
                 FunSysConfig(lcsini);
                 FunApiConfig(lcsini);
-                FunDeviceConfig(lcsini);
-                FunPlcConfig(lcsini);
-                FunStkPortConfig(lcsini);
                 FunStnNoConfig(lcsini);
             }
             catch(Exception ex)
@@ -84,66 +81,8 @@ namespace Mirle.ASRS.WCS
       
         private static void FunApiConfig(ASRSINI lcsini)
         {
-            WmsApi_Config.IP = lcsini.WMS_API.IP;
-            WcsApi_Config.IP = lcsini.WCS_API.IP;
-        }
-
-        private static void FunDeviceConfig(ASRSINI lcsini)
-        {
-            string[] adStocker = lcsini.Device.StockerID.Split(',');
-            gsStockerID = new string[adStocker.Length];
-            gsStockerID = adStocker;
-        }
-
-        private static void FunPlcConfig(ASRSINI lcsini)
-        {
-            CV_Config.InMemorySimulator = lcsini.CV.InMemorySimulator switch
-            {
-                1 => true,
-                _ => false
-            };
-
-            CV_Config.MPLCIP = lcsini.CV.MPLCIP;
-            CV_Config.MPLCNo = lcsini.CV.MPLCNo;
-            CV_Config.MPLCPort = lcsini.CV.MPLCPort;
-            CV_Config.MPLCTimeout = lcsini.CV.MPLCTimeout;
-
-            CV_Config.UseMCProtocol = lcsini.CV.UseMCProtocol switch
-            {
-                1 => true,
-                _ => false
-            };
-
-            CV_Config.WritePLCRawData = lcsini.CV.WritePLCRawData switch
-            {
-                1 => true,
-                _ => false
-            };
-
-            CV_Config.CycleCount_Max = lcsini.CV.CycleCount_Max;
-        }
-
-        private static void FunStkPortConfig(ASRSINI lcsini)
-        {
-            ConveyorDef.A1_01.StkPortID = lcsini.StkPort.Left1;
-            ConveyorDef.A1_07.StkPortID = lcsini.StkPort.Left1;
-            ConveyorDef.A1_13.StkPortID = lcsini.StkPort.Left1;
-            ConveyorDef.A1_19.StkPortID = lcsini.StkPort.Left1;
-
-            ConveyorDef.A1_02.StkPortID = lcsini.StkPort.Left2;
-            ConveyorDef.A1_08.StkPortID = lcsini.StkPort.Left2;
-            ConveyorDef.A1_14.StkPortID = lcsini.StkPort.Left2;
-            ConveyorDef.A1_20.StkPortID = lcsini.StkPort.Left2;
-
-            ConveyorDef.A1_04.StkPortID = lcsini.StkPort.Right1;
-            ConveyorDef.A1_10.StkPortID = lcsini.StkPort.Right1;
-            ConveyorDef.A1_16.StkPortID = lcsini.StkPort.Right1;
-            ConveyorDef.A1_22.StkPortID = lcsini.StkPort.Right1;
-
-            ConveyorDef.A1_05.StkPortID = lcsini.StkPort.Right2;
-            ConveyorDef.A1_11.StkPortID = lcsini.StkPort.Right2;
-            ConveyorDef.A1_17.StkPortID = lcsini.StkPort.Right2;
-            ConveyorDef.A1_23.StkPortID = lcsini.StkPort.Right2;
+            WmsApi_Config.IP = lcsini.Client_API.IP;
+            WcsApi_Config.IP = lcsini.Server_API.IP;
         }
 
         private static void FunStnNoConfig(ASRSINI lcsini)

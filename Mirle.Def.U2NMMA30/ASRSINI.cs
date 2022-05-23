@@ -17,26 +17,11 @@ namespace Mirle.Def.U2NMMA30
         [Option(Alias = "System Info")]
         SystemConfig System_Info { get; }
 
-        [Option(Alias = "OEE Parameter")]
-        OEEParameterConfig OEE_Parameter { get; }
+        [Option(Alias = "Client API")]
+        APIConfig Client_API { get; }
 
-        [Option(Alias = "WMS API")]
-        APIConfig WMS_API { get; }
-
-        [Option(Alias = "WCS API")]
-        APIConfig WCS_API { get; }
-
-        [Option(Alias = "Device")]
-        DeviceConfig Device { get; }
-
-        [Option(Alias = "Fork Setup")]
-        ForkSetupConfig Fork { get; }
-
-        [Option(Alias = "CV PLC")]
-        CV_PlcConfig CV { get; }
-
-        [Option(Alias = "STK Port")]
-        StkPortConfig StkPort { get; }
+        [Option(Alias = "Server API")]
+        APIConfig Server_API { get; }
 
         [Option(Alias = "StnNo")]
         StnNoConfig StnNo { get; }

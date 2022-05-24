@@ -87,6 +87,28 @@ namespace Mirle.DB.Proc
             }
         }
 
+        public int FunGetCmdMst_Grid(ref DataTable dtTmp)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        return CMD_MST.FunGetCmdMst_Grid(ref dtTmp, db);
+                    }
+                    else return iRet;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+        }
+
         public int FunCheckHasCommand(string sLoc, ref CmdMstInfo cmd)
         {
             try

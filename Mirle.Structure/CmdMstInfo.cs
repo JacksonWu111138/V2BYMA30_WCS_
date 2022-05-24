@@ -43,7 +43,11 @@ namespace Mirle.Structure
         /// </summary>
         public string CurLoc { get; set; }
         public string CurDeviceID { get; set; }
+        public string JobID { get; set; }
+        public string BatchID { get; set; }
         public string Zone_ID { get; set; }
         public string Remark { get; set; }
+        public string NeedShelfToShelf { get; set; }
+        public string backupPortId { get; set; }
     }
 }

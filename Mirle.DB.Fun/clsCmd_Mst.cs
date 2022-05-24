@@ -125,6 +125,32 @@ namespace Mirle.DB.Fun
             }
         }
 
+        public int FunGetCmdMst_Grid(ref DataTable dtTmp, DataBase.DB db)
+        {
+            try
+            {
+                string strEM = "";
+                string strSql = $"select * from {Parameter.clsCmd_Mst.TableName}" +
+                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} in ('{clsConstValue.CmdSts.strCmd_Initial}'," +
+                    $" '{clsConstValue.CmdSts.strCmd_Running}')";
+                strSql += $" ORDER BY {Parameter.clsCmd_Mst.Column.Prty}," +
+                    $" {Parameter.clsCmd_Mst.Column.Create_Date}, {Parameter.clsCmd_Mst.Column.Cmd_Sno}";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
+                {
+                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                }
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+        }
+
         public int FunGetFinishCommand(ref DataTable dtTmp, DataBase.DB db)
         {
             try

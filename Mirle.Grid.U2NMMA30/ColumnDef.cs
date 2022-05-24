@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 using Mirle.Gird;
 
@@ -28,31 +27,31 @@ namespace Mirle.Grid.U2NMMA30
 
         public class CMD_MST
         {
-            public static readonly ColumnInfo CmdSno = new ColumnInfo { Index = 0, Name = "任務號", Width = 68 };
-            public static readonly ColumnInfo JobID = new ColumnInfo { Index = 1, Name = "JobID", Width = 200 };
-            public static readonly ColumnInfo BoxId = new ColumnInfo { Index = 2, Name = "CstID", Width = 100 };
-            public static readonly ColumnInfo CmdSts = new ColumnInfo { Index = 3, Name = "狀態", Width = 60 };
-            public static readonly ColumnInfo PRT = new ColumnInfo { Index = 4, Name = "優先權", Width = 68 };
-            public static readonly ColumnInfo CmdMode = new ColumnInfo { Index = 5, Name = "模式", Width = 60 };
-            public static readonly ColumnInfo StnNo = new ColumnInfo { Index = 6, Name = "站口", Width = 200 };
-            public static readonly ColumnInfo Loc = new ColumnInfo { Index = 7, Name = "儲位", Width = 68 };
-            public static readonly ColumnInfo Remark = new ColumnInfo { Index = 8, Name = "說明", Width = 250 };
-            public static readonly ColumnInfo CurDeviceID = new ColumnInfo { Index = 9, Name = "當下設備", Width = 80 };
-            public static readonly ColumnInfo CurLoc = new ColumnInfo { Index = 10, Name = "當下位置", Width = 80 };
-            public static readonly ColumnInfo EquNO = new ColumnInfo { Index = 11, Name = "STK", Width = 60 };
-            public static readonly ColumnInfo BatchID = new ColumnInfo { Index = 12, Name = "BatchID", Width = 200 };
-            public static readonly ColumnInfo ZoneID = new ColumnInfo { Index = 13, Name = "ZoneID", Width = 80 };
-            public static readonly ColumnInfo NewLoc = new ColumnInfo { Index = 14, Name = "新儲位", Width = 68 };
-            public static readonly ColumnInfo NeedShelfToShelf = new ColumnInfo { Index = 15, Name = "需要庫對庫", Width = 100 };
-            public static readonly ColumnInfo CrtDate = new ColumnInfo { Index = 16, Name = "產生時間", Width = 100 };
-            public static readonly ColumnInfo ExpDate = new ColumnInfo { Index = 17, Name = "執行時間", Width = 100 };
-            public static readonly ColumnInfo BackupPortId = new ColumnInfo { Index = 18, Name = "BackupPortId", Width = 200 };
-            public static readonly ColumnInfo TicketId = new ColumnInfo { Index = 19, Name = "訂單號", Width = 200 };
-            public static readonly ColumnInfo ManualStockIn = new ColumnInfo { Index = 20, Name = "手動入庫", Width = 200 };
+            public static readonly ColumnInfo CmdSno = new ColumnInfo { Index = 0, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Cmd_Sno, Width = 68 };
+            public static readonly ColumnInfo JobID = new ColumnInfo { Index = 1, Name = DB.Fun.Parameter.clsCmd_Mst.Column.JobID, Width = 200 };
+            public static readonly ColumnInfo BoxId = new ColumnInfo { Index = 2, Name = DB.Fun.Parameter.clsCmd_Mst.Column.BoxID, Width = 100 };
+            public static readonly ColumnInfo CmdSts = new ColumnInfo { Index = 3, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Cmd_Sts, Width = 60 };
+            public static readonly ColumnInfo PRT = new ColumnInfo { Index = 4, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Prty, Width = 68 };
+            public static readonly ColumnInfo CmdMode = new ColumnInfo { Index = 5, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Cmd_Mode, Width = 60 };
+            public static readonly ColumnInfo StnNo = new ColumnInfo { Index = 6, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Stn_No, Width = 200 };
+            public static readonly ColumnInfo Loc = new ColumnInfo { Index = 7, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Loc, Width = 68 };
+            public static readonly ColumnInfo Remark = new ColumnInfo { Index = 8, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Remark, Width = 250 };
+            public static readonly ColumnInfo CurDeviceID = new ColumnInfo { Index = 9, Name = DB.Fun.Parameter.clsCmd_Mst.Column.CurDeviceID, Width = 80 };
+            public static readonly ColumnInfo CurLoc = new ColumnInfo { Index = 10, Name = DB.Fun.Parameter.clsCmd_Mst.Column.CurLoc, Width = 80 };
+            public static readonly ColumnInfo EquNO = new ColumnInfo { Index = 11, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Equ_No, Width = 60 };
+            public static readonly ColumnInfo BatchID = new ColumnInfo { Index = 12, Name = DB.Fun.Parameter.clsCmd_Mst.Column.BatchID, Width = 200 };
+            public static readonly ColumnInfo ZoneID = new ColumnInfo { Index = 13, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Zone, Width = 80 };
+            public static readonly ColumnInfo NewLoc = new ColumnInfo { Index = 14, Name = DB.Fun.Parameter.clsCmd_Mst.Column.New_Loc, Width = 68 };
+            public static readonly ColumnInfo NeedShelfToShelf = new ColumnInfo { Index = 15, Name = DB.Fun.Parameter.clsCmd_Mst.Column.NeedShelfToShelf, Width = 100 };
+            public static readonly ColumnInfo CrtDate = new ColumnInfo { Index = 16, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Create_Date, Width = 100 };
+            public static readonly ColumnInfo ExpDate = new ColumnInfo { Index = 17, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Expose_Date, Width = 100 };
+            public static readonly ColumnInfo BackupPortId = new ColumnInfo { Index = 18, Name = DB.Fun.Parameter.clsCmd_Mst.Column.backupPortId, Width = 200 };
+            //public static readonly ColumnInfo TicketId = new ColumnInfo { Index = 19, Name = "訂單號", Width = 200 };
+            //public static readonly ColumnInfo ManualStockIn = new ColumnInfo { Index = 20, Name = "手動入庫", Width = 200 };
 
             public static void GridSetLocRange(ref DataGridView oGrid)
             {
-                oGrid.ColumnCount = 21;
+                oGrid.ColumnCount = 19;
                 oGrid.RowCount = 0;
                 clInitSys.SetGridColumnInit(CmdSno, ref oGrid);
                 clInitSys.SetGridColumnInit(JobID, ref oGrid);
@@ -73,8 +72,8 @@ namespace Mirle.Grid.U2NMMA30
                 clInitSys.SetGridColumnInit(CrtDate, ref oGrid);
                 clInitSys.SetGridColumnInit(ExpDate, ref oGrid);
                 clInitSys.SetGridColumnInit(BackupPortId, ref oGrid);
-                clInitSys.SetGridColumnInit(TicketId, ref oGrid);
-                clInitSys.SetGridColumnInit(ManualStockIn, ref oGrid);
+                //clInitSys.SetGridColumnInit(TicketId, ref oGrid);
+                //clInitSys.SetGridColumnInit(ManualStockIn, ref oGrid);
             }
         }
     }

@@ -48,6 +48,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mirle.DB.Fun\Mirle.DB.Fun.csproj">
+      <Project>{c40166b0-0f5d-4535-94a7-699764a59a83}</Project>
+      <Name>Mirle.DB.Fun</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.Gird\Mirle.Gird.csproj">
       <Project>{8ab5fac9-7cc2-4eec-b583-39778e66ce1f}</Project>
       <Name>Mirle.Gird</Name>

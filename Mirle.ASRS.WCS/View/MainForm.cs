@@ -143,6 +143,11 @@ namespace Mirle.ASRS.WCS.View
             timRead.Enabled = false;
             try
             {
+                SubShowCmdtoGrid(ref Grid1);
+                if(clsDB_Proc.DBConn)
+                {
+
+                }
             }
             catch (Exception ex)
             {
@@ -199,8 +204,6 @@ namespace Mirle.ASRS.WCS.View
         private void SubShowCmdtoGrid(ref DataGridView oGrid)
         {
             degShowCmdtoGrid obj;
-            string strSql = string.Empty;
-            string strEM = string.Empty;
             DataTable dtTmp = new DataTable();
             try
             {
@@ -211,7 +214,77 @@ namespace Mirle.ASRS.WCS.View
                 }
                 else
                 {
-                   
+                    int iRet = clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCmdMst_Grid(ref dtTmp);
+                    if (iRet == DBResult.Success)
+                    {
+                        if (oGrid.Columns.Count == 0)
+                            return;
+
+                        int intSelectRowIndex = (oGrid.SelectedRows.Count == 0 ? -1 : oGrid.SelectedRows[0].Index);
+                        oGrid.SuspendLayout();
+                        if (oGrid.Rows.Count > dtTmp.Rows.Count)
+                        {
+                            for (int intRow = oGrid.Rows.Count; intRow > dtTmp.Rows.Count; intRow--)
+                                oGrid.Rows.Remove(oGrid.Rows[intRow - 1]);
+                        }
+                        else if (oGrid.Rows.Count < dtTmp.Rows.Count)
+                        {
+                            for (int intRow = oGrid.Rows.Count; intRow < dtTmp.Rows.Count; intRow++)
+                            {
+                                oGrid.Rows.Add();
+                                oGrid.Rows[intRow].HeaderCell.Value = (intRow + 1).ToString();
+                            }
+                        }
+                        else
+                        {
+                            for (int intRow = 0; intRow < oGrid.Rows.Count; intRow++)
+                                oGrid.Rows[intRow].HeaderCell.Value = (intRow + 1).ToString();
+                        }
+
+                        string strField = string.Empty;
+                        string strSortField = string.Empty;
+                        SortOrder sortOrder = SortOrder.Ascending;
+                        object sync1 = new object();
+                        object sync2 = new object();
+
+                        if (oGrid.SortedColumn != null)
+                        {
+                            strSortField = oGrid.SortedColumn.Name;
+                            sortOrder = oGrid.SortOrder;
+                            dtTmp.DefaultView.Sort = strSortField + (sortOrder == SortOrder.Ascending ? " ASC" : " DESC");
+                            dtTmp = dtTmp.DefaultView.ToTable();
+                        }
+
+                        for (int intRow = 0; intRow < oGrid.Rows.Count; intRow++)
+                        {
+                            for (int intCol = 0; intCol < dtTmp.Columns.Count; intCol++)
+                            {
+                                //dataGridView.Columns[intCol].HeaderCell.SortGlyphDirection = SortOrder.None;
+                                strField = oGrid.Columns[intCol].Name;
+                                if (oGrid.Columns.Contains(strField))
+                                {
+                                    if (Convert.ToString(oGrid.Rows[intRow].Cells[intCol].Value) != Convert.ToString(dtTmp.Rows[intRow][strField]))
+                                        oGrid.Rows[intRow].Cells[intCol].Value = Convert.ToString(dtTmp.Rows[intRow][strField]);
+                                }
+                            }
+                        }
+
+                        if (intSelectRowIndex >= 0)
+                        {
+                            if (oGrid.Rows.Count > intSelectRowIndex)
+                                oGrid.Rows[intSelectRowIndex].Selected = true;
+                            else
+                                oGrid.Rows[oGrid.Rows.Count - 1].Selected = true;
+                        }
+                        else
+                            oGrid.ClearSelection();
+
+                        oGrid.ResumeLayout();
+                    }
+                    else
+                    {
+                        oGrid.Rows.Clear();
+                    }
                 }
             }
             catch (Exception ex)

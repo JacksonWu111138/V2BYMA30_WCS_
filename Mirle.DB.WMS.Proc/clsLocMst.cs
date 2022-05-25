@@ -161,5 +161,39 @@ namespace Mirle.DB.WMS.Proc
                 return DBResult.Exception;
             }
         }
+
+        public int CheckHasNNNN(string Equ_No, ref string[] Loc)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        string sLoc = LocMst.funSearchEmptyLoc(Equ_No, clsEnum.LocSts_Double.NNNN, db);
+                        if (string.IsNullOrWhiteSpace(sLoc)) iRet = DBResult.NoDataSelect;
+                        else
+                        {
+                            string sLoc_DD = LocMst.GetLocDD(sLoc, db);
+                            if (string.IsNullOrWhiteSpace(sLoc_DD)) iRet = DBResult.Exception;
+                            else
+                            {
+                                Loc = new string[] { sLoc, sLoc_DD };
+                                iRet = DBResult.Success;
+                            }
+                        }
+                    }
+                    
+                    return iRet;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+        }
     }
 }

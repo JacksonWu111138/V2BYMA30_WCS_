@@ -15,7 +15,7 @@ namespace Mirle.DB.WMS.Fun
         /// <param name="IsOutside"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        public int CheckLocIsOutside(string sLoc, ref bool IsOutside, ref string sLocDD, ref bool IsEmpty_DD, ref string BoxID_DD, SqlServer db)
+        public int CheckLocIsOutside(string sLoc, ref bool IsOutside, ref string sLocDD, ref bool IsEmpty_DD, ref string BoxID_DD, DataBase.DB db)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace Mirle.DB.WMS.Fun
         /// <param name="IsOutside"></param>
         /// <param name="db"></param>
         /// <returns></returns>
-        public int CheckLocIsOutside(string sLoc, ref bool IsOutside, SqlServer db)
+        public int CheckLocIsOutside(string sLoc, ref bool IsOutside, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -76,7 +76,7 @@ namespace Mirle.DB.WMS.Fun
             }
         }
 
-        public string GetLocDD(string sLoc, SqlServer db)
+        public string GetLocDD(string sLoc, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -106,7 +106,7 @@ namespace Mirle.DB.WMS.Fun
             }
         }
 
-        public int CheckLocIsEmpty(string sLoc, ref bool IsEmpty, SqlServer db)
+        public int CheckLocIsEmpty(string sLoc, ref bool IsEmpty, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -138,7 +138,7 @@ namespace Mirle.DB.WMS.Fun
             }
         }
 
-        public int CheckLocIsEmpty(string sLoc, ref bool IsEmpty, ref string BoxID, SqlServer db)
+        public int CheckLocIsEmpty(string sLoc, ref bool IsEmpty, ref string BoxID, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -171,7 +171,7 @@ namespace Mirle.DB.WMS.Fun
             }
         }
 
-        public int CheckLineByBoxID(string sBoxID, ref int StockerID, ref string sLoc, SqlServer db)
+        public int CheckLineByBoxID(string sBoxID, ref int StockerID, ref string sLoc, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -200,59 +200,7 @@ namespace Mirle.DB.WMS.Fun
             }
         }
 
-        public string FunSearchEmptyLoc(ref int EquNo, int CurStockerID, SqlServer db)
-        {
-            try
-            {
-                EquNo = CurStockerID;
-                int iCount = 0;
-                do
-                {
-                    if (Micron.U2NMMA30.clsMicronStocker.GetStockerById(EquNo).GetCraneById(1).IsInService)
-                    {
-                        string sNewLoc = "";
-                        if (EquNo == 4)
-                        {   //Single Deep
-                            sNewLoc = funSearchEmptyLoc(EquNo.ToString(), clsEnum.LocSts_Double.None, db);
-                        }
-                        else
-                        {
-                            sNewLoc = funSearchEmptyLoc(EquNo.ToString(), clsEnum.LocSts_Double.NNNN, db);
-                            if (string.IsNullOrWhiteSpace(sNewLoc))
-                            {
-                                sNewLoc = funSearchEmptyLoc(EquNo.ToString(), clsEnum.LocSts_Double.SNNS, db);
-                                if (string.IsNullOrWhiteSpace(sNewLoc))
-                                {
-                                    sNewLoc = funSearchEmptyLoc(EquNo.ToString(), clsEnum.LocSts_Double.ENNE, db);
-                                    if (string.IsNullOrWhiteSpace(sNewLoc))
-                                    {
-                                        sNewLoc = funSearchEmptyLoc(EquNo.ToString(), clsEnum.LocSts_Double.XNNX, db);
-                                    }
-                                }
-                            }
-                        }
-
-                        if (!string.IsNullOrWhiteSpace(sNewLoc)) return sNewLoc;
-                    }
-                    else clsWriLog.Log.FunWriTraceLog_CV($"Error: Stocker{EquNo}並非InService！");
-
-                    if (EquNo == 4) EquNo = 1;
-                    else EquNo++;
-
-                    iCount++;
-                } while (iCount < 4);
-
-                return "";
-            }
-            catch (Exception ex)
-            {
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                return "";
-            }
-        }
-
-        public string funSearchEmptyLoc(string Equ_No, clsEnum.LocSts_Double locSts, SqlServer db)
+        public string funSearchEmptyLoc(string Equ_No, clsEnum.LocSts_Double locSts, DataBase.DB db)
         {
             string strEM = "";
             DataTable dtTmp = new DataTable();

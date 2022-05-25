@@ -12,13 +12,17 @@ namespace Mirle.DB.Object
     public class clsDB_Proc
     {
         private static Proc.clsHost wcs;
-        public static void Initial(clsDbConfig dbConfig)
+        private static WMS.Proc.clsHost wms;
+        public static void Initial(clsDbConfig dbConfig, clsDbConfig dbConfig_WMS)
         {
             wcs = new Proc.clsHost(dbConfig);
+            wms = new WMS.Proc.clsHost(dbConfig_WMS);
         }
 
         public static Proc.clsHost GetDB_Object() => wcs;
+        public static WMS.Proc.clsHost GetWmsDB_Object() => wms;
         public static bool DBConn => Proc.clsHost.IsConn;
+        public static bool DBConn_WMS => WMS.Proc.clsHost.IsConn;
         public static int FunSelectNeedToTeach(int MaxCount, ref DataTable dtTmp) => wcs.GetL2LCount().FunSelectNeedToTeach(MaxCount, ref dtTmp);
     }
 }

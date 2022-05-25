@@ -8,7 +8,7 @@ namespace Mirle.DB.WMS.Proc
 {
     public class clsLocMst
     {
-        private WMS.Fun.clsLocMst LocMst = new WMS.Fun.clsLocMst();
+        private Fun.clsLocMst LocMst = new Fun.clsLocMst();
         private clsDbConfig _config = new clsDbConfig();
         public clsLocMst(clsDbConfig config)
         {
@@ -159,28 +159,6 @@ namespace Mirle.DB.WMS.Proc
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
                 return DBResult.Exception;
-            }
-        }
-
-        public string FunSearchEmptyLoc(ref int EquNo, int CurStockerID)
-        {
-            try
-            {
-                using (var db = clsGetDB.GetDB(_config))
-                {
-                    int iRet = clsGetDB.FunDbOpen(db);
-                    if (iRet == DBResult.Success)
-                    {
-                        return LocMst.FunSearchEmptyLoc(ref EquNo, CurStockerID, db);
-                    }
-                    else return "";
-                }
-            }
-            catch (Exception ex)
-            {
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                return "";
             }
         }
     }

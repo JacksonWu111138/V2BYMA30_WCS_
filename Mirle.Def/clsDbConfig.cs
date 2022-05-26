@@ -14,5 +14,7 @@ namespace Mirle.Def
         public int CommandTimeOut { get; set; }
         public int ConnectTimeOut { get; set; }
         public bool WriteLog { get; set; }
+        public string Schema { get; set; }
+        public int DBLogReserveDay { get; set; } = 180;
     }
 }

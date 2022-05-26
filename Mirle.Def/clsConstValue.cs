@@ -77,6 +77,11 @@ namespace Mirle.Def
             /// 庫對庫
             /// </summary>
             public const string L2L = "5";
+            public const string Move = "6";
+            /// <summary>
+            /// 取物
+            /// </summary>
+            public const string Pick = "8";
             /// <summary>
             /// 置物
             /// </summary>
@@ -345,6 +350,10 @@ namespace Mirle.Def
 
             public const string CannotExcuteFromSTKC = "PD";            //STKC 判斷地上盤無法執行該命令
             public const string CommandTimeoutFromSTKC = "PE";          //STKC 下命令給地上盤命令後，地上盤未有反應或執行超過10分鐘
+            /// <summary>
+            /// 電腦強制取消
+            /// </summary>
+            public const string ComputerCancel = "CC";
         }
     }
 }

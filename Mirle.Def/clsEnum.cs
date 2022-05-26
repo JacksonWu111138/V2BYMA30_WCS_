@@ -8,6 +8,46 @@ namespace Mirle.Def
 {
     public class clsEnum
     {
+        public enum BaseType
+        {
+            None = 0,
+            DataBase = 1, 
+            TXT = 2
+        }
+
+        public class CmdType
+        {
+            public enum CraneType
+            {
+                Single,
+                Daul
+            }
+
+            public enum ForkType
+            {
+                SingleFork,
+                TwinFork
+            }
+
+            public enum LocType
+            {
+                SingleDeep,
+                DoubleDeep,
+                Skip //不判斷
+            }
+        }
+
+        public enum CmdMaintence
+        {
+            Cancel, Complete
+        }
+
+        public enum SCState
+        {
+            Auto,
+            Paused
+        }
+
         public enum Style
         {
             ASRS_IN, ASRS_OUT, ASRS_CYCLE, ASRS_R2R, ASRS_S2S, 

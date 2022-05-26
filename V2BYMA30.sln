@@ -58,6 +58,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.DB.WMS.Fun", "Mirle.D
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.DB.WMS.Proc", "Mirle.DB.WMS.Proc\Mirle.DB.WMS.Proc.csproj", "{553BD8CF-F4C1-4B39-97AB-42CC2F7C8187}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.ASRS.DBCommand", "Mirle.ASRS.DBCommand\Mirle.ASRS.DBCommand.csproj", "{9441796E-D9F9-45CC-B0C8-C8B5EEB679EB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -155,6 +157,12 @@ Global
 		{553BD8CF-F4C1-4B39-97AB-42CC2F7C8187}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
 		{553BD8CF-F4C1-4B39-97AB-42CC2F7C8187}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{553BD8CF-F4C1-4B39-97AB-42CC2F7C8187}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9441796E-D9F9-45CC-B0C8-C8B5EEB679EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9441796E-D9F9-45CC-B0C8-C8B5EEB679EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9441796E-D9F9-45CC-B0C8-C8B5EEB679EB}.R0K5M320|Any CPU.ActiveCfg = Release|Any CPU
+		{9441796E-D9F9-45CC-B0C8-C8B5EEB679EB}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
+		{9441796E-D9F9-45CC-B0C8-C8B5EEB679EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9441796E-D9F9-45CC-B0C8-C8B5EEB679EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -8,27 +8,33 @@ namespace Mirle.Def.U2NMMA30
 {
     public class ConveyorDef
     {
-        public static ConveyorInfo A1_01 = new ConveyorInfo { Index = 1, BufferName = "A1-01" };
-        public static ConveyorInfo A1_02 = new ConveyorInfo { Index = 2, BufferName = "A1-02" };
-        public static ConveyorInfo A1_07 = new ConveyorInfo { Index = 7, BufferName = "A1-07" };
-        public static ConveyorInfo A1_08 = new ConveyorInfo { Index = 8, BufferName = "A1-08" };
-        public static ConveyorInfo A1_13 = new ConveyorInfo { Index = 13, BufferName = "A1-13" };
-        public static ConveyorInfo A1_14 = new ConveyorInfo { Index = 14, BufferName = "A1-14" };
-        public static ConveyorInfo A1_19 = new ConveyorInfo { Index = 19, BufferName = "A1-19" };
-        public static ConveyorInfo A1_20 = new ConveyorInfo { Index = 20, BufferName = "A1-20" };
+        public static ConveyorInfo B1_001 = new ConveyorInfo { Index = 1, BufferName = "B1-001" };
+        public static ConveyorInfo B1_004 = new ConveyorInfo { Index = 4, BufferName = "B1-004" };
+        public static ConveyorInfo B1_007 = new ConveyorInfo { Index = 7, BufferName = "B1-007" };
+        public static ConveyorInfo B1_010 = new ConveyorInfo { Index = 10, BufferName = "B1-010" };
+        public static ConveyorInfo B1_081 = new ConveyorInfo { Index = 81, BufferName = "B1-081" };
+        public static ConveyorInfo B1_084 = new ConveyorInfo { Index = 84, BufferName = "B1-084" };
+        public static ConveyorInfo B1_087 = new ConveyorInfo { Index = 87, BufferName = "B1-087" };
+        public static ConveyorInfo B1_090 = new ConveyorInfo { Index = 90, BufferName = "B1-090" };
 
-        public static ConveyorInfo A1_04 = new ConveyorInfo { Path = 12, Index = 4, BufferName = "A1-04" };
-        public static ConveyorInfo A1_05 = new ConveyorInfo { Path = 11, Index = 5, BufferName = "A1-05" };
-        public static ConveyorInfo A1_10 = new ConveyorInfo { Path = 22, Index = 10, BufferName = "A1-10" };
-        public static ConveyorInfo A1_11 = new ConveyorInfo { Path = 21, Index = 11, BufferName = "A1-11" };
-        public static ConveyorInfo A1_16 = new ConveyorInfo { Path = 32, Index = 16, BufferName = "A1-16" };
-        public static ConveyorInfo A1_17 = new ConveyorInfo { Path = 31, Index = 17, BufferName = "A1-17" };
-        public static ConveyorInfo A1_22 = new ConveyorInfo { Path = 42, Index = 22, BufferName = "A1-22" };
-        public static ConveyorInfo A1_23 = new ConveyorInfo { Path = 41, Index = 23, BufferName = "A1-23" };
+        public static ConveyorInfo B1_013 = new ConveyorInfo { Index = 13, BufferName = "B1-013" };
+        public static ConveyorInfo B1_016 = new ConveyorInfo { Index = 16, BufferName = "B1-016" };
+        public static ConveyorInfo B1_019 = new ConveyorInfo { Index = 19, BufferName = "B1-019" };
+        public static ConveyorInfo B1_022 = new ConveyorInfo { Index = 22, BufferName = "B1-022" };
+        public static ConveyorInfo B1_093 = new ConveyorInfo { Index = 93, BufferName = "B1-093" };
+        public static ConveyorInfo B1_096 = new ConveyorInfo { Index = 96, BufferName = "B1-096" };
+        public static ConveyorInfo B1_099 = new ConveyorInfo { Index = 99, BufferName = "B1-099" };
+        public static ConveyorInfo B1_102 = new ConveyorInfo { Index = 102, BufferName = "B1-102" };
 
-        public static ConveyorInfo A1_41 = new ConveyorInfo { Path = 10, Index = 41, BufferName = "A1-41" };
-        public static ConveyorInfo A1_42 = new ConveyorInfo { Path = 20, Index = 42, BufferName = "A1-42" };
-        public static ConveyorInfo A1_43 = new ConveyorInfo { Path = 30, Index = 43, BufferName = "A1-43" };
-        public static ConveyorInfo A1_44 = new ConveyorInfo { Path = 40, Index = 44, BufferName = "A1-44" };
+        public static ConveyorInfo B1_025 = new ConveyorInfo { Index = 25, BufferName = "B1-025" };
+        public static ConveyorInfo B1_028 = new ConveyorInfo { Index = 28, BufferName = "B1-028" };
+        public static ConveyorInfo B1_031 = new ConveyorInfo { Index = 31, BufferName = "B1-031" };
+        public static ConveyorInfo B1_034 = new ConveyorInfo { Index = 34, BufferName = "B1-034" };
+        public static ConveyorInfo B1_105 = new ConveyorInfo { Index = 105, BufferName = "B1-105" };
+        public static ConveyorInfo B1_108 = new ConveyorInfo { Index = 108, BufferName = "B1-108" };
+        public static ConveyorInfo B1_111 = new ConveyorInfo { Index = 111, BufferName = "B1-111" };
+        public static ConveyorInfo B1_114 = new ConveyorInfo { Index = 114, BufferName = "B1-114" };
+
+
     }
 }

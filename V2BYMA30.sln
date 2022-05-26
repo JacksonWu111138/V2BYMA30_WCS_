@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLL", "DLL", "{58EC0D04-15AD-46AB-BE9C-1B871F4BCD1A}"
 	ProjectSection(SolutionItems) = preProject
 		Dll\Mirle.ASRS.Close.Program.exe = Dll\Mirle.ASRS.Close.Program.exe
+		Dll\Mirle.Stocker.Command.dll = Dll\Mirle.Stocker.Command.dll
 		Dll\Mirle.WriLog.dll = Dll\Mirle.WriLog.dll
 	EndProjectSection
 EndProject

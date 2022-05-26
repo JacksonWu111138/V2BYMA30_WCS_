@@ -22,11 +22,20 @@ namespace Mirle.ASRS.DBCommand
                 {
                     if(LocType == clsEnum.CmdType.LocType.DoubleDeep)
                     {
-                        process = new DoubleDeep.SingleCrane.SingleFork.Process();
-                        process.Start();
+                        switch(plcConfig.CV_Type)
+                        {
+                            case clsEnum.CmdType.CV_Type.Double:
+                                process = new DoubleDeep.SingleCrane.SingleFork.DoubleCV.Process(plcConfig);
+                                break;
+                            default:
+                                process = new DoubleDeep.SingleCrane.SingleFork.Process(plcConfig);
+                                break;
+                        }
                     }
                 }
             }
+
+            process.Start();
         }
 
         public int ForkNo { get; }

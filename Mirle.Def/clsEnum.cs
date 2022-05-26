@@ -35,6 +35,12 @@ namespace Mirle.Def
                 DoubleDeep,
                 Skip //不判斷
             }
+
+            public enum CV_Type
+            {
+                Double,
+                Single
+            }
         }
 
         public enum CmdMaintence

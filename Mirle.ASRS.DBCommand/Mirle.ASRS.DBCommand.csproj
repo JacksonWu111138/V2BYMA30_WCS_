@@ -50,6 +50,7 @@
     <Compile Include="ASRSProcess.cs" />
     <Compile Include="clsWriLog.cs" />
     <Compile Include="CraneProcess.cs" />
+    <Compile Include="DoubleDeep\SingleCrane\SingleFork\DoubleCV\Process.cs" />
     <Compile Include="DoubleDeep\SingleCrane\SingleFork\Process.cs" />
     <Compile Include="ForkProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
+namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork.DoubleCV
 {
     public class Process : IProcess
     {
@@ -31,7 +31,7 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
             {
                 if (clsDB_Proc.DBConn)
                 {
-                    
+
                 }
             }
             catch (Exception ex)

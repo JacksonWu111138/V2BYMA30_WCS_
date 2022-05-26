@@ -24,5 +24,6 @@ namespace Mirle.Def
         public clsEnum.CmdType.CraneType CraneType { get; set; } = clsEnum.CmdType.CraneType.Single;
         public clsEnum.CmdType.ForkType ForkType { get; set; } = clsEnum.CmdType.ForkType.SingleFork;
         public clsEnum.CmdType.LocType LocType { get; set; } = clsEnum.CmdType.LocType.Skip;
+        public clsEnum.CmdType.CV_Type CV_Type { get; set; } = clsEnum.CmdType.CV_Type.Single;
     }
 }

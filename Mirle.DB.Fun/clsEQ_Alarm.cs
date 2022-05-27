@@ -22,7 +22,7 @@ namespace Mirle.DB.Fun
                 if (db.ExecuteSQL(update, ref strEM) == DBResult.Success) return true;
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{update} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{update} => {strEM}");
                     return false;
                 }
             }
@@ -44,7 +44,7 @@ namespace Mirle.DB.Fun
                 if (db.ExecuteSQL(sql, ref strEM) == DBResult.Success) return true;
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{sql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{sql} => {strEM}");
                     return false;
                 }
             }

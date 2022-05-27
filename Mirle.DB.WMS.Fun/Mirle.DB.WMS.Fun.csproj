@@ -33,10 +33,6 @@
     <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mirle.WriLog, Version=1.0.2101.1, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Dll\Mirle.WriLog.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -55,6 +51,10 @@
     <ProjectReference Include="..\Mirle.Def\Mirle.Def.csproj">
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog.csproj">
+      <Project>{fcb3bfde-2247-4aa4-a652-f87c081b63fc}</Project>
+      <Name>Mirle.WriLog</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

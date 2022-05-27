@@ -34,13 +34,13 @@ namespace Mirle.DB.Fun
                     if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success) return true;
                     else
                     {
-                        clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                         return false;
                     }
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                     return false;
                 }
             }
@@ -90,14 +90,14 @@ namespace Mirle.DB.Fun
                     if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success) return true;
                     else
                     {
-                        clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                         return false;
                     }
                 }
                 else if (iRet == DBResult.NoDataSelect) return true;
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                     return false;
                 }
             }

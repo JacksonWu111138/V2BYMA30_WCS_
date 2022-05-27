@@ -25,7 +25,7 @@ namespace Mirle.DB.Fun
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                 }
 
                 return iRet;
@@ -50,12 +50,12 @@ namespace Mirle.DB.Fun
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
                     return true;
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSql + " => " + strEM);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
                     return false;
                 }
             }
@@ -81,12 +81,12 @@ namespace Mirle.DB.Fun
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
                     return true;
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSql + " => " + strEM);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
                     return false;
                 }
             }
@@ -108,12 +108,12 @@ namespace Mirle.DB.Fun
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
                     return true;
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSql + " => " + strEM);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
                     return false;
                 }
             }
@@ -143,7 +143,7 @@ namespace Mirle.DB.Fun
                 if (iRet == DBResult.Success) return true;
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{SQL} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{SQL} => {strEM}");
                     return false;
                 }
             }
@@ -166,11 +166,11 @@ namespace Mirle.DB.Fun
                 int Ret = db.ExecuteSQL(strSQL, ref strEM);
                 if (Ret == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSQL); return true;
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSQL); return true;
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSQL + " => " + strEM); return false;
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSQL + " => " + strEM); return false;
                 }
             }
             catch (Exception ex)

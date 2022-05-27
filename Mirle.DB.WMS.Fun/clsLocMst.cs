@@ -59,7 +59,7 @@ namespace Mirle.DB.WMS.Fun
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                 }
 
                 return iRet;
@@ -90,7 +90,7 @@ namespace Mirle.DB.WMS.Fun
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                     return string.Empty;
                 }
             }
@@ -121,7 +121,7 @@ namespace Mirle.DB.WMS.Fun
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                 }
 
                 return iRet;
@@ -154,7 +154,7 @@ namespace Mirle.DB.WMS.Fun
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                 }
 
                 return iRet;
@@ -184,7 +184,7 @@ namespace Mirle.DB.WMS.Fun
                     StockerID = Convert.ToInt32(dtTmp.Rows[0]["CRANE"]);
                     sLoc = Convert.ToString(dtTmp.Rows[0]["LOCATION_CODE"]);
                 }
-                else clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                else clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
 
                 return iRet;
             }

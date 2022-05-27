@@ -17,7 +17,7 @@ namespace Mirle.DB.Fun
                 string strEM = "";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if(iRet == DBResult.Exception)
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
 
                 return iRet;
             }
@@ -40,7 +40,7 @@ namespace Mirle.DB.Fun
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
 
                 if (iRet == DBResult.Exception)
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
 
                 return iRet;
             }
@@ -66,12 +66,12 @@ namespace Mirle.DB.Fun
                     $"'{DateTime.Now:yyyy-MM-dd HH:mm:ss}' where {Parameter.clsL2LCount.Column.BoxID} = '{BoxID}' ";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
                     return true;
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                     return false;
                 }
             }
@@ -92,12 +92,12 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsL2LCount.Column.Create_Date}) values('{BoxID}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}')";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
                     return true;
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                     return false;
                 }
             }
@@ -118,12 +118,12 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsL2LCount.Column.BoxID} = '{BoxID}' ";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
                     return true;
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                     return false;
                 }
             }

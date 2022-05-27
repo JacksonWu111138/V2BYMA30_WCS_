@@ -47,7 +47,7 @@ namespace Mirle.ASRS.WCS.View
             FunInit();
             GridInit();
 
-            clsWriLog.Log.FunWriTraceLog_CV("WCS程式已開啟");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, "WCS程式已開啟");
             timRead.Enabled = true;
             timer1.Enabled = true;
         }
@@ -65,7 +65,7 @@ namespace Mirle.ASRS.WCS.View
                 {
                     chkOnline.Checked = false;
                     SpinWait.SpinUntil(() => false, 1000);
-                    clsWriLog.Log.FunWriTraceLog_CV("WCS程式已關閉！");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, "WCS程式已關閉！");
                     throw new Exception();
                 }
             }
@@ -104,25 +104,25 @@ namespace Mirle.ASRS.WCS.View
         private void chkOnline_CheckedChanged(object sender, EventArgs e)
         {
             if (chkOnline.Checked)
-                clsWriLog.Log.FunWriTraceLog_CV("WCS OnLine.");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, "WCS OnLine.");
             else
-                clsWriLog.Log.FunWriTraceLog_CV("WCS OffLine.");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, "WCS OffLine.");
         }
 
         private void chkCycleRun_CheckedChanged(object sender, EventArgs e)
         {
             if (chkCycleRun.Checked)
-                clsWriLog.Log.FunWriTraceLog_CV("周邊CycleRun啟動！");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, "周邊CycleRun啟動！");
             else
-                clsWriLog.Log.FunWriTraceLog_CV("周邊CycleRun關閉！");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, "周邊CycleRun關閉！");
         }
 
         private void chkIgnoreTkt_CheckedChanged(object sender, EventArgs e)
         {
             if (chkIgnoreTkt.Checked)
-                clsWriLog.Log.FunWriTraceLog_CV("啟動IgnoreTicket功能！");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, "啟動IgnoreTicket功能！");
             else
-                clsWriLog.Log.FunWriTraceLog_CV("關閉IgnoreTicket功能！");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, "關閉IgnoreTicket功能！");
         }
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)

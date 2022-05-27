@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{9441796E-D9F9-45CC-B0C8-C8B5EEB679EB}</ProjectGuid>
+    <ProjectGuid>{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mirle.ASRS.DBCommand</RootNamespace>
-    <AssemblyName>Mirle.ASRS.DBCommand</AssemblyName>
+    <RootNamespace>Mirle.WriLog</RootNamespace>
+    <AssemblyName>Mirle.WriLog</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,11 +30,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mirle.Stocker.Command">
-      <HintPath>..\Dll\Mirle.Stocker.Command.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,27 +43,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ASRSProcess.cs" />
-    <Compile Include="clsWriLog.cs" />
-    <Compile Include="CraneProcess.cs" />
-    <Compile Include="DoubleDeep\SingleCrane\SingleFork\DoubleCV\Process.cs" />
-    <Compile Include="DoubleDeep\SingleCrane\SingleFork\Process.cs" />
-    <Compile Include="ForkProcess.cs" />
+    <Compile Include="clsLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mirle.DB.Object\Mirle.DB.Object.csproj">
-      <Project>{25DDA85B-35BE-429D-81B4-025731C0E826}</Project>
-      <Name>Mirle.DB.Object</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mirle.Def\Mirle.Def.csproj">
-      <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
-      <Name>Mirle.Def</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog.csproj">
-      <Project>{fcb3bfde-2247-4aa4-a652-f87c081b63fc}</Project>
-      <Name>Mirle.WriLog</Name>
-    </ProjectReference>
+    <PackageReference Include="Mirle">
+      <Version>2.0.8</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

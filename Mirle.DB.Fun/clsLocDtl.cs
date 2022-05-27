@@ -124,7 +124,7 @@ namespace Mirle.DB.Fun
                         string strErrMsg = "";
                         if (db.ExecuteSQL(sSQL, ref strErrMsg) != DBResult.Success)
                         {
-                            clsWriLog.Log.FunWriTraceLog_CV($"{sSQL} => {strErrMsg}");
+                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{sSQL} => {strErrMsg}");
                             return false;
                         }
                     }
@@ -232,7 +232,7 @@ namespace Mirle.DB.Fun
                         sSQL += $" AND {Parameter.clsLoc_Dtl_Log.Column.WH_ID} = '" + tCmd_Mst.WH_ID + "'";
                         if (db.ExecuteSQL(sSQL, ref strEM) != DBResult.Success)
                         {
-                            clsWriLog.Log.FunWriTraceLog_CV($"{sSQL} => {strEM}");
+                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{sSQL} => {strEM}");
                             return false;
                         }
                     }
@@ -271,7 +271,7 @@ namespace Mirle.DB.Fun
                         sSQL += $" AND {Parameter.clsCycle.Column.Loc_Txno} = '" + locdtl.LocTxno + "' ";
                         if (db.ExecuteSQL(sSQL, ref strEM) != DBResult.Success)
                         {
-                            clsWriLog.Log.FunWriTraceLog_CV($"{sSQL} => {strEM}");
+                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{sSQL} => {strEM}");
                             return false;
                         }
                     }
@@ -286,7 +286,7 @@ namespace Mirle.DB.Fun
                         sSQL += $" AND {Parameter.clsLoc_Dtl.Column.Loc_Txno} = '" + locdtl.LocTxno + "'";
                         if (db.ExecuteSQL(sSQL, ref strEM) != DBResult.Success)
                         {
-                            clsWriLog.Log.FunWriTraceLog_CV($"{sSQL} => {strEM}");
+                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{sSQL} => {strEM}");
                             return false;
                         }
 
@@ -305,7 +305,7 @@ namespace Mirle.DB.Fun
                             sSQL += $" AND {Parameter.clsLoc_Dtl.Column.Loc_Txno} = '" + locdtl.LocTxno + "'";
                             if (db.ExecuteSQL(sSQL, ref strEM) != DBResult.Success)
                             {
-                                clsWriLog.Log.FunWriTraceLog_CV($"{sSQL} => {strEM}");
+                                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{sSQL} => {strEM}");
                                 return false;
                             }
                         }
@@ -332,7 +332,7 @@ namespace Mirle.DB.Fun
 
                             if (db.ExecuteSQL(sSQL, ref strEM) != DBResult.Success)
                             {
-                                clsWriLog.Log.FunWriTraceLog_CV($"{sSQL} => {strEM}");
+                                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{sSQL} => {strEM}");
                                 return false;
                             }
                         }
@@ -382,7 +382,7 @@ namespace Mirle.DB.Fun
                         sSQL = sSQL + $" AND {Parameter.clsCycle.Column.Cyc_No} = '" + locdtl.CycNo + "'";
                         if (db.ExecuteSQL(sSQL, ref strEM) != DBResult.Success)
                         {
-                            clsWriLog.Log.FunWriTraceLog_CV($"{sSQL} => {strEM}");
+                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{sSQL} => {strEM}");
                             return false;
                         }
                     }
@@ -428,7 +428,7 @@ namespace Mirle.DB.Fun
                     string strEM = "";
                     if (db.ExecuteSQL(sSQL, ref strEM) != DBResult.Success)
                     {
-                        clsWriLog.Log.FunWriTraceLog_CV($"{sSQL} => {strEM}");
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{sSQL} => {strEM}");
                         return false;
                     }
                 }
@@ -493,12 +493,12 @@ namespace Mirle.DB.Fun
                 string strErrMsg = "";
                 if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(sSQL);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, sSQL);
                     return true;
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{sSQL} => {strErrMsg}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{sSQL} => {strErrMsg}");
                     return false;
                 }
             }
@@ -560,12 +560,12 @@ namespace Mirle.DB.Fun
 
             if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
             {
-                clsWriLog.Log.FunWriTraceLog_CV(sSQL);
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, sSQL);
                 return true;
             }
             else
             {
-                clsWriLog.Log.FunWriTraceLog_CV($"{sSQL} => {strErrMsg}");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{sSQL} => {strErrMsg}");
                 return false;
             }
         }
@@ -586,12 +586,12 @@ namespace Mirle.DB.Fun
                 sSQL = sSQL + $"AND {Parameter.clsLoc_Dtl.Column.IN_Date} = '" + tLoc_Dtl.InDate + "' ";
                 if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(sSQL);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, sSQL);
                     return true;
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"{sSQL} => {strErrMsg}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{sSQL} => {strErrMsg}");
                     return false;
                 }
             }
@@ -625,7 +625,7 @@ namespace Mirle.DB.Fun
                 {
                     //刪除成功
                     strLogString = "刪除" + dblDay + "天前完成過帳之併板資料成功";
-                    clsWriLog.Log.FunWriTraceLog_CV(strLogString);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strLogString);
                     return true;
                 }
                 else if(intRet == DBResult.Exception)

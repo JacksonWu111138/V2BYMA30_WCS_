@@ -36,7 +36,7 @@ namespace Mirle.DB.Proc
             clsHost.IsConn = db.IsConnected;
             if(iRet != DBResult.Success)
             {
-                clsWriLog.Log.FunWriTraceLog_CV($"資料庫開啟失敗！=> {strEM}");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"資料庫開啟失敗！=> {strEM}");
             }
 
             return iRet;

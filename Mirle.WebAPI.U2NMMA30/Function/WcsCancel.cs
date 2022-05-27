@@ -21,11 +21,11 @@ namespace Mirle.WebAPI.U2NMMA30.Function
             try
             {
                 string strJson = Newtonsoft.Json.JsonConvert.SerializeObject(info);
-                clsWriLog.Log.FunWriTraceLog_CV(strJson);
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strJson);
                 string sLink = $"http://{_config.IP}/WCS_CANCEL";
-                clsWriLog.Log.FunWriTraceLog_CV($"URL: {sLink}");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"URL: {sLink}");
                 string re = clsTool.HttpPost(sLink, strJson);
-                clsWriLog.Log.FunWriTraceLog_CV(re);
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, re);
 
                 return true;
             }

@@ -49,7 +49,7 @@ namespace Mirle.DB.Fun
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV($"<CmdSno>{cmd.Cmd_Sno} => 取得命令明細資料失敗！");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"<CmdSno>{cmd.Cmd_Sno} => 取得命令明細資料失敗！");
                     return false;
                 }
             }
@@ -73,7 +73,7 @@ namespace Mirle.DB.Fun
                 string strEM = "";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Exception)
-                    clsWriLog.Log.FunWriTraceLog_CV($"{strSql} => {strEM}");
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
 
                 return iRet;
             }
@@ -113,11 +113,11 @@ namespace Mirle.DB.Fun
                 int Ret = db.ExecuteSQL(strSQL, ref strEM);
                 if (Ret == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSQL); return true;
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSQL); return true;
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSQL + " => " + strEM); return false;
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSQL + " => " + strEM); return false;
                 }
             }
             catch (Exception ex)

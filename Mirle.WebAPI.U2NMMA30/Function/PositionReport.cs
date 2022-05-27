@@ -21,11 +21,11 @@ namespace Mirle.WebAPI.U2NMMA30.Function
             try
             {
                 string strJson = JsonConvert.SerializeObject(info);
-                clsWriLog.Log.FunWriTraceLog_CV(strJson);
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strJson);
                 string sLink = $"http://{_config.IP}/POSITION_REPORT";
-                clsWriLog.Log.FunWriTraceLog_CV($"URL: {sLink}");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"URL: {sLink}");
                 string re = clsTool.HttpPost(sLink, strJson);
-                clsWriLog.Log.FunWriTraceLog_CV(re);
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, re);
                 //HttpResponseMessage response = null;
                 //using (HttpClient client = new HttpClient())
                 //{
@@ -36,7 +36,7 @@ namespace Mirle.WebAPI.U2NMMA30.Function
                 //        var data = new StringContent(strJson, Encoding.UTF8, "application/json");
                 //        request.Content = data;
                 //        response = client.SendAsync(request).Result;
-                //        clsWriLog.Log.FunWriTraceLog_CV(response.Content.ReadAsStringAsync().Result);
+                //        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, response.Content.ReadAsStringAsync().Result);
                 //    }
 
                 //    //var result2 = client.PostAsJsonAsync(sLink, info).Result;

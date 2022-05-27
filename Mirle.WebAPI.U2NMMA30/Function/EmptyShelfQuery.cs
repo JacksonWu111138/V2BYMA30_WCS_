@@ -22,11 +22,11 @@ namespace Mirle.WebAPI.U2NMMA30.Function
             try
             {
                 string strJson = JsonConvert.SerializeObject(info);
-                clsWriLog.Log.FunWriTraceLog_CV(strJson);
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strJson);
                 string sLink = $"http://{_config.IP}/EMPTY_SHELF_QUERY";
-                clsWriLog.Log.FunWriTraceLog_CV($"URL: {sLink}");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"URL: {sLink}");
                 string re = clsTool.HttpPost(sLink, strJson);
-                clsWriLog.Log.FunWriTraceLog_CV(re);
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, re);
                 response = (EmptyShelfQuery_WMS)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(EmptyShelfQuery_WMS));
 
                 return true;

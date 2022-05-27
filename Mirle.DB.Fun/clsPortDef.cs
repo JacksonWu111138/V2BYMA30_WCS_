@@ -37,7 +37,7 @@ namespace Mirle.DB.Fun
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSql + " => " + strEM);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
                     return false;
                 }
             }
@@ -80,7 +80,7 @@ namespace Mirle.DB.Fun
                 }
                 else
                 {
-                    clsWriLog.Log.FunWriTraceLog_CV(strSql + " => " + strEM);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
                     throw new Exception();
                 }
             }

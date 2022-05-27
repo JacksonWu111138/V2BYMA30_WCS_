@@ -127,7 +127,7 @@ namespace Mirle.DB.Fun
                 strSql += $" and DeviceID = '{sDeviceID}' ";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
                     return true;
                 }
                 else
@@ -157,7 +157,7 @@ namespace Mirle.DB.Fun
                 strSql += $" and DeviceID = '{sDeviceID}' ";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
                     return true;
                 }
                 else
@@ -186,7 +186,7 @@ namespace Mirle.DB.Fun
                 strSql += " where BoxId = '" + sBoxID + "' ";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
                     return true;
                 }
                 else
@@ -212,7 +212,7 @@ namespace Mirle.DB.Fun
                 strSql += $"('{sDeviceID}','{sLoc}','{sts.ToString()}','{sBoxID}')";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
                     return true;
                 }
                 else
@@ -315,7 +315,7 @@ namespace Mirle.DB.Fun
                     sSQL = sSQL + $"AND {Parameter.clsLoc_Mst.Column.Loc_Sts} = '" + sOldLocSts + "' ";
                     if(db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                     {
-                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, sSQL);
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, sSQL);
                         return true;
                     }
                     else
@@ -358,7 +358,7 @@ namespace Mirle.DB.Fun
                             string strErrMsg = "";
                             if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                             {
-                                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, sSQL);
+                                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, sSQL);
                                 return true;
                             }
                             else
@@ -420,7 +420,7 @@ namespace Mirle.DB.Fun
                     string strErrMsg = "";
                     if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                     {
-                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, sSQL);
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, sSQL);
                         return true;
                     }
                     else
@@ -489,7 +489,7 @@ namespace Mirle.DB.Fun
                     string strErrMsg = "";
                     if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                     {
-                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, sSQL);
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, sSQL);
                     }
                     else
                     {
@@ -504,7 +504,7 @@ namespace Mirle.DB.Fun
                     int iRet = db.ExecuteSQL(strSQL, ref strErrMsg);
                     if (iRet == DBResult.Success || iRet == DBResult.NoDataUpdate)
                     {
-                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSQL);
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSQL);
                         return true;
                     }
                     else
@@ -538,7 +538,7 @@ namespace Mirle.DB.Fun
                 string strErrMsg = string.Empty;
                 if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, sSQL);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, sSQL);
 
                     sSQL = $"UPDATE {Parameter.clsLoc_Mst.TableName} SET" +
                         $" {Parameter.clsLoc_Mst.Column.Loc_Sts} = '{clsEnum.LocSts.N.ToString()}', ";
@@ -549,7 +549,7 @@ namespace Mirle.DB.Fun
                     sSQL = sSQL + $"AND {Parameter.clsLoc_Mst.Column.Loc_Sts} = '{clsEnum.LocSts.O.ToString()}' ";
                     if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                     {
-                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, sSQL);
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, sSQL);
                         return true;
                     }
                     else
@@ -589,7 +589,7 @@ namespace Mirle.DB.Fun
                 string strErrMsg = string.Empty;
                 if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, sSQL);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, sSQL);
 
                     sSQL = $"UPDATE {Parameter.clsLoc_Mst.TableName} SET" +
                         $" {Parameter.clsLoc_Mst.Column.Loc_Sts} = '{clsEnum.LocSts.N.ToString()}', ";
@@ -600,7 +600,7 @@ namespace Mirle.DB.Fun
                     sSQL = sSQL + $"AND {Parameter.clsLoc_Mst.Column.Loc_Sts} = '{clsEnum.LocSts.I.ToString()}' ";
                     if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                     {
-                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, sSQL);
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, sSQL);
                         return true;
                     }
                     else

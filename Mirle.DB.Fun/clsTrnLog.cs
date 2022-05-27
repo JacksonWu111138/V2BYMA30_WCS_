@@ -81,7 +81,7 @@ namespace Mirle.DB.Fun
 
                 if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, sSQL);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, sSQL);
                     return true;
                 }
                 else

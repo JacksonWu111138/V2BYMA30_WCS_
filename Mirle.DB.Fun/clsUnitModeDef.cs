@@ -40,7 +40,7 @@ namespace Mirle.DB.Fun
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
                     return true;
                 }
                 else

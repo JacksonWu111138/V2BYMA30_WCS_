@@ -113,7 +113,7 @@ namespace Mirle.DB.Fun
                 int Ret = db.ExecuteSQL(strSQL, ref strEM);
                 if (Ret == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSQL); return true;
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSQL); return true;
                 }
                 else
                 {

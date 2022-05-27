@@ -50,7 +50,7 @@ namespace Mirle.DB.Fun
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
                     return true;
                 }
                 else
@@ -81,7 +81,7 @@ namespace Mirle.DB.Fun
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
                     return true;
                 }
                 else
@@ -108,7 +108,7 @@ namespace Mirle.DB.Fun
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
                     return true;
                 }
                 else
@@ -166,7 +166,7 @@ namespace Mirle.DB.Fun
                 int Ret = db.ExecuteSQL(strSQL, ref strEM);
                 if (Ret == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSQL); return true;
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSQL); return true;
                 }
                 else
                 {

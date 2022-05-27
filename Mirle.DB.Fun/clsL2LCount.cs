@@ -66,7 +66,7 @@ namespace Mirle.DB.Fun
                     $"'{DateTime.Now:yyyy-MM-dd HH:mm:ss}' where {Parameter.clsL2LCount.Column.BoxID} = '{BoxID}' ";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
                     return true;
                 }
                 else
@@ -92,7 +92,7 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsL2LCount.Column.Create_Date}) values('{BoxID}', '{DateTime.Now:yyyy-MM-dd HH:mm:ss}')";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
                     return true;
                 }
                 else
@@ -118,7 +118,7 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsL2LCount.Column.BoxID} = '{BoxID}' ";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql);
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
                     return true;
                 }
                 else

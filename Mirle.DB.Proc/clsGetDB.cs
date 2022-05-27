@@ -7,12 +7,19 @@ namespace Mirle.DB.Proc
     {
         public static DataBase.DB GetDB(clsDbConfig _config)
         {
+            DBOptions options = new DBOptions();
+            options.SetDBType(DBTypes.SqlServer);
+            options.SetAccount(_config.DbName, _config.DbUser, _config.DbPassword);
+            options.SetCommandTimeOut(_config.CommandTimeOut);
+            options.SetConnectTimeOut(_config.ConnectTimeOut);
+            options.SetDBServer(_config.DbServer, _config.DbPort, _config.FODBServer);
+            options.EnableWriteLog();
             DataBase.DB db;
             if (_config.DBType == DBTypes.SqlServer)
-                db = new SqlServer(_config);
-            else if (_config.DBType == DBTypes.SQLite)
-                db = new Sqlite(_config);
-            else db = new OracleClient(_config);
+                db = new SqlServer(options);
+            //else if (_config.DBType == DBTypes.SQLite)
+            //    db = new SQLite(options);
+            else db = new OracleClient(options);
 
             return db;
         }

@@ -87,31 +87,7 @@ namespace Mirle.ASRS.WCS
 
         private static void FunStnNoConfig(ASRSINI lcsini)
         {
-            ConveyorDef.A1_41.StnNo = lcsini.StnNo.A1_41;
-            ConveyorDef.A1_42.StnNo = lcsini.StnNo.A1_42;
-            ConveyorDef.A1_43.StnNo = lcsini.StnNo.A1_43;
-            ConveyorDef.A1_44.StnNo = lcsini.StnNo.A1_44;
-
-            string[] adWater = lcsini.StnNo.WaterLevel.Split(',');
-            for (int i = 0; i < 4; i++)
-            {
-                int.TryParse(adWater[i], out int value);
-                switch (i)
-                {
-                    case 0:
-                        ConveyorDef.A1_41.WaterLevel = value;
-                        break;
-                    case 1:
-                        ConveyorDef.A1_42.WaterLevel = value;
-                        break;
-                    case 2:
-                        ConveyorDef.A1_43.WaterLevel = value;
-                        break;
-                    default:
-                        ConveyorDef.A1_44.WaterLevel = value;
-                        break;
-                }
-            }
+           
         }
 
         /// <summary>

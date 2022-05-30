@@ -21,11 +21,11 @@ namespace Mirle.WebAPI.U2NMMA30.Function
             try
             {
                 string strJson = Newtonsoft.Json.JsonConvert.SerializeObject(info);
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strJson);
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strJson);
                 string sLink = $"http://{_config.IP}/RETRIEVE_COMPLETE";
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"URL: {sLink}");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"URL: {sLink}");
                 string re = clsTool.HttpPost(sLink, strJson);
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, re);
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, re);
                 var info_wms = (RetrieveCompleteReturnInfo)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(RetrieveCompleteReturnInfo));
 
                 if (info_wms.returnCode == clsConstValue.ApiReturnCode.Success) return true;

@@ -49,10 +49,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "APISendTest", "UnitTest\APISendTest\APISendTest.csproj", "{32376421-A5BC-4941-AB66-D845B17B763D}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Document", "Document", "{61B183CF-3CA1-4B7A-8290-C4E19124C2CC}"
-	ProjectSection(SolutionItems) = preProject
-		Document\V2BYMA30_ASRS_FileLayOut_v1.0.doc = Document\V2BYMA30_ASRS_FileLayOut_v1.0.doc
-		Document\V2BYMA30_ASRS_FileLayOut_v1.1.doc = Document\V2BYMA30_ASRS_FileLayOut_v1.1.doc
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.DB.WMS.Fun", "Mirle.DB.WMS.Fun\Mirle.DB.WMS.Fun.csproj", "{AD4818FF-FEFA-48F2-A7FE-F1007D3CFBBC}"
 EndProject
@@ -61,6 +57,19 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.ASRS.DBCommand", "Mirle.ASRS.DBCommand\Mirle.ASRS.DBCommand.csproj", "{9441796E-D9F9-45CC-B0C8-C8B5EEB679EB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WriLog", "Mirle.WriLog\Mirle.WriLog.csproj", "{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.MapController", "Mirle.MapController\Mirle.MapController.csproj", "{E9C71B96-E8F4-4124-9F18-444E8A05CF80}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Filelayout", "Filelayout", "{BA3059FD-E10C-4FE3-B7D8-DF535C7FFC93}"
+	ProjectSection(SolutionItems) = preProject
+		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.0.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.0.doc
+		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.1.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.1.doc
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Script", "Script", "{51694A5A-772A-4A6E-AEFF-15C3B7F38738}"
+	ProjectSection(SolutionItems) = preProject
+		Document\Script\Table_ASRS_Create_Script_V1.txt = Document\Script\Table_ASRS_Create_Script_V1.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -171,6 +180,12 @@ Global
 		{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
 		{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9C71B96-E8F4-4124-9F18-444E8A05CF80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9C71B96-E8F4-4124-9F18-444E8A05CF80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9C71B96-E8F4-4124-9F18-444E8A05CF80}.R0K5M320|Any CPU.ActiveCfg = Release|Any CPU
+		{E9C71B96-E8F4-4124-9F18-444E8A05CF80}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
+		{E9C71B96-E8F4-4124-9F18-444E8A05CF80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9C71B96-E8F4-4124-9F18-444E8A05CF80}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -178,6 +193,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{C353B695-42ED-49BD-A6B4-47E66ACE0E66} = {58EC0D04-15AD-46AB-BE9C-1B871F4BCD1A}
 		{32376421-A5BC-4941-AB66-D845B17B763D} = {3F649014-F98E-482A-A2FF-DBC662716BED}
+		{BA3059FD-E10C-4FE3-B7D8-DF535C7FFC93} = {61B183CF-3CA1-4B7A-8290-C4E19124C2CC}
+		{51694A5A-772A-4A6E-AEFF-15C3B7F38738} = {61B183CF-3CA1-4B7A-8290-C4E19124C2CC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EA11E8F2-8EA3-4120-9E0B-3AA68CFDC997}

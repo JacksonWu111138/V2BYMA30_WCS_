@@ -54,6 +54,7 @@
     <Compile Include="clsLocMst.cs" />
     <Compile Include="clsMoldUseLog.cs" />
     <Compile Include="clsProc.cs" />
+    <Compile Include="clsRoutdef.cs" />
     <Compile Include="clsSno.cs" />
     <Compile Include="clsTKT_MST.cs" />
     <Compile Include="clsTool.cs" />
@@ -75,6 +76,7 @@
     <Compile Include="Parameter\clsLoc_Mst.cs" />
     <Compile Include="Parameter\clsMoldUseLog.cs" />
     <Compile Include="Parameter\clsPortDef.cs" />
+    <Compile Include="Parameter\clsRoutdef.cs" />
     <Compile Include="Parameter\clsSno_Ctl.cs" />
     <Compile Include="Parameter\clsSno_Max.cs" />
     <Compile Include="Parameter\clsTktMst.cs" />

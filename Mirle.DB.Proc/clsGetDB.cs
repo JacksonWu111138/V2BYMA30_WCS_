@@ -8,7 +8,7 @@ namespace Mirle.DB.Proc
         public static DataBase.DB GetDB(clsDbConfig _config)
         {
             DBOptions options = new DBOptions();
-            options.SetDBType(DBTypes.SqlServer);
+            options.SetDBType(_config.DBType);
             options.SetAccount(_config.DbName, _config.DbUser, _config.DbPassword);
             options.SetCommandTimeOut(_config.CommandTimeOut);
             options.SetConnectTimeOut(_config.ConnectTimeOut);

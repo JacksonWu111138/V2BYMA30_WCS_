@@ -17,6 +17,7 @@ using Mirle.Logger;
 using Mirle.WebAPI.U2NMMA30.View;
 using Mirle.ASRS.Close.Program;
 using System.Threading;
+using Mirle.MapController;
 using Mirle.Structure;
 using Mirle.WebAPI.U2NMMA30.ReportInfo;
 using Mirle.DB.Object.Table;
@@ -29,7 +30,7 @@ namespace Mirle.ASRS.WCS.View
         private WebApiHost _webApiHost;
         private UnityContainer _unityContainer;
         private static System.Timers.Timer timRead = new System.Timers.Timer();
-
+        private MapHost router;
         public MainForm()
         {
             InitializeComponent();
@@ -143,7 +144,7 @@ namespace Mirle.ASRS.WCS.View
             timRead.Enabled = false;
             try
             {
-                SubShowCmdtoGrid(ref Grid1);
+                //SubShowCmdtoGrid(ref Grid1);
                 if(clsDB_Proc.DBConn)
                 {
 
@@ -186,11 +187,11 @@ namespace Mirle.ASRS.WCS.View
         {
             var archive = new AutoArchive();
             archive.Start();
-
-            _unityContainer = new UnityContainer();
-            _unityContainer.RegisterInstance(new WCSController());
-            _webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
-            clearCmd = new DB.ClearCmd.Proc.clsHost();
+            router = new MapHost(clInitSys.DbConfig);
+            //_unityContainer = new UnityContainer();
+            //_unityContainer.RegisterInstance(new WCSController());
+            //_webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
+            //clearCmd = new DB.ClearCmd.Proc.clsHost();
         }
 
         #region Grid顯示

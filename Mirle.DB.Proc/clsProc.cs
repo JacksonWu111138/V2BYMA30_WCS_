@@ -22,9 +22,8 @@ namespace Mirle.DB.Proc
             _config = config;
         }
 
-        public  bool FunMapping_Proc()
+        public  bool FunMapping_Proc(out List<Element_Port> ports, ref DataTable dtRoutDef)
         {
-            DataTable dtTmp = new DataTable();
             try
             {
                 using (var db = clsGetDB.GetDB(_config))
@@ -32,30 +31,16 @@ namespace Mirle.DB.Proc
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        var list = PortDef.GetAllPort(db);
-                        if (list.Count <= 0) return false;
+                        ports = PortDef.GetAllPort(db);
+                        if (ports.Count <= 0) return false;
 
-                        if (routdef.GetRoutdef(ref dtTmp, db))
-                        {
-                            for (int i = 0; i < dtTmp.Rows.Count; i++)
-                            {
-                                string DeviceID = Convert.ToString(dtTmp.Rows[i][Fun.Parameter.clsRoutdef.Column.DeviceID]);
-                                string HostPortID = Convert.ToString(dtTmp.Rows[i][Fun.Parameter.clsRoutdef.Column.HostPortID]);
-                                var data1 = list.Where(r => r.DeviceID == DeviceID && r.HostPortID == HostPortID);
-                                Location n1;
-                                foreach(var loc in data1)
-                                {
-                                    n1 = new Location(loc.DeviceID, loc.HostPortID, Location.GetLocationTypesByPortType(loc.PortType));
-                                }
-                            }
-
-                            return true;
-                        }
-                        else return false;
+                        dtRoutDef = new DataTable();
+                        return routdef.GetRoutdef(ref dtRoutDef, db);
                     }
                     else
                     {
                         clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, "資料庫開啟失敗！");
+                        ports = new List<Element_Port>();
                         return false;
                     }
                 }
@@ -64,11 +49,8 @@ namespace Mirle.DB.Proc
             {
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                ports = new List<Element_Port>();
                 return false;
-            }
-            finally
-            {
-                dtTmp.Dispose();
             }
         }
     }

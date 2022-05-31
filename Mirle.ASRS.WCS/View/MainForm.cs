@@ -31,6 +31,8 @@ namespace Mirle.ASRS.WCS.View
         private UnityContainer _unityContainer;
         private static System.Timers.Timer timRead = new System.Timers.Timer();
         private MapHost router;
+        private DeviceInfo[] PCBA = new DeviceInfo[2];
+        private DeviceInfo[] Box = new DeviceInfo[3];
         public MainForm()
         {
             InitializeComponent();
@@ -44,6 +46,7 @@ namespace Mirle.ASRS.WCS.View
         {
             ChkAppIsAlreadyRunning();
             this.Text = this.Text + "  v " + ProductVersion;
+            CraneBuffer_Initial();
             clInitSys.FunLoadIniSys();
             FunInit();
             GridInit();
@@ -182,6 +185,101 @@ namespace Mirle.ASRS.WCS.View
             }
         } 
         #endregion Timer
+
+        private void CraneBuffer_Initial()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                for (int f = 1; f <= 2; f++)
+                {
+                    if (i < 2 && f == 2) continue;
+
+                    FloorInfo floor = new FloorInfo();
+                    floor.Group_IN = new List<ConveyorInfo>();
+                    floor.Group_OUT = new List<ConveyorInfo>();
+                    switch(i)
+                    {
+                        #region PCBA
+                        case 0:
+                            floor.Group_IN.Add(ConveyorDef.M1_06);
+                            floor.Group_OUT.Add(ConveyorDef.M1_01);
+
+                            PCBA[i] = new DeviceInfo();
+                            PCBA[i].Floors = new List<FloorInfo>();
+                            PCBA[i].Floors.Add(floor);
+                            break;
+                        case 1:
+                            floor.Group_IN.Add(ConveyorDef.M1_16);
+                            floor.Group_OUT.Add(ConveyorDef.M1_11);
+
+                            PCBA[i] = new DeviceInfo();
+                            PCBA[i].Floors = new List<FloorInfo>();
+                            PCBA[i].Floors.Add(floor);
+                            break;
+                        #endregion PCBA
+                        #region 箱式倉
+                        case 2:
+                            if (f == 1)
+                            {
+                                floor.Group_IN.Add(ConveyorDef.B1_007);
+                                floor.Group_IN.Add(ConveyorDef.B1_010);
+                                floor.Group_OUT.Add(ConveyorDef.B1_001);
+                                floor.Group_OUT.Add(ConveyorDef.B1_004);
+                            }
+                            else
+                            {
+                                floor.Group_IN.Add(ConveyorDef.B1_087);
+                                floor.Group_IN.Add(ConveyorDef.B1_090);
+                                floor.Group_OUT.Add(ConveyorDef.B1_081);
+                                floor.Group_OUT.Add(ConveyorDef.B1_084);
+                            }
+                            Box[i - 2] = new DeviceInfo();
+                            Box[i - 2].Floors = new List<FloorInfo>();
+                            Box[i - 2].Floors.Add(floor);
+                            break;
+                        case 3:
+                            if (f == 1)
+                            {
+                                floor.Group_IN.Add(ConveyorDef.B1_019);
+                                floor.Group_IN.Add(ConveyorDef.B1_022);
+                                floor.Group_OUT.Add(ConveyorDef.B1_013);
+                                floor.Group_OUT.Add(ConveyorDef.B1_016);
+                            }
+                            else
+                            {
+                                floor.Group_IN.Add(ConveyorDef.B1_099);
+                                floor.Group_IN.Add(ConveyorDef.B1_102);
+                                floor.Group_OUT.Add(ConveyorDef.B1_093);
+                                floor.Group_OUT.Add(ConveyorDef.B1_096);
+                            }
+                            Box[i - 2] = new DeviceInfo();
+                            Box[i - 2].Floors = new List<FloorInfo>();
+                            Box[i - 2].Floors.Add(floor);
+                            break;
+                        default:
+                            if (f == 1)
+                            {
+                                floor.Group_IN.Add(ConveyorDef.B1_031);
+                                floor.Group_IN.Add(ConveyorDef.B1_034);
+                                floor.Group_OUT.Add(ConveyorDef.B1_025);
+                                floor.Group_OUT.Add(ConveyorDef.B1_028);
+                            }
+                            else
+                            {
+                                floor.Group_IN.Add(ConveyorDef.B1_111);
+                                floor.Group_IN.Add(ConveyorDef.B1_114);
+                                floor.Group_OUT.Add(ConveyorDef.B1_105);
+                                floor.Group_OUT.Add(ConveyorDef.B1_108);
+                            }
+                            Box[i - 2] = new DeviceInfo();
+                            Box[i - 2].Floors = new List<FloorInfo>();
+                            Box[i - 2].Floors.Add(floor);
+                            break;
+                            #endregion 箱式倉
+                    }
+                }
+            }
+        }
 
         private void FunInit()
         {

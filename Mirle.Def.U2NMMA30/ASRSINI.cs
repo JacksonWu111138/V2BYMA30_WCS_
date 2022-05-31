@@ -17,6 +17,9 @@ namespace Mirle.Def.U2NMMA30
         [Option(Alias = "System Info")]
         SystemConfig System_Info { get; }
 
+        [Option(Alias = "EquNo")]
+        EquNoConfig EquNo { get; }
+
         [Option(Alias = "Client API")]
         APIConfig Client_API { get; }
 
@@ -56,14 +59,10 @@ namespace Mirle.Def.U2NMMA30
         int L2L_MaxCount { get; }
     }
 
-    public interface OEEParameterConfig
+    public interface EquNoConfig
     {
-        string CountBy { get; }
-        [Option(DefaultValue = 24.0)]
-        double PlanTime { get; }
-
-        string PlanCount { get; }
-
+        string PCBA { get; }
+        string Box { get; }
     }
 
     public interface APIConfig

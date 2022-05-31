@@ -45,7 +45,6 @@
   <ItemGroup>
     <Compile Include="ASRSINI.cs" />
     <Compile Include="ConveyorDef.cs" />
-    <Compile Include="LocationDef.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

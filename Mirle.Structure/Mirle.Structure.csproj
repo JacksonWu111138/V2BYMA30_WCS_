@@ -55,6 +55,7 @@
     <Compile Include="ConveyorInfo.cs" />
     <Compile Include="CraneInfo.cs" />
     <Compile Include="CstInfo.cs" />
+    <Compile Include="DeviceInfo.cs" />
     <Compile Include="DisabledLoc.cs" />
     <Compile Include="EnhancedCarrierInfo.cs" />
     <Compile Include="EnhancedDisabledLoc.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="EnhancedZoneData.cs" />
     <Compile Include="EqPortInfo.cs" />
     <Compile Include="EquCmdInfo.cs" />
+    <Compile Include="FloorInfo.cs" />
     <Compile Include="ForkSetupInfo.cs" />
     <Compile Include="LocationStatus.cs" />
     <Compile Include="LocCheckInfo.cs" />

@@ -4,7 +4,7 @@ using Mirle.Stocker.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Mirle.Structure;
 using System.Threading.Tasks;
 
 namespace Mirle.ASRS.DBCommand
@@ -14,14 +14,14 @@ namespace Mirle.ASRS.DBCommand
         private clsEnum.CmdType.CraneType craneType;
         private int _stockerId;
         private readonly List<ICrane> _cranes = new List<ICrane>();
-        public ASRSProcess(clsPlcConfig plcConfig)
+        public ASRSProcess(clsPlcConfig plcConfig, DeviceInfo Device)
         {
             craneType = plcConfig.CraneType;
             _stockerId = int.Parse(plcConfig.DeviceNo);
-            _cranes.Add(new CraneProcess(1, plcConfig));
+            _cranes.Add(new CraneProcess(1, plcConfig, Device));
 
             if (craneType == clsEnum.CmdType.CraneType.Daul)
-                _cranes.Add(new CraneProcess(2, plcConfig));
+                _cranes.Add(new CraneProcess(2, plcConfig, Device));
         }
 
         public clsEnum.CmdType.CraneType CraneType => craneType;

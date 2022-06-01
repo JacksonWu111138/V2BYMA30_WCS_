@@ -3,7 +3,7 @@ using Mirle.Stocker.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Mirle.Structure;
 using System.Threading.Tasks;
 
 namespace Mirle.ASRS.DBCommand
@@ -11,14 +11,14 @@ namespace Mirle.ASRS.DBCommand
     public class CraneProcess : ICrane
     {
         private readonly List<IFork> _forks = new List<IFork>();
-        public CraneProcess(int craneNo, clsPlcConfig plcConfig)
+        public CraneProcess(int craneNo, clsPlcConfig plcConfig, DeviceInfo Device)
         {
             CraneNo = craneNo;
             ForkType = plcConfig.ForkType;
-            _forks.Add(new ForkProcess(1, plcConfig));
+            _forks.Add(new ForkProcess(1, plcConfig, Device));
 
             if (ForkType == clsEnum.CmdType.ForkType.TwinFork)
-                _forks.Add(new ForkProcess(2, plcConfig));
+                _forks.Add(new ForkProcess(2, plcConfig, Device));
         }
 
         public int CraneNo { get; }

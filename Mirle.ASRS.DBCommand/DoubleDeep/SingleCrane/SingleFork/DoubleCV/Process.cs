@@ -4,7 +4,7 @@ using Mirle.Stocker.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Mirle.Structure;
 using System.Threading.Tasks;
 
 namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork.DoubleCV
@@ -12,10 +12,11 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork.DoubleCV
     public class Process : IProcess
     {
         private System.Timers.Timer timRead = new System.Timers.Timer();
-        public Process(clsPlcConfig plcConfig)
+        private DeviceInfo device;
+        public Process(clsPlcConfig plcConfig, DeviceInfo Device)
         {
             EquNo = int.Parse(plcConfig.DeviceNo);
-
+            device = Device;
             timRead.Elapsed += new System.Timers.ElapsedEventHandler(timRead_Elapsed);
             timRead.Enabled = false; timRead.Interval = 500;
         }

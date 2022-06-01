@@ -3,7 +3,7 @@ using Mirle.Stocker.Command;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Mirle.Structure;
 using System.Threading.Tasks;
 
 namespace Mirle.ASRS.DBCommand
@@ -11,7 +11,7 @@ namespace Mirle.ASRS.DBCommand
     public class ForkProcess : IFork
     {
         private IProcess process;
-        public ForkProcess(int forkNo, clsPlcConfig plcConfig)
+        public ForkProcess(int forkNo, clsPlcConfig plcConfig, DeviceInfo Device)
         {
             ForkNo = forkNo;
             LocType = plcConfig.LocType;
@@ -25,10 +25,10 @@ namespace Mirle.ASRS.DBCommand
                         switch(plcConfig.CV_Type)
                         {
                             case clsEnum.CmdType.CV_Type.Double:
-                                process = new DoubleDeep.SingleCrane.SingleFork.DoubleCV.Process(plcConfig);
+                                process = new DoubleDeep.SingleCrane.SingleFork.DoubleCV.Process(plcConfig, Device);
                                 break;
                             default:
-                                process = new DoubleDeep.SingleCrane.SingleFork.Process(plcConfig);
+                                process = new DoubleDeep.SingleCrane.SingleFork.Process(plcConfig, Device);
                                 break;
                         }
                     }

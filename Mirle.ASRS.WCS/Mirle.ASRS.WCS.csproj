@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsGetCVLocation.cs" />
     <Compile Include="Event\LoadPortEventArgs.cs" />
     <Compile Include="Library\clInitSys.cs" />
     <Compile Include="Library\clsWriLog.cs" />

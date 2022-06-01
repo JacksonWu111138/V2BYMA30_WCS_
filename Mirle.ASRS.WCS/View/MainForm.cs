@@ -29,10 +29,11 @@ namespace Mirle.ASRS.WCS.View
         private DB.ClearCmd.Proc.clsHost clearCmd;
         private WebApiHost _webApiHost;
         private UnityContainer _unityContainer;
+        private clsGetCVLocation CVLocation;
         private static System.Timers.Timer timRead = new System.Timers.Timer();
         private MapHost router;
-        private DeviceInfo[] PCBA = new DeviceInfo[2];
-        private DeviceInfo[] Box = new DeviceInfo[3];
+        public static DeviceInfo[] PCBA = new DeviceInfo[2];
+        public static DeviceInfo[] Box = new DeviceInfo[3];
         public MainForm()
         {
             InitializeComponent();
@@ -286,6 +287,7 @@ namespace Mirle.ASRS.WCS.View
             var archive = new AutoArchive();
             archive.Start();
             router = new MapHost(clInitSys.DbConfig);
+            CVLocation = new clsGetCVLocation(router);
             //_unityContainer = new UnityContainer();
             //_unityContainer.RegisterInstance(new WCSController());
             //_webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);

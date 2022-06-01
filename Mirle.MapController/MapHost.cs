@@ -22,7 +22,7 @@ namespace Mirle.MapController
         }
 
         private readonly List<Location> Nodes = new List<Location>();
-
+        public bool Done = false;
         private void timRead_Elapsed(object source, System.Timers.ElapsedEventArgs e)
         {
             timRead.Enabled = false;
@@ -63,6 +63,7 @@ namespace Mirle.MapController
                         else routeService.AddDevicePath(n1, n2);
                     }
 
+                    Done = true;
                     timRead.Enabled = false;
                 }
                 else timRead.Enabled = true;

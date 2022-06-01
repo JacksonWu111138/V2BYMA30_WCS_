@@ -7,6 +7,7 @@ using Mirle.DataBase;
 using Mirle.Structure;
 using System.Text;
 using System.Runtime.InteropServices;
+using Mirle.ASRS.WCS.View;
 
 namespace Mirle.ASRS.WCS
 {
@@ -14,10 +15,8 @@ namespace Mirle.ASRS.WCS
     {
         public static clsDbConfig DbConfig = new clsDbConfig();
         public static clsDbConfig DbConfig_WMS = new clsDbConfig();
-        public static clsPlcConfig CV_Config = new clsPlcConfig();
         public static WebApiConfig WmsApi_Config = new WebApiConfig();
         public static WebApiConfig WcsApi_Config = new WebApiConfig();
-        public static OEEParamConfig OEEparamConfig = new OEEParamConfig();
         public static ASRSINI lcsini;
         public static string[] gsStockerID = new string[4];
         public static int L2L_MaxCount = 5;
@@ -38,6 +37,7 @@ namespace Mirle.ASRS.WCS
 
                 FunDbConfig(lcsini);
                 FunSysConfig(lcsini);
+                FunDeviceConfig(lcsini);
                 FunApiConfig(lcsini);
                 FunStnNoConfig(lcsini);
             }
@@ -77,6 +77,21 @@ namespace Mirle.ASRS.WCS
         private static void FunSysConfig(ASRSINI lcsini)
         {
             L2L_MaxCount = lcsini.System_Info.L2L_MaxCount;
+        }
+
+        private static void FunDeviceConfig(ASRSINI lcsini)
+        {
+            string[] adPCBA = lcsini.EquNo.PCBA.Split(',');
+            for (int i = 0; i < MainForm.PCBA.Length; i++)
+            {
+                MainForm.PCBA[i].DeviceID = adPCBA[i];
+            }
+
+            string[] adBox = lcsini.EquNo.Box.Split(',');
+            for (int i = 0; i < MainForm.Box.Length; i++)
+            {
+                MainForm.Box[i].DeviceID = adBox[i];
+            }
         }
       
         private static void FunApiConfig(ASRSINI lcsini)

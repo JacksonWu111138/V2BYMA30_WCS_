@@ -7,8 +7,8 @@
     <ProjectGuid>{E9C71B96-E8F4-4124-9F18-444E8A05CF80}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mirle.MapController</RootNamespace>
-    <AssemblyName>Mirle.MapController</AssemblyName>
+    <RootNamespace>Mirle.MapController_2</RootNamespace>
+    <AssemblyName>Mirle.MapController_2</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -53,26 +53,40 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DB_Proc\clsGetDB.cs" />
     <Compile Include="clsWriLog.cs" />
+    <Compile Include="DB_Proc\clsHost.cs" />
+    <Compile Include="DB_Proc\clsProc.cs" />
+    <Compile Include="DB_Proc\Parameter\clsAlarmData.cs" />
+    <Compile Include="DB_Proc\Parameter\clsCmd_Dtl.cs" />
+    <Compile Include="DB_Proc\Parameter\clsCmd_Dtl_His.cs" />
+    <Compile Include="DB_Proc\Parameter\clsCmd_Mst.cs" />
+    <Compile Include="DB_Proc\Parameter\clsCMD_MST_His.cs" />
+    <Compile Include="DB_Proc\Parameter\clsCycle.cs" />
+    <Compile Include="DB_Proc\Parameter\clsEquCmd.cs" />
+    <Compile Include="DB_Proc\Parameter\clsItmMst.cs" />
+    <Compile Include="DB_Proc\Parameter\clsL2LCount.cs" />
+    <Compile Include="DB_Proc\Parameter\clsLoc_Dtl.cs" />
+    <Compile Include="DB_Proc\Parameter\clsLoc_Dtl_Log.cs" />
+    <Compile Include="DB_Proc\Parameter\clsLoc_Mst.cs" />
+    <Compile Include="DB_Proc\Parameter\clsMoldUseLog.cs" />
+    <Compile Include="DB_Proc\Parameter\clsPortDef.cs" />
+    <Compile Include="DB_Proc\Parameter\clsRoutdef.cs" />
+    <Compile Include="DB_Proc\Parameter\clsSno_Ctl.cs" />
+    <Compile Include="DB_Proc\Parameter\clsSno_Max.cs" />
+    <Compile Include="DB_Proc\Parameter\clsTktMst.cs" />
+    <Compile Include="DB_Proc\Parameter\clsTrn_Log.cs" />
     <Compile Include="MapHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mirle.DB.Fun\Mirle.DB.Fun.csproj">
-      <Project>{c40166b0-0f5d-4535-94a7-699764a59a83}</Project>
-      <Name>Mirle.DB.Fun</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mirle.DB.Proc\Mirle.DB.Proc.csproj">
-      <Project>{60c72719-d780-4bc8-9198-fc21c9754918}</Project>
-      <Name>Mirle.DB.Proc</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mirle.Def\Mirle.Def.csproj">
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog.csproj">
+    <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog_2.csproj">
       <Project>{fcb3bfde-2247-4aa4-a652-f87c081b63fc}</Project>
-      <Name>Mirle.WriLog</Name>
+      <Name>Mirle.WriLog_2</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

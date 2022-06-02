@@ -52,9 +52,9 @@
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog.csproj">
+    <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog_2.csproj">
       <Project>{fcb3bfde-2247-4aa4-a652-f87c081b63fc}</Project>
-      <Name>Mirle.WriLog</Name>
+      <Name>Mirle.WriLog_2</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

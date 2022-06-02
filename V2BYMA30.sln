@@ -56,9 +56,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.DB.WMS.Proc", "Mirle.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.ASRS.DBCommand", "Mirle.ASRS.DBCommand\Mirle.ASRS.DBCommand.csproj", "{9441796E-D9F9-45CC-B0C8-C8B5EEB679EB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WriLog", "Mirle.WriLog\Mirle.WriLog.csproj", "{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WriLog_2", "Mirle.WriLog\Mirle.WriLog_2.csproj", "{FCB3BFDE-2247-4AA4-A652-F87C081B63FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.MapController", "Mirle.MapController\Mirle.MapController.csproj", "{E9C71B96-E8F4-4124-9F18-444E8A05CF80}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.MapController_2", "Mirle.MapController\Mirle.MapController_2.csproj", "{E9C71B96-E8F4-4124-9F18-444E8A05CF80}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Filelayout", "Filelayout", "{BA3059FD-E10C-4FE3-B7D8-DF535C7FFC93}"
 	ProjectSection(SolutionItems) = preProject

@@ -61,9 +61,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog.csproj">
+    <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog_2.csproj">
       <Project>{fcb3bfde-2247-4aa4-a652-f87c081b63fc}</Project>
-      <Name>Mirle.WriLog</Name>
+      <Name>Mirle.WriLog_2</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

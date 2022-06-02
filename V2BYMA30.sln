@@ -6,7 +6,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLL", "DLL", "{58EC0D04-15AD-46AB-BE9C-1B871F4BCD1A}"
 	ProjectSection(SolutionItems) = preProject
 		Dll\Mirle.ASRS.Close.Program.exe = Dll\Mirle.ASRS.Close.Program.exe
-		Dll\Mirle.Stocker.Command.dll = Dll\Mirle.Stocker.Command.dll
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Structure", "Mirle.Structure\Mirle.Structure.csproj", "{0A0D222E-0C76-4838-A8B1-6CA6F26CB225}"
@@ -15,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.ASRS.WCS", "Mirle.ASR
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.DB.Fun", "Mirle.DB.Fun\Mirle.DB.Fun.csproj", "{C40166B0-0F5D-4535-94A7-699764A59A83}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Def", "Mirle.Def\Mirle.Def.csproj", "{906DA4EE-6B8D-40C7-BD49-A410FEB1D2C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Def_2", "Mirle.Def\Mirle.Def_2.csproj", "{906DA4EE-6B8D-40C7-BD49-A410FEB1D2C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.DB.Proc", "Mirle.DB.Proc\Mirle.DB.Proc.csproj", "{60C72719-D780-4BC8-9198-FC21C9754918}"
 EndProject
@@ -71,6 +70,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Script", "Script", "{51694A
 		Document\Script\Table_ASRS_Create_Script_V1.txt = Document\Script\Table_ASRS_Create_Script_V1.txt
 		Document\Script\Table_Initial.sql = Document\Script\Table_Initial.sql
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Stocker.Command", "Mirle.Stocker.Command\Mirle.Stocker.Command.csproj", "{8FE496D0-5503-4719-9C50-6C894E125B6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -187,6 +188,12 @@ Global
 		{E9C71B96-E8F4-4124-9F18-444E8A05CF80}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
 		{E9C71B96-E8F4-4124-9F18-444E8A05CF80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9C71B96-E8F4-4124-9F18-444E8A05CF80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FE496D0-5503-4719-9C50-6C894E125B6F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE496D0-5503-4719-9C50-6C894E125B6F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FE496D0-5503-4719-9C50-6C894E125B6F}.R0K5M320|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE496D0-5503-4719-9C50-6C894E125B6F}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
+		{8FE496D0-5503-4719-9C50-6C894E125B6F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE496D0-5503-4719-9C50-6C894E125B6F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

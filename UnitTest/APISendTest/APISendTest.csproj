@@ -166,9 +166,9 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
-    <ProjectReference Include="..\..\Mirle.Def\Mirle.Def.csproj">
+    <ProjectReference Include="..\..\Mirle.Def\Mirle.Def_2.csproj">
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
-      <Name>Mirle.Def</Name>
+      <Name>Mirle.Def_2</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Mirle.WebAPI.U2NMMA30\Mirle.WebAPI.U2NMMA30.csproj">
       <Project>{646741d4-de4c-48ef-9b90-1785bd22cefd}</Project>

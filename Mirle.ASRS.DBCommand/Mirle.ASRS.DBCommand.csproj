@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mirle.Stocker.Command">
-      <HintPath>..\Dll\Mirle.Stocker.Command.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -57,9 +54,13 @@
       <Project>{25DDA85B-35BE-429D-81B4-025731C0E826}</Project>
       <Name>Mirle.DB.Object</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mirle.Def\Mirle.Def.csproj">
+    <ProjectReference Include="..\Mirle.Def\Mirle.Def_2.csproj">
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
-      <Name>Mirle.Def</Name>
+      <Name>Mirle.Def_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mirle.Stocker.Command\Mirle.Stocker.Command.csproj">
+      <Project>{8fe496d0-5503-4719-9c50-6c894e125b6f}</Project>
+      <Name>Mirle.Stocker.Command</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.Structure\Mirle.Structure.csproj">
       <Project>{0a0d222e-0c76-4838-a8b1-6ca6f26cb225}</Project>

@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{906DA4EE-6B8D-40C7-BD49-A410FEB1D2C8}</ProjectGuid>
+    <ProjectGuid>{8FE496D0-5503-4719-9C50-6C894E125B6F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mirle.Def</RootNamespace>
-    <AssemblyName>Mirle.Def</AssemblyName>
+    <RootNamespace>Mirle.Stocker.Command</RootNamespace>
+    <AssemblyName>Mirle.Stocker.Command</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -21,7 +21,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,12 +29,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Reflection.Context" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,22 +41,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="OEEParamConfig.cs" />
-    <Compile Include="clsConstValue.cs" />
-    <Compile Include="clsDbConfig.cs" />
-    <Compile Include="clsEnum.cs" />
-    <Compile Include="clsPlcConfig.cs" />
-    <Compile Include="clsTool.cs" />
-    <Compile Include="Element_Port.cs" />
-    <Compile Include="Location.cs" />
-    <Compile Include="LocationTypes.cs" />
+    <Compile Include="ICrane.cs" />
+    <Compile Include="IFork.cs" />
+    <Compile Include="IProcess.cs" />
+    <Compile Include="IStocker.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WebApiConfig.cs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Mirle">
-      <Version>2.0.8</Version>
-    </PackageReference>
+    <ProjectReference Include="..\Mirle.Def\Mirle.Def_2.csproj">
+      <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
+      <Name>Mirle.Def_2</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

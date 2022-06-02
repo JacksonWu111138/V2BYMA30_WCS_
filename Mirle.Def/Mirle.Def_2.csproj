@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AD4818FF-FEFA-48F2-A7FE-F1007D3CFBBC}</ProjectGuid>
+    <ProjectGuid>{906DA4EE-6B8D-40C7-BD49-A410FEB1D2C8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mirle.DB.WMS.Fun</RootNamespace>
-    <AssemblyName>Mirle.DB.WMS.Fun</AssemblyName>
+    <RootNamespace>Mirle.Def_2</RootNamespace>
+    <AssemblyName>Mirle.Def_2</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -35,6 +35,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Reflection.Context" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,32 +44,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="clsLocMst.cs" />
-    <Compile Include="clsWriLog.cs" />
+    <Compile Include="OEEParamConfig.cs" />
+    <Compile Include="clsConstValue.cs" />
+    <Compile Include="clsDbConfig.cs" />
+    <Compile Include="clsEnum.cs" />
+    <Compile Include="clsPlcConfig.cs" />
+    <Compile Include="clsTool.cs" />
+    <Compile Include="Element_Port.cs" />
+    <Compile Include="Location.cs" />
+    <Compile Include="LocationTypes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mirle.Def\Mirle.Def_2.csproj">
-      <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
-      <Name>Mirle.Def_2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog_2.csproj">
-      <Project>{fcb3bfde-2247-4aa4-a652-f87c081b63fc}</Project>
-      <Name>Mirle.WriLog_2</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
+    <Compile Include="WebApiConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Mirle">
       <Version>2.0.8</Version>
-    </PackageReference>
-    <PackageReference Include="Mirle.MPLC.MCProtocol">
-      <Version>1.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="Mirle.MPLC.MXComponent">
-      <Version>1.0.2</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -127,5 +127,37 @@ namespace Mirle.MapController
                 return false;
             }
         }
+
+        public bool EnablePath(Location Start, Location End, bool Enable)
+        {
+            try
+            {
+                routeService.EnalePath(Start, End, Enable);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
+        public bool EnableNode(Location Node, bool Enable)
+        {
+            try
+            {
+                routeService.EnalePath(Node, Enable);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
     }
 }

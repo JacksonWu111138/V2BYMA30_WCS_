@@ -25,10 +25,10 @@ namespace Mirle.ASRS.DBCommand
                         switch(plcConfig.CV_Type)
                         {
                             case clsEnum.CmdType.CV_Type.Double:
-                                process = new DoubleDeep.SingleCrane.SingleFork.DoubleCV.Process(plcConfig, Device);
+                                process = new DoubleDeep.SingleCrane.SingleFork.DoubleCV.Process(Device);
                                 break;
                             default:
-                                process = new DoubleDeep.SingleCrane.SingleFork.Process(plcConfig, Device);
+                                process = new DoubleDeep.SingleCrane.SingleFork.Process(Device);
                                 break;
                         }
                     }

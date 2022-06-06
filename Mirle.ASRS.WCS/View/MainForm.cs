@@ -20,7 +20,7 @@ using System.Threading;
 using Mirle.MapController;
 using Mirle.Structure;
 using Mirle.WebAPI.U2NMMA30.ReportInfo;
-using Mirle.DB.Object.Table;
+using Mirle.ASRS.DBCommand;
 
 namespace Mirle.ASRS.WCS.View
 {
@@ -34,6 +34,7 @@ namespace Mirle.ASRS.WCS.View
         private MapHost router;
         public static DeviceInfo[] PCBA = new DeviceInfo[2];
         public static DeviceInfo[] Box = new DeviceInfo[3];
+        private ASRSProcess[] AsrsCommand = new ASRSProcess[5];
         public MainForm()
         {
             InitializeComponent();
@@ -286,12 +287,36 @@ namespace Mirle.ASRS.WCS.View
         {
             var archive = new AutoArchive();
             archive.Start();
+            clsDB_Proc.Initial(clInitSys.DbConfig, clInitSys.DbConfig_WMS);
             router = new MapHost(clInitSys.DbConfig);
             CVLocation = new clsGetCVLocation(router);
+            FunAsrsCmdInit();
             //_unityContainer = new UnityContainer();
             //_unityContainer.RegisterInstance(new WCSController());
             //_webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
             //clearCmd = new DB.ClearCmd.Proc.clsHost();
+        }
+
+        private void FunAsrsCmdInit()
+        {
+            for (int i = 0; i < AsrsCommand.Length; i++)
+            {
+                clsPlcConfig plcConfig = new clsPlcConfig();
+                plcConfig.CraneType = clsEnum.CmdType.CraneType.Single;
+                plcConfig.ForkType = clsEnum.CmdType.ForkType.SingleFork;
+                plcConfig.LocType = clsEnum.CmdType.LocType.DoubleDeep;
+
+                if (i < 2)
+                {
+                    plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Single;
+                    AsrsCommand[i] = new ASRSProcess(plcConfig, PCBA[i]);
+                }
+                else
+                {
+                    plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Double;
+                    AsrsCommand[i] = new ASRSProcess(plcConfig, Box[i - 2]);
+                }
+            }
         }
 
         #region Grid顯示

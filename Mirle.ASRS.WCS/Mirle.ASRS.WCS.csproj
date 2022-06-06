@@ -96,6 +96,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mirle.ASRS.DBCommand\Mirle.ASRS.DBCommand.csproj">
+      <Project>{9441796e-d9f9-45cc-b0c8-c8b5eeb679eb}</Project>
+      <Name>Mirle.ASRS.DBCommand</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.DB.ClearCmd.Proc\Mirle.DB.ClearCmd.Proc.csproj">
       <Project>{31deb747-36ca-4a92-8df1-89eee47a0fa4}</Project>
       <Name>Mirle.DB.ClearCmd.Proc</Name>
@@ -127,6 +131,10 @@
     <ProjectReference Include="..\Mirle.MapController\Mirle.MapController_2.csproj">
       <Project>{e9c71b96-e8f4-4124-9f18-444e8a05cf80}</Project>
       <Name>Mirle.MapController_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mirle.Stocker.Command\Mirle.Stocker.Command.csproj">
+      <Project>{8FE496D0-5503-4719-9C50-6C894E125B6F}</Project>
+      <Name>Mirle.Stocker.Command</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.Structure\Mirle.Structure.csproj">
       <Project>{0a0d222e-0c76-4838-a8b1-6ca6f26cb225}</Project>

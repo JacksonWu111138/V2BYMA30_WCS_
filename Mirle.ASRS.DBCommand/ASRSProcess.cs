@@ -17,7 +17,7 @@ namespace Mirle.ASRS.DBCommand
         public ASRSProcess(clsPlcConfig plcConfig, DeviceInfo Device)
         {
             craneType = plcConfig.CraneType;
-            _stockerId = int.Parse(plcConfig.DeviceNo);
+            _stockerId = int.Parse(Device.DeviceID);
             _cranes.Add(new CraneProcess(1, plcConfig, Device));
 
             if (craneType == clsEnum.CmdType.CraneType.Daul)

@@ -13,9 +13,9 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
     {
         private System.Timers.Timer timRead = new System.Timers.Timer();
         private DeviceInfo device;
-        public Process(clsPlcConfig plcConfig, DeviceInfo Device)
+        public Process(DeviceInfo Device)
         {
-            EquNo = int.Parse(plcConfig.DeviceNo);
+            EquNo = int.Parse(Device.DeviceID);
             device = Device;
             timRead.Elapsed += new System.Timers.ElapsedEventHandler(timRead_Elapsed);
             timRead.Enabled = false; timRead.Interval = 500;

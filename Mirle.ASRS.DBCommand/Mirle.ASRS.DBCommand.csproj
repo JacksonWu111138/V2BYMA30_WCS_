@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ASRSProcess.cs" />
+    <Compile Include="clsTool.cs" />
     <Compile Include="clsWriLog.cs" />
     <Compile Include="CraneProcess.cs" />
     <Compile Include="DoubleDeep\SingleCrane\SingleFork\DoubleCV\Process.cs" />
@@ -57,6 +58,10 @@
     <ProjectReference Include="..\Mirle.Def\Mirle.Def_2.csproj">
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def_2</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mirle.MapController\Mirle.MapController_2.csproj">
+      <Project>{e9c71b96-e8f4-4124-9f18-444e8a05cf80}</Project>
+      <Name>Mirle.MapController_2</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.Stocker.Command\Mirle.Stocker.Command.csproj">
       <Project>{8fe496d0-5503-4719-9c50-6c894e125b6f}</Project>

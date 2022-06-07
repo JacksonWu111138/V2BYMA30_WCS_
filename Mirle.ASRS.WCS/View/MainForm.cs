@@ -309,12 +309,12 @@ namespace Mirle.ASRS.WCS.View
                 if (i < 2)
                 {
                     plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Single;
-                    AsrsCommand[i] = new ASRSProcess(plcConfig, PCBA[i]);
+                    AsrsCommand[i] = new ASRSProcess(plcConfig, PCBA[i], router);
                 }
                 else
                 {
                     plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Double;
-                    AsrsCommand[i] = new ASRSProcess(plcConfig, Box[i - 2]);
+                    AsrsCommand[i] = new ASRSProcess(plcConfig, Box[i - 2], router);
                 }
             }
         }

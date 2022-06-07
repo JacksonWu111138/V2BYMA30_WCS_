@@ -17,8 +17,8 @@ namespace Mirle.MapController.DB_Proc
             DataBase.DB db;
             if (_config.DBType == DBTypes.SqlServer)
                 db = new SqlServer(options);
-            //else if (_config.DBType == DBTypes.SQLite)
-            //    db = new SQLite(options);
+            else if (_config.DBType == DBTypes.SQLite)
+                db = new SQLite(options);
             else db = new OracleClient(options);
 
             return db;

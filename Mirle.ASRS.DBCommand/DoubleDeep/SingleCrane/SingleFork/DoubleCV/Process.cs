@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mirle.Structure;
 using System.Threading.Tasks;
+using Mirle.MapController;
 
 namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork.DoubleCV
 {
@@ -13,15 +14,14 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork.DoubleCV
     {
         private System.Timers.Timer timRead = new System.Timers.Timer();
         private DeviceInfo device;
-        public Process(DeviceInfo Device)
+        private MapHost router;
+        public Process(DeviceInfo Device, MapHost Router)
         {
-            EquNo = int.Parse(Device.DeviceID);
-            device = Device;
+            device = Device; router = Router;
             timRead.Elapsed += new System.Timers.ElapsedEventHandler(timRead_Elapsed);
             timRead.Enabled = false; timRead.Interval = 500;
         }
 
-        private int EquNo;
         public void Start() => timRead.Enabled = true;
         public void Stop() => timRead.Enabled = false;
 
@@ -32,7 +32,7 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork.DoubleCV
             {
                 if (clsDB_Proc.DBConn)
                 {
-
+                   
                 }
             }
             catch (Exception ex)

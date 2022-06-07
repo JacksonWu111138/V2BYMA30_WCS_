@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mirle.Structure;
 using System.Threading.Tasks;
+using Mirle.MapController;
 
 namespace Mirle.ASRS.DBCommand
 {
@@ -14,14 +15,14 @@ namespace Mirle.ASRS.DBCommand
         private clsEnum.CmdType.CraneType craneType;
         private int _stockerId;
         private readonly List<ICrane> _cranes = new List<ICrane>();
-        public ASRSProcess(clsPlcConfig plcConfig, DeviceInfo Device)
+        public ASRSProcess(clsPlcConfig plcConfig, DeviceInfo Device, MapHost Router)
         {
             craneType = plcConfig.CraneType;
             _stockerId = int.Parse(Device.DeviceID);
-            _cranes.Add(new CraneProcess(1, plcConfig, Device));
+            _cranes.Add(new CraneProcess(1, plcConfig, Device, Router));
 
             if (craneType == clsEnum.CmdType.CraneType.Daul)
-                _cranes.Add(new CraneProcess(2, plcConfig, Device));
+                _cranes.Add(new CraneProcess(2, plcConfig, Device, Router));
         }
 
         public clsEnum.CmdType.CraneType CraneType => craneType;

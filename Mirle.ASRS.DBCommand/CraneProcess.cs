@@ -5,20 +5,21 @@ using System.Collections.Generic;
 using System.Linq;
 using Mirle.Structure;
 using System.Threading.Tasks;
+using Mirle.MapController;
 
 namespace Mirle.ASRS.DBCommand
 {
     public class CraneProcess : ICrane
     {
         private readonly List<IFork> _forks = new List<IFork>();
-        public CraneProcess(int craneNo, clsPlcConfig plcConfig, DeviceInfo Device)
+        public CraneProcess(int craneNo, clsPlcConfig plcConfig, DeviceInfo Device, MapHost Router)
         {
             CraneNo = craneNo;
             ForkType = plcConfig.ForkType;
-            _forks.Add(new ForkProcess(1, plcConfig, Device));
+            _forks.Add(new ForkProcess(1, plcConfig, Device, Router));
 
             if (ForkType == clsEnum.CmdType.ForkType.TwinFork)
-                _forks.Add(new ForkProcess(2, plcConfig, Device));
+                _forks.Add(new ForkProcess(2, plcConfig, Device, Router));
         }
 
         public int CraneNo { get; }

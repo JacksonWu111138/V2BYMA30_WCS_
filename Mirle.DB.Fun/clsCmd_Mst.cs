@@ -9,6 +9,33 @@ namespace Mirle.DB.Fun
     public class clsCmd_Mst
     {
         private clsTool tool = new clsTool();
+        public int FunGetCommand(string EquNo, string StockInLoc_Sql, ref DataTable dtTmp, DataBase.DB db)
+        {
+            try
+            {
+                string strEM = "";
+                string strSql = $"select * from {Parameter.clsCmd_Mst.TableName} where (";
+                strSql += $"{Parameter.clsCmd_Mst.Column.Equ_No} = '{EquNo}' and ";
+                strSql += $"{Parameter.clsCmd_Mst.Column.Cmd_Mode} in ('{clsConstValue.CmdMode.StockOut}'," +
+                    $"'{clsConstValue.CmdMode.L2L}') and {Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{clsConstValue.CmdSts.strCmd_Initial}') ";
+                strSql += $"or ({Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{clsConstValue.CmdSts.strCmd_Running}' and " +
+                    $"{Parameter.clsCmd_Mst.Column.CurDeviceID} = '{EquNo}' and " +
+                    $"{Parameter.clsCmd_Mst.Column.CurLoc} in ({StockInLoc_Sql}))";
+                dtTmp = new DataTable();
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet == DBResult.Exception) clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return DBResult.Exception;
+            }
+        }
+
         public bool FunGetCommand(string sCmdSno, ref CmdMstInfo cmd, ref int iRet, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();

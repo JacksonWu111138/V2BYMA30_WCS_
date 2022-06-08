@@ -55,6 +55,14 @@
       <Project>{25DDA85B-35BE-429D-81B4-025731C0E826}</Project>
       <Name>Mirle.DB.Object</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mirle.DB.Proc\Mirle.DB.Proc.csproj">
+      <Project>{60C72719-D780-4BC8-9198-FC21C9754918}</Project>
+      <Name>Mirle.DB.Proc</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mirle.DB.WMS.Proc\Mirle.DB.WMS.Proc.csproj">
+      <Project>{553BD8CF-F4C1-4B39-97AB-42CC2F7C8187}</Project>
+      <Name>Mirle.DB.WMS.Proc</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.Def\Mirle.Def_2.csproj">
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def_2</Name>

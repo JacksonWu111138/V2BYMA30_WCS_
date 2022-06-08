@@ -1,6 +1,7 @@
 ﻿using Mirle.DataBase;
 using Mirle.DB.Fun;
 using Mirle.Def;
+using Mirle.MapController;
 using Mirle.Structure;
 using System;
 using System.Collections.Generic;
@@ -14,16 +15,16 @@ namespace Mirle.DB.Proc
 {
     public class clsProc
     {
-        private clsPortDef PortDef = new clsPortDef();
-        private clsRoutdef routdef = new clsRoutdef();
+        private Fun.clsCmd_Mst Cmd_Mst = new Fun.clsCmd_Mst();
         private clsDbConfig _config = new clsDbConfig();
         public clsProc(clsDbConfig config)
         {
             _config = config;
         }
 
-        public  bool FunMapping_Proc(out List<Element_Port> ports, ref DataTable dtRoutDef)
+        public bool FunAsrsCmd_Proc(DeviceInfo Device, string StockInLoc_Sql, MapHost Router, WMS.Proc.clsHost wms)
         {
+            DataTable dtTmp = new DataTable();
             try
             {
                 using (var db = clsGetDB.GetDB(_config))
@@ -31,26 +32,22 @@ namespace Mirle.DB.Proc
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        ports = PortDef.GetAllPort(db);
-                        if (ports.Count <= 0) return false;
+                        iRet = Cmd_Mst.FunGetCommand(Device.DeviceID, StockInLoc_Sql, ref dtTmp, db);
 
-                        dtRoutDef = new DataTable();
-                        return routdef.GetRoutdef(ref dtRoutDef, db);
+                        return true;
                     }
-                    else
-                    {
-                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, "資料庫開啟失敗！");
-                        ports = new List<Element_Port>();
-                        return false;
-                    }
+                    else return false;
                 }
             }
             catch (Exception ex)
             {
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                ports = new List<Element_Port>();
                 return false;
+            }
+            finally
+            {
+                dtTmp.Dispose();
             }
         }
     }

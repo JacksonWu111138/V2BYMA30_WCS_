@@ -32,9 +32,8 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
             {
                 if (clsDB_Proc.DBConn)
                 {
-                    
-
-
+                    clsDB_Proc.GetDB_Object().GetProc().FunAsrsCmd_Proc(device, clsTool.GetSqlLocation_ForIn(device), 
+                        router, clsDB_Proc.GetWmsDB_Object());
                 }
             }
             catch (Exception ex)

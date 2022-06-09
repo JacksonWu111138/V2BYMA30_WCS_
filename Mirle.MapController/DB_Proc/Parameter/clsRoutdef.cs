@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mirle.DB.Fun.Parameter
+namespace Mirle.MapController.DB_Proc.Parameter
 {
     public class clsRoutdef
     {

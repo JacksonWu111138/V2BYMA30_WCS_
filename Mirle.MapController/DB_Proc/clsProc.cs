@@ -94,7 +94,7 @@ namespace Mirle.MapController.DB_Proc
         {
             try
             {
-                string strSql = $"select * from {DB.Fun.Parameter.clsRoutdef.TableName}";
+                string strSql = $"select * from {Parameter.clsRoutdef.TableName}";
                 string strEM = "";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet != DBResult.Success)

@@ -35,6 +35,9 @@ namespace Mirle.Def
             }
         }
 
+        public enum LocationID
+        { Shelf, Teach }
+
         public static void AddPath_Double(RouteService routeService, Location loc1, Location loc2)
         {
             routeService.AddPath(loc1, loc2);

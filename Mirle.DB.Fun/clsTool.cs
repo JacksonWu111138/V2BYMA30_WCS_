@@ -144,5 +144,39 @@ namespace Mirle.DB.Fun
 
             return trnLog;
         }
+
+        /// <summary>
+        /// 依儲位取得Equ_No
+        /// </summary>
+        /// <param name="sLoc">儲位編號</param>
+        /// <returns></returns>
+        public int funGetEquNoByLoc(string sLoc)
+        {
+            int iCrn = 0;
+            string sRow_X = string.Empty;
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(sLoc))
+                {
+                    sRow_X = sLoc.Substring(0, 2);
+                    int iRow = Convert.ToInt32(sRow_X);
+                    if (iRow % 4 == 0) iCrn = iRow / 4;
+                    else iCrn = iRow / 4 + 1;
+
+                    return iCrn;
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return 0;
+            }
+        }
     }
 }

@@ -38,8 +38,8 @@ namespace Mirle.MapController
 
                     for (int i = 0; i < dtTmp.Rows.Count; i++)
                     {
-                        string DeviceID = Convert.ToString(dtTmp.Rows[i][DB.Fun.Parameter.clsRoutdef.Column.DeviceID]);
-                        string HostPortID = Convert.ToString(dtTmp.Rows[i][DB.Fun.Parameter.clsRoutdef.Column.HostPortID]);
+                        string DeviceID = Convert.ToString(dtTmp.Rows[i][DB_Proc.Parameter.clsRoutdef.Column.DeviceID]);
+                        string HostPortID = Convert.ToString(dtTmp.Rows[i][DB_Proc.Parameter.clsRoutdef.Column.HostPortID]);
                         var n1 = GetLocation(DeviceID, HostPortID);
                         if(n1 == null)
                         {
@@ -48,8 +48,8 @@ namespace Mirle.MapController
                             continue;
                         }
 
-                        DeviceID = Convert.ToString(dtTmp.Rows[i][DB.Fun.Parameter.clsRoutdef.Column.NextDeviceID]);
-                        HostPortID = Convert.ToString(dtTmp.Rows[i][DB.Fun.Parameter.clsRoutdef.Column.NextHostPortID]);
+                        DeviceID = Convert.ToString(dtTmp.Rows[i][DB_Proc.Parameter.clsRoutdef.Column.NextDeviceID]);
+                        HostPortID = Convert.ToString(dtTmp.Rows[i][DB_Proc.Parameter.clsRoutdef.Column.NextHostPortID]);
                         var n2 = GetLocation(DeviceID, HostPortID);
                         if (n2 == null)
                         {

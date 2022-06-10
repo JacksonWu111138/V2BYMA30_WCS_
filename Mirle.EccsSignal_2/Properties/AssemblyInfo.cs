@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // 組件的一般資訊是由下列的屬性集控制。
 // 變更這些屬性的值即可修改組件的相關
 // 資訊。
-[assembly: AssemblyTitle("Mirle.Structure")]
+[assembly: AssemblyTitle("Mirle.EccsSignal_2")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Mirle.Structure")]
+[assembly: AssemblyProduct("Mirle.EccsSignal_2")]
 [assembly: AssemblyCopyright("Copyright ©  2022")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // 下列 GUID 為專案公開 (Expose) 至 COM 時所要使用的 typelib ID
-[assembly: Guid("cc7b0aac-3935-44cf-b363-55c0445358d0")]
+[assembly: Guid("f1280df7-4dac-4be5-8ecd-c7663697229d")]
 
 // 組件的版本資訊由下列四個值所組成: 
 //

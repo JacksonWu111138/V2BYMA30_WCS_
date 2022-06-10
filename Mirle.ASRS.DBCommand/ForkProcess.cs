@@ -6,13 +6,14 @@ using System.Linq;
 using Mirle.Structure;
 using System.Threading.Tasks;
 using Mirle.MapController;
+using Mirle.Middle;
 
 namespace Mirle.ASRS.DBCommand
 {
     public class ForkProcess : IFork
     {
         private IProcess process;
-        public ForkProcess(int forkNo, clsPlcConfig plcConfig, DeviceInfo Device, MapHost Router)
+        public ForkProcess(int forkNo, clsPlcConfig plcConfig, DeviceInfo Device, MapHost Router, MidHost middle)
         {
             ForkNo = forkNo;
             LocType = plcConfig.LocType;
@@ -29,7 +30,7 @@ namespace Mirle.ASRS.DBCommand
                                 process = new DoubleDeep.SingleCrane.SingleFork.DoubleCV.Process(Device, Router);
                                 break;
                             default:
-                                process = new DoubleDeep.SingleCrane.SingleFork.Process(Device, Router);
+                                process = new DoubleDeep.SingleCrane.SingleFork.Process(Device, Router, middle);
                                 break;
                         }
                     }

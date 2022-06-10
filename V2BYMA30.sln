@@ -8,8 +8,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLL", "DLL", "{58EC0D04-15A
 		Dll\Mirle.ASRS.Close.Program.exe = Dll\Mirle.ASRS.Close.Program.exe
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Structure", "Mirle.Structure\Mirle.Structure.csproj", "{0A0D222E-0C76-4838-A8B1-6CA6F26CB225}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.ASRS.WCS", "Mirle.ASRS.WCS\Mirle.ASRS.WCS.csproj", "{448A3C3E-39FD-49FF-B6D7-2D0D9E61AA49}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.DB.Fun", "Mirle.DB.Fun\Mirle.DB.Fun.csproj", "{C40166B0-0F5D-4535-94A7-699764A59A83}"
@@ -75,6 +73,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Stocker.Command", "Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Middle", "Mirle.Middle\Mirle.Middle.csproj", "{312ED336-0211-4E88-9F3F-6B15A133F864}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.EccsSignal", "Mirle.EccsSignal_2\Mirle.EccsSignal.csproj", "{F1280DF7-4DAC-4BE5-8ECD-C7663697229D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Structure", "Mirle.Structure\Mirle.Structure.csproj", "{CC7B0AAC-3935-44CF-B363-55C0445358D0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,12 +84,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{0A0D222E-0C76-4838-A8B1-6CA6F26CB225}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0A0D222E-0C76-4838-A8B1-6CA6F26CB225}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0A0D222E-0C76-4838-A8B1-6CA6F26CB225}.R0K5M320|Any CPU.ActiveCfg = Release|Any CPU
-		{0A0D222E-0C76-4838-A8B1-6CA6F26CB225}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
-		{0A0D222E-0C76-4838-A8B1-6CA6F26CB225}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0A0D222E-0C76-4838-A8B1-6CA6F26CB225}.Release|Any CPU.Build.0 = Release|Any CPU
 		{448A3C3E-39FD-49FF-B6D7-2D0D9E61AA49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{448A3C3E-39FD-49FF-B6D7-2D0D9E61AA49}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{448A3C3E-39FD-49FF-B6D7-2D0D9E61AA49}.R0K5M320|Any CPU.ActiveCfg = Release|Any CPU
@@ -202,6 +198,18 @@ Global
 		{312ED336-0211-4E88-9F3F-6B15A133F864}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
 		{312ED336-0211-4E88-9F3F-6B15A133F864}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{312ED336-0211-4E88-9F3F-6B15A133F864}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1280DF7-4DAC-4BE5-8ECD-C7663697229D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1280DF7-4DAC-4BE5-8ECD-C7663697229D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1280DF7-4DAC-4BE5-8ECD-C7663697229D}.R0K5M320|Any CPU.ActiveCfg = Release|Any CPU
+		{F1280DF7-4DAC-4BE5-8ECD-C7663697229D}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
+		{F1280DF7-4DAC-4BE5-8ECD-C7663697229D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1280DF7-4DAC-4BE5-8ECD-C7663697229D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC7B0AAC-3935-44CF-B363-55C0445358D0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC7B0AAC-3935-44CF-B363-55C0445358D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC7B0AAC-3935-44CF-B363-55C0445358D0}.R0K5M320|Any CPU.ActiveCfg = Release|Any CPU
+		{CC7B0AAC-3935-44CF-B363-55C0445358D0}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
+		{CC7B0AAC-3935-44CF-B363-55C0445358D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC7B0AAC-3935-44CF-B363-55C0445358D0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

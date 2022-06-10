@@ -16,6 +16,32 @@ namespace Mirle.DB.Fun
         private clsTool tool = new clsTool();
         private clsLocMst LocMst = new clsLocMst();
         private clsCmd_Mst Cmd_Mst = new clsCmd_Mst();
+        public Location GetCurLocation(CmdMstInfo cmd, MapHost Router, string DeviceID, string HostLocation, DataBase.DB db)
+        {
+            try
+            {
+                Location Start = Router.GetLocation(DeviceID, HostLocation);
+                if (Start == null)
+                {
+                    string sRemark = $"Error: 取得CurLocation失敗 => <DeviceID> {DeviceID} <Location> {HostLocation}";
+                    if (sRemark != cmd.Remark)
+                    {
+                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                    }
+
+                    return null;
+                }
+
+                return Start;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return null;
+            }
+        }
+
         public Location GetFinialDestination(CmdMstInfo cmd, MapHost Router, DataBase.DB db)
         {
             try

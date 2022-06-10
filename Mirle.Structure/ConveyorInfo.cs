@@ -16,6 +16,7 @@ namespace Mirle.Structure
         public Location bufferLocation { get; set; }
         public int WaterLevel { get; set; } = 0;
         public DoubleType DoubleType { get; set; } = DoubleType.None;
+        public string ControllerID { get; set; } = "";
     }
 
     public enum DoubleType

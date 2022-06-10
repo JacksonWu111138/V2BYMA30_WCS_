@@ -21,6 +21,8 @@ using Mirle.MapController;
 using Mirle.Structure;
 using Mirle.WebAPI.U2NMMA30.ReportInfo;
 using Mirle.ASRS.DBCommand;
+using Mirle.Middle;
+using Mirle.EccsSignal;
 
 namespace Mirle.ASRS.WCS.View
 {
@@ -35,6 +37,8 @@ namespace Mirle.ASRS.WCS.View
         public static DeviceInfo[] PCBA = new DeviceInfo[2];
         public static DeviceInfo[] Box = new DeviceInfo[3];
         private ASRSProcess[] AsrsCommand = new ASRSProcess[5];
+        private SignalHost[] CraneSignals = new SignalHost[5];
+        private MidHost middle = new MidHost();
         public MainForm()
         {
             InitializeComponent();
@@ -309,12 +313,14 @@ namespace Mirle.ASRS.WCS.View
                 if (i < 2)
                 {
                     plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Single;
-                    AsrsCommand[i] = new ASRSProcess(plcConfig, PCBA[i], router);
+                    AsrsCommand[i] = new ASRSProcess(plcConfig, PCBA[i], router, middle);
+                    CraneSignals[i] = new SignalHost(clInitSys.DbConfig, PCBA[i].DeviceID);
                 }
                 else
                 {
                     plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Double;
-                    AsrsCommand[i] = new ASRSProcess(plcConfig, Box[i - 2], router);
+                    AsrsCommand[i] = new ASRSProcess(plcConfig, Box[i - 2], router, middle);
+                    CraneSignals[i] = new SignalHost(clInitSys.DbConfig, Box[i - 2].DeviceID);
                 }
             }
         }

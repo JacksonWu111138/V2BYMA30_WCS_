@@ -8,6 +8,7 @@ using Mirle.Structure;
 using System.Threading.Tasks;
 using Mirle.MapController;
 using Mirle.Middle;
+using Mirle.EccsSignal;
 
 namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
 {
@@ -17,9 +18,10 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
         private DeviceInfo device;
         private MapHost router;
         private MidHost middle;
-        public Process(DeviceInfo Device, MapHost Router, MidHost Middle)
+        private SignalHost signal;
+        public Process(DeviceInfo Device, MapHost Router, MidHost Middle, SignalHost CrnSignal)
         {
-            device = Device; router = Router; middle = Middle;
+            device = Device; router = Router; middle = Middle; signal = CrnSignal;
             timRead.Elapsed += new System.Timers.ElapsedEventHandler(timRead_Elapsed);
             timRead.Enabled = false; timRead.Interval = 500;
         }
@@ -35,7 +37,7 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
                 if (clsDB_Proc.DBConn)
                 {
                     clsDB_Proc.GetDB_Object().GetProc().FunAsrsCmd_Proc(device, clsTool.GetSqlLocation_ForIn(device), 
-                        router, clsDB_Proc.GetWmsDB_Object(), middle);
+                        router, clsDB_Proc.GetWmsDB_Object(), middle, signal);
                 }
             }
             catch (Exception ex)

@@ -312,15 +312,15 @@ namespace Mirle.ASRS.WCS.View
 
                 if (i < 2)
                 {
-                    plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Single;
-                    AsrsCommand[i] = new ASRSProcess(plcConfig, PCBA[i], router, middle);
                     CraneSignals[i] = new SignalHost(clInitSys.DbConfig, PCBA[i].DeviceID);
+                    plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Single;
+                    AsrsCommand[i] = new ASRSProcess(plcConfig, PCBA[i], router, middle, CraneSignals[i]);
                 }
                 else
                 {
-                    plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Double;
-                    AsrsCommand[i] = new ASRSProcess(plcConfig, Box[i - 2], router, middle);
                     CraneSignals[i] = new SignalHost(clInitSys.DbConfig, Box[i - 2].DeviceID);
+                    plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Double;
+                    AsrsCommand[i] = new ASRSProcess(plcConfig, Box[i - 2], router, middle, CraneSignals[i]);
                 }
             }
         }

@@ -56,17 +56,17 @@ namespace Mirle.MapController.DB_Proc
             string strEM = "";
             try
             {
-                string strSql = $"select * from {DB.Fun.Parameter.clsPortDef.TableName}";
+                string strSql = $"select * from {Parameter.clsPortDef.TableName}";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Success)
                 {
                     for (int i = 0; i < dtTmp.Rows.Count; i++)
                     {
-                        objPort = new Element_Port(Convert.ToString(dtTmp.Rows[i][DB.Fun.Parameter.clsPortDef.Column.DeviceID]),
-                            Convert.ToString(dtTmp.Rows[i][DB.Fun.Parameter.clsPortDef.Column.HostPortID]),
-                            Convert.ToInt32(dtTmp.Rows[i][DB.Fun.Parameter.clsPortDef.Column.PortType]),
-                            Convert.ToInt32(dtTmp.Rows[i][DB.Fun.Parameter.clsPortDef.Column.PortTypeIndex]),
-                            Convert.ToInt32(dtTmp.Rows[i][DB.Fun.Parameter.clsPortDef.Column.PLCPortID]));
+                        objPort = new Element_Port(Convert.ToString(dtTmp.Rows[i][Parameter.clsPortDef.Column.DeviceID]),
+                            Convert.ToString(dtTmp.Rows[i][Parameter.clsPortDef.Column.HostPortID]),
+                            Convert.ToInt32(dtTmp.Rows[i][Parameter.clsPortDef.Column.PortType]),
+                            Convert.ToInt32(dtTmp.Rows[i][Parameter.clsPortDef.Column.PortTypeIndex]),
+                            Convert.ToInt32(dtTmp.Rows[i][Parameter.clsPortDef.Column.PLCPortID]));
                         lstPorts.Add(objPort);
                     }
 

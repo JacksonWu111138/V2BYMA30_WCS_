@@ -1,5 +1,6 @@
 ﻿using Mirle.DataBase;
 using Mirle.Def;
+using Mirle.EccsSignal;
 using Mirle.MapController;
 using Mirle.Middle;
 using Mirle.Structure;
@@ -25,7 +26,8 @@ namespace Mirle.DB.Proc
             _config = config;
         }
 
-        public bool FunAsrsCmd_Proc(DeviceInfo Device, string StockInLoc_Sql, MapHost Router, WMS.Proc.clsHost wms, MidHost middle)
+        public bool FunAsrsCmd_Proc(DeviceInfo Device, string StockInLoc_Sql, MapHost Router, 
+            WMS.Proc.clsHost wms, MidHost middle, SignalHost CrnSignal)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -40,8 +42,10 @@ namespace Mirle.DB.Proc
                         {
                             for (int i = 0; i < dtTmp.Rows.Count; i++)
                             {
-                                string sRemark = "";
                                 CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
+                                if (!Cmd_Mst.CheckCraneStatus(cmd, Device, CrnSignal, db)) continue;
+
+                                string sRemark = "";
                                 Location Start = null; Location End = null;
                                 if (!string.IsNullOrWhiteSpace(cmd.CurLoc))
                                 {

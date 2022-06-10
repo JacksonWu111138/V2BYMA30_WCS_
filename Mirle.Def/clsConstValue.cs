@@ -8,6 +8,65 @@ namespace Mirle.Def
 {
     public class clsConstValue
     {
+        public class Crane
+        {
+            public class Mode
+            {
+                /// <summary>
+                /// 電腦模式
+                /// </summary>
+                public const string Computer = "C";
+                /// <summary>
+                /// 地上盤模式
+                /// </summary>
+                public const string Manual = "R";
+                /// <summary>
+                /// 地上盤維護模式
+                /// </summary>
+                public const string MasterMaintain = "I";
+                /// <summary>
+                /// 車上盤維護模式
+                /// </summary>
+                public const string CarMaintain = "M";
+                /// <summary>
+                /// 電腦離線中
+                /// </summary>
+                public const string ComputerOffLine = "N";
+                /// <summary>
+                /// 無資料
+                /// </summary>
+                public const string Error = "X";
+            }
+
+            public class Status
+            {
+                /// <summary>
+                /// PLC檢查命令中
+                /// </summary>
+                public const string PlcCheck = "I";
+                /// <summary>
+                /// 動作中
+                /// </summary>
+                public const string Busy = "A";
+                /// <summary>
+                /// 異常中
+                /// </summary>
+                public const string Alarm = "E";
+                /// <summary>
+                /// 待命中
+                /// </summary>
+                public const string Idle = "W";
+                /// <summary>
+                /// 電腦離線中
+                /// </summary>
+                public const string ComputerOffLine = "N";
+                /// <summary>
+                /// 與PLC未連線
+                /// </summary>
+                public const string Error = "X";
+            }
+        }
+
         public class YesNo
         {
             public const string Yes = "Y";
@@ -22,18 +81,6 @@ namespace Mirle.Def
         {
             public const string Success = "200";
             public const string Fail = "500";
-        }
-
-        public class OEECountMethod
-        {
-            public const string lot = "lot";
-            public const string bin = "bin";
-        }
-
-        public class STKC_FinishLoc
-        {
-            public const string LeftFork = "0001001";
-            public const string RightFork = "0001002";
         }
 
         public class CmdSts

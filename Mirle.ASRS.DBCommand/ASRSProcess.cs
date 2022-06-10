@@ -8,6 +8,7 @@ using Mirle.Structure;
 using System.Threading.Tasks;
 using Mirle.MapController;
 using Mirle.Middle;
+using Mirle.EccsSignal;
 
 namespace Mirle.ASRS.DBCommand
 {
@@ -16,14 +17,14 @@ namespace Mirle.ASRS.DBCommand
         private clsEnum.CmdType.CraneType craneType;
         private int _stockerId;
         private readonly List<ICrane> _cranes = new List<ICrane>();
-        public ASRSProcess(clsPlcConfig plcConfig, DeviceInfo Device, MapHost Router, MidHost middle)
+        public ASRSProcess(clsPlcConfig plcConfig, DeviceInfo Device, MapHost Router, MidHost middle, SignalHost CrnSignal)
         {
             craneType = plcConfig.CraneType;
             _stockerId = int.Parse(Device.DeviceID);
-            _cranes.Add(new CraneProcess(1, plcConfig, Device, Router, middle));
+            _cranes.Add(new CraneProcess(1, plcConfig, Device, Router, middle, CrnSignal));
 
             if (craneType == clsEnum.CmdType.CraneType.Daul)
-                _cranes.Add(new CraneProcess(2, plcConfig, Device, Router, middle));
+                _cranes.Add(new CraneProcess(2, plcConfig, Device, Router, middle, CrnSignal));
         }
 
         public clsEnum.CmdType.CraneType CraneType => craneType;

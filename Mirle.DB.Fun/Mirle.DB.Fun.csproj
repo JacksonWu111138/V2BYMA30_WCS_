@@ -89,6 +89,10 @@
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def_2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mirle.EccsSignal_2\Mirle.EccsSignal.csproj">
+      <Project>{F1280DF7-4DAC-4BE5-8ECD-C7663697229D}</Project>
+      <Name>Mirle.EccsSignal</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.MapController\Mirle.MapController_2.csproj">
       <Project>{E9C71B96-E8F4-4124-9F18-444E8A05CF80}</Project>
       <Name>Mirle.MapController_2</Name>

@@ -3,12 +3,47 @@ using Mirle.Def;
 using System.Data;
 using Mirle.Structure;
 using Mirle.DataBase;
+using Mirle.EccsSignal;
 
 namespace Mirle.DB.Fun
 {
     public class clsCmd_Mst
     {
         private clsTool tool = new clsTool();
+        public bool CheckCraneStatus(CmdMstInfo cmd, DeviceInfo Device, SignalHost CrnSignal, DataBase.DB db)
+        {
+            string sRemark = "";
+            bool bCraneSts = true;
+            if (CrnSignal.CrnMode != clsConstValue.Crane.Mode.Computer)
+            {
+                bCraneSts = false;
+                sRemark = $"Error: Line{Device.DeviceID}並非電腦模式";
+            }
+            else if (CrnSignal.CrnSts == clsConstValue.Crane.Status.Alarm ||
+                CrnSignal.CrnSts == clsConstValue.Crane.Status.ComputerOffLine ||
+                CrnSignal.CrnSts == clsConstValue.Crane.Status.Error)
+            {
+                bCraneSts = false;
+                sRemark = $"Error: Line{Device.DeviceID}異常中";
+            }
+            else if (CrnSignal.CrnSts == clsConstValue.Crane.Status.Busy)
+            {
+                bCraneSts = false;
+                sRemark = $"Line{Device.DeviceID}動作中";
+            }
+            else bCraneSts = true;
+
+            if (!bCraneSts)
+            {
+                if (sRemark != cmd.Remark)
+                {
+                    FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                }
+            }
+
+            return bCraneSts;
+        }
+
         public int FunGetCommand(string EquNo, string StockInLoc_Sql, ref DataTable dtTmp, DataBase.DB db)
         {
             try
@@ -21,6 +56,8 @@ namespace Mirle.DB.Fun
                 strSql += $"or ({Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{clsConstValue.CmdSts.strCmd_Running}' and " +
                     $"{Parameter.clsCmd_Mst.Column.CurDeviceID} = '{EquNo}' and " +
                     $"{Parameter.clsCmd_Mst.Column.CurLoc} in ({StockInLoc_Sql}))";
+                strSql += $" ORDER BY {Parameter.clsCmd_Mst.Column.Prty}," +
+                   $" {Parameter.clsCmd_Mst.Column.Create_Date}, {Parameter.clsCmd_Mst.Column.Cmd_Sno}";
                 dtTmp = new DataTable();
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Exception) clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");

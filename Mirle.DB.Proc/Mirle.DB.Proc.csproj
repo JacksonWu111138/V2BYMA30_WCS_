@@ -73,6 +73,10 @@
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def_2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mirle.EccsSignal_2\Mirle.EccsSignal.csproj">
+      <Project>{F1280DF7-4DAC-4BE5-8ECD-C7663697229D}</Project>
+      <Name>Mirle.EccsSignal</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.Gird\Mirle.Gird.csproj">
       <Project>{8ab5fac9-7cc2-4eec-b583-39778e66ce1f}</Project>
       <Name>Mirle.Gird</Name>

@@ -57,25 +57,8 @@
     <Compile Include="clsWriLog.cs" />
     <Compile Include="DB_Proc\clsHost.cs" />
     <Compile Include="DB_Proc\clsProc.cs" />
-    <Compile Include="DB_Proc\Parameter\clsAlarmData.cs" />
-    <Compile Include="DB_Proc\Parameter\clsCmd_Dtl.cs" />
-    <Compile Include="DB_Proc\Parameter\clsCmd_Dtl_His.cs" />
-    <Compile Include="DB_Proc\Parameter\clsCmd_Mst.cs" />
-    <Compile Include="DB_Proc\Parameter\clsCMD_MST_His.cs" />
-    <Compile Include="DB_Proc\Parameter\clsCycle.cs" />
-    <Compile Include="DB_Proc\Parameter\clsEquCmd.cs" />
-    <Compile Include="DB_Proc\Parameter\clsItmMst.cs" />
-    <Compile Include="DB_Proc\Parameter\clsL2LCount.cs" />
-    <Compile Include="DB_Proc\Parameter\clsLoc_Dtl.cs" />
-    <Compile Include="DB_Proc\Parameter\clsLoc_Dtl_Log.cs" />
-    <Compile Include="DB_Proc\Parameter\clsLoc_Mst.cs" />
-    <Compile Include="DB_Proc\Parameter\clsMoldUseLog.cs" />
     <Compile Include="DB_Proc\Parameter\clsPortDef.cs" />
     <Compile Include="DB_Proc\Parameter\clsRoutdef.cs" />
-    <Compile Include="DB_Proc\Parameter\clsSno_Ctl.cs" />
-    <Compile Include="DB_Proc\Parameter\clsSno_Max.cs" />
-    <Compile Include="DB_Proc\Parameter\clsTktMst.cs" />
-    <Compile Include="DB_Proc\Parameter\clsTrn_Log.cs" />
     <Compile Include="MapHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

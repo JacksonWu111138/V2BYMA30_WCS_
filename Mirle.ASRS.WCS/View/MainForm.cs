@@ -55,6 +55,7 @@ namespace Mirle.ASRS.WCS.View
             CraneBuffer_Initial();
             clInitSys.FunLoadIniSys();
             FunInit();
+            FunEventInit();
             GridInit();
 
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "WCS程式已開啟");
@@ -87,6 +88,11 @@ namespace Mirle.ASRS.WCS.View
             {
                 objCloseProgram = null;
             }
+        }
+
+        private void MainForm_OnNeedShelfToShelfEvent(object sender, DB.Fun.Events.NeedShelfToShelfArgs e)
+        {
+            //通知WMS產生庫對庫
         }
 
         private MainTestForm mainTest;
@@ -299,6 +305,11 @@ namespace Mirle.ASRS.WCS.View
             //_unityContainer.RegisterInstance(new WCSController());
             //_webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
             //clearCmd = new DB.ClearCmd.Proc.clsHost();
+        }
+
+        private void FunEventInit()
+        {
+            clsDB_Proc.GetDB_Object().GetProc().GetFun_Routdef().OnNeedShelfToShelfEvent += MainForm_OnNeedShelfToShelfEvent;
         }
 
         private void FunAsrsCmdInit()

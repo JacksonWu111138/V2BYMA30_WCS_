@@ -1,6 +1,8 @@
 ﻿using Mirle.DataBase;
+using Mirle.DB.Fun.Events;
 using Mirle.Def;
 using Mirle.MapController;
+using Mirle.Middle;
 using Mirle.Structure;
 using System;
 using System.Collections.Generic;
@@ -13,6 +15,10 @@ namespace Mirle.DB.Fun
 {
     public class clsRoutdef
     {
+        public delegate void NeedShelfToShelfEventHandler(object sender, NeedShelfToShelfArgs e);
+        public event NeedShelfToShelfEventHandler OnNeedShelfToShelfEvent;
+        private bool reportedFlag = false;
+        protected readonly object _Lock = new object();
         private clsTool tool = new clsTool();
         private clsLocMst LocMst = new clsLocMst();
         private clsCmd_Mst Cmd_Mst = new clsCmd_Mst();
@@ -83,6 +89,126 @@ namespace Mirle.DB.Fun
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
                 return null;
+            }
+        }
+
+        public bool CheckSourceIsOK(CmdMstInfo cmd, Location sLoc_Start, MidHost middle, DeviceInfo Device, WMS.Proc.clsHost wms, DataBase.DB db)
+        {
+            try
+            {
+                string sRemark = "";
+                switch (sLoc_Start.LocationTypes)
+                {
+                    case LocationTypes.Conveyor:
+                    case LocationTypes.EQ:
+                    case LocationTypes.IO:
+                        if (!middle.CheckIsInReady(Device, sLoc_Start))
+                        {
+                            sRemark = $"Error: {sLoc_Start.LocationId}沒發入庫Ready";
+
+                            if (sRemark != cmd.Remark)
+                            {
+                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                            }
+
+                            return false;
+                        }
+
+                        break;
+                    case LocationTypes.Shelf:
+                        bool bCheckOutside = false; string sLocDD = ""; bool IsEmpty_DD = false; string BoxID_DD = "";
+                        int iRet = wms.GetLocMst().CheckLocIsOutside(cmd.Loc, ref bCheckOutside, ref sLocDD, ref IsEmpty_DD, ref BoxID_DD);
+                        if (iRet == DBResult.Success)
+                        {
+                            if (bCheckOutside)
+                            {
+                                CmdMstInfo cmd_DD = new CmdMstInfo();
+                                iRet = Cmd_Mst.FunCheckHasCommand(sLocDD, ref cmd_DD, db);
+                                if (iRet == DBResult.Success)
+                                {
+                                    bool bCheckCanDo = true;
+                                    if (IsEmpty_DD)
+                                    {
+                                        if (
+                                            cmd_DD.Cmd_Sts == clsConstValue.CmdSts.strCmd_Running &&
+                                            (
+                                              (cmd_DD.Cmd_Mode == clsConstValue.CmdMode.StockIn && cmd_DD.Loc == sLocDD)
+                                              ||
+                                              (cmd_DD.Cmd_Mode == clsConstValue.CmdMode.L2L && cmd_DD.New_Loc == sLocDD)
+                                            )
+                                          )
+                                        {
+                                            bCheckCanDo = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        bCheckCanDo = false;
+                                    }
+
+                                    if (!bCheckCanDo)
+                                    {
+                                        sRemark = $"Error: 等候內儲位{sLocDD}命令完成 => " +
+                                            $"<{Parameter.clsCmd_Mst.Column.Cmd_Sno}>{cmd_DD.Cmd_Sno}";
+                                        if (sRemark != cmd.Remark)
+                                        {
+                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                        }
+
+                                        return false;
+                                    }
+                                }
+                                else if (iRet == DBResult.NoDataSelect && !IsEmpty_DD)
+                                {
+                                    //通知WMS產生內儲位庫對庫
+                                    lock(_Lock)
+                                    {
+                                        if (!reportedFlag)
+                                        {
+                                            reportedFlag = true;
+                                            OnNeedShelfToShelfEvent?.Invoke(this, new NeedShelfToShelfArgs(sLocDD, BoxID_DD));
+                                            reportedFlag = false;
+                                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"觸發庫對庫Event => " +
+                                                $"<{Parameter.clsCmd_Mst.Column.Loc}>{sLocDD} <{Parameter.clsCmd_Mst.Column.BoxID}>{BoxID_DD}");
+                                        }
+                                    }
+
+                                    return false;
+                                }
+                                else if (iRet == DBResult.Exception)
+                                {
+                                    sRemark = $"Error: 找尋儲位命令失敗 => <{Parameter.clsCmd_Mst.Column.Loc}>{sLocDD}";
+                                    if (sRemark != cmd.Remark)
+                                    {
+                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                    }
+
+                                    return false;
+                                }
+                                else { }
+                            }
+                        }
+                        else
+                        {
+                            sRemark = $"Error: 取得WMS儲位資料失敗 => <{Parameter.clsCmd_Mst.Column.Loc}>{cmd.Loc}";
+                            if (sRemark != cmd.Remark)
+                            {
+                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                            }
+
+                            return false;
+                        }
+
+                        break;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
             }
         }
     }

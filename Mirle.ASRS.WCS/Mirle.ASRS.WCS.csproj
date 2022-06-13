@@ -104,6 +104,10 @@
       <Project>{31deb747-36ca-4a92-8df1-89eee47a0fa4}</Project>
       <Name>Mirle.DB.ClearCmd.Proc</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mirle.DB.Fun\Mirle.DB.Fun.csproj">
+      <Project>{C40166B0-0F5D-4535-94A7-699764A59A83}</Project>
+      <Name>Mirle.DB.Fun</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.DB.Object\Mirle.DB.Object.csproj">
       <Project>{25dda85b-35be-429d-81b4-025731c0e826}</Project>
       <Name>Mirle.DB.Object</Name>

@@ -26,6 +26,8 @@ namespace Mirle.DB.Proc
             _config = config;
         }
 
+        public Fun.clsRoutdef GetFun_Routdef() => Routdef;
+
         public bool FunAsrsCmd_Proc(DeviceInfo Device, string StockInLoc_Sql, MapHost Router, 
             WMS.Proc.clsHost wms, MidHost middle, SignalHost CrnSignal)
         {
@@ -119,76 +121,8 @@ namespace Mirle.DB.Proc
                                     }
                                     else
                                     {
-                                        switch(sLoc_Start.LocationTypes)
-                                        {
-                                            case LocationTypes.Conveyor:
-                                            case LocationTypes.EQ:
-                                            case LocationTypes.IO:
-                                                if (!middle.CheckIsInReady(Device, sLoc_Start))
-                                                {
-                                                    sRemark = $"Error: {sLoc_Start.LocationId}沒發入庫Ready";
-
-                                                    if (sRemark != cmd.Remark)
-                                                    {
-                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                    }
-
-                                                    continue;
-                                                }
-
-                                                break;
-                                            case LocationTypes.Shelf:
-                                                bool bCheckOutside = false; string sLocDD = ""; bool IsEmpty_DD = false; string BoxID_DD = "";
-                                                iRet = wms.GetLocMst().CheckLocIsOutside(cmd.Loc, ref bCheckOutside, ref sLocDD, ref IsEmpty_DD, ref BoxID_DD);
-                                                if (iRet == DBResult.Success)
-                                                {
-                                                    if (bCheckOutside)
-                                                    {
-                                                        CmdMstInfo cmd_DD = new CmdMstInfo();
-                                                        iRet = Cmd_Mst.FunCheckHasCommand(sLocDD, ref cmd_DD, db);
-                                                        if (iRet == DBResult.Success)
-                                                        {
-                                                            if(IsEmpty_DD)
-                                                            {
-
-                                                            }
-                                                        }
-                                                        else if (iRet == DBResult.NoDataSelect && !IsEmpty_DD)
-                                                        {
-                                                            //通知WMS產生內儲位庫對庫
-                                                            continue;
-                                                        }
-                                                        else if(iRet == DBResult.Exception)
-                                                        {
-                                                            sRemark = $"Error: 找尋儲位命令失敗 => <{Fun.Parameter.clsCmd_Mst.Column.Loc}>{sLocDD}";
-                                                            if (sRemark != cmd.Remark)
-                                                            {
-                                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                            }
-
-                                                            continue;
-                                                        }
-                                                        else { }
-
-                                                            if (IsEmpty_DD)
-                                                        {
-
-                                                        }
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    sRemark = $"Error: 取得WMS儲位資料失敗 => <{Fun.Parameter.clsCmd_Mst.Column.Loc}>{cmd.Loc}";
-                                                    if (sRemark != cmd.Remark)
-                                                    {
-                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                    }
-
-                                                    continue;
-                                                }
-
-                                                break;
-                                        }
+                                        //確認來源目的狀態
+                                        if (!Routdef.CheckSourceIsOK(cmd, sLoc_Start, middle, Device, wms, db)) continue;
                                     }
                                 }
                                 else continue;

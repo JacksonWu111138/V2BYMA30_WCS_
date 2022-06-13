@@ -13,7 +13,7 @@ namespace Mirle.DB.Fun
         public bool CheckCraneStatus(CmdMstInfo cmd, DeviceInfo Device, SignalHost CrnSignal, DataBase.DB db)
         {
             string sRemark = "";
-            bool bCraneSts = true;
+            bool bCraneSts;
             if (CrnSignal.CrnMode != clsConstValue.Crane.Mode.Computer)
             {
                 bCraneSts = false;

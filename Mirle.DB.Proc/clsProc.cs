@@ -121,8 +121,10 @@ namespace Mirle.DB.Proc
                                     }
                                     else
                                     {
-                                        //確認來源目的狀態
                                         if (!Routdef.CheckSourceIsOK(cmd, sLoc_Start, middle, Device, wms, db)) continue;
+                                        if (!Routdef.CheckDestinationIsOK(cmd, sLoc_End, middle, Device, wms, db)) continue;
+
+
                                     }
                                 }
                                 else continue;

@@ -93,6 +93,7 @@ namespace Mirle.ASRS.WCS.View
         private void MainForm_OnNeedShelfToShelfEvent(object sender, DB.Fun.Events.NeedShelfToShelfArgs e)
         {
             //通知WMS產生庫對庫
+
         }
 
         private MainTestForm mainTest;

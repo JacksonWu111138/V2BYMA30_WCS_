@@ -56,6 +56,7 @@
     <Compile Include="clsProc.cs" />
     <Compile Include="clsRoutdef.cs" />
     <Compile Include="clsSno.cs" />
+    <Compile Include="clsTask.cs" />
     <Compile Include="clsTKT_MST.cs" />
     <Compile Include="clsTool.cs" />
     <Compile Include="clsTrnLog.cs" />

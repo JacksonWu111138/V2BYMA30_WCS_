@@ -10,9 +10,11 @@ namespace Mirle.DB.Fun.Events
     {
         public string Loc { get; }
         public string BoxID { get; }
+        public string EquNo { get; }
 
-        public NeedShelfToShelfArgs(string sLoc, string sBoxID)
+        public NeedShelfToShelfArgs(string sEquNo, string sLoc, string sBoxID)
         {
+            EquNo = sEquNo;
             Loc = sLoc;
             BoxID = sBoxID;
         }

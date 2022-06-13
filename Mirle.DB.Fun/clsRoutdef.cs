@@ -165,7 +165,7 @@ namespace Mirle.DB.Fun
                                         if (!reportedFlag)
                                         {
                                             reportedFlag = true;
-                                            OnNeedShelfToShelfEvent?.Invoke(this, new NeedShelfToShelfArgs(sLocDD, BoxID_DD));
+                                            OnNeedShelfToShelfEvent?.Invoke(this, new NeedShelfToShelfArgs(Device.DeviceID, sLocDD, BoxID_DD));
                                             reportedFlag = false;
                                             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"觸發庫對庫Event => " +
                                                 $"<{Parameter.clsCmd_Mst.Column.Loc}>{sLocDD} <{Parameter.clsCmd_Mst.Column.BoxID}>{BoxID_DD}");
@@ -278,7 +278,7 @@ namespace Mirle.DB.Fun
                                             if (!reportedFlag)
                                             {
                                                 reportedFlag = true;
-                                                OnNeedShelfToShelfEvent?.Invoke(this, new NeedShelfToShelfArgs(sLocDD, BoxID_DD));
+                                                OnNeedShelfToShelfEvent?.Invoke(this, new NeedShelfToShelfArgs(Device.DeviceID, sLocDD, BoxID_DD));
                                                 reportedFlag = false;
                                                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"觸發庫對庫Event => " +
                                                     $"<{Parameter.clsCmd_Mst.Column.Loc}>{sLocDD} <{Parameter.clsCmd_Mst.Column.BoxID}>{BoxID_DD}");

@@ -14,12 +14,10 @@ namespace Mirle.Structure
         public int CraneNo { get; set; } = 1;
         public int ForkNo { get; set; } = 1;
         public string CSTID { get; set; }
-        //public clsEnum.TaskState TaskState { get; set; }
-        public string TaskState { get; set; }
+        public clsEnum.TaskState TaskState { get; set; }
         public string CompleteCode { get; set; }
         public clsEnum.TaskCmdState CMDState { get; set; }
-        //public clsEnum.TaskMode TransferMode { get; set; }
-        public string TransferMode { get; set; }
+        public clsEnum.TaskMode TransferMode { get; set; }
         public string TransferModeType { get; set; }
         public string Source { get; set; }
         public int SourceBay { get; set; }

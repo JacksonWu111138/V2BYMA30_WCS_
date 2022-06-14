@@ -62,6 +62,7 @@
     <Compile Include="LocationStatus.cs" />
     <Compile Include="LocCheckInfo.cs" />
     <Compile Include="LocDtlInfo.cs" />
+    <Compile Include="MiddleCmd.cs" />
     <Compile Include="MoldUseLogInfo.cs" />
     <Compile Include="MonitoredCraneInfo.cs" />
     <Compile Include="PortInfo.cs" />

@@ -20,6 +20,7 @@ namespace Mirle.DB.Proc
         private Fun.clsLocMst LocMst = new Fun.clsLocMst();
         private Fun.clsTool tool = new Fun.clsTool();
         private Fun.clsRoutdef Routdef = new Fun.clsRoutdef();
+        private Fun.clsMiddleCmd MiddleCmd = new Fun.clsMiddleCmd();
         private clsDbConfig _config = new clsDbConfig();
         public clsProc(clsDbConfig config)
         {
@@ -121,11 +122,67 @@ namespace Mirle.DB.Proc
                                     }
                                     else
                                     {
+                                        #region 判斷狀態
                                         if (!Routdef.CheckSourceIsOK(cmd, sLoc_Start, middle, Device, wms, db)) continue;
                                         if (!Routdef.CheckDestinationIsOK(cmd, sLoc_End, middle, Device, wms, db)) continue;
+                                        iRet = MiddleCmd.CheckHasMiddleCmd(Device.DeviceID, db);
+                                        if (iRet == DBResult.Success)
+                                        {
+                                            sRemark = $"Error: 等候Stocker{Device.DeviceID}的Fork命令淨空";
+                                            if (sRemark != cmd.Remark)
+                                            {
+                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                            }
 
-                                        
+                                            continue;
+                                        }
+                                        else if (iRet == DBResult.Exception)
+                                        {
+                                            sRemark = $"Error: 取得Stocker{Device.DeviceID}的Fork命令失敗！";
+                                            if (sRemark != cmd.Remark)
+                                            {
+                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                            }
 
+                                            continue;
+                                        }
+                                        else { }
+                                        #endregion 判斷狀態
+                                        MiddleCmd middleCmd = new MiddleCmd();
+                                        if (!MiddleCmd.FunGetMiddleCmd(cmd, sLoc_Start, sLoc_End, ref middleCmd, db)) continue;
+
+                                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                        {
+                                            sRemark = "Error: Begin失敗！";
+                                            if (sRemark != cmd.Remark)
+                                            {
+                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                            }
+
+                                            continue;
+                                        }
+
+                                        sRemark = $"下達Middle層命令 => <{Fun.Parameter.clsMiddleCmd.Column.DeviceID}>{sLoc_Start.DeviceId}";
+                                        if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
+                                        {
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            continue;
+                                        }
+
+                                        if (!MiddleCmd.FunInsMiddleCmd(middleCmd, db))
+                                        {
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            sRemark = "Error: 下達Middle層命令失敗";
+                                            if (sRemark != cmd.Remark)
+                                            {
+                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                            }
+
+                                            continue;
+                                        }
+
+                                        db.TransactionCtrl(TransactionTypes.Commit);
+                                        return true;
                                     }
                                 }
                                 else continue;

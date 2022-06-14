@@ -52,6 +52,7 @@
     <Compile Include="clsL2LCount.cs" />
     <Compile Include="clsLocDtl.cs" />
     <Compile Include="clsLocMst.cs" />
+    <Compile Include="clsMiddleCmd.cs" />
     <Compile Include="clsMoldUseLog.cs" />
     <Compile Include="clsProc.cs" />
     <Compile Include="clsRoutdef.cs" />
@@ -76,6 +77,7 @@
     <Compile Include="Parameter\clsLoc_Dtl.cs" />
     <Compile Include="Parameter\clsLoc_Dtl_Log.cs" />
     <Compile Include="Parameter\clsLoc_Mst.cs" />
+    <Compile Include="Parameter\clsMiddleCmd.cs" />
     <Compile Include="Parameter\clsMoldUseLog.cs" />
     <Compile Include="Parameter\clsPortDef.cs" />
     <Compile Include="Parameter\clsRoutdef.cs" />

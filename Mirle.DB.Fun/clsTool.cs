@@ -178,5 +178,16 @@ namespace Mirle.DB.Fun
                 return 0;
             }
         }
+
+        public string GetLocation(string Loc, Location location)
+        {
+            switch(location.LocationTypes)
+            {
+                case LocationTypes.Shelf:
+                    return Loc;
+                default:
+                    return location.LocationId;
+            }
+        }
     }
 }

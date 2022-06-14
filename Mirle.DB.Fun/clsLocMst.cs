@@ -59,13 +59,13 @@ namespace Mirle.DB.Fun
             }
         }
 
-        public string GetTeachLoc(string BoxID, DataBase.DB db)
+        public string GetTeachLoc(string DeviceID, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
             try
             {
                 string strEM = "";
-                string strSql = $"select Loc from Teach_Loc where BoxId = '{BoxID}' ";
+                string strSql = $"select Loc from Teach_Loc where DeviceID = '{DeviceID}' ";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Success)
                 {

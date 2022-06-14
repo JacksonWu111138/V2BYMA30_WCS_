@@ -1,4 +1,6 @@
-﻿Drop Table UnitModeDef;
+﻿Drop Table MiddleCmd;
+Drop Table MiddleCmd_His;
+Drop Table UnitModeDef;
 Drop Table UnitStsLog;
 DROP TABLE AlarmDef;
 DROP TABLE ALARMDATA;
@@ -16,6 +18,46 @@ DROP TABLE CMD_MST;
 Drop Table CMD_MST_His;
 Drop Table Teach_Loc;
 Drop Table r_wms_location;
+
+Create Table MiddleCmd
+(
+DeviceID VARCHAR(64) NOT NULL,
+CommandID VARCHAR(64) NOT NULL,
+TaskNo VARCHAR(15) NOT NULL,
+Priority NUMERIC(4, 0) DEFAULT 50,
+CSTID VARCHAR(64) DEFAULT '',
+CmdSts			Varchar(1) NOT NULL,		
+CmdMode			Varchar(1)  NOT NULL,
+Source VARCHAR(64) DEFAULT 0,
+Destination VARCHAR(64) DEFAULT 0,
+Path_Left NUMERIC(2, 0) DEFAULT 0,
+Path_Right NUMERIC(2, 0) DEFAULT 0,
+CrtDate			Varchar(20) Not Null     Default '',	
+ExpDate			Varchar(20) Not Null     Default '',	
+EndDate			Varchar(20) Not Null     Default '',
+Remark          NVarchar(MAX) Not Null  Default '',
+PRIMARY KEY(DeviceID,CommandID,TaskNo)
+);
+
+Create Table MiddleCmd_His
+(
+HisDT varchar(25) NOT NULL Default CONVERT([VARCHAR], GETDATE(), (121)),
+DeviceID VARCHAR(64) NOT NULL,
+CommandID VARCHAR(64) NOT NULL,
+TaskNo VARCHAR(15) NOT NULL,
+Priority NUMERIC(4, 0) DEFAULT 50,
+CSTID VARCHAR(64) DEFAULT '',
+CmdSts			Varchar(1) NOT NULL,		
+CmdMode			Varchar(1)  NOT NULL,
+Source VARCHAR(64) DEFAULT 0,
+Destination VARCHAR(64) DEFAULT 0,
+Path_Left NUMERIC(2, 0) DEFAULT 0,
+Path_Right NUMERIC(2, 0) DEFAULT 0,
+CrtDate			Varchar(20) Not Null     Default '',	
+ExpDate			Varchar(20) Not Null     Default '',	
+EndDate			Varchar(20) Not Null     Default '',
+Remark          NVarchar(MAX) Not Null  Default ''
+);
 
 Create Table UnitModeDef
 (

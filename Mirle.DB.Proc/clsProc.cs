@@ -124,7 +124,7 @@ namespace Mirle.DB.Proc
                                         if (!Routdef.CheckSourceIsOK(cmd, sLoc_Start, middle, Device, wms, db)) continue;
                                         if (!Routdef.CheckDestinationIsOK(cmd, sLoc_End, middle, Device, wms, db)) continue;
 
-                                        TaskDTO dto = new TaskDTO();
+                                        
 
                                     }
                                 }

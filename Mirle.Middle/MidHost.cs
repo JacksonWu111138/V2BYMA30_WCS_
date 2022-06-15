@@ -15,6 +15,22 @@ namespace Mirle.Middle
 
         }
 
+        /// <summary>
+        /// 取得Buffer PLC上的命令序號
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
+        public int GetBufferCmd(ConveyorInfo buffer)
+        {
+            return 0;
+        }
+
+        /// <summary>
+        /// 確認是否是入庫Ready
+        /// </summary>
+        /// <param name="Device"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
         public bool CheckIsInReady(DeviceInfo Device, Location location)
         {
             ConveyorInfo conveyor = new ConveyorInfo();
@@ -37,6 +53,22 @@ namespace Mirle.Middle
             return true;
         }
 
+        /// <summary>
+        /// 確認是否是入庫Ready
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
+        public bool CheckIsInReady(ConveyorInfo buffer)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// 確認是否是出庫Ready
+        /// </summary>
+        /// <param name="Device"></param>
+        /// <param name="location"></param>
+        /// <returns></returns>
         public bool CheckIsOutReady(DeviceInfo Device, Location location)
         {
             ConveyorInfo conveyor = new ConveyorInfo();
@@ -56,6 +88,17 @@ namespace Mirle.Middle
                 if (bGet) break;
             }
 
+            return true;
+        }
+
+        /// <summary>
+        /// 確認該Buffer是否荷有
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <param name="IsLoad">是否荷有</param>
+        /// <returns></returns>
+        public bool CheckIsLoad(ConveyorInfo buffer, ref bool IsLoad)
+        {
             return true;
         }
     }

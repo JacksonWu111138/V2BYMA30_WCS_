@@ -84,6 +84,7 @@ namespace Mirle.DB.Fun
                 iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Success)
                 {
+                    cmd = new CmdMstInfo();
                     cmd = tool.GetCommand(dtTmp.Rows[0]);
                     return true;
                 }

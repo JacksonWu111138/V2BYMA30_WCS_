@@ -3,6 +3,7 @@ using Mirle.Def;
 using Mirle.Structure;
 using Mirle.DataBase;
 using System.Data;
+using System.Collections.Generic;
 
 namespace Mirle.DB.Fun
 {
@@ -188,6 +189,54 @@ namespace Mirle.DB.Fun
                 default:
                     return location.LocationId;
             }
+        }
+
+        public ConveyorInfo GetBuffer(DeviceInfo Device, Location location)
+        {
+            foreach (var floor in Device.Floors)
+            {
+                foreach (var con in floor.Group_IN)
+                {
+                    if (con.BufferName == location.LocationId)
+                    {
+                        return con;
+                    }
+                }
+
+                foreach (var con in floor.Group_OUT)
+                {
+                    if (con.BufferName == location.LocationId)
+                    {
+                        return con;
+                    }
+                }
+            }
+
+            return new ConveyorInfo();
+        }
+
+        public List<ConveyorInfo> GetGroup(DeviceInfo Device, ConveyorInfo conveyor)
+        {
+            foreach (var floor in Device.Floors)
+            {
+                foreach (var con in floor.Group_IN)
+                {
+                    if (con == conveyor)
+                    {
+                        return floor.Group_IN;
+                    }
+                }
+
+                foreach (var con in floor.Group_OUT)
+                {
+                    if (con == conveyor)
+                    {
+                        return floor.Group_OUT;
+                    }
+                }
+            }
+
+            return new List<ConveyorInfo>();
         }
     }
 }

@@ -48,7 +48,7 @@ namespace Mirle.DB.Fun
             }
         }
 
-        public Location GetFinialDestination(CmdMstInfo cmd, MapHost Router, DataBase.DB db)
+        public Location GetFinialDestination(CmdMstInfo cmd, MapHost Router, List<ConveyorInfo> Stations, DataBase.DB db)
         {
             try
             {
@@ -78,7 +78,13 @@ namespace Mirle.DB.Fun
                         break;
                     case clsConstValue.CmdMode.S2S:
                     case clsConstValue.CmdMode.StockOut:
-                        
+                        string stn = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;
+                        var StnList = Stations.Where(r => r.StnNo == stn);
+                        foreach(var s in StnList)
+                        {
+                            End = s.bufferLocation;
+                        }
+
                         break;
                 }
 

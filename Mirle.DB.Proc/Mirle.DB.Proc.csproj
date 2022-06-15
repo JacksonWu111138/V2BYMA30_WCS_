@@ -69,6 +69,10 @@
       <Project>{553bd8cf-f4c1-4b39-97ab-42cc2f7c8187}</Project>
       <Name>Mirle.DB.WMS.Proc</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mirle.Def.U2NMMA30\Mirle.Def.U2NMMA30.csproj">
+      <Project>{e6f732fe-3905-49a7-b2cf-b4fa79c2dc5d}</Project>
+      <Name>Mirle.Def.U2NMMA30</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.Def\Mirle.Def_2.csproj">
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def_2</Name>

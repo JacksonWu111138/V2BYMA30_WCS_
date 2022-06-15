@@ -40,5 +40,16 @@ namespace Mirle.Def.U2NMMA30
 
         public static ConveyorInfo M1_11 = new ConveyorInfo { Index = 11, BufferName = "M1-11" };
         public static ConveyorInfo M1_16 = new ConveyorInfo { Index = 16, BufferName = "M1-16" };
+
+        private static List<ConveyorInfo> Stations = new List<ConveyorInfo>();
+        /// <summary>
+        /// 人員工作站List
+        /// </summary>
+        /// <returns></returns>
+        public static List<ConveyorInfo> GetStations() => Stations;
+        public static void FunStnListAddInit()
+        {
+
+        }
     }
 }

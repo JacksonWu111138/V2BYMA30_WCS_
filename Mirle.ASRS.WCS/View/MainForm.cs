@@ -301,6 +301,7 @@ namespace Mirle.ASRS.WCS.View
             clsDB_Proc.Initial(clInitSys.DbConfig, clInitSys.DbConfig_WMS);
             router = new MapHost(clInitSys.DbConfig);
             CVLocation = new clsGetCVLocation(router);
+            ConveyorDef.FunStnListAddInit();
             FunAsrsCmdInit();
             //_unityContainer = new UnityContainer();
             //_unityContainer.RegisterInstance(new WCSController());

@@ -304,7 +304,7 @@ namespace Mirle.DB.Proc
                                         bool IsDoubleCmd = false; CmdMstInfo cmd_DD = new CmdMstInfo();
                                         #region 判斷狀態
                                         if (!Routdef.CheckSourceIsOK(cmd, sLoc_Start, middle, Device, wms, ref IsDoubleCmd, ref cmd_DD, db)) continue;
-                                        if (!Routdef.CheckDestinationIsOK(cmd, sLoc_End, middle, Device, wms, db)) continue;
+                                        if (!Routdef.CheckDestinationIsOK(cmd, sLoc_End, middle, Device, wms, IsDoubleCmd, db)) continue;
 
 
                                         iRet = MiddleCmd.CheckHasMiddleCmd(Device.DeviceID, db);
@@ -330,6 +330,7 @@ namespace Mirle.DB.Proc
                                         }
                                         else { }
                                         #endregion 判斷狀態
+
                                     }
                                 }
                                 else continue;

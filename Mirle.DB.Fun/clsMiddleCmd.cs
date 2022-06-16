@@ -75,6 +75,76 @@ namespace Mirle.DB.Fun
             }
         }
 
+        public bool FunGetMiddleCmd(CmdMstInfo cmd, Location sLoc_Start, Location sLoc_End, ref MiddleCmd middleCmd, 
+            bool IsDoubleCmd, CmdMstInfo cmd_DD, DataBase.DB db)
+        {
+            try
+            {
+                middleCmd = new MiddleCmd();
+                if (IsDoubleCmd)
+                {
+
+                    middleCmd.TaskNo = cmd_DD.Cmd_Sno;
+                }
+                else
+                {
+                    middleCmd.TaskNo = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSUO, db);
+                    if (string.IsNullOrWhiteSpace(middleCmd.TaskNo))
+                    {
+                        string sRemark = "Error: 取得TaskNo失敗！";
+                        if (sRemark != cmd.Remark)
+                        {
+                            CMD_MST.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                        }
+
+                        return false;
+                    }
+                }
+
+                middleCmd.CommandID = cmd.Cmd_Sno;
+                middleCmd.DeviceID = sLoc_Start.DeviceId;
+                middleCmd.CSTID = cmd.Loc_ID;
+                string ToLoc = cmd.Cmd_Mode == clsConstValue.CmdMode.L2L ? cmd.New_Loc : cmd.Loc;
+                middleCmd.Source = tool.GetLocation(cmd.Loc, sLoc_Start);
+                middleCmd.Destination = tool.GetLocation(ToLoc, sLoc_End);
+                string sCmdMode = "";
+                if (sLoc_Start.LocationTypes == LocationTypes.Shelf)
+                {
+                    switch (sLoc_End.LocationTypes)
+                    {
+                        case LocationTypes.Shelf:
+                            sCmdMode = clsConstValue.CmdMode.L2L;
+                            break;
+                        default:
+                            sCmdMode = clsConstValue.CmdMode.StockOut;
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (sLoc_End.LocationTypes)
+                    {
+                        case LocationTypes.Shelf:
+                            sCmdMode = clsConstValue.CmdMode.StockIn;
+                            break;
+                        default:
+                            sCmdMode = clsConstValue.CmdMode.S2S;
+                            break;
+                    }
+                }
+
+                middleCmd.CmdMode = sCmdMode;
+                middleCmd.Priority = Convert.ToInt32(cmd.Prty);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
         public int CheckHasMiddleCmd(string DeviceID, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();

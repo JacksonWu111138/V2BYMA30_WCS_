@@ -92,6 +92,16 @@ namespace Mirle.Middle
         }
 
         /// <summary>
+        /// 確認是否是出庫Ready
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
+        public bool CheckIsOutReady(ConveyorInfo buffer)
+        {
+            return true;
+        }
+
+        /// <summary>
         /// 確認該Buffer是否荷有
         /// </summary>
         /// <param name="buffer"></param>

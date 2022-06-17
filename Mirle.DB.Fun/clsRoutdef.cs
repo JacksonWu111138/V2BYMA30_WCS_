@@ -1,6 +1,7 @@
 ﻿using Mirle.DataBase;
 using Mirle.DB.Fun.Events;
 using Mirle.Def;
+using Mirle.Def.U2NMMA30;
 using Mirle.MapController;
 using Mirle.Middle;
 using Mirle.Structure;
@@ -22,6 +23,44 @@ namespace Mirle.DB.Fun
         private clsTool tool = new clsTool();
         private clsLocMst LocMst = new clsLocMst();
         private clsCmd_Mst Cmd_Mst = new clsCmd_Mst();
+
+        public bool FunGetLocation(CmdMstInfo cmd, MapHost Router, ref Location sLoc_Start, ref Location sLoc_End, DataBase.DB db)
+        {
+            try
+            {
+                if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
+                    sLoc_Start = GetCurLoc_Inital(cmd, Router, db);
+                else
+                {
+                    if (!string.IsNullOrWhiteSpace(cmd.CurLoc))
+                        sLoc_Start = GetCurLocation(cmd, Router, cmd.CurDeviceID, cmd.CurLoc, db);
+                    else
+                    {
+                        string sRemark = $"Error: 執行中的命令{Parameter.clsCmd_Mst.Column.CurLoc}不該為空" +
+                                   $" => <{Parameter.clsCmd_Mst.Column.Cmd_Sno}>{cmd.Cmd_Sno}";
+                        if (sRemark != cmd.Remark)
+                        {
+                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                        }
+
+                        return false;
+                    }
+                }
+
+                if (sLoc_Start == null) return false;
+                sLoc_End = GetFinialDestination(cmd, Router, ConveyorDef.GetStations(), db);
+                if (sLoc_End == null) return false;
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
         public Location GetCurLocation(CmdMstInfo cmd, MapHost Router, string DeviceID, string HostLocation, DataBase.DB db)
         {
             try
@@ -96,6 +135,25 @@ namespace Mirle.DB.Fun
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
                 return null;
             }
+        }
+
+        public Location GetCurLoc_Inital(CmdMstInfo cmd, MapHost Router, DataBase.DB db)
+        {
+            bool IsTeach = false;
+            int iRet = LocMst.CheckIsTeach(cmd.Equ_No, cmd.Loc, ref IsTeach, db);
+            if (iRet == DBResult.Exception)
+            {
+                string sRemark = $"Error: 確認是否是校正儲位失敗 => <{Parameter.clsCmd_Mst.Column.Loc}>{cmd.Loc}";
+                if (sRemark != cmd.Remark)
+                {
+                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                }
+
+                return null;
+            }
+
+            string sLocationID = IsTeach ? Location.LocationID.Teach.ToString() : Location.LocationID.Shelf.ToString();
+            return GetCurLocation(cmd, Router, cmd.Equ_No, sLocationID, db);
         }
 
         public bool CheckSourceIsOK(CmdMstInfo cmd, Location sLoc_Start, MidHost middle, DeviceInfo Device, WMS.Proc.clsHost wms, DataBase.DB db)

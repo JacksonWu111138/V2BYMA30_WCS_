@@ -17,11 +17,11 @@ namespace Mirle.Structure
         public string CmdMode { get; set; }
         public string Source { get; set; }
         public string Destination { get; set; }
-        public int Path_Left { get; set; } = 0;
-        public int Path_Right { get; set; } = 0;
+        public int Path { get; set; } = 0;
         public string CrtDate { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         public string ExpDate { get; set; } = "";
         public string EndDate { get; set; } = "";
         public string Remark { get; set; } = "";
+        public string BatchID { get; set; } = "";
     }
 }

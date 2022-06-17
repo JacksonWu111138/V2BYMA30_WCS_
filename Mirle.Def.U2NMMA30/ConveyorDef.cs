@@ -51,5 +51,16 @@ namespace Mirle.Def.U2NMMA30
         {
 
         }
+
+        public static int GetPathByStn(string StnNo)
+        {
+            var lst = Stations.Where(r => r.StnNo == StnNo);
+            foreach(var s in lst)
+            {
+                return s.Path;
+            }
+
+            return 0;
+        }
     }
 }

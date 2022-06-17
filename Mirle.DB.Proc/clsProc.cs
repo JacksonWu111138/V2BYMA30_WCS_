@@ -51,61 +51,7 @@ namespace Mirle.DB.Proc
 
                                 string sRemark = "";
                                 Location Start = null; Location End = null;
-                                if (!string.IsNullOrWhiteSpace(cmd.CurLoc))
-                                {
-                                    #region 判斷當前位置
-                                    Start = Routdef.GetCurLocation(cmd, Router, cmd.CurDeviceID, cmd.CurLoc, db);
-                                    if (Start == null) continue;
-                                    #endregion 判斷當前位置
-                                }
-                                else
-                                {
-                                    if(cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
-                                    {
-                                        #region 判斷當前位置
-                                        bool IsTeach = false;
-                                        iRet = LocMst.CheckIsTeach(cmd.Equ_No, cmd.Loc, ref IsTeach, db);
-                                        if (iRet == DBResult.Exception)
-                                        {
-                                            sRemark = $"Error: 確認是否是校正儲位失敗 => <{Fun.Parameter.clsCmd_Mst.Column.Loc}>{cmd.Loc}";
-                                            if (sRemark != cmd.Remark)
-                                            {
-                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                            }
-
-                                            continue;
-                                        }
-
-                                        string sLocationID = IsTeach ? Location.LocationID.Teach.ToString() : Location.LocationID.Shelf.ToString();
-                                        Start = Routdef.GetCurLocation(cmd, Router, cmd.Equ_No, sLocationID, db);
-                                        if (Start == null) continue;
-                                        #endregion 判斷當前位置
-                                    }
-                                    else
-                                    {
-                                        sRemark = $"Error: 執行中的命令{Fun.Parameter.clsCmd_Mst.Column.CurLoc}不該為空" +
-                                            $" => <{Fun.Parameter.clsCmd_Mst.Column.Cmd_Sno}>{cmd.Cmd_Sno}";
-                                        if (sRemark != cmd.Remark)
-                                        {
-                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                        }
-
-                                        continue;
-                                    }
-                                }
-
-                                #region 判斷最終目的位置
-                                End = Routdef.GetFinialDestination(cmd, Router, ConveyorDef.GetStations(), db);
-                                if (End == null)
-                                {
-                                    sRemark = "Error: 取得最終位置失敗！";
-                                    if (sRemark != cmd.Remark)
-                                    {
-                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                    }
-                                    continue;
-                                }
-                                #endregion 判斷最終目的位置
+                                if (!Routdef.FunGetLocation(cmd, Router, ref Start, ref End, db)) continue;
                                 if (Start != End)
                                 {
                                     Location sLoc_Start = null; Location sLoc_End = null;
@@ -229,61 +175,7 @@ namespace Mirle.DB.Proc
 
                                 string sRemark = "";
                                 Location Start = null; Location End = null;
-                                if (!string.IsNullOrWhiteSpace(cmd.CurLoc))
-                                {
-                                    #region 判斷當前位置
-                                    Start = Routdef.GetCurLocation(cmd, Router, cmd.CurDeviceID, cmd.CurLoc, db);
-                                    if (Start == null) continue;
-                                    #endregion 判斷當前位置
-                                }
-                                else
-                                {
-                                    if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
-                                    {
-                                        #region 判斷當前位置
-                                        bool IsTeach = false;
-                                        iRet = LocMst.CheckIsTeach(cmd.Equ_No, cmd.Loc, ref IsTeach, db);
-                                        if (iRet == DBResult.Exception)
-                                        {
-                                            sRemark = $"Error: 確認是否是校正儲位失敗 => <{Fun.Parameter.clsCmd_Mst.Column.Loc}>{cmd.Loc}";
-                                            if (sRemark != cmd.Remark)
-                                            {
-                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                            }
-
-                                            continue;
-                                        }
-
-                                        string sLocationID = IsTeach ? Location.LocationID.Teach.ToString() : Location.LocationID.Shelf.ToString();
-                                        Start = Routdef.GetCurLocation(cmd, Router, cmd.Equ_No, sLocationID, db);
-                                        if (Start == null) continue;
-                                        #endregion 判斷當前位置
-                                    }
-                                    else
-                                    {
-                                        sRemark = $"Error: 執行中的命令{Fun.Parameter.clsCmd_Mst.Column.CurLoc}不該為空" +
-                                            $" => <{Fun.Parameter.clsCmd_Mst.Column.Cmd_Sno}>{cmd.Cmd_Sno}";
-                                        if (sRemark != cmd.Remark)
-                                        {
-                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                        }
-
-                                        continue;
-                                    }
-                                }
-
-                                #region 判斷最終目的位置
-                                End = Routdef.GetFinialDestination(cmd, Router, ConveyorDef.GetStations(), db);
-                                if (End == null)
-                                {
-                                    sRemark = "Error: 取得最終位置失敗！";
-                                    if (sRemark != cmd.Remark)
-                                    {
-                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                    }
-                                    continue;
-                                }
-                                #endregion 判斷最終目的位置
+                                if (!Routdef.FunGetLocation(cmd, Router, ref Start, ref End, db)) continue;
                                 if (Start != End)
                                 {
                                     Location sLoc_Start = null; Location sLoc_End = null;
@@ -330,7 +222,66 @@ namespace Mirle.DB.Proc
                                         }
                                         else { }
                                         #endregion 判斷狀態
+                                        MiddleCmd middleCmd = new MiddleCmd();
+                                        MiddleCmd middleCmd_DD = new MiddleCmd();
+                                        if (!MiddleCmd.FunGetMiddleCmd(cmd, sLoc_Start, sLoc_End, ref middleCmd, ref middleCmd_DD, IsDoubleCmd, cmd_DD, Router, db))
+                                            continue;
+                                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                        {
+                                            sRemark = "Error: Begin失敗！";
+                                            if (sRemark != cmd.Remark)
+                                            {
+                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                            }
 
+                                            continue;
+                                        }
+
+                                        sRemark = $"下達Middle層命令 => <{Fun.Parameter.clsMiddleCmd.Column.DeviceID}>{sLoc_Start.DeviceId}";
+                                        if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
+                                        {
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            continue;
+                                        }
+
+                                        if(IsDoubleCmd)
+                                        {
+                                            if (!Cmd_Mst.FunUpdateCmdSts(cmd_DD.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                continue;
+                                            }
+                                        }
+
+                                        if (!MiddleCmd.FunInsMiddleCmd(middleCmd, db))
+                                        {
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            sRemark = "Error: 下達Middle層命令失敗";
+                                            if (sRemark != cmd.Remark)
+                                            {
+                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                            }
+
+                                            continue;
+                                        }
+
+                                        if (IsDoubleCmd)
+                                        {
+                                            if (!MiddleCmd.FunInsMiddleCmd(middleCmd_DD, db))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                sRemark = "Error: 下達Middle層命令失敗";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd_DD.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+                                        }
+
+                                        db.TransactionCtrl(TransactionTypes.Commit);
+                                        return true;
                                     }
                                 }
                                 else continue;

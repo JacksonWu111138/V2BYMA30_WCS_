@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Mirle.Def;
 using Mirle.DataBase;
 using System.Data;
+using Mirle.Def.U2NMMA30;
+using Mirle.MapController;
 
 namespace Mirle.DB.Fun
 {
@@ -14,7 +16,8 @@ namespace Mirle.DB.Fun
         private readonly clsSno SNO = new clsSno();
         private readonly clsCmd_Mst CMD_MST = new clsCmd_Mst();
         private readonly clsTool tool = new clsTool();
-        public bool FunGetMiddleCmd(CmdMstInfo cmd, Location sLoc_Start, Location sLoc_End, ref MiddleCmd middleCmd, DataBase.DB db)
+        private readonly clsRoutdef routdef = new clsRoutdef();
+        public bool FunGetMiddleCmd(CmdMstInfo cmd, Location sLoc_Start, Location sLoc_End, ref MiddleCmd middleCmd, DataBase.DB db, string BatchID = "")
         {
             try
             {
@@ -65,6 +68,11 @@ namespace Mirle.DB.Fun
 
                 middleCmd.CmdMode = sCmdMode;
                 middleCmd.Priority = Convert.ToInt32(cmd.Prty);
+
+                string sStnNo = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;
+                middleCmd.Path = ConveyorDef.GetPathByStn(sStnNo);
+                middleCmd.BatchID = BatchID;
+
                 return true;
             }
             catch (Exception ex)
@@ -75,23 +83,20 @@ namespace Mirle.DB.Fun
             }
         }
 
-        public bool FunGetMiddleCmd(CmdMstInfo cmd, Location sLoc_Start, Location sLoc_End, ref MiddleCmd middleCmd, 
-            bool IsDoubleCmd, CmdMstInfo cmd_DD, DataBase.DB db)
+        public bool FunGetMiddleCmd(CmdMstInfo cmd, Location sLoc_Start, Location sLoc_End, ref MiddleCmd middleCmd, ref MiddleCmd middleCmd_DD,
+            bool IsDoubleCmd, CmdMstInfo cmd_DD, MapHost Router, DataBase.DB db)
         {
             try
             {
                 middleCmd = new MiddleCmd();
+                middleCmd_DD = new MiddleCmd();
+                string sRemark = "";
                 if (IsDoubleCmd)
                 {
-
-                    middleCmd.TaskNo = cmd_DD.Cmd_Sno;
-                }
-                else
-                {
-                    middleCmd.TaskNo = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSUO, db);
-                    if (string.IsNullOrWhiteSpace(middleCmd.TaskNo))
+                    string sBatchID = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSUO, db);
+                    if (string.IsNullOrWhiteSpace(sBatchID))
                     {
-                        string sRemark = "Error: 取得TaskNo失敗！";
+                        sRemark = $"Error: 取得{Parameter.clsMiddleCmd.Column.BatchID}失敗！";
                         if (sRemark != cmd.Remark)
                         {
                             CMD_MST.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
@@ -99,43 +104,22 @@ namespace Mirle.DB.Fun
 
                         return false;
                     }
-                }
 
-                middleCmd.CommandID = cmd.Cmd_Sno;
-                middleCmd.DeviceID = sLoc_Start.DeviceId;
-                middleCmd.CSTID = cmd.Loc_ID;
-                string ToLoc = cmd.Cmd_Mode == clsConstValue.CmdMode.L2L ? cmd.New_Loc : cmd.Loc;
-                middleCmd.Source = tool.GetLocation(cmd.Loc, sLoc_Start);
-                middleCmd.Destination = tool.GetLocation(ToLoc, sLoc_End);
-                string sCmdMode = "";
-                if (sLoc_Start.LocationTypes == LocationTypes.Shelf)
-                {
-                    switch (sLoc_End.LocationTypes)
+                    if (FunGetMiddleCmd(cmd, sLoc_Start, sLoc_End, ref middleCmd, db, sBatchID))
                     {
-                        case LocationTypes.Shelf:
-                            sCmdMode = clsConstValue.CmdMode.L2L;
-                            break;
-                        default:
-                            sCmdMode = clsConstValue.CmdMode.StockOut;
-                            break;
+                        Location sLoc_Start_DD = null; Location sLoc_End_DD = null;
+                        if (routdef.FunGetLocation(cmd_DD, Router, ref sLoc_Start_DD, ref sLoc_End_DD, db))
+                        {
+                            return FunGetMiddleCmd(cmd_DD, sLoc_Start_DD, sLoc_End_DD, ref middleCmd_DD, db, sBatchID);
+                        }
+                        else return false;
                     }
+                    else return false;
                 }
                 else
                 {
-                    switch (sLoc_End.LocationTypes)
-                    {
-                        case LocationTypes.Shelf:
-                            sCmdMode = clsConstValue.CmdMode.StockIn;
-                            break;
-                        default:
-                            sCmdMode = clsConstValue.CmdMode.S2S;
-                            break;
-                    }
+                    return FunGetMiddleCmd(cmd, sLoc_Start, sLoc_End, ref middleCmd, db);
                 }
-
-                middleCmd.CmdMode = sCmdMode;
-                middleCmd.Priority = Convert.ToInt32(cmd.Prty);
-                return true;
             }
             catch (Exception ex)
             {
@@ -182,13 +166,12 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsMiddleCmd.Column.Create_Date},{Parameter.clsMiddleCmd.Column.CSTID}," +
                     $"{Parameter.clsMiddleCmd.Column.Destination},{Parameter.clsMiddleCmd.Column.DeviceID}," +
                     $"{Parameter.clsMiddleCmd.Column.EndDate},{Parameter.clsMiddleCmd.Column.Expose_Date}," +
-                    $"{Parameter.clsMiddleCmd.Column.Path_Left},{Parameter.clsMiddleCmd.Column.Path_Right}," +
-                    $"{Parameter.clsMiddleCmd.Column.Priority},{Parameter.clsMiddleCmd.Column.Remark}," +
-                    $"{Parameter.clsMiddleCmd.Column.Source},{Parameter.clsMiddleCmd.Column.TaskNo}) values (" +
+                    $"{Parameter.clsMiddleCmd.Column.Path},{Parameter.clsMiddleCmd.Column.Priority},{Parameter.clsMiddleCmd.Column.Remark}," +
+                    $"{Parameter.clsMiddleCmd.Column.Source},{Parameter.clsMiddleCmd.Column.TaskNo},{Parameter.clsMiddleCmd.Column.BatchID}) values (" +
                     $"'{middleCmd.CmdMode}','{middleCmd.CmdSts}','{middleCmd.CommandID}','{middleCmd.CrtDate}'," +
                     $"'{middleCmd.CSTID}','{middleCmd.Destination}','{middleCmd.DeviceID}','{middleCmd.EndDate}'," +
-                    $"'{middleCmd.ExpDate}',{middleCmd.Path_Left},{middleCmd.Path_Right},{middleCmd.Priority}," +
-                    $"'{middleCmd.Remark}','{middleCmd.Source}','{middleCmd.TaskNo}')";
+                    $"'{middleCmd.ExpDate}',{middleCmd.Path},{middleCmd.Priority}," +
+                    $"'{middleCmd.Remark}','{middleCmd.Source}','{middleCmd.TaskNo}','{middleCmd.BatchID}')";
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {

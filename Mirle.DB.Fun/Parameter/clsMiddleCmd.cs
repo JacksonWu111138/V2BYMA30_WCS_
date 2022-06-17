@@ -20,12 +20,12 @@ namespace Mirle.DB.Fun.Parameter
             public const string CmdMode = "CmdMode";
             public const string Source = "Source";
             public const string Destination = "Destination";
-            public const string Path_Left = "Path_Left";
-            public const string Path_Right = "Path_Right";
+            public const string Path = "Path";
             public const string Create_Date = "CrtDate";
             public const string Expose_Date = "ExpDate";
             public const string EndDate = "EndDate";
             public const string Remark = "Remark";
+            public const string BatchID = "BatchID";
         }
     }
 }

@@ -29,12 +29,12 @@ CmdSts			Varchar(1) NOT NULL,
 CmdMode			Varchar(1)  NOT NULL,
 Source VARCHAR(64) DEFAULT 0,
 Destination VARCHAR(64) DEFAULT 0,
-Path_Left NUMERIC(2, 0) DEFAULT 0,
-Path_Right NUMERIC(2, 0) DEFAULT 0,
+Path NUMERIC(2, 0) DEFAULT 0,
 CrtDate			Varchar(20) Not Null     Default '',	
 ExpDate			Varchar(20) Not Null     Default '',	
 EndDate			Varchar(20) Not Null     Default '',
 Remark          NVarchar(MAX) Not Null  Default '',
+BatchID         NVarchar(MAX) NOT NULL  Default '',
 PRIMARY KEY(DeviceID,CommandID,TaskNo)
 );
 
@@ -50,12 +50,12 @@ CmdSts			Varchar(1) NOT NULL,
 CmdMode			Varchar(1)  NOT NULL,
 Source VARCHAR(64) DEFAULT 0,
 Destination VARCHAR(64) DEFAULT 0,
-Path_Left NUMERIC(2, 0) DEFAULT 0,
-Path_Right NUMERIC(2, 0) DEFAULT 0,
+Path NUMERIC(2, 0) DEFAULT 0,
 CrtDate			Varchar(20) Not Null     Default '',	
 ExpDate			Varchar(20) Not Null     Default '',	
 EndDate			Varchar(20) Not Null     Default '',
-Remark          NVarchar(MAX) Not Null  Default ''
+Remark          NVarchar(MAX) Not Null  Default '',
+BatchID         NVarchar(MAX) NOT NULL  Default ''
 );
 
 Create Table UnitModeDef

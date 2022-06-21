@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="clsLocMst.cs" />
     <Compile Include="clsWriLog.cs" />
+    <Compile Include="Parameter\clsLocMst.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

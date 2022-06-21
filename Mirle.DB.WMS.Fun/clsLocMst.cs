@@ -51,7 +51,7 @@ namespace Mirle.DB.WMS.Fun
             try
             {
                 string strEM = "";
-                string strSql = $"select IS_INSIDE from r_wms_location where LOCATION_CODE = '{sLoc}' ";
+                string strSql = $"select IS_INSIDE from {Parameter.clsLocMst.TableName} where {Parameter.clsLocMst.Column.Loc} = '{sLoc}' ";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Success)
                 {
@@ -82,7 +82,8 @@ namespace Mirle.DB.WMS.Fun
             try
             {
                 string strEM = "";
-                string strSql = $"select BROTHER_LOCATION_CODE from r_wms_location where LOCATION_CODE = '{sLoc}' ";
+                string strSql = $"select {Parameter.clsLocMst.Column.LocDD} from {Parameter.clsLocMst.TableName} where " +
+                    $"{Parameter.clsLocMst.Column.Loc} = '{sLoc}' ";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Success)
                 {
@@ -112,7 +113,7 @@ namespace Mirle.DB.WMS.Fun
             try
             {
                 string strEM = "";
-                string strSql = $"select STORAGE_STATUS,from r_wms_location where LOCATION_CODE = '{sLoc}' ";
+                string strSql = $"select STORAGE_STATUS,from {Parameter.clsLocMst.TableName} where {Parameter.clsLocMst.Column.Loc} = '{sLoc}' ";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Success)
                 {
@@ -144,13 +145,14 @@ namespace Mirle.DB.WMS.Fun
             try
             {
                 string strEM = "";
-                string strSql = $"select STORAGE_STATUS, CARRIER_CODE from r_wms_location where LOCATION_CODE = '{sLoc}' ";
+                string strSql = $"select STORAGE_STATUS, {Parameter.clsLocMst.Column.BoxID} from " +
+                    $"{Parameter.clsLocMst.TableName} where {Parameter.clsLocMst.Column.Loc} = '{sLoc}' ";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Success)
                 {
                     IsEmpty = Convert.ToString(dtTmp.Rows[0]["STORAGE_STATUS"]).Trim().ToUpper() ==
                         clsConstValue.LocSts.Empty;
-                    BoxID = Convert.ToString(dtTmp.Rows[0]["CARRIER_CODE"]);
+                    BoxID = Convert.ToString(dtTmp.Rows[0][Parameter.clsLocMst.Column.BoxID]);
                 }
                 else
                 {
@@ -176,13 +178,13 @@ namespace Mirle.DB.WMS.Fun
             DataTable dtTmp = new DataTable();
             try
             {
-                string strSql = $"select * from r_wms_location where CARRIER_CODE = '{sBoxID}' ";
+                string strSql = $"select * from {Parameter.clsLocMst.TableName} where {Parameter.clsLocMst.Column.BoxID} = '{sBoxID}' ";
                 string strEM = "";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Success)
                 {
-                    StockerID = Convert.ToInt32(dtTmp.Rows[0]["CRANE"]);
-                    sLoc = Convert.ToString(dtTmp.Rows[0]["LOCATION_CODE"]);
+                    StockerID = Convert.ToInt32(dtTmp.Rows[0][Parameter.clsLocMst.Column.EquNo]);
+                    sLoc = Convert.ToString(dtTmp.Rows[0][Parameter.clsLocMst.Column.Loc]);
                 }
                 else clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
 
@@ -206,41 +208,46 @@ namespace Mirle.DB.WMS.Fun
             DataTable dtTmp = new DataTable();
             try
             {
-                string sSQL = "SELECT TOP 1 LOCATION_CODE FROM r_wms_location WHERE STORAGE_STATUS = '" + clsConstValue.LocSts.Empty + "' ";
-                sSQL += $" AND OPERATE_STATUS = '{clsConstValue.LocSts.Normal}' and CRANE = '" + Equ_No + "' ";
+                string sSQL = $"SELECT TOP 1 {Parameter.clsLocMst.Column.Loc} FROM " +
+                    $"{Parameter.clsLocMst.TableName} WHERE STORAGE_STATUS = '" + clsConstValue.LocSts.Empty + "' ";
+                sSQL += $" AND OPERATE_STATUS = '{clsConstValue.LocSts.Normal}' and {Parameter.clsLocMst.Column.EquNo} = '" + Equ_No + "' ";
 
                 if (locSts == clsEnum.LocSts_Double.NNNN) //找外側空庫位
                 {
-                    sSQL += " AND LOCATION_CODE IN (SELECT BROTHER_LOCATION_CODE FROM r_wms_location" +
+                    sSQL += $" AND {Parameter.clsLocMst.Column.Loc} IN (SELECT {Parameter.clsLocMst.Column.LocDD} FROM " +
+                        $"{Parameter.clsLocMst.TableName}" +
                         $" WHERE STORAGE_STATUS='{clsConstValue.LocSts.Empty}' AND OPERATE_STATUS = '{clsConstValue.LocSts.Normal}'" +
                         $" AND IS_INSIDE = 'Y') ";
                 }
                 else if (locSts == clsEnum.LocSts_Double.SNNS)
                 {
-                    sSQL += " AND LOCATION_CODE IN (SELECT BROTHER_LOCATION_CODE FROM r_wms_location" +
+                    sSQL += $" AND {Parameter.clsLocMst.Column.Loc} IN (SELECT {Parameter.clsLocMst.Column.LocDD} FROM " +
+                        $"{Parameter.clsLocMst.TableName}" +
                         $" WHERE STORAGE_STATUS in ('{clsConstValue.LocSts.Full}','{clsConstValue.LocSts.NotFull}')" +
                         $" AND OPERATE_STATUS = '{clsConstValue.LocSts.Normal}' AND IS_INSIDE = 'N') ";
                 }
                 else if (locSts == clsEnum.LocSts_Double.ENNE)
                 {
-                    sSQL += " AND LOCATION_CODE IN (SELECT BROTHER_LOCATION_CODE FROM r_wms_location" +
+                    sSQL += $" AND {Parameter.clsLocMst.Column.Loc} IN (SELECT {Parameter.clsLocMst.Column.LocDD} FROM " +
+                        $"{Parameter.clsLocMst.TableName}" +
                         $" WHERE STORAGE_STATUS = '{clsConstValue.LocSts.EmptyBox}' AND OPERATE_STATUS = '{clsConstValue.LocSts.Normal}'" +
                         " AND IS_INSIDE = 'N') ";
                 }
                 else if (locSts == clsEnum.LocSts_Double.XNNX)
                 {
-                    sSQL += " AND LOCATION_CODE IN (SELECT BROTHER_LOCATION_CODE FROM r_wms_location" +
+                    sSQL += $" AND {Parameter.clsLocMst.Column.Loc} IN (SELECT {Parameter.clsLocMst.Column.LocDD} FROM " +
+                        $"{Parameter.clsLocMst.TableName}" +
                         $" WHERE OPERATE_STATUS = '{clsConstValue.LocSts.Block}' AND IS_INSIDE = 'N') ";
                 }
                 else { } //Single Deep
 
-                sSQL += " ORDER BY BAY, LEVEL, ROW DESC";
+                sSQL += $" ORDER BY {Parameter.clsLocMst.Column.BAY}, {Parameter.clsLocMst.Column.LEVEL}, {Parameter.clsLocMst.Column.ROW} DESC";
 
                 dtTmp = new DataTable();
                 string sNewLoc;
                 if (db.GetDataTable(sSQL, ref dtTmp, ref strEM) == DBResult.Success)
                 {
-                    sNewLoc = dtTmp.Rows[0]["LOCATION_CODE"].ToString();
+                    sNewLoc = dtTmp.Rows[0][Parameter.clsLocMst.Column.Loc].ToString();
                 }
                 else
                 {

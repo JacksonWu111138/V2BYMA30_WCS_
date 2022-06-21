@@ -160,7 +160,7 @@ namespace Mirle.ASRS.WCS.View
             timRead.Enabled = false;
             try
             {
-                //SubShowCmdtoGrid(ref Grid1);
+                SubShowCmdtoGrid(ref Grid1);
                 if(clsDB_Proc.DBConn)
                 {
 

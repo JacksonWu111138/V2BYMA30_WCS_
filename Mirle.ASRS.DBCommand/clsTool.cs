@@ -19,11 +19,11 @@ namespace Mirle.ASRS.DBCommand
                 {
                     if (count == 1)
                     {
-                        StockInLoc_Sql = $"'{conveyer.bufferLocation.LocationId}'";
+                        StockInLoc_Sql = $"'{conveyer.BufferName}'";
                     }
                     else
                     {
-                        StockInLoc_Sql += $",'{conveyer.bufferLocation.LocationId}'";
+                        StockInLoc_Sql += $",'{conveyer.BufferName}'";
                     }
 
                     count++;

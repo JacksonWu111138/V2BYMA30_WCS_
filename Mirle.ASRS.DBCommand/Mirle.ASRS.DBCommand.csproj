@@ -63,10 +63,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mirle.DB.Object\Mirle.DB.Object.csproj">
-      <Project>{25DDA85B-35BE-429D-81B4-025731C0E826}</Project>
-      <Name>Mirle.DB.Object</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mirle.DB.Proc\Mirle.DB.Proc.csproj">
       <Project>{60C72719-D780-4BC8-9198-FC21C9754918}</Project>
       <Name>Mirle.DB.Proc</Name>

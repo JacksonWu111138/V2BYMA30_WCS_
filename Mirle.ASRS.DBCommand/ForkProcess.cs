@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 using Mirle.MapController;
 using Mirle.Middle;
 using Mirle.EccsSignal;
+using Mirle.DB.Proc;
 
 namespace Mirle.ASRS.DBCommand
 {
     public class ForkProcess : IFork
     {
         private IProcess process;
-        public ForkProcess(int forkNo, clsPlcConfig plcConfig, DeviceInfo Device, MapHost Router, MidHost middle, SignalHost CrnSignal)
+        public ForkProcess(int forkNo, clsHost wcs, DB.WMS.Proc.clsHost wms, clsPlcConfig plcConfig, DeviceInfo Device, MapHost Router, MidHost middle, SignalHost CrnSignal)
         {
             ForkNo = forkNo;
             LocType = plcConfig.LocType;
@@ -28,10 +29,10 @@ namespace Mirle.ASRS.DBCommand
                         switch(plcConfig.CV_Type)
                         {
                             case clsEnum.CmdType.CV_Type.Double:
-                                process = new DoubleDeep.SingleCrane.SingleFork.DoubleCV.Process(Device, Router, middle, CrnSignal);
+                                process = new DoubleDeep.SingleCrane.SingleFork.DoubleCV.Process(wcs, wms, Device, Router, middle, CrnSignal);
                                 break;
                             default:
-                                process = new DoubleDeep.SingleCrane.SingleFork.Process(Device, Router, middle, CrnSignal);
+                                process = new DoubleDeep.SingleCrane.SingleFork.Process(wcs, wms, Device, Router, middle, CrnSignal);
                                 break;
                         }
                     }

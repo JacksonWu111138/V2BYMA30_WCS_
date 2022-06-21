@@ -1,5 +1,4 @@
-﻿using Mirle.DB.Object;
-using Mirle.Def;
+﻿using Mirle.Def;
 using Mirle.Stocker.Command;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using Mirle.MapController;
 using Mirle.Middle;
 using Mirle.EccsSignal;
+using Mirle.DB.Proc;
 
 namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
 {
@@ -19,8 +19,11 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
         private MapHost router;
         private MidHost middle;
         private SignalHost signal;
-        public Process(DeviceInfo Device, MapHost Router, MidHost Middle, SignalHost CrnSignal)
+        private clsHost _wcs;
+        private DB.WMS.Proc.clsHost _wms;
+        public Process(clsHost wcs, DB.WMS.Proc.clsHost wms, DeviceInfo Device, MapHost Router, MidHost Middle, SignalHost CrnSignal)
         {
+            _wcs = wcs; _wms = wms;
             device = Device; router = Router; middle = Middle; signal = CrnSignal;
             timRead.Elapsed += new System.Timers.ElapsedEventHandler(timRead_Elapsed);
             timRead.Enabled = false; timRead.Interval = 500;
@@ -34,11 +37,8 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
             timRead.Enabled = false;
             try
             {
-                if (clsDB_Proc.DBConn)
-                {
-                    clsDB_Proc.GetDB_Object().GetProc().FunAsrsCmd_Proc(device, clsTool.GetSqlLocation_ForIn(device), 
-                        router, clsDB_Proc.GetWmsDB_Object(), middle, signal);
-                }
+                _wcs.GetProc().FunAsrsCmd_Proc(device, clsTool.GetSqlLocation_ForIn(device),
+                       router, _wms, middle, signal);
             }
             catch (Exception ex)
             {

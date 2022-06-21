@@ -1,5 +1,4 @@
-﻿using Mirle.DB.Object;
-using Mirle.Def;
+﻿using Mirle.Def;
 using Mirle.Stocker.Command;
 using System;
 using System.Collections.Generic;
@@ -9,6 +8,7 @@ using System.Threading.Tasks;
 using Mirle.MapController;
 using Mirle.Middle;
 using Mirle.EccsSignal;
+using Mirle.DB.Proc;
 
 namespace Mirle.ASRS.DBCommand
 {
@@ -17,14 +17,15 @@ namespace Mirle.ASRS.DBCommand
         private clsEnum.CmdType.CraneType craneType;
         private int _stockerId;
         private readonly List<ICrane> _cranes = new List<ICrane>();
-        public ASRSProcess(clsPlcConfig plcConfig, DeviceInfo Device, MapHost Router, MidHost middle, SignalHost CrnSignal)
+        public ASRSProcess(clsDbConfig dbConfig, clsDbConfig dbConfig_WMS, clsPlcConfig plcConfig, DeviceInfo Device, MapHost Router, MidHost middle, SignalHost CrnSignal)
         {
+            Initial(dbConfig, dbConfig_WMS);
             craneType = plcConfig.CraneType;
             _stockerId = int.Parse(Device.DeviceID);
-            _cranes.Add(new CraneProcess(1, plcConfig, Device, Router, middle, CrnSignal));
+            _cranes.Add(new CraneProcess(1, wcs, wms, plcConfig, Device, Router, middle, CrnSignal));
 
             if (craneType == clsEnum.CmdType.CraneType.Daul)
-                _cranes.Add(new CraneProcess(2, plcConfig, Device, Router, middle, CrnSignal));
+                _cranes.Add(new CraneProcess(2, wcs, wms, plcConfig, Device, Router, middle, CrnSignal));
         }
 
         public clsEnum.CmdType.CraneType CraneType => craneType;
@@ -37,6 +38,14 @@ namespace Mirle.ASRS.DBCommand
         public ICrane GetCrane(int craneNo)
         {
             return GetCranes().FirstOrDefault(x => x.CraneNo == craneNo);
+        }
+
+        private clsHost wcs;
+        private DB.WMS.Proc.clsHost wms;
+       private void Initial(clsDbConfig dbConfig, clsDbConfig dbConfig_WMS)
+        {
+            wcs = new clsHost(dbConfig);
+            wms = new DB.WMS.Proc.clsHost(dbConfig_WMS);
         }
     }
 }

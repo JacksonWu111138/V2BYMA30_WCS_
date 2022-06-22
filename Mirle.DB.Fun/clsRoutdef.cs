@@ -24,6 +24,43 @@ namespace Mirle.DB.Fun
         private clsLocMst LocMst = new clsLocMst();
         private clsCmd_Mst Cmd_Mst = new clsCmd_Mst();
 
+        public string GetLocaionByCmdMode(string sCmdMode, string sCmdSts, string sDeviceID, string sLocation, DataBase.DB db)
+        {
+            string location = ""; bool IsTeach = false; int iRet = DBResult.Initial;
+            if (sCmdSts == clsConstValue.CmdSts.strCmd_Cancel_Wait)
+            {
+                switch (sCmdMode)
+                {
+                    case clsConstValue.CmdMode.StockOut:
+                    case clsConstValue.CmdMode.L2L:
+                        iRet = LocMst.CheckIsTeach(sDeviceID, sLocation, ref IsTeach, db);
+                        if (iRet != DBResult.Exception)
+                            location = IsTeach ? Location.LocationID.Teach.ToString() : Location.LocationID.Shelf.ToString();
+                        break;
+                    default:
+                        location = sLocation;
+                        break;
+                }
+            }
+            else
+            {
+                switch (sCmdMode)
+                {
+                    case clsConstValue.CmdMode.StockIn:
+                    case clsConstValue.CmdMode.L2L:
+                        iRet = LocMst.CheckIsTeach(sDeviceID, sLocation, ref IsTeach, db);
+                        if (iRet != DBResult.Exception)
+                            location = IsTeach ? Location.LocationID.Teach.ToString() : Location.LocationID.Shelf.ToString();
+                        break;
+                    default:
+                        location = sLocation;
+                        break;
+                }
+            }
+
+            return location;
+        }
+
         public bool FunGetLocation(CmdMstInfo cmd, MapHost Router, ref Location sLoc_Start, ref Location sLoc_End, DataBase.DB db)
         {
             try

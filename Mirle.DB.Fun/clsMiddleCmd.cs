@@ -17,6 +17,30 @@ namespace Mirle.DB.Fun
         private readonly clsCmd_Mst CMD_MST = new clsCmd_Mst();
         private readonly clsTool tool = new clsTool();
         private readonly clsRoutdef routdef = new clsRoutdef();
+        public int GetFinishCommand(string DeviceID, ref DataTable dtTmp, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"select * from {Parameter.clsMiddleCmd.TableName} where {Parameter.clsMiddleCmd.Column.DeviceID} = '{DeviceID}' and " +
+                    $"{Parameter.clsMiddleCmd.Column.CmdSts} in ('{clsConstValue.CmdSts.strCmd_Cancel_Wait}','{clsConstValue.CmdSts.strCmd_Finish_Wait}')";
+                dtTmp = new DataTable();
+                string strEM = "";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                }
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+        }
+
         public bool FunGetMiddleCmd(CmdMstInfo cmd, Location sLoc_Start, Location sLoc_End, ref MiddleCmd middleCmd, DataBase.DB db, string BatchID = "")
         {
             try

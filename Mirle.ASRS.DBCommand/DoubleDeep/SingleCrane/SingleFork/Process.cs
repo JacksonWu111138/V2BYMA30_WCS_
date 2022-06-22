@@ -39,6 +39,10 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
             {
                 _wcs.GetProc().FunAsrsCmd_Proc(device, clsTool.GetSqlLocation_ForIn(device),
                        router, _wms, middle, signal);
+                if (clsHost.IsConn)
+                {
+                    _wcs.GetMiddleCmd().FunMiddleCmdFinish_Proc(device.DeviceID);
+                }
             }
             catch (Exception ex)
             {

@@ -17,6 +17,7 @@ namespace Mirle.DB.Proc
         private readonly clsUnitModeDef unitModeDef;
         private readonly clsL2LCount L2LCount;
         private readonly clsProc proc;
+        private readonly clsMiddleCmd middleCmd;
         private static object _Lock = new object();
         private static bool _IsConn = false;
         public static bool IsConn
@@ -44,6 +45,7 @@ namespace Mirle.DB.Proc
             EQ_Alarm = new clsEQ_Alarm(config);
             L2LCount = new clsL2LCount(config);
             proc = new clsProc(config);
+            middleCmd = new clsMiddleCmd(config);
         }
 
         public clsCmd_Mst GetCmd_Mst()
@@ -89,5 +91,6 @@ namespace Mirle.DB.Proc
         }
 
         public clsProc GetProc() => proc;
+        public clsMiddleCmd GetMiddleCmd() => middleCmd;
     }
 }

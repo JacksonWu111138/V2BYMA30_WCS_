@@ -53,6 +53,7 @@
     <Compile Include="clsL2LCount.cs" />
     <Compile Include="clsLocMst.cs" />
     <Compile Include="clsLoc_Dtl.cs" />
+    <Compile Include="clsMiddleCmd.cs" />
     <Compile Include="clsProc.cs" />
     <Compile Include="clsSno.cs" />
     <Compile Include="clsUnitModeDef.cs" />

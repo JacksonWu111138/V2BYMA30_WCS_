@@ -41,6 +41,11 @@ namespace Mirle.DB.Proc
                                 {
                                     string sCmdSts = Convert.ToString(dtTmp.Rows[i][Fun.Parameter.clsMiddleCmd.Column.CmdSts]);
                                     string sCmdMode = Convert.ToString(dtTmp.Rows[i][Fun.Parameter.clsMiddleCmd.Column.CmdMode]);
+                                    string sCompleteCode = Convert.ToString(dtTmp.Rows[i][Fun.Parameter.clsMiddleCmd.Column.CompleteCode]);
+                                    if (sCompleteCode == clsConstValue.CompleteCode.DoubleStorage ||
+                                        sCompleteCode == clsConstValue.CompleteCode.EmptyRetrieval)
+                                        continue; //二重格或空出庫，外部流程自行處理
+
                                     string sLocation = "";
                                     if (sCmdSts == clsConstValue.CmdSts.strCmd_Cancel_Wait)
                                     {

@@ -26,6 +26,7 @@ namespace Mirle.DB.Fun.Parameter
             public const string EndDate = "EndDate";
             public const string Remark = "Remark";
             public const string BatchID = "BatchID";
+            public const string CompleteCode = "CompleteCode";
         }
     }
 }

@@ -189,12 +189,12 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsMiddleCmd.Column.CmdSts},{Parameter.clsMiddleCmd.Column.CommandID}," +
                     $"{Parameter.clsMiddleCmd.Column.Create_Date},{Parameter.clsMiddleCmd.Column.CSTID}," +
                     $"{Parameter.clsMiddleCmd.Column.Destination},{Parameter.clsMiddleCmd.Column.DeviceID}," +
-                    $"{Parameter.clsMiddleCmd.Column.EndDate},{Parameter.clsMiddleCmd.Column.Expose_Date}," +
+                    $"{Parameter.clsMiddleCmd.Column.EndDate},{Parameter.clsMiddleCmd.Column.Expose_Date},{Parameter.clsMiddleCmd.Column.CompleteCode}," +
                     $"{Parameter.clsMiddleCmd.Column.Path},{Parameter.clsMiddleCmd.Column.Priority},{Parameter.clsMiddleCmd.Column.Remark}," +
                     $"{Parameter.clsMiddleCmd.Column.Source},{Parameter.clsMiddleCmd.Column.TaskNo},{Parameter.clsMiddleCmd.Column.BatchID}) values (" +
                     $"'{middleCmd.CmdMode}','{middleCmd.CmdSts}','{middleCmd.CommandID}','{middleCmd.CrtDate}'," +
                     $"'{middleCmd.CSTID}','{middleCmd.Destination}','{middleCmd.DeviceID}','{middleCmd.EndDate}'," +
-                    $"'{middleCmd.ExpDate}',{middleCmd.Path},{middleCmd.Priority}," +
+                    $"'{middleCmd.ExpDate}','{middleCmd.CompleteCode}',{middleCmd.Path},{middleCmd.Priority}," +
                     $"'{middleCmd.Remark}','{middleCmd.Source}','{middleCmd.TaskNo}','{middleCmd.BatchID}')";
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)

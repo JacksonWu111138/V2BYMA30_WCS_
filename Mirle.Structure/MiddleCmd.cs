@@ -23,5 +23,6 @@ namespace Mirle.Structure
         public string EndDate { get; set; } = "";
         public string Remark { get; set; } = "";
         public string BatchID { get; set; } = "";
+        public string CompleteCode { get; set; } = "";
     }
 }

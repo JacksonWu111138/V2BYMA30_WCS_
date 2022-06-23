@@ -35,6 +35,7 @@ ExpDate			Varchar(20) Not Null     Default '',
 EndDate			Varchar(20) Not Null     Default '',
 Remark          NVarchar(MAX) Not Null  Default '',
 BatchID         NVarchar(MAX) NOT NULL  Default '',
+CompleteCode VARCHAR(2) DEFAULT'',
 PRIMARY KEY(DeviceID,CommandID,TaskNo)
 );
 
@@ -55,7 +56,8 @@ CrtDate			Varchar(20) Not Null     Default '',
 ExpDate			Varchar(20) Not Null     Default '',	
 EndDate			Varchar(20) Not Null     Default '',
 Remark          NVarchar(MAX) Not Null  Default '',
-BatchID         NVarchar(MAX) NOT NULL  Default ''
+BatchID         NVarchar(MAX) NOT NULL  Default '',
+CompleteCode VARCHAR(2) DEFAULT''
 );
 
 Create Table UnitModeDef

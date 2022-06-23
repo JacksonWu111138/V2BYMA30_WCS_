@@ -96,6 +96,11 @@ namespace Mirle.ASRS.WCS.View
 
         }
 
+        private void MainForm_OnPostionReportEvent_ASRS(object sender, DB.Proc.Events.PositionReportArgs e)
+        {
+            //ASRS的Position回報
+        }
+
         private MainTestForm mainTest;
         private void button1_Click(object sender, EventArgs e)
         {
@@ -314,6 +319,7 @@ namespace Mirle.ASRS.WCS.View
             for (int i = 0; i < AsrsCommand.Length; i++)
             {
                 AsrsCommand[i].GetWCS().GetProc().GetFun_Routdef().OnNeedShelfToShelfEvent += MainForm_OnNeedShelfToShelfEvent;
+                AsrsCommand[i].GetWCS().GetMiddleCmd().OnPostionReportEvent += MainForm_OnPostionReportEvent_ASRS;
             }
         }
 

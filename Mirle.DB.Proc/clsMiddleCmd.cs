@@ -1,4 +1,5 @@
 ﻿using Mirle.DataBase;
+using Mirle.DB.Proc.Events;
 using Mirle.Def;
 using Mirle.Structure;
 using System;
@@ -12,6 +13,10 @@ namespace Mirle.DB.Proc
 {
     public class clsMiddleCmd
     {
+        public delegate void PostionReportEventHandler(object sender, PositionReportArgs e);
+        public event PostionReportEventHandler OnPostionReportEvent;
+        private bool reportedFlag = false;
+        protected readonly object _Lock = new object();
         private Fun.clsMiddleCmd MiddleCmd = new Fun.clsMiddleCmd();
         private Fun.clsCmd_Mst cmd_Mst = new Fun.clsCmd_Mst();
         private Fun.clsRoutdef routdef = new Fun.clsRoutdef();
@@ -57,7 +62,46 @@ namespace Mirle.DB.Proc
                                     }
 
                                     string sCurLoc = routdef.GetLocaionByCmdMode(sCmdMode, sCmdSts, DeviceID, sLocation, db);
+                                    MiddleCmd.FunInsertHisMiddleCmd(sCmdSno, db);
+                                    string sRemark = "";
+                                    if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                    {
+                                        sRemark = "Error: Begin失敗！";
+                                        if (sRemark != cmd.Remark)
+                                        {
+                                            cmd_Mst.FunUpdateRemark(sCmdSno, sRemark, db);
+                                        }
 
+                                        continue;
+                                    }
+
+                                    if (!cmd_Mst.FunUpdateCurLoc(sCmdSno, DeviceID, sCurLoc, db))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        continue;
+                                    }
+
+                                    if (!MiddleCmd.FunDelMiddleCmd(sCmdSno, db))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        continue;
+                                    }
+
+                                    db.TransactionCtrl(TransactionTypes.Commit);
+
+                                    lock (_Lock)
+                                    {
+                                        if (!reportedFlag)
+                                        {
+                                            reportedFlag = true;
+                                            OnPostionReportEvent?.Invoke(this, new PositionReportArgs(DeviceID, sCurLoc));
+                                            reportedFlag = false;
+                                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"觸發Position回報Event => " +
+                                                $"<Device>{DeviceID} <Location>{sCurLoc}");
+                                        }
+                                    }
+
+                                    return true;
                                 }
                                 else
                                 {

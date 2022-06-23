@@ -78,6 +78,7 @@
     <Compile Include="Parameter\clsLoc_Dtl_Log.cs" />
     <Compile Include="Parameter\clsLoc_Mst.cs" />
     <Compile Include="Parameter\clsMiddleCmd.cs" />
+    <Compile Include="Parameter\clsMiddleCmd_His.cs" />
     <Compile Include="Parameter\clsMoldUseLog.cs" />
     <Compile Include="Parameter\clsPortDef.cs" />
     <Compile Include="Parameter\clsRoutdef.cs" />

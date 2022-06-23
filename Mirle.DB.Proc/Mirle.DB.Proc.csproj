@@ -59,6 +59,7 @@
     <Compile Include="clsUnitModeDef.cs" />
     <Compile Include="clsUnitStsLog.cs" />
     <Compile Include="clsWriLog.cs" />
+    <Compile Include="Events\PositionReportArgs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -111,5 +112,6 @@
       <Version>2.0.10</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

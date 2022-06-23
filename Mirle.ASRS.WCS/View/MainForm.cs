@@ -311,7 +311,10 @@ namespace Mirle.ASRS.WCS.View
 
         private void FunEventInit()
         {
-            clsDB_Proc.GetDB_Object().GetProc().GetFun_Routdef().OnNeedShelfToShelfEvent += MainForm_OnNeedShelfToShelfEvent;
+            for (int i = 0; i < AsrsCommand.Length; i++)
+            {
+                AsrsCommand[i].GetWCS().GetProc().GetFun_Routdef().OnNeedShelfToShelfEvent += MainForm_OnNeedShelfToShelfEvent;
+            }
         }
 
         private void FunAsrsCmdInit()

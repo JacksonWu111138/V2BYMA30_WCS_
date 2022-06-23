@@ -215,5 +215,53 @@ namespace Mirle.DB.Fun
                 return false;
             }
         }
+
+        public bool FunInsertHisMiddleCmd(string sCmdSno, DataBase.DB db)
+        {
+            try
+            {
+                string SQL = $"INSERT INTO {Parameter.clsMiddleCmd_His.TableName} ";
+                SQL += $" SELECT '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}', * FROM {Parameter.clsMiddleCmd.TableName} ";
+                SQL += $" WHERE {Parameter.clsMiddleCmd.Column.CommandID}='{sCmdSno}'";
+
+                int iRet = db.ExecuteSQL(SQL);
+                if (iRet == DBResult.Success)
+                {
+                    return true;
+                }
+                else return false;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunDelMiddleCmd(string CommandID, DataBase.DB db)
+        {
+            try
+            {
+                string strEM = "";
+                string strSQL = $"delete from {Parameter.clsMiddleCmd.TableName} where " +
+                    $"{Parameter.clsMiddleCmd.Column.CommandID} = '" + CommandID + "' ";
+                int Ret = db.ExecuteSQL(strSQL, ref strEM);
+                if (Ret == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSQL); return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSQL + " => " + strEM); return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
     }
 }

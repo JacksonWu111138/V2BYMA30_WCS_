@@ -92,6 +92,8 @@ namespace Mirle.ASRS.WCS
             {
                 MainForm.Box[i].DeviceID = adBox[i];
             }
+
+            MainForm.AGV.DeviceID = lcsini.EquNo.AGV;
         }
       
         private static void FunApiConfig(ASRSINI lcsini)

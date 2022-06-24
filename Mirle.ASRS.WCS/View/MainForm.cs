@@ -36,6 +36,7 @@ namespace Mirle.ASRS.WCS.View
         private MapHost router;
         public static DeviceInfo[] PCBA = new DeviceInfo[2];
         public static DeviceInfo[] Box = new DeviceInfo[3];
+        public static DeviceInfo AGV = new DeviceInfo();
         private ASRSProcess[] AsrsCommand = new ASRSProcess[5];
         private SignalHost[] CraneSignals = new SignalHost[5];
         private MidHost middle = new MidHost();

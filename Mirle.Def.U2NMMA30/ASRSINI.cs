@@ -63,6 +63,8 @@ namespace Mirle.Def.U2NMMA30
     {
         string PCBA { get; }
         string Box { get; }
+        string AGV { get; }
+        string Tower { get; }
     }
 
     public interface APIConfig

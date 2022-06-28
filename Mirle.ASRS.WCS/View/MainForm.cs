@@ -220,16 +220,16 @@ namespace Mirle.ASRS.WCS.View
                     {
                         #region PCBA
                         case 0:
-                            floor.Group_IN.Add(ConveyorDef.M1_06);
-                            floor.Group_OUT.Add(ConveyorDef.M1_01);
+                            floor.Group_IN.Add(ConveyorDef.PCBA.M1_06);
+                            floor.Group_OUT.Add(ConveyorDef.PCBA.M1_01);
 
                             PCBA[i] = new DeviceInfo();
                             PCBA[i].Floors = new List<FloorInfo>();
                             PCBA[i].Floors.Add(floor);
                             break;
                         case 1:
-                            floor.Group_IN.Add(ConveyorDef.M1_16);
-                            floor.Group_OUT.Add(ConveyorDef.M1_11);
+                            floor.Group_IN.Add(ConveyorDef.PCBA.M1_16);
+                            floor.Group_OUT.Add(ConveyorDef.PCBA.M1_11);
 
                             PCBA[i] = new DeviceInfo();
                             PCBA[i].Floors = new List<FloorInfo>();
@@ -240,17 +240,17 @@ namespace Mirle.ASRS.WCS.View
                         case 2:
                             if (f == 1)
                             {
-                                floor.Group_IN.Add(ConveyorDef.B1_007);
-                                floor.Group_IN.Add(ConveyorDef.B1_010);
-                                floor.Group_OUT.Add(ConveyorDef.B1_001);
-                                floor.Group_OUT.Add(ConveyorDef.B1_004);
+                                floor.Group_IN.Add(ConveyorDef.Box.B1_007);
+                                floor.Group_IN.Add(ConveyorDef.Box.B1_010);
+                                floor.Group_OUT.Add(ConveyorDef.Box.B1_001);
+                                floor.Group_OUT.Add(ConveyorDef.Box.B1_004);
                             }
                             else
                             {
-                                floor.Group_IN.Add(ConveyorDef.B1_087);
-                                floor.Group_IN.Add(ConveyorDef.B1_090);
-                                floor.Group_OUT.Add(ConveyorDef.B1_081);
-                                floor.Group_OUT.Add(ConveyorDef.B1_084);
+                                floor.Group_IN.Add(ConveyorDef.Box.B1_087);
+                                floor.Group_IN.Add(ConveyorDef.Box.B1_090);
+                                floor.Group_OUT.Add(ConveyorDef.Box.B1_081);
+                                floor.Group_OUT.Add(ConveyorDef.Box.B1_084);
                             }
                             Box[i - 2] = new DeviceInfo();
                             Box[i - 2].Floors = new List<FloorInfo>();
@@ -259,17 +259,17 @@ namespace Mirle.ASRS.WCS.View
                         case 3:
                             if (f == 1)
                             {
-                                floor.Group_IN.Add(ConveyorDef.B1_019);
-                                floor.Group_IN.Add(ConveyorDef.B1_022);
-                                floor.Group_OUT.Add(ConveyorDef.B1_013);
-                                floor.Group_OUT.Add(ConveyorDef.B1_016);
+                                floor.Group_IN.Add(ConveyorDef.Box.B1_019);
+                                floor.Group_IN.Add(ConveyorDef.Box.B1_022);
+                                floor.Group_OUT.Add(ConveyorDef.Box.B1_013);
+                                floor.Group_OUT.Add(ConveyorDef.Box.B1_016);
                             }
                             else
                             {
-                                floor.Group_IN.Add(ConveyorDef.B1_099);
-                                floor.Group_IN.Add(ConveyorDef.B1_102);
-                                floor.Group_OUT.Add(ConveyorDef.B1_093);
-                                floor.Group_OUT.Add(ConveyorDef.B1_096);
+                                floor.Group_IN.Add(ConveyorDef.Box.B1_099);
+                                floor.Group_IN.Add(ConveyorDef.Box.B1_102);
+                                floor.Group_OUT.Add(ConveyorDef.Box.B1_093);
+                                floor.Group_OUT.Add(ConveyorDef.Box.B1_096);
                             }
                             Box[i - 2] = new DeviceInfo();
                             Box[i - 2].Floors = new List<FloorInfo>();
@@ -278,17 +278,17 @@ namespace Mirle.ASRS.WCS.View
                         default:
                             if (f == 1)
                             {
-                                floor.Group_IN.Add(ConveyorDef.B1_031);
-                                floor.Group_IN.Add(ConveyorDef.B1_034);
-                                floor.Group_OUT.Add(ConveyorDef.B1_025);
-                                floor.Group_OUT.Add(ConveyorDef.B1_028);
+                                floor.Group_IN.Add(ConveyorDef.Box.B1_031);
+                                floor.Group_IN.Add(ConveyorDef.Box.B1_034);
+                                floor.Group_OUT.Add(ConveyorDef.Box.B1_025);
+                                floor.Group_OUT.Add(ConveyorDef.Box.B1_028);
                             }
                             else
                             {
-                                floor.Group_IN.Add(ConveyorDef.B1_111);
-                                floor.Group_IN.Add(ConveyorDef.B1_114);
-                                floor.Group_OUT.Add(ConveyorDef.B1_105);
-                                floor.Group_OUT.Add(ConveyorDef.B1_108);
+                                floor.Group_IN.Add(ConveyorDef.Box.B1_111);
+                                floor.Group_IN.Add(ConveyorDef.Box.B1_114);
+                                floor.Group_OUT.Add(ConveyorDef.Box.B1_105);
+                                floor.Group_OUT.Add(ConveyorDef.Box.B1_108);
                             }
                             Box[i - 2] = new DeviceInfo();
                             Box[i - 2].Floors = new List<FloorInfo>();
@@ -307,6 +307,7 @@ namespace Mirle.ASRS.WCS.View
             clsDB_Proc.Initial(clInitSys.DbConfig, clInitSys.DbConfig_WMS);
             router = new MapHost(clInitSys.DbConfig);
             CVLocation = new clsGetCVLocation(router);
+            ConveyorDef.FunNodeListAddInit();
             ConveyorDef.FunStnListAddInit();
             FunAsrsCmdInit();
             //_unityContainer = new UnityContainer();

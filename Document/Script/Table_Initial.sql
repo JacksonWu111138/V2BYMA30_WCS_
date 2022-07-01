@@ -174,3 +174,30 @@ insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) v
 insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('5', 'LeftFork','5', 'B1-028', ' ');
 insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('5', 'LeftFork','5', 'B1-105', ' ');
 insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('5', 'LeftFork','5', 'B1-108', ' ');
+
+--AGV (3F)
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A1-04', 3, 1, 4, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A1-08', 3, 2, 8, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A1-12', 3, 3, 12, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'LO4-04', 3, 4, 4, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A1-01', 3, 5, 1, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A1-05', 3, 6, 5, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A1-09', 3, 7, 9, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'LO4-01', 3, 8, 1, ' ');
+
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A1-04','6', 'A1-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A1-04','6', 'A1-05', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A1-04','6', 'A1-09', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A1-04','6', 'LO4-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A1-08','6', 'A1-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A1-08','6', 'A1-05', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A1-08','6', 'A1-09', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A1-08','6', 'LO4-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A1-12','6', 'A1-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A1-12','6', 'A1-05', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A1-12','6', 'A1-09', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A1-12','6', 'LO4-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'LO4-04','6', 'A1-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'LO4-04','6', 'A1-05', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'LO4-04','6', 'A1-09', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'LO4-04','6', 'LO4-01', ' ');

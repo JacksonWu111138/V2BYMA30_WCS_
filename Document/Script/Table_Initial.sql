@@ -253,3 +253,55 @@ insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) v
 insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'LO5-04','6', 'A2-17', ' ');
 insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'LO5-04','6', 'LO5-01', ' ');
 
+--AGV (6F)
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A3-04', 3, 1, 4, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A3-08', 3, 2, 8, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A3-12', 3, 3, 12, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A3-16', 3, 4, 16, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A3-20', 3, 5, 20, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'LO6-04', 3, 6, 4, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A3-01', 3, 7, 1, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A3-05', 3, 8, 5, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A3-09', 3, 9, 9, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A3-13', 3, 10, 13, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'A3-17', 3, 11, 17, ' ');
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT) values('6', 'LO6-01', 3, 12, 1, ' ');
+
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-04','6', 'A3-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-04','6', 'A3-05', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-04','6', 'A3-09', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-04','6', 'A3-13', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-04','6', 'A3-17', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-04','6', 'LO6-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-08','6', 'A3-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-08','6', 'A3-05', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-08','6', 'A3-09', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-08','6', 'A3-13', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-08','6', 'A3-17', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-08','6', 'LO6-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-12','6', 'A3-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-12','6', 'A3-05', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-12','6', 'A3-09', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-12','6', 'A3-13', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-12','6', 'A3-17', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-12','6', 'LO6-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-16','6', 'A3-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-16','6', 'A3-05', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-16','6', 'A3-09', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-16','6', 'A3-13', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-16','6', 'A3-17', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-16','6', 'LO6-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-20','6', 'A3-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-20','6', 'A3-05', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-20','6', 'A3-09', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-20','6', 'A3-13', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-20','6', 'A3-17', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'A3-20','6', 'LO6-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'LO6-04','6', 'A3-01', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'LO6-04','6', 'A3-05', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'LO6-04','6', 'A3-09', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'LO6-04','6', 'A3-13', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'LO6-04','6', 'A3-17', ' ');
+insert into Routdef(DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) values('6', 'LO6-04','6', 'LO6-01', ' ');
+
+--AGV (8F)

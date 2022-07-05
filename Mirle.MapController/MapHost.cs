@@ -20,7 +20,7 @@ namespace Mirle.MapController
             timRead.Enabled = true; timRead.Interval = 100;
         }
 
-        private readonly List<Location> Nodes = new List<Location>();
+        private List<Location>[] Nodes = new List<Location>[0];
         public bool Done = false;
         private void timRead_Elapsed(object source, System.Timers.ElapsedEventArgs e)
         {
@@ -28,12 +28,33 @@ namespace Mirle.MapController
             DataTable dtTmp = new DataTable();
             try
             {
-                if (db.GetProc().FunMapping_Proc(out var list, ref dtTmp))
+                if (db.GetProc().FunMapping_Proc(out Nodes, ref dtTmp))
                 {
-                    foreach(var loc in list)
+                    for (int i = 0; i < Nodes.Length; i++)
                     {
-                        var node = new Location(loc.DeviceID, loc.HostPortID, Location.GetLocationTypesByPortType(loc.PortType));
-                        Nodes.Add(node);
+                        foreach(var loc1 in Nodes[i])
+                        {
+                            foreach(var loc2 in Nodes[i])
+                            {
+                                if(loc1 != loc2)
+                                {
+                                    switch(loc1.Direction)
+                                    {
+                                        case clsEnum.IOPortDirection.Both:
+                                        case clsEnum.IOPortDirection.InMode:
+                                            switch(loc2.Direction)
+                                            {
+                                                case clsEnum.IOPortDirection.Both:
+                                                case clsEnum.IOPortDirection.OutMode:
+                                                    routeService.AddPath(loc1, loc2);
+                                                    break;
+                                            }
+
+                                            break;
+                                    }
+                                }
+                            }
+                        }
                     }
 
                     for (int i = 0; i < dtTmp.Rows.Count; i++)
@@ -58,7 +79,7 @@ namespace Mirle.MapController
                             continue;
                         }
 
-                        if (n1.DeviceId == n2.DeviceId) Location.AddPath_Single(routeService, n1, n2);
+                        if (n1.DeviceId == n2.DeviceId) continue;
                         else routeService.AddDevicePath(n1, n2);
                     }
 
@@ -82,10 +103,16 @@ namespace Mirle.MapController
 
         public Location GetLocation(string DeviceID, string HostPortID)
         {
-            var node = Nodes.Where(r => r.DeviceId == DeviceID && r.LocationId == HostPortID);
-            foreach(var s in node)
+            for (int i = 0; i < Nodes.Length; i++)
             {
-                return s;
+                if(Nodes[i].Any(r => r.DeviceId == DeviceID && r.LocationId == HostPortID))
+                {
+                    var node = Nodes[i].Where(r => r.DeviceId == DeviceID && r.LocationId == HostPortID);
+                    foreach (var s in node)
+                    {
+                        return s;
+                    }
+                }
             }
 
             return null;

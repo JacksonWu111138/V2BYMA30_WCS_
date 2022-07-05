@@ -4,12 +4,13 @@ namespace Mirle.Def
 {
     public class Location : ILocation
     {
-        public Location(string deviceID, string locationId, LocationTypes locationTypes)
+        public Location(string deviceID, string locationId, LocationTypes locationTypes, clsEnum.IOPortDirection direction)
         {
             DeviceId = deviceID;
             LocationId = locationId;
             ShelfId = locationId;
             LocationTypes = locationTypes;
+            Direction = direction;
         }
 
         public string DeviceId { get;  }
@@ -17,6 +18,7 @@ namespace Mirle.Def
         public string LocationId { get; }
         public int Stage { get; } = 1;
         public LocationTypes LocationTypes { get; }
+        public clsEnum.IOPortDirection Direction { get; }
 
         public static LocationTypes GetLocationTypesByPortType(int PortType)
         {

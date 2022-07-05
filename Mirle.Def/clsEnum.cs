@@ -8,6 +8,13 @@ namespace Mirle.Def
 {
     public class clsEnum
     {
+        public enum IOPortDirection
+        {
+            Both = 0,
+            InMode = 1,
+            OutMode = 2
+        }
+
         public enum BaseType
         {
             None = 0,

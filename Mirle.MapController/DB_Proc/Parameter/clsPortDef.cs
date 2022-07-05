@@ -31,6 +31,10 @@ namespace Mirle.MapController.DB_Proc.Parameter
             /// For PLC看的PortID
             /// </summary>
             public const string PLCPortID = "PLCPortID";
+            /// <summary>
+            /// 流向
+            /// </summary>
+            public const string Direction = "Direction";
         }
     }
 }

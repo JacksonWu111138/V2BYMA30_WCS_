@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsTool.cs" />
     <Compile Include="DB_Proc\clsGetDB.cs" />
     <Compile Include="clsWriLog.cs" />
     <Compile Include="DB_Proc\clsHost.cs" />

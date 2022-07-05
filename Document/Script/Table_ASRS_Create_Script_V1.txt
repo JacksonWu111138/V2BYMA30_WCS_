@@ -165,6 +165,7 @@ AlternateDeviceID VARCHAR(64) DEFAULT ' ',
 AlternateLoc VARCHAR(64) DEFAULT ' ',
 Remark VARCHAR(100) DEFAULT ' ',
 TrnDT VARCHAR(25) NOT NULL,
+Direction NUMERIC(2, 0) NOT NULL DEFAULT 0,
 PRIMARY KEY(DeviceID,HostPortID)
 );
 

@@ -57,30 +57,33 @@ namespace Mirle.MapController
                         }
                     }
 
-                    for (int i = 0; i < dtTmp.Rows.Count; i++)
+                    if (dtTmp != null && dtTmp.Rows.Count > 0)
                     {
-                        string DeviceID = Convert.ToString(dtTmp.Rows[i][DB_Proc.Parameter.clsRoutdef.Column.DeviceID]);
-                        string HostPortID = Convert.ToString(dtTmp.Rows[i][DB_Proc.Parameter.clsRoutdef.Column.HostPortID]);
-                        var n1 = GetLocation(DeviceID, HostPortID);
-                        if(n1 == null)
+                        for (int i = 0; i < dtTmp.Rows.Count; i++)
                         {
-                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error,
-                                $"Router找不到此Location => <DeviceID>{DeviceID} <HostPortID>{HostPortID}");
-                            continue;
-                        }
+                            string DeviceID = Convert.ToString(dtTmp.Rows[i][DB_Proc.Parameter.clsRoutdef.Column.DeviceID]);
+                            string HostPortID = Convert.ToString(dtTmp.Rows[i][DB_Proc.Parameter.clsRoutdef.Column.HostPortID]);
+                            var n1 = GetLocation(DeviceID, HostPortID);
+                            if (n1 == null)
+                            {
+                                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error,
+                                    $"Router找不到此Location => <DeviceID>{DeviceID} <HostPortID>{HostPortID}");
+                                continue;
+                            }
 
-                        DeviceID = Convert.ToString(dtTmp.Rows[i][DB_Proc.Parameter.clsRoutdef.Column.NextDeviceID]);
-                        HostPortID = Convert.ToString(dtTmp.Rows[i][DB_Proc.Parameter.clsRoutdef.Column.NextHostPortID]);
-                        var n2 = GetLocation(DeviceID, HostPortID);
-                        if (n2 == null)
-                        {
-                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error,
-                                $"Router找不到此Location => <DeviceID>{DeviceID} <HostPortID>{HostPortID}");
-                            continue;
-                        }
+                            DeviceID = Convert.ToString(dtTmp.Rows[i][DB_Proc.Parameter.clsRoutdef.Column.NextDeviceID]);
+                            HostPortID = Convert.ToString(dtTmp.Rows[i][DB_Proc.Parameter.clsRoutdef.Column.NextHostPortID]);
+                            var n2 = GetLocation(DeviceID, HostPortID);
+                            if (n2 == null)
+                            {
+                                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error,
+                                    $"Router找不到此Location => <DeviceID>{DeviceID} <HostPortID>{HostPortID}");
+                                continue;
+                            }
 
-                        if (n1.DeviceId == n2.DeviceId) continue;
-                        else routeService.AddDevicePath(n1, n2);
+                            if (n1.DeviceId == n2.DeviceId) continue;
+                            else routeService.AddDevicePath(n1, n2);
+                        }
                     }
 
                     Done = true;

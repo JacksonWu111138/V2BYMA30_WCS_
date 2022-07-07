@@ -174,7 +174,7 @@ namespace Mirle.MapController.DB_Proc
                 string strSql = $"select * from {Parameter.clsRoutdef.TableName}";
                 string strEM = "";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
-                if (iRet != DBResult.Success)
+                if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
                 {
                     clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
                     return false;

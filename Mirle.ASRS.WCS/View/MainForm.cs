@@ -36,7 +36,7 @@ namespace Mirle.ASRS.WCS.View
         private MapHost router;
         public static DeviceInfo[] PCBA = new DeviceInfo[2];
         public static DeviceInfo[] Box = new DeviceInfo[3];
-        public static DeviceInfo AGV = new DeviceInfo();
+        public static DeviceInfo[] AGV = new DeviceInfo[4];
         private ASRSProcess[] AsrsCommand = new ASRSProcess[5];
         private SignalHost[] CraneSignals = new SignalHost[5];
         private MidHost middle = new MidHost();
@@ -207,8 +207,12 @@ namespace Mirle.ASRS.WCS.View
         #endregion Timer
         private void AGVBuffer_Initial()
         {
-            AGV.Floors = new List<FloorInfo>();
             #region 3F
+            AGV[0] = new DeviceInfo
+            {
+                Floors = new List<FloorInfo>()
+            };
+
             var floor = new FloorInfo
             {
                 Group_IN = new List<ConveyorInfo>
@@ -226,9 +230,14 @@ namespace Mirle.ASRS.WCS.View
                     ConveyorDef.AGV.LO4_01
                 }
             };
-            AGV.Floors.Add(floor);
+            AGV[0].Floors.Add(floor);
             #endregion 3F
             #region 5F
+            AGV[1] = new DeviceInfo
+            {
+                Floors = new List<FloorInfo>()
+            };
+
             floor = new FloorInfo
             {
                 Group_IN = new List<ConveyorInfo>
@@ -250,9 +259,14 @@ namespace Mirle.ASRS.WCS.View
                     ConveyorDef.AGV.LO5_01
                 }
             };
-            AGV.Floors.Add(floor);
+            AGV[1].Floors.Add(floor);
             #endregion 5F
             #region 6F
+            AGV[2] = new DeviceInfo
+            {
+                Floors = new List<FloorInfo>()
+            };
+
             floor = new FloorInfo
             {
                 Group_IN = new List<ConveyorInfo>
@@ -274,9 +288,14 @@ namespace Mirle.ASRS.WCS.View
                     ConveyorDef.AGV.LO6_01
                 }
             };
-            AGV.Floors.Add(floor);
+            AGV[2].Floors.Add(floor);
             #endregion 6F
             #region 8F
+            AGV[3] = new DeviceInfo
+            {
+                Floors = new List<FloorInfo>()
+            };
+
             floor = new FloorInfo
             {
                 Group_IN = new List<ConveyorInfo>
@@ -402,7 +421,7 @@ namespace Mirle.ASRS.WCS.View
                     ConveyorDef.AGV.S6_07
                 }
             };
-            AGV.Floors.Add(floor); 
+            AGV[3].Floors.Add(floor); 
             #endregion 8F
         }
 

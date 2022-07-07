@@ -18,7 +18,6 @@ namespace Mirle.ASRS.WCS
         public static WebApiConfig WmsApi_Config = new WebApiConfig();
         public static WebApiConfig WcsApi_Config = new WebApiConfig();
         public static ASRSINI lcsini;
-        public static string[] gsStockerID = new string[4];
         public static int L2L_MaxCount = 5;
         
 
@@ -93,7 +92,11 @@ namespace Mirle.ASRS.WCS
                 MainForm.Box[i].DeviceID = adBox[i];
             }
 
-            MainForm.AGV.DeviceID = lcsini.EquNo.AGV;
+            string[] adAGV = lcsini.EquNo.AGV.Split(',');
+            for (int i = 0; i < MainForm.AGV.Length; i++)
+            {
+                MainForm.AGV[i].DeviceID = adAGV[i];
+            }
         }
       
         private static void FunApiConfig(ASRSINI lcsini)

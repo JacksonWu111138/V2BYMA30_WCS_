@@ -8,6 +8,18 @@ namespace Mirle.Def.U2NMMA30
 {
     public class ConveyorDef
     {
+        public class E04
+        {
+            /// <summary>
+            /// 站口
+            /// </summary>
+            public static ConveyorInfo LO1_02 = new ConveyorInfo { Index = 2, BufferName = "LO1-02" };
+            /// <summary>
+            /// 站口
+            /// </summary>
+            public static ConveyorInfo LO1_07 = new ConveyorInfo { Index = 7, BufferName = "LO1-07" };
+        }
+
         /// <summary>
         /// 箱式倉
         /// </summary>
@@ -39,6 +51,22 @@ namespace Mirle.Def.U2NMMA30
             public static ConveyorInfo B1_108 = new ConveyorInfo { Index = 108, BufferName = "B1-108", DoubleType = DoubleType.Right };
             public static ConveyorInfo B1_111 = new ConveyorInfo { Index = 111, BufferName = "B1-111", DoubleType = DoubleType.Left, Path = 33 };
             public static ConveyorInfo B1_114 = new ConveyorInfo { Index = 114, BufferName = "B1-114", DoubleType = DoubleType.Right, Path = 34 };
+            /// <summary>
+            /// 站口
+            /// </summary>
+            public static ConveyorInfo B1_062 = new ConveyorInfo { Index = 62, BufferName = "B1-062", Path = 10 };
+            /// <summary>
+            /// 站口
+            /// </summary>
+            public static ConveyorInfo B1_067 = new ConveyorInfo { Index = 67, BufferName = "B1-067", Path = 20 };
+            /// <summary>
+            /// 站口
+            /// </summary>
+            public static ConveyorInfo B1_142 = new ConveyorInfo { Index = 142, BufferName = "B1-142", Path = 30 };
+            /// <summary>
+            /// 站口
+            /// </summary>
+            public static ConveyorInfo B1_147 = new ConveyorInfo { Index = 147, BufferName = "B1-147", Path = 40 };
         }
 
         public class PCBA
@@ -335,7 +363,12 @@ namespace Mirle.Def.U2NMMA30
         public static List<ConveyorInfo> GetStations() => Stations;
         public static void FunStnListAddInit()
         {
-
+            Stations.Add(E04.LO1_02);
+            Stations.Add(E04.LO1_07);
+            Stations.Add(Box.B1_062);
+            Stations.Add(Box.B1_067);
+            Stations.Add(Box.B1_142);
+            Stations.Add(Box.B1_147);
         }
 
         public static int GetPathByStn(string StnNo)

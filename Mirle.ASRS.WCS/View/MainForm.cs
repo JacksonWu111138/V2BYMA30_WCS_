@@ -53,8 +53,8 @@ namespace Mirle.ASRS.WCS.View
         {
             ChkAppIsAlreadyRunning();
             this.Text = this.Text + "  v " + ProductVersion;
-            CraneBuffer_Initial();
-            AGVBuffer_Initial();
+            //CraneBuffer_Initial();
+            //AGVBuffer_Initial();
             clInitSys.FunLoadIniSys();
             FunInit();
             FunEventInit();
@@ -205,7 +205,7 @@ namespace Mirle.ASRS.WCS.View
             }
         } 
         #endregion Timer
-        private void AGVBuffer_Initial()
+        public static void AGVBuffer_Initial()
         {
             #region 3F
             AGV[0] = new DeviceInfo
@@ -425,7 +425,7 @@ namespace Mirle.ASRS.WCS.View
             #endregion 8F
         }
 
-        private void CraneBuffer_Initial()
+        public static void CraneBuffer_Initial()
         {
             for (int i = 0; i < 5; i++)
             {

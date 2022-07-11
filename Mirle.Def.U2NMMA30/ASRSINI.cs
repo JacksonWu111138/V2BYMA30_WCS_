@@ -17,6 +17,12 @@ namespace Mirle.Def.U2NMMA30
         [Option(Alias = "System Info")]
         SystemConfig System_Info { get; }
 
+        [Option(Alias = "ControllerID")]
+        ControllerID_Config ControllerID { get; }
+
+        [Option(Alias = "StnNo")]
+        StnNoConfig StnNo { get; }
+
         [Option(Alias = "EquNo")]
         EquNoConfig EquNo { get; }
 
@@ -25,9 +31,6 @@ namespace Mirle.Def.U2NMMA30
 
         [Option(Alias = "Server API")]
         APIConfig Server_API { get; }
-
-        [Option(Alias = "StnNo")]
-        StnNoConfig StnNo { get; }
     }
 
     public interface DatabaseConfig
@@ -57,6 +60,41 @@ namespace Mirle.Def.U2NMMA30
     {
         [Option(DefaultValue = 5)]
         int L2L_MaxCount { get; }
+    }
+
+    public interface ControllerID_Config
+    {
+        string Tower { get; }
+        string Box { get; }
+        string PCBA { get; }
+        /// <summary>
+        /// 產線
+        /// </summary>
+        string SMTC { get; }
+        /// <summary>
+        /// 線邊倉
+        /// </summary>
+        string Line { get; }
+        /// <summary>
+        /// 3F產線
+        /// </summary>
+        string SMT3C { get; }
+        /// <summary>
+        /// 5F產線
+        /// </summary>
+        string SMT5C { get; }
+        /// <summary>
+        /// 6F產線
+        /// </summary>
+        string SMT6C { get; }
+        /// <summary>
+        /// E04 + 1F + 8F
+        /// </summary>
+        string E04 { get; }
+        /// <summary>
+        /// E05 + 3F + 5F + 6F + 8F
+        /// </summary>
+        string E05 { get; }
     }
 
     public interface EquNoConfig
@@ -128,10 +166,12 @@ namespace Mirle.Def.U2NMMA30
 
     public interface StnNoConfig
     {
-        string A1_41 { get; }
-        string A1_42 { get; }
-        string A1_43 { get; }
-        string A1_44 { get; }
+        string LO1_02 { get; }
+        string LO1_07 { get; }
+        string B1_062 { get; }
+        string B1_067 { get; }
+        string B1_142 { get; }
+        string B1_147 { get; }
         string WaterLevel { get; }
     }
 }

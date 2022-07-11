@@ -129,9 +129,9 @@ insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, T
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'E2-38', 3, 12, 38, ' ',0);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'E2-39', 3, 13, 39, ' ',0);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'E2-44', 3, 14, 44, ' ',0);
-insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'B1-070', 3, 15, 70, ' ',1);
-insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'B1-074', 3, 16, 74, ' ',1);
-insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'B1-078', 3, 17, 78, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'B1-070', 3, 15, 70, ' ',2);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'B1-074', 3, 16, 74, ' ',2);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'B1-078', 3, 17, 78, ' ',2);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'LO2-04', 3, 18, 4, ' ',1);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'LO3-01', 3, 19, 1, ' ',1);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'M1-10', 3, 20, 10, ' ',2);
@@ -142,9 +142,9 @@ insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, T
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'A4-13', 3, 25, 13, ' ',2);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'A4-17', 3, 26, 17, ' ',2);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'E1-01', 3, 27, 1, ' ',2);
-insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'B1-071', 3, 28, 71, ' ',2);
-insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'B1-075', 3, 29, 75, ' ',2);
-insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'B1-079', 3, 30, 79, ' ',2);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'B1-071', 3, 28, 71, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'B1-075', 3, 29, 75, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'B1-079', 3, 30, 79, ' ',1);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'LO2-01', 3, 31, 1, ' ',2);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'LO3-04', 3, 32, 4, ' ',2);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('68', 'S1-49', 3, 33, 49, ' ',0);

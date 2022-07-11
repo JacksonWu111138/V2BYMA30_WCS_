@@ -238,6 +238,11 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(Box.B1_111);
             Node_All.Add(Box.B1_114);
 
+            Node_All.Add(Box.B1_062);
+            Node_All.Add(Box.B1_067);
+            Node_All.Add(Box.B1_142);
+            Node_All.Add(Box.B1_147);
+
             Node_All.Add(PCBA.M1_01);
             Node_All.Add(PCBA.M1_06);
             Node_All.Add(PCBA.M1_11);
@@ -293,6 +298,8 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(AGV.E2_38);
             Node_All.Add(AGV.E2_39);
             Node_All.Add(AGV.E2_44);
+            Node_All.Add(E04.LO1_02);
+            Node_All.Add(E04.LO1_07);
             Node_All.Add(AGV.LO2_01);
             Node_All.Add(AGV.LO2_04);
             Node_All.Add(AGV.LO3_01);

@@ -40,6 +40,8 @@ namespace Mirle.ASRS.WCS.View
         private ASRSProcess[] AsrsCommand = new ASRSProcess[5];
         private SignalHost[] CraneSignals = new SignalHost[5];
         private MidHost middle = new MidHost();
+        private string sAsrsStockIn_Sql = "";
+        private string sAsrsEquNo_Sql = "";
         public MainForm()
         {
             InitializeComponent();
@@ -59,6 +61,12 @@ namespace Mirle.ASRS.WCS.View
             FunInit();
             FunEventInit();
             GridInit();
+
+            sAsrsStockIn_Sql = DBCommand.clsTool.GetAllSqlLocation_ForIn(PCBA);
+            sAsrsStockIn_Sql = sAsrsStockIn_Sql + "," + DBCommand.clsTool.GetAllSqlLocation_ForIn(Box);
+
+            sAsrsEquNo_Sql = DBCommand.clsTool.GetAllSqlEquNo(PCBA);
+            sAsrsEquNo_Sql = sAsrsEquNo_Sql + "," + DBCommand.clsTool.GetAllSqlEquNo(Box);
 
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "WCS程式已開啟");
             timRead.Enabled = true;

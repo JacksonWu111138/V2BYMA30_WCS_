@@ -9,6 +9,23 @@ namespace Mirle.ASRS.DBCommand
 {
     public class clsTool
     {
+        public static string GetSqlEquNo(DeviceInfo device)
+        {
+            return $"'{device.DeviceID}'";
+        }
+
+        public static string GetAllSqlEquNo(DeviceInfo[] devices)
+        {
+            string EquNoString = "";
+            for (int i = 0; i < devices.Length; i++)
+            {
+                if (i == 0) EquNoString = GetSqlEquNo(devices[i]);
+                else EquNoString += "," + GetSqlEquNo(devices[i]);
+            }
+
+            return EquNoString;
+        }
+
         public static string GetSqlLocation_ForIn(DeviceInfo device)
         {
             string StockInLoc_Sql = "";

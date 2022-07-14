@@ -30,6 +30,44 @@ namespace Mirle.DB.Proc
 
         public Fun.clsRoutdef GetFun_Routdef() => Routdef;
 
+        public bool FunNormalCmd_Proc(string sAsrsStockInLocation_Sql, string sAsrsEquNo_Sql)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        iRet = Cmd_Mst.FunGetNormalCommand(sAsrsStockInLocation_Sql, sAsrsEquNo_Sql, ref dtTmp, db);
+                        if (iRet == DBResult.Success)
+                        {
+                            for (int i = 0; i < dtTmp.Rows.Count; i++)
+                            {
+                                CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
+
+                            }
+
+                            return false;
+                        }
+                        else return false;
+                    }
+                    else return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+            finally
+            {
+                dtTmp.Dispose();
+            }
+        }
+
         public bool FunAsrsCmd_Proc(DeviceInfo Device, string StockInLoc_Sql, MapHost Router, 
             WMS.Proc.clsHost wms, MidHost middle, SignalHost CrnSignal)
         {

@@ -165,10 +165,10 @@ namespace Mirle.Def.U2NMMA30
             public static ConveyorInfo S1_48 = new ConveyorInfo { Index = 48, BufferName = "S1-48" };
             public static ConveyorInfo S1_49 = new ConveyorInfo { Index = 49, BufferName = "S1-49" };
             public static ConveyorInfo S1_50 = new ConveyorInfo { Index = 50, BufferName = "S1-50" };
-            public static ConveyorInfo S1_52 = new ConveyorInfo { Index = 52, BufferName = "S1-52" };
-            public static ConveyorInfo S1_56 = new ConveyorInfo { Index = 56, BufferName = "S1-56" };
-            public static ConveyorInfo S1_60 = new ConveyorInfo { Index = 60, BufferName = "S1-60" };
-            public static ConveyorInfo S1_64 = new ConveyorInfo { Index = 64, BufferName = "S1-64" };
+            //public static ConveyorInfo S1_52 = new ConveyorInfo { Index = 52, BufferName = "S1-52" };
+            //public static ConveyorInfo S1_56 = new ConveyorInfo { Index = 56, BufferName = "S1-56" };
+            //public static ConveyorInfo S1_60 = new ConveyorInfo { Index = 60, BufferName = "S1-60" };
+            //public static ConveyorInfo S1_64 = new ConveyorInfo { Index = 64, BufferName = "S1-64" };
 
             public static ConveyorInfo S2_01 = new ConveyorInfo { Index = 1, BufferName = "S2-01" };
             public static ConveyorInfo S2_07 = new ConveyorInfo { Index = 7, BufferName = "S2-07" };
@@ -203,6 +203,79 @@ namespace Mirle.Def.U2NMMA30
 
             public static ConveyorInfo S6_01 = new ConveyorInfo { Index = 1, BufferName = "S6-01" };
             public static ConveyorInfo S6_07 = new ConveyorInfo { Index = 7, BufferName = "S6-07" };
+        }
+        /// <summary>
+        /// 3F產線
+        /// </summary>
+        public class SMT3C
+        {
+            public static ConveyorInfo A1_02 = new ConveyorInfo { Index = 2, BufferName = "A1-02" };
+            public static ConveyorInfo A1_03 = new ConveyorInfo { Index = 3, BufferName = "A1-03" };
+            public static ConveyorInfo A1_06 = new ConveyorInfo { Index = 6, BufferName = "A1-06" };
+            public static ConveyorInfo A1_07 = new ConveyorInfo { Index = 7, BufferName = "A1-07" };
+            public static ConveyorInfo A1_10 = new ConveyorInfo { Index = 10, BufferName = "A1-10" };
+            public static ConveyorInfo A1_11 = new ConveyorInfo { Index = 11, BufferName = "A1-11" };
+        }
+        /// <summary>
+        /// 5F產線
+        /// </summary>
+        public class SMT5C
+        {
+            public static ConveyorInfo A2_02 = new ConveyorInfo { Index = 2, BufferName = "A2-02" };
+            public static ConveyorInfo A2_03 = new ConveyorInfo { Index = 3, BufferName = "A2-03" };
+            public static ConveyorInfo A2_06 = new ConveyorInfo { Index = 6, BufferName = "A2-06" };
+            public static ConveyorInfo A2_07 = new ConveyorInfo { Index = 7, BufferName = "A2-07" };
+            public static ConveyorInfo A2_10 = new ConveyorInfo { Index = 10, BufferName = "A2-10" };
+            public static ConveyorInfo A2_11 = new ConveyorInfo { Index = 11, BufferName = "A2-11" };
+            public static ConveyorInfo A2_14 = new ConveyorInfo { Index = 14, BufferName = "A2-14" };
+            public static ConveyorInfo A2_15 = new ConveyorInfo { Index = 15, BufferName = "A2-15" };
+            public static ConveyorInfo A2_18 = new ConveyorInfo { Index = 18, BufferName = "A2-18" };
+            public static ConveyorInfo A2_19 = new ConveyorInfo { Index = 19, BufferName = "A2-19" };
+        }
+        /// <summary>
+        /// 6F產線
+        /// </summary>
+        public class SMT6C
+        {
+            public static ConveyorInfo A3_02 = new ConveyorInfo { Index = 2, BufferName = "A3-02" };
+            public static ConveyorInfo A3_03 = new ConveyorInfo { Index = 3, BufferName = "A3-03" };
+            public static ConveyorInfo A3_06 = new ConveyorInfo { Index = 6, BufferName = "A3-06" };
+            public static ConveyorInfo A3_07 = new ConveyorInfo { Index = 7, BufferName = "A3-07" };
+            public static ConveyorInfo A3_10 = new ConveyorInfo { Index = 10, BufferName = "A3-10" };
+            public static ConveyorInfo A3_11 = new ConveyorInfo { Index = 11, BufferName = "A3-11" };
+            public static ConveyorInfo A3_14 = new ConveyorInfo { Index = 14, BufferName = "A3-14" };
+            public static ConveyorInfo A3_15 = new ConveyorInfo { Index = 15, BufferName = "A3-15" };
+            public static ConveyorInfo A3_18 = new ConveyorInfo { Index = 18, BufferName = "A3-18" };
+            public static ConveyorInfo A3_19 = new ConveyorInfo { Index = 19, BufferName = "A3-19" };
+        }
+        /// <summary>
+        /// 產線
+        /// </summary>
+        public class SMTC
+        {
+            public static ConveyorInfo S1_38 = new ConveyorInfo { Index = 38, BufferName = "S1-38" };
+            public static ConveyorInfo S1_39 = new ConveyorInfo { Index = 39, BufferName = "S1-39" };
+            public static ConveyorInfo S1_42 = new ConveyorInfo { Index = 42, BufferName = "S1-42" };
+            public static ConveyorInfo S1_43 = new ConveyorInfo { Index = 43, BufferName = "S1-43" };
+            public static ConveyorInfo S1_46 = new ConveyorInfo { Index = 46, BufferName = "S1-46" };
+            public static ConveyorInfo S1_47 = new ConveyorInfo { Index = 47, BufferName = "S1-47" };
+            //public static ConveyorInfo S1_51 = new ConveyorInfo { Index = 51, BufferName = "S1-51" };
+        }
+        /// <summary>
+        /// 線邊倉
+        /// </summary>
+        public class Line
+        {
+            public static ConveyorInfo A4_02 = new ConveyorInfo { Index = 2, BufferName = "A4-02" };
+            public static ConveyorInfo A4_03 = new ConveyorInfo { Index = 3, BufferName = "A4-03" };
+            public static ConveyorInfo A4_06 = new ConveyorInfo { Index = 6, BufferName = "A4-06" };
+            public static ConveyorInfo A4_07 = new ConveyorInfo { Index = 7, BufferName = "A4-07" };
+            public static ConveyorInfo A4_10 = new ConveyorInfo { Index = 10, BufferName = "A4-10" };
+            public static ConveyorInfo A4_11 = new ConveyorInfo { Index = 11, BufferName = "A4-11" };
+            public static ConveyorInfo A4_14 = new ConveyorInfo { Index = 14, BufferName = "A4-14" };
+            public static ConveyorInfo A4_15 = new ConveyorInfo { Index = 15, BufferName = "A4-15" };
+            public static ConveyorInfo A4_18 = new ConveyorInfo { Index = 18, BufferName = "A4-18" };
+            public static ConveyorInfo A4_19 = new ConveyorInfo { Index = 19, BufferName = "A4-19" };
         }
 
         private static List<ConveyorInfo> Node_All = new List<ConveyorInfo>();
@@ -249,32 +322,68 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(PCBA.M1_16);
 
             Node_All.Add(AGV.A1_01);
+            Node_All.Add(SMT3C.A1_02);
+            Node_All.Add(SMT3C.A1_03);
             Node_All.Add(AGV.A1_04);
             Node_All.Add(AGV.A1_05);
+            Node_All.Add(SMT3C.A1_06);
+            Node_All.Add(SMT3C.A1_07);
             Node_All.Add(AGV.A1_08);
             Node_All.Add(AGV.A1_09);
+            Node_All.Add(SMT3C.A1_10);
+            Node_All.Add(SMT3C.A1_11);
             Node_All.Add(AGV.A1_12);
             Node_All.Add(AGV.A2_01);
+            Node_All.Add(SMT5C.A2_02);
+            Node_All.Add(SMT5C.A2_03);
             Node_All.Add(AGV.A2_04);
             Node_All.Add(AGV.A2_05);
+            Node_All.Add(SMT5C.A2_06);
+            Node_All.Add(SMT5C.A2_07);
             Node_All.Add(AGV.A2_08);
             Node_All.Add(AGV.A2_09);
+            Node_All.Add(SMT5C.A2_10);
+            Node_All.Add(SMT5C.A2_11);
             Node_All.Add(AGV.A2_12);
             Node_All.Add(AGV.A2_13);
+            Node_All.Add(SMT5C.A2_14);
+            Node_All.Add(SMT5C.A2_15);
             Node_All.Add(AGV.A2_16);
             Node_All.Add(AGV.A2_17);
+            Node_All.Add(SMT5C.A2_18);
+            Node_All.Add(SMT5C.A2_19);
             Node_All.Add(AGV.A2_20);
             Node_All.Add(AGV.A3_01);
+            Node_All.Add(SMT6C.A3_02);
+            Node_All.Add(SMT6C.A3_03);
             Node_All.Add(AGV.A3_04);
             Node_All.Add(AGV.A3_05);
+            Node_All.Add(SMT6C.A3_06);
+            Node_All.Add(SMT6C.A3_07);
             Node_All.Add(AGV.A3_08);
             Node_All.Add(AGV.A3_09);
+            Node_All.Add(SMT6C.A3_10);
+            Node_All.Add(SMT6C.A3_11);
             Node_All.Add(AGV.A3_12);
             Node_All.Add(AGV.A3_13);
+            Node_All.Add(SMT6C.A3_14);
+            Node_All.Add(SMT6C.A3_15);
             Node_All.Add(AGV.A3_16);
             Node_All.Add(AGV.A3_17);
+            Node_All.Add(SMT6C.A3_18);
+            Node_All.Add(SMT6C.A3_19);
             Node_All.Add(AGV.A3_20);
             Node_All.Add(AGV.A4_01);
+            Node_All.Add(Line.A4_02);
+            Node_All.Add(Line.A4_03);
+            Node_All.Add(Line.A4_06);
+            Node_All.Add(Line.A4_07);
+            Node_All.Add(Line.A4_10);
+            Node_All.Add(Line.A4_11);
+            Node_All.Add(Line.A4_14);
+            Node_All.Add(Line.A4_15);
+            Node_All.Add(Line.A4_18);
+            Node_All.Add(Line.A4_19);
             Node_All.Add(AGV.A4_04);
             Node_All.Add(AGV.A4_05);
             Node_All.Add(AGV.A4_08);
@@ -320,17 +429,24 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(AGV.S1_25);
             Node_All.Add(AGV.S1_31);
             Node_All.Add(AGV.S1_37);
+            Node_All.Add(SMTC.S1_38);
+            Node_All.Add(SMTC.S1_39);
             Node_All.Add(AGV.S1_40);
             Node_All.Add(AGV.S1_41);
+            Node_All.Add(SMTC.S1_42);
+            Node_All.Add(SMTC.S1_43);
             Node_All.Add(AGV.S1_44);
             Node_All.Add(AGV.S1_45);
+            Node_All.Add(SMTC.S1_46);
+            Node_All.Add(SMTC.S1_47);
             Node_All.Add(AGV.S1_48);
             Node_All.Add(AGV.S1_49);
             Node_All.Add(AGV.S1_50);
-            Node_All.Add(AGV.S1_52);
-            Node_All.Add(AGV.S1_56);
-            Node_All.Add(AGV.S1_60);
-            Node_All.Add(AGV.S1_64);
+            //Node_All.Add(SMTC.S1_51);
+            //Node_All.Add(AGV.S1_52);
+            //Node_All.Add(AGV.S1_56);
+            //Node_All.Add(AGV.S1_60);
+            //Node_All.Add(AGV.S1_64);
             Node_All.Add(AGV.S2_01);
             Node_All.Add(AGV.S2_07);
             Node_All.Add(AGV.S2_13);
@@ -376,6 +492,49 @@ namespace Mirle.Def.U2NMMA30
             Stations.Add(Box.B1_067);
             Stations.Add(Box.B1_142);
             Stations.Add(Box.B1_147);
+            Stations.Add(SMT3C.A1_02);
+            Stations.Add(SMT3C.A1_03);
+            Stations.Add(SMT3C.A1_06);
+            Stations.Add(SMT3C.A1_07);
+            Stations.Add(SMT3C.A1_10);
+            Stations.Add(SMT3C.A1_11);
+            Stations.Add(SMT5C.A2_02);
+            Stations.Add(SMT5C.A2_03);
+            Stations.Add(SMT5C.A2_06);
+            Stations.Add(SMT5C.A2_07);
+            Stations.Add(SMT5C.A2_10);
+            Stations.Add(SMT5C.A2_11);
+            Stations.Add(SMT5C.A2_14);
+            Stations.Add(SMT5C.A2_15);
+            Stations.Add(SMT5C.A2_18);
+            Stations.Add(SMT5C.A2_19);
+            Stations.Add(SMT6C.A3_02);
+            Stations.Add(SMT6C.A3_03);
+            Stations.Add(SMT6C.A3_06);
+            Stations.Add(SMT6C.A3_07);
+            Stations.Add(SMT6C.A3_10);
+            Stations.Add(SMT6C.A3_11);
+            Stations.Add(SMT6C.A3_14);
+            Stations.Add(SMT6C.A3_15);
+            Stations.Add(SMT6C.A3_18);
+            Stations.Add(SMT6C.A3_19);
+            Stations.Add(SMTC.S1_38);
+            Stations.Add(SMTC.S1_39);
+            Stations.Add(SMTC.S1_42);
+            Stations.Add(SMTC.S1_43);
+            Stations.Add(SMTC.S1_46);
+            Stations.Add(SMTC.S1_47);
+            Stations.Add(AGV.S1_50);
+            Stations.Add(Line.A4_02);
+            Stations.Add(Line.A4_03);
+            Stations.Add(Line.A4_06);
+            Stations.Add(Line.A4_07);
+            Stations.Add(Line.A4_10);
+            Stations.Add(Line.A4_11);
+            Stations.Add(Line.A4_14);
+            Stations.Add(Line.A4_15);
+            Stations.Add(Line.A4_18);
+            Stations.Add(Line.A4_19);
         }
 
         public static int GetPathByStn(string StnNo)

@@ -46,7 +46,24 @@ namespace Mirle.DB.Proc
                             for (int i = 0; i < dtTmp.Rows.Count; i++)
                             {
                                 CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
+                                if(cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
+                                {
+                                    switch(cmd.Cmd_Mode)
+                                    {
+                                        case clsConstValue.CmdMode.StockIn:
+                                        case clsConstValue.CmdMode.S2S:
 
+                                            break;
+                                        case clsConstValue.CmdMode.L2L:
+                                        case clsConstValue.CmdMode.StockOut:
+
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+
+                                }
                             }
 
                             return false;

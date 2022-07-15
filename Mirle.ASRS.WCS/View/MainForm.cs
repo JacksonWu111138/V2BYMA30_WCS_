@@ -178,7 +178,7 @@ namespace Mirle.ASRS.WCS.View
                 SubShowCmdtoGrid(ref Grid1);
                 if(clsDB_Proc.DBConn)
                 {
-
+                    clsDB_Proc.GetDB_Object().GetProc().FunNormalCmd_Proc(sAsrsStockIn_Sql, sAsrsEquNo_Sql);
                 }
             }
             catch (Exception ex)
@@ -337,10 +337,10 @@ namespace Mirle.ASRS.WCS.View
                     ConveyorDef.AGV.S1_40,
                     ConveyorDef.AGV.S1_44,
                     ConveyorDef.AGV.S1_48,
-                    ConveyorDef.AGV.S1_52,
-                    ConveyorDef.AGV.S1_56,
-                    ConveyorDef.AGV.S1_60,
-                    ConveyorDef.AGV.S1_64,
+                    //ConveyorDef.AGV.S1_52,
+                    //ConveyorDef.AGV.S1_56,
+                    //ConveyorDef.AGV.S1_60,
+                    //ConveyorDef.AGV.S1_64,
                     ConveyorDef.AGV.S2_49,
                     ConveyorDef.AGV.S2_01,
                     ConveyorDef.AGV.S2_07,

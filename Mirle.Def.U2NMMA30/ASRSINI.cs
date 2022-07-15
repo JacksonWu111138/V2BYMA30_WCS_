@@ -172,6 +172,49 @@ namespace Mirle.Def.U2NMMA30
         string B1_067 { get; }
         string B1_142 { get; }
         string B1_147 { get; }
+        string A1_02 { get; }
+        string A1_03 { get; }
+        string A1_06 { get; }
+        string A1_07 { get; }
+        string A1_10 { get; }
+        string A1_11 { get; }
+        string A2_02 { get; }
+        string A2_03 { get; }
+        string A2_06 { get; }
+        string A2_07 { get; }
+        string A2_10 { get; }
+        string A2_11 { get; }
+        string A2_14 { get; }
+        string A2_15 { get; }
+        string A2_18 { get; }
+        string A2_19 { get; }
+        string A3_02 { get; }
+        string A3_03 { get; }
+        string A3_06 { get; }
+        string A3_07 { get; }
+        string A3_10 { get; }
+        string A3_11 { get; }
+        string A3_14 { get; }
+        string A3_15 { get; }
+        string A3_18 { get; }
+        string A3_19 { get; }
+        string S1_38 { get; }
+        string S1_39 { get; }
+        string S1_42 { get; }
+        string S1_43 { get; }
+        string S1_46 { get; }
+        string S1_47 { get; }
+        string S1_50 { get; }
+        string A4_02 { get; }
+        string A4_03 { get; }
+        string A4_06 { get; }
+        string A4_07 { get; }
+        string A4_10 { get; }
+        string A4_11 { get; }
+        string A4_14 { get; }
+        string A4_15 { get; }
+        string A4_18 { get; }
+        string A4_19 { get; }
         string WaterLevel { get; }
     }
 }

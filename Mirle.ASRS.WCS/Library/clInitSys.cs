@@ -157,7 +157,6 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.S1_48.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S1_49.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S1_50.ControllerID = lcsini.ControllerID.SMTC;
-            //ConveyorDef.SMTC.S1_51.ControllerID = lcsini.ControllerID.SMTC;
             //ConveyorDef.AGV.S1_52.ControllerID = lcsini.ControllerID.SMTC;
             //ConveyorDef.AGV.S1_56.ControllerID = lcsini.ControllerID.SMTC;
             //ConveyorDef.AGV.S1_60.ControllerID = lcsini.ControllerID.SMTC;
@@ -175,8 +174,13 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.S3_25.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S3_31.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S3_37.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.SMTC.S3_38.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.SMTC.S3_39.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.SMTC.S3_42.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.SMTC.S3_43.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S3_45.ControllerID = lcsini.ControllerID.SMTC;
-            ConveyorDef.AGV.S3_47.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.SMTC.S3_46.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.SMTC.S3_47.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S3_49.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S4_01.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S4_07.ControllerID = lcsini.ControllerID.SMTC;
@@ -188,20 +192,31 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.S5_01.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S5_07.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S5_37.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.SMTC.S5_38.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.SMTC.S5_39.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S5_49.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S6_01.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S6_07.ControllerID = lcsini.ControllerID.SMTC;
 
             ConveyorDef.AGV.A4_01.ControllerID = lcsini.ControllerID.Line;
             ConveyorDef.Line.A4_02.ControllerID = lcsini.ControllerID.Line;
+            ConveyorDef.Line.A4_03.ControllerID = lcsini.ControllerID.Line;
             ConveyorDef.AGV.A4_04.ControllerID = lcsini.ControllerID.Line;
             ConveyorDef.AGV.A4_05.ControllerID = lcsini.ControllerID.Line;
+            ConveyorDef.Line.A4_06.ControllerID = lcsini.ControllerID.Line;
+            ConveyorDef.Line.A4_07.ControllerID = lcsini.ControllerID.Line;
             ConveyorDef.AGV.A4_08.ControllerID = lcsini.ControllerID.Line;
             ConveyorDef.AGV.A4_09.ControllerID = lcsini.ControllerID.Line;
+            ConveyorDef.Line.A4_10.ControllerID = lcsini.ControllerID.Line;
+            ConveyorDef.Line.A4_11.ControllerID = lcsini.ControllerID.Line;
             ConveyorDef.AGV.A4_12.ControllerID = lcsini.ControllerID.Line;
             ConveyorDef.AGV.A4_13.ControllerID = lcsini.ControllerID.Line;
+            ConveyorDef.Line.A4_14.ControllerID = lcsini.ControllerID.Line;
+            ConveyorDef.Line.A4_15.ControllerID = lcsini.ControllerID.Line;
             ConveyorDef.AGV.A4_16.ControllerID = lcsini.ControllerID.Line;
             ConveyorDef.AGV.A4_17.ControllerID = lcsini.ControllerID.Line;
+            ConveyorDef.Line.A4_18.ControllerID = lcsini.ControllerID.Line;
+            ConveyorDef.Line.A4_19.ControllerID = lcsini.ControllerID.Line;
             ConveyorDef.AGV.A4_20.ControllerID = lcsini.ControllerID.Line;
 
             ConveyorDef.AGV.A1_01.ControllerID = lcsini.ControllerID.SMT3C;
@@ -314,8 +329,24 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.SMTC.S1_43.StnNo = lcsini.StnNo.S1_43;
             ConveyorDef.SMTC.S1_46.StnNo = lcsini.StnNo.S1_46;
             ConveyorDef.SMTC.S1_47.StnNo = lcsini.StnNo.S1_47;
-            ConveyorDef.AGV.S1_50.StnNo = lcsini.StnNo.S1_50;
+            ConveyorDef.SMTC.S3_38.StnNo = lcsini.StnNo.S3_38;
+            ConveyorDef.SMTC.S3_39.StnNo = lcsini.StnNo.S3_39;
+            ConveyorDef.SMTC.S3_42.StnNo = lcsini.StnNo.S3_42;
+            ConveyorDef.SMTC.S3_43.StnNo = lcsini.StnNo.S3_43;
+            ConveyorDef.SMTC.S3_46.StnNo = lcsini.StnNo.S3_46;
+            ConveyorDef.SMTC.S3_47.StnNo = lcsini.StnNo.S3_47;
+            ConveyorDef.SMTC.S5_38.StnNo = lcsini.StnNo.S5_38;
+            ConveyorDef.SMTC.S5_39.StnNo = lcsini.StnNo.S5_39;
             ConveyorDef.Line.A4_02.StnNo = lcsini.StnNo.A4_02;
+            ConveyorDef.Line.A4_03.StnNo = lcsini.StnNo.A4_03;
+            ConveyorDef.Line.A4_06.StnNo = lcsini.StnNo.A4_06;
+            ConveyorDef.Line.A4_07.StnNo = lcsini.StnNo.A4_07;
+            ConveyorDef.Line.A4_10.StnNo = lcsini.StnNo.A4_10;
+            ConveyorDef.Line.A4_11.StnNo = lcsini.StnNo.A4_11;
+            ConveyorDef.Line.A4_14.StnNo = lcsini.StnNo.A4_14;
+            ConveyorDef.Line.A4_15.StnNo = lcsini.StnNo.A4_15;
+            ConveyorDef.Line.A4_18.StnNo = lcsini.StnNo.A4_18;
+            ConveyorDef.Line.A4_19.StnNo = lcsini.StnNo.A4_19;
         }
 
         private static void FunDeviceConfig(ASRSINI lcsini)

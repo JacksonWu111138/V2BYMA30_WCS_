@@ -178,7 +178,7 @@ namespace Mirle.ASRS.WCS.View
                 SubShowCmdtoGrid(ref Grid1);
                 if(clsDB_Proc.DBConn)
                 {
-                    clsDB_Proc.GetDB_Object().GetProc().FunNormalCmd_Proc(sAsrsStockIn_Sql, sAsrsEquNo_Sql);
+                    clsDB_Proc.GetDB_Object().GetProc().FunNormalCmd_Proc(sAsrsStockIn_Sql, sAsrsEquNo_Sql, router);
                 }
             }
             catch (Exception ex)

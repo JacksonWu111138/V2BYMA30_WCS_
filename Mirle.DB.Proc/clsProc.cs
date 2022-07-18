@@ -30,7 +30,7 @@ namespace Mirle.DB.Proc
 
         public Fun.clsRoutdef GetFun_Routdef() => Routdef;
 
-        public bool FunNormalCmd_Proc(string sAsrsStockInLocation_Sql, string sAsrsEquNo_Sql)
+        public bool FunNormalCmd_Proc(string sAsrsStockInLocation_Sql, string sAsrsEquNo_Sql, MapHost Router)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -46,23 +46,35 @@ namespace Mirle.DB.Proc
                             for (int i = 0; i < dtTmp.Rows.Count; i++)
                             {
                                 CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
-                                if(cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
+                                string sRemark = "";
+                                Location Start = null; Location End = null;
+                                if (!Routdef.FunGetLocation(cmd, Router, ref Start, ref End, db)) continue;
+                                if (Start != End)
                                 {
-                                    switch(cmd.Cmd_Mode)
+                                    Location sLoc_Start = null; Location sLoc_End = null;
+                                    bool bCheck = Router.GetPath(Start, End, ref sLoc_Start, ref sLoc_End);
+                                    if (bCheck == false)
                                     {
-                                        case clsConstValue.CmdMode.StockIn:
-                                        case clsConstValue.CmdMode.S2S:
+                                        sRemark = "Error: Route給出的路徑為Null，WCS給的Location => Start: <Device>" + Start.DeviceId + " <Location>" + Start.LocationId +
+                                           "，End: <Device>" + End.DeviceId + " <Location>" + End.LocationId;
+                                        if (sRemark != cmd.Remark)
+                                        {
+                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                        }
 
-                                            break;
-                                        case clsConstValue.CmdMode.L2L:
-                                        case clsConstValue.CmdMode.StockOut:
-
-                                            break;
+                                        continue;
                                     }
-                                }
-                                else
-                                {
+                                    else
+                                    {
+                                        if(sLoc_Start.DeviceId != sLoc_End.DeviceId)
+                                        {
+                                            //CV Controller
+                                        }
+                                        else
+                                        {
 
+                                        }
+                                    }
                                 }
                             }
 

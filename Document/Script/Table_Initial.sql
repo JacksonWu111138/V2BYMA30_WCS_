@@ -242,8 +242,25 @@ insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) 
 
 
 --Box1 箱式倉1
-insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box1', 'B1-062', 3, 1, 62, ' ',0);
-insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box1', 'B1-067', 3, 2, 67, ' ',0);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box1', 'B1-037', 3, 1, 37, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box1', 'B1-041', 3, 2, 41, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box1', 'B1-045', 3, 3, 45, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box1', 'B1-054', 3, 4, 54, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box1', 'B1-062', 3, 5, 62, ' ',0);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box1', 'B1-067', 3, 6, 67, ' ',0);
+
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-037', '3', 'B1-007', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-037', '4', 'B1-019', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-037', '5', 'B1-031', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-041', '3', 'B1-007', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-041', '4', 'B1-019', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-041', '5', 'B1-031', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-045', '3', 'B1-007', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-045', '4', 'B1-019', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-045', '5', 'B1-031', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-054', '3', 'B1-007', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-054', '4', 'B1-019', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-054', '5', 'B1-031', ' ');
 
 insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-062', '68', 'B1-071', ' ');
 insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box1', 'B1-062', '68', 'B1-075', ' ');
@@ -276,8 +293,25 @@ insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) 
 
 
 --Box2 箱式倉2
-insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box2', 'B1-142', 3, 1, 142, ' ',0);
-insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box2', 'B1-147', 3, 2, 147, ' ',0);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box2', 'B1-117', 3, 1, 117, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box2', 'B1-121', 3, 2, 121, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box2', 'B1-125', 3, 3, 125, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box2', 'B1-134', 3, 4, 134, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box2', 'B1-142', 3, 5, 142, ' ',0);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Box2', 'B1-147', 3, 6, 147, ' ',0);
+
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-117', '3', 'B1-087', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-117', '4', 'B1-099', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-117', '5', 'B1-111', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-121', '3', 'B1-087', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-121', '4', 'B1-099', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-121', '5', 'B1-111', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-125', '3', 'B1-087', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-125', '4', 'B1-099', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-125', '5', 'B1-111', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-134', '3', 'B1-087', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-134', '4', 'B1-099', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-134', '5', 'B1-111', ' ');
 
 insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-142', '3', 'B1-087', ' ');
 insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Box2', 'B1-147', '3', 'B1-087', ' ');

@@ -117,6 +117,15 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.Box.B1_111.ControllerID = lcsini.ControllerID.Box;
             ConveyorDef.Box.B1_114.ControllerID = lcsini.ControllerID.Box;
 
+            ConveyorDef.Box.B1_037.ControllerID = lcsini.ControllerID.Box;
+            ConveyorDef.Box.B1_041.ControllerID = lcsini.ControllerID.Box;
+            ConveyorDef.Box.B1_045.ControllerID = lcsini.ControllerID.Box;
+            ConveyorDef.Box.B1_054.ControllerID = lcsini.ControllerID.Box;
+            ConveyorDef.Box.B1_117.ControllerID = lcsini.ControllerID.Box;
+            ConveyorDef.Box.B1_121.ControllerID = lcsini.ControllerID.Box;
+            ConveyorDef.Box.B1_125.ControllerID = lcsini.ControllerID.Box;
+            ConveyorDef.Box.B1_134.ControllerID = lcsini.ControllerID.Box;
+
             ConveyorDef.Box.B1_062.ControllerID = lcsini.ControllerID.Box;
             ConveyorDef.Box.B1_067.ControllerID = lcsini.ControllerID.Box;
             ConveyorDef.Box.B1_142.ControllerID = lcsini.ControllerID.Box;

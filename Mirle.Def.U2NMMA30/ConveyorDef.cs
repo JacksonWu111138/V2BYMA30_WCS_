@@ -51,6 +51,15 @@ namespace Mirle.Def.U2NMMA30
             public static ConveyorInfo B1_108 = new ConveyorInfo { Index = 108, BufferName = "B1-108", DoubleType = DoubleType.Right };
             public static ConveyorInfo B1_111 = new ConveyorInfo { Index = 111, BufferName = "B1-111", DoubleType = DoubleType.Left, Path = 33 };
             public static ConveyorInfo B1_114 = new ConveyorInfo { Index = 114, BufferName = "B1-114", DoubleType = DoubleType.Right, Path = 34 };
+
+            public static ConveyorInfo B1_037 = new ConveyorInfo { Index = 37, BufferName = "B1-037" };
+            public static ConveyorInfo B1_041 = new ConveyorInfo { Index = 41, BufferName = "B1-041" };
+            public static ConveyorInfo B1_045 = new ConveyorInfo { Index = 45, BufferName = "B1-045" };
+            public static ConveyorInfo B1_054 = new ConveyorInfo { Index = 54, BufferName = "B1-054" };
+            public static ConveyorInfo B1_117 = new ConveyorInfo { Index = 117, BufferName = "B1-117" };
+            public static ConveyorInfo B1_121 = new ConveyorInfo { Index = 121, BufferName = "B1-121" };
+            public static ConveyorInfo B1_125 = new ConveyorInfo { Index = 125, BufferName = "B1-125" };
+            public static ConveyorInfo B1_134 = new ConveyorInfo { Index = 134, BufferName = "B1-134" };
             /// <summary>
             /// 站口
             /// </summary>
@@ -320,6 +329,15 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(Box.B1_108);
             Node_All.Add(Box.B1_111);
             Node_All.Add(Box.B1_114);
+
+            Node_All.Add(Box.B1_037);
+            Node_All.Add(Box.B1_041);
+            Node_All.Add(Box.B1_045);
+            Node_All.Add(Box.B1_054);
+            Node_All.Add(Box.B1_117);
+            Node_All.Add(Box.B1_121);
+            Node_All.Add(Box.B1_125);
+            Node_All.Add(Box.B1_134);
 
             Node_All.Add(Box.B1_062);
             Node_All.Add(Box.B1_067);

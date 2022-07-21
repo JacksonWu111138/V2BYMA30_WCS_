@@ -20,7 +20,7 @@ namespace Mirle.ASRS.WCS
         public static WebApiConfig WcsApi_Config = new WebApiConfig();
         public static ASRSINI lcsini;
         public static int L2L_MaxCount = 5;
-        
+        public static string DeviceID_AGV = "";
 
         //API
         [DllImport("kernel32.dll")]
@@ -40,7 +40,7 @@ namespace Mirle.ASRS.WCS
                 FunControllerID_Config(lcsini);
                 FunApiConfig(lcsini);
                 FunStnNoConfig(lcsini);
-                MainForm.AGVBuffer_Initial();
+                //MainForm.AGVBuffer_Initial();
                 MainForm.CraneBuffer_Initial();
                 FunDeviceConfig(lcsini);
             }
@@ -373,11 +373,12 @@ namespace Mirle.ASRS.WCS
                 MainForm.Box[i].DeviceID = adBox[i];
             }
 
-            string[] adAGV = lcsini.EquNo.AGV.Split(',');
-            for (int i = 0; i < MainForm.AGV.Length; i++)
-            {
-                MainForm.AGV[i].DeviceID = adAGV[i];
-            }
+            DeviceID_AGV = lcsini.EquNo.AGV;
+            //string[] adAGV = lcsini.EquNo.AGV.Split(',');
+            //for (int i = 0; i < MainForm.AGV.Length; i++)
+            //{
+            //    MainForm.AGV[i].DeviceID = adAGV[i];
+            //}
         }
       
         private static void FunApiConfig(ASRSINI lcsini)

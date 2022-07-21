@@ -36,10 +36,10 @@ namespace Mirle.ASRS.WCS.View
         private MapHost router;
         public static DeviceInfo[] PCBA = new DeviceInfo[2];
         public static DeviceInfo[] Box = new DeviceInfo[3];
-        public static DeviceInfo[] AGV = new DeviceInfo[4];
+        //public static DeviceInfo[] AGV = new DeviceInfo[4];
         private ASRSProcess[] AsrsCommand = new ASRSProcess[5];
         private SignalHost[] CraneSignals = new SignalHost[5];
-        private MidHost middle = new MidHost();
+        private MidHost middle;
         private string sAsrsStockIn_Sql = "";
         private string sAsrsEquNo_Sql = "";
         public MainForm()
@@ -213,228 +213,228 @@ namespace Mirle.ASRS.WCS.View
             }
         } 
         #endregion Timer
-        public static void AGVBuffer_Initial()
-        {
-            #region 3F
-            AGV[0] = new DeviceInfo
-            {
-                Floors = new List<FloorInfo>()
-            };
+        //public static void AGVBuffer_Initial()
+        //{
+        //    #region 3F
+        //    AGV[0] = new DeviceInfo
+        //    {
+        //        Floors = new List<FloorInfo>()
+        //    };
 
-            var floor = new FloorInfo
-            {
-                Group_IN = new List<ConveyorInfo>
-                {
-                    ConveyorDef.AGV.A1_04,
-                    ConveyorDef.AGV.A1_08,
-                    ConveyorDef.AGV.A1_12,
-                    ConveyorDef.AGV.LO4_04
-                },
-                Group_OUT = new List<ConveyorInfo>
-                {
-                    ConveyorDef.AGV.A1_01,
-                    ConveyorDef.AGV.A1_05,
-                    ConveyorDef.AGV.A1_09,
-                    ConveyorDef.AGV.LO4_01
-                }
-            };
-            AGV[0].Floors.Add(floor);
-            #endregion 3F
-            #region 5F
-            AGV[1] = new DeviceInfo
-            {
-                Floors = new List<FloorInfo>()
-            };
+        //    var floor = new FloorInfo
+        //    {
+        //        Group_IN = new List<ConveyorInfo>
+        //        {
+        //            ConveyorDef.AGV.A1_04,
+        //            ConveyorDef.AGV.A1_08,
+        //            ConveyorDef.AGV.A1_12,
+        //            ConveyorDef.AGV.LO4_04
+        //        },
+        //        Group_OUT = new List<ConveyorInfo>
+        //        {
+        //            ConveyorDef.AGV.A1_01,
+        //            ConveyorDef.AGV.A1_05,
+        //            ConveyorDef.AGV.A1_09,
+        //            ConveyorDef.AGV.LO4_01
+        //        }
+        //    };
+        //    AGV[0].Floors.Add(floor);
+        //    #endregion 3F
+        //    #region 5F
+        //    AGV[1] = new DeviceInfo
+        //    {
+        //        Floors = new List<FloorInfo>()
+        //    };
 
-            floor = new FloorInfo
-            {
-                Group_IN = new List<ConveyorInfo>
-                {
-                    ConveyorDef.AGV.A2_04,
-                    ConveyorDef.AGV.A2_08,
-                    ConveyorDef.AGV.A2_12,
-                    ConveyorDef.AGV.A2_16,
-                    ConveyorDef.AGV.A2_20,
-                    ConveyorDef.AGV.LO5_04
-                },
-                Group_OUT = new List<ConveyorInfo>
-                {
-                    ConveyorDef.AGV.A2_01,
-                    ConveyorDef.AGV.A2_05,
-                    ConveyorDef.AGV.A2_09,
-                    ConveyorDef.AGV.A2_13,
-                    ConveyorDef.AGV.A2_17,
-                    ConveyorDef.AGV.LO5_01
-                }
-            };
-            AGV[1].Floors.Add(floor);
-            #endregion 5F
-            #region 6F
-            AGV[2] = new DeviceInfo
-            {
-                Floors = new List<FloorInfo>()
-            };
+        //    floor = new FloorInfo
+        //    {
+        //        Group_IN = new List<ConveyorInfo>
+        //        {
+        //            ConveyorDef.AGV.A2_04,
+        //            ConveyorDef.AGV.A2_08,
+        //            ConveyorDef.AGV.A2_12,
+        //            ConveyorDef.AGV.A2_16,
+        //            ConveyorDef.AGV.A2_20,
+        //            ConveyorDef.AGV.LO5_04
+        //        },
+        //        Group_OUT = new List<ConveyorInfo>
+        //        {
+        //            ConveyorDef.AGV.A2_01,
+        //            ConveyorDef.AGV.A2_05,
+        //            ConveyorDef.AGV.A2_09,
+        //            ConveyorDef.AGV.A2_13,
+        //            ConveyorDef.AGV.A2_17,
+        //            ConveyorDef.AGV.LO5_01
+        //        }
+        //    };
+        //    AGV[1].Floors.Add(floor);
+        //    #endregion 5F
+        //    #region 6F
+        //    AGV[2] = new DeviceInfo
+        //    {
+        //        Floors = new List<FloorInfo>()
+        //    };
 
-            floor = new FloorInfo
-            {
-                Group_IN = new List<ConveyorInfo>
-                {
-                    ConveyorDef.AGV.A3_04,
-                    ConveyorDef.AGV.A3_08,
-                    ConveyorDef.AGV.A3_12,
-                    ConveyorDef.AGV.A3_16,
-                    ConveyorDef.AGV.A3_20,
-                    ConveyorDef.AGV.LO6_04
-                },
-                Group_OUT = new List<ConveyorInfo>
-                {
-                    ConveyorDef.AGV.A3_01,
-                    ConveyorDef.AGV.A3_05,
-                    ConveyorDef.AGV.A3_09,
-                    ConveyorDef.AGV.A3_13,
-                    ConveyorDef.AGV.A3_17,
-                    ConveyorDef.AGV.LO6_01
-                }
-            };
-            AGV[2].Floors.Add(floor);
-            #endregion 6F
-            #region 8F
-            AGV[3] = new DeviceInfo
-            {
-                Floors = new List<FloorInfo>()
-            };
+        //    floor = new FloorInfo
+        //    {
+        //        Group_IN = new List<ConveyorInfo>
+        //        {
+        //            ConveyorDef.AGV.A3_04,
+        //            ConveyorDef.AGV.A3_08,
+        //            ConveyorDef.AGV.A3_12,
+        //            ConveyorDef.AGV.A3_16,
+        //            ConveyorDef.AGV.A3_20,
+        //            ConveyorDef.AGV.LO6_04
+        //        },
+        //        Group_OUT = new List<ConveyorInfo>
+        //        {
+        //            ConveyorDef.AGV.A3_01,
+        //            ConveyorDef.AGV.A3_05,
+        //            ConveyorDef.AGV.A3_09,
+        //            ConveyorDef.AGV.A3_13,
+        //            ConveyorDef.AGV.A3_17,
+        //            ConveyorDef.AGV.LO6_01
+        //        }
+        //    };
+        //    AGV[2].Floors.Add(floor);
+        //    #endregion 6F
+        //    #region 8F
+        //    AGV[3] = new DeviceInfo
+        //    {
+        //        Floors = new List<FloorInfo>()
+        //    };
 
-            floor = new FloorInfo
-            {
-                Group_IN = new List<ConveyorInfo>
-                {
-                    ConveyorDef.AGV.M1_05,
-                    ConveyorDef.AGV.M1_15,
-                    ConveyorDef.AGV.A4_04,
-                    ConveyorDef.AGV.A4_08,
-                    ConveyorDef.AGV.A4_12,
-                    ConveyorDef.AGV.A4_16,
-                    ConveyorDef.AGV.A4_20,
-                    ConveyorDef.AGV.E1_08,
-                    ConveyorDef.AGV.E2_35,
-                    ConveyorDef.AGV.E2_36,
-                    ConveyorDef.AGV.E2_37,
-                    ConveyorDef.AGV.E2_38,
-                    ConveyorDef.AGV.E2_39,
-                    ConveyorDef.AGV.E2_44,
-                    ConveyorDef.AGV.B1_070,
-                    ConveyorDef.AGV.B1_074,
-                    ConveyorDef.AGV.B1_078,
-                    ConveyorDef.AGV.LO2_04,
-                    ConveyorDef.AGV.LO3_01,
-                    ConveyorDef.AGV.S1_49,
-                    ConveyorDef.AGV.S1_50,
-                    ConveyorDef.AGV.S1_01,
-                    ConveyorDef.AGV.S1_07,
-                    ConveyorDef.AGV.S1_13,
-                    ConveyorDef.AGV.S1_25,
-                    ConveyorDef.AGV.S1_31,
-                    ConveyorDef.AGV.S1_40,
-                    ConveyorDef.AGV.S1_44,
-                    ConveyorDef.AGV.S1_48,
-                    //ConveyorDef.AGV.S1_52,
-                    //ConveyorDef.AGV.S1_56,
-                    //ConveyorDef.AGV.S1_60,
-                    //ConveyorDef.AGV.S1_64,
-                    ConveyorDef.AGV.S2_49,
-                    ConveyorDef.AGV.S2_01,
-                    ConveyorDef.AGV.S2_07,
-                    ConveyorDef.AGV.S2_13,
-                    ConveyorDef.AGV.S2_25,
-                    ConveyorDef.AGV.S2_31,
-                    ConveyorDef.AGV.S3_49,
-                    ConveyorDef.AGV.S3_01,
-                    ConveyorDef.AGV.S3_07,
-                    ConveyorDef.AGV.S3_13,
-                    ConveyorDef.AGV.S3_19,
-                    ConveyorDef.AGV.S3_25,
-                    ConveyorDef.AGV.S3_31,
-                    ConveyorDef.AGV.S3_40,
-                    ConveyorDef.AGV.S3_44,
-                    ConveyorDef.AGV.S3_48,
-                    ConveyorDef.AGV.S4_49,
-                    ConveyorDef.AGV.S4_50,
-                    ConveyorDef.AGV.S4_01,
-                    ConveyorDef.AGV.S4_07,
-                    ConveyorDef.AGV.S4_13,
-                    ConveyorDef.AGV.S4_19,
-                    ConveyorDef.AGV.S4_25,
-                    ConveyorDef.AGV.S5_49,
-                    ConveyorDef.AGV.S5_01,
-                    ConveyorDef.AGV.S5_07,
-                    ConveyorDef.AGV.S5_40,
-                    ConveyorDef.AGV.S6_01,
-                    ConveyorDef.AGV.S6_07
-                },
-                Group_OUT = new List<ConveyorInfo>
-                {
-                    ConveyorDef.AGV.M1_10,
-                    ConveyorDef.AGV.M1_20,
-                    ConveyorDef.AGV.A4_01,
-                    ConveyorDef.AGV.A4_05,
-                    ConveyorDef.AGV.A4_09,
-                    ConveyorDef.AGV.A4_13,
-                    ConveyorDef.AGV.A4_17,
-                    ConveyorDef.AGV.E1_01,
-                    ConveyorDef.AGV.E2_35,
-                    ConveyorDef.AGV.E2_36,
-                    ConveyorDef.AGV.E2_37,
-                    ConveyorDef.AGV.E2_38,
-                    ConveyorDef.AGV.E2_39,
-                    ConveyorDef.AGV.E2_44,
-                    ConveyorDef.AGV.B1_071,
-                    ConveyorDef.AGV.B1_075,
-                    ConveyorDef.AGV.B1_079,
-                    ConveyorDef.AGV.LO2_01,
-                    ConveyorDef.AGV.LO3_04,
-                    ConveyorDef.AGV.S1_49,
-                    ConveyorDef.AGV.S1_50,
-                    ConveyorDef.AGV.S1_01,
-                    ConveyorDef.AGV.S1_07,
-                    ConveyorDef.AGV.S1_13,
-                    ConveyorDef.AGV.S1_25,
-                    ConveyorDef.AGV.S1_31,
-                    ConveyorDef.AGV.S1_37,
-                    ConveyorDef.AGV.S1_41,
-                    ConveyorDef.AGV.S1_45,
-                    ConveyorDef.AGV.S2_49,
-                    ConveyorDef.AGV.S2_01,
-                    ConveyorDef.AGV.S2_07,
-                    ConveyorDef.AGV.S2_13,
-                    ConveyorDef.AGV.S2_25,
-                    ConveyorDef.AGV.S2_31,
-                    ConveyorDef.AGV.S3_49,
-                    ConveyorDef.AGV.S3_01,
-                    ConveyorDef.AGV.S3_07,
-                    ConveyorDef.AGV.S3_13,
-                    ConveyorDef.AGV.S3_19,
-                    ConveyorDef.AGV.S3_25,
-                    ConveyorDef.AGV.S3_31,
-                    ConveyorDef.AGV.S3_37,
-                    ConveyorDef.AGV.S3_45,
-                    ConveyorDef.AGV.S4_49,
-                    ConveyorDef.AGV.S4_50,
-                    ConveyorDef.AGV.S4_01,
-                    ConveyorDef.AGV.S4_07,
-                    ConveyorDef.AGV.S4_13,
-                    ConveyorDef.AGV.S4_19,
-                    ConveyorDef.AGV.S4_25,
-                    ConveyorDef.AGV.S5_49,
-                    ConveyorDef.AGV.S5_01,
-                    ConveyorDef.AGV.S5_07,
-                    ConveyorDef.AGV.S5_37,
-                    ConveyorDef.AGV.S6_01,
-                    ConveyorDef.AGV.S6_07
-                }
-            };
-            AGV[3].Floors.Add(floor); 
-            #endregion 8F
-        }
+        //    floor = new FloorInfo
+        //    {
+        //        Group_IN = new List<ConveyorInfo>
+        //        {
+        //            ConveyorDef.AGV.M1_05,
+        //            ConveyorDef.AGV.M1_15,
+        //            ConveyorDef.AGV.A4_04,
+        //            ConveyorDef.AGV.A4_08,
+        //            ConveyorDef.AGV.A4_12,
+        //            ConveyorDef.AGV.A4_16,
+        //            ConveyorDef.AGV.A4_20,
+        //            ConveyorDef.AGV.E1_08,
+        //            ConveyorDef.AGV.E2_35,
+        //            ConveyorDef.AGV.E2_36,
+        //            ConveyorDef.AGV.E2_37,
+        //            ConveyorDef.AGV.E2_38,
+        //            ConveyorDef.AGV.E2_39,
+        //            ConveyorDef.AGV.E2_44,
+        //            ConveyorDef.AGV.B1_070,
+        //            ConveyorDef.AGV.B1_074,
+        //            ConveyorDef.AGV.B1_078,
+        //            ConveyorDef.AGV.LO2_04,
+        //            ConveyorDef.AGV.LO3_01,
+        //            ConveyorDef.AGV.S1_49,
+        //            ConveyorDef.AGV.S1_50,
+        //            ConveyorDef.AGV.S1_01,
+        //            ConveyorDef.AGV.S1_07,
+        //            ConveyorDef.AGV.S1_13,
+        //            ConveyorDef.AGV.S1_25,
+        //            ConveyorDef.AGV.S1_31,
+        //            ConveyorDef.AGV.S1_40,
+        //            ConveyorDef.AGV.S1_44,
+        //            ConveyorDef.AGV.S1_48,
+        //            //ConveyorDef.AGV.S1_52,
+        //            //ConveyorDef.AGV.S1_56,
+        //            //ConveyorDef.AGV.S1_60,
+        //            //ConveyorDef.AGV.S1_64,
+        //            ConveyorDef.AGV.S2_49,
+        //            ConveyorDef.AGV.S2_01,
+        //            ConveyorDef.AGV.S2_07,
+        //            ConveyorDef.AGV.S2_13,
+        //            ConveyorDef.AGV.S2_25,
+        //            ConveyorDef.AGV.S2_31,
+        //            ConveyorDef.AGV.S3_49,
+        //            ConveyorDef.AGV.S3_01,
+        //            ConveyorDef.AGV.S3_07,
+        //            ConveyorDef.AGV.S3_13,
+        //            ConveyorDef.AGV.S3_19,
+        //            ConveyorDef.AGV.S3_25,
+        //            ConveyorDef.AGV.S3_31,
+        //            ConveyorDef.AGV.S3_40,
+        //            ConveyorDef.AGV.S3_44,
+        //            ConveyorDef.AGV.S3_48,
+        //            ConveyorDef.AGV.S4_49,
+        //            ConveyorDef.AGV.S4_50,
+        //            ConveyorDef.AGV.S4_01,
+        //            ConveyorDef.AGV.S4_07,
+        //            ConveyorDef.AGV.S4_13,
+        //            ConveyorDef.AGV.S4_19,
+        //            ConveyorDef.AGV.S4_25,
+        //            ConveyorDef.AGV.S5_49,
+        //            ConveyorDef.AGV.S5_01,
+        //            ConveyorDef.AGV.S5_07,
+        //            ConveyorDef.AGV.S5_40,
+        //            ConveyorDef.AGV.S6_01,
+        //            ConveyorDef.AGV.S6_07
+        //        },
+        //        Group_OUT = new List<ConveyorInfo>
+        //        {
+        //            ConveyorDef.AGV.M1_10,
+        //            ConveyorDef.AGV.M1_20,
+        //            ConveyorDef.AGV.A4_01,
+        //            ConveyorDef.AGV.A4_05,
+        //            ConveyorDef.AGV.A4_09,
+        //            ConveyorDef.AGV.A4_13,
+        //            ConveyorDef.AGV.A4_17,
+        //            ConveyorDef.AGV.E1_01,
+        //            ConveyorDef.AGV.E2_35,
+        //            ConveyorDef.AGV.E2_36,
+        //            ConveyorDef.AGV.E2_37,
+        //            ConveyorDef.AGV.E2_38,
+        //            ConveyorDef.AGV.E2_39,
+        //            ConveyorDef.AGV.E2_44,
+        //            ConveyorDef.AGV.B1_071,
+        //            ConveyorDef.AGV.B1_075,
+        //            ConveyorDef.AGV.B1_079,
+        //            ConveyorDef.AGV.LO2_01,
+        //            ConveyorDef.AGV.LO3_04,
+        //            ConveyorDef.AGV.S1_49,
+        //            ConveyorDef.AGV.S1_50,
+        //            ConveyorDef.AGV.S1_01,
+        //            ConveyorDef.AGV.S1_07,
+        //            ConveyorDef.AGV.S1_13,
+        //            ConveyorDef.AGV.S1_25,
+        //            ConveyorDef.AGV.S1_31,
+        //            ConveyorDef.AGV.S1_37,
+        //            ConveyorDef.AGV.S1_41,
+        //            ConveyorDef.AGV.S1_45,
+        //            ConveyorDef.AGV.S2_49,
+        //            ConveyorDef.AGV.S2_01,
+        //            ConveyorDef.AGV.S2_07,
+        //            ConveyorDef.AGV.S2_13,
+        //            ConveyorDef.AGV.S2_25,
+        //            ConveyorDef.AGV.S2_31,
+        //            ConveyorDef.AGV.S3_49,
+        //            ConveyorDef.AGV.S3_01,
+        //            ConveyorDef.AGV.S3_07,
+        //            ConveyorDef.AGV.S3_13,
+        //            ConveyorDef.AGV.S3_19,
+        //            ConveyorDef.AGV.S3_25,
+        //            ConveyorDef.AGV.S3_31,
+        //            ConveyorDef.AGV.S3_37,
+        //            ConveyorDef.AGV.S3_45,
+        //            ConveyorDef.AGV.S4_49,
+        //            ConveyorDef.AGV.S4_50,
+        //            ConveyorDef.AGV.S4_01,
+        //            ConveyorDef.AGV.S4_07,
+        //            ConveyorDef.AGV.S4_13,
+        //            ConveyorDef.AGV.S4_19,
+        //            ConveyorDef.AGV.S4_25,
+        //            ConveyorDef.AGV.S5_49,
+        //            ConveyorDef.AGV.S5_01,
+        //            ConveyorDef.AGV.S5_07,
+        //            ConveyorDef.AGV.S5_37,
+        //            ConveyorDef.AGV.S6_01,
+        //            ConveyorDef.AGV.S6_07
+        //        }
+        //    };
+        //    AGV[3].Floors.Add(floor); 
+        //    #endregion 8F
+        //}
 
         public static void CraneBuffer_Initial()
         {
@@ -541,6 +541,7 @@ namespace Mirle.ASRS.WCS.View
             ConveyorDef.FunNodeListAddInit();
             ConveyorDef.FunStnListAddInit();
             FunAsrsCmdInit();
+            middle = new MidHost(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box, clInitSys.DeviceID_AGV, clInitSys.DbConfig);
             //_unityContainer = new UnityContainer();
             //_unityContainer.RegisterInstance(new WCSController());
             //_webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);

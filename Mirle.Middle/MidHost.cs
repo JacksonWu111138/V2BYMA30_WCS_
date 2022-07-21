@@ -1,4 +1,5 @@
 ﻿using Mirle.Def;
+using Mirle.Middle.DB_Proc;
 using Mirle.Structure;
 using System;
 using System.Collections.Generic;
@@ -10,9 +11,43 @@ namespace Mirle.Middle
 {
     public class MidHost
     {
-        public MidHost()
+        private static List<ConveyorInfo> Node_All = new List<ConveyorInfo>();
+        private WebApiConfig AgvApi_Config = new WebApiConfig();
+        private DeviceInfo[] _PCBA = new DeviceInfo[2];
+        private DeviceInfo[] _Box = new DeviceInfo[3];
+        private string sDeviceID_AGV = "";
+        private readonly clsHost db;
+        private System.Timers.Timer timRead = new System.Timers.Timer();
+        public MidHost(List<ConveyorInfo> conveyors, WebApiConfig AgvApiConfig, DeviceInfo[] PCBA, DeviceInfo[] Box, string DeviceID_AGV, clsDbConfig config)
         {
+            db = new clsHost(config);
+            Node_All = conveyors;
+            AgvApi_Config = AgvApiConfig;
+            _PCBA = PCBA;
+            _Box = Box;
+            sDeviceID_AGV = DeviceID_AGV;
 
+            timRead.Elapsed += new System.Timers.ElapsedEventHandler(timRead_Elapsed);
+            timRead.Enabled = true; timRead.Interval = 500;
+        }
+
+        private void timRead_Elapsed(object source, System.Timers.ElapsedEventArgs e)
+        {
+            timRead.Enabled = false;
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+            }
+            finally
+            {
+                timRead.Enabled = true;
+            }
         }
 
         /// <summary>

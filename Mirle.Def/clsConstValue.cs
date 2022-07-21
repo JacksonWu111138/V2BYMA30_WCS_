@@ -83,6 +83,28 @@ namespace Mirle.Def
             public const string Fail = "500";
         }
 
+        public class CmdSts_MiddleCmd
+        {
+            public const string strCmd_Initial = "0";
+            /// <summary>
+            /// 預約周邊站口
+            /// </summary>
+            public const string strCmd_WriteCV = "1";
+            /// <summary>
+            /// 下達設備命令
+            /// </summary>
+            public const string strCmd_WriteDeviceCmd = "2";
+            /// <summary>
+            /// 7:命令完成待過帳
+            /// </summary>
+            public const string strCmd_Finish_Wait = "7";
+
+            /// <summary>
+            /// 8:命令取消待過帳
+            /// </summary>
+            public const string strCmd_Cancel_Wait = "8";
+        }
+
         public class CmdSts
         {
             public const string strCmd_Initial = "0";

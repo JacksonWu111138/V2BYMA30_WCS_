@@ -18,6 +18,7 @@ namespace Mirle.Middle
         private string sDeviceID_AGV = "";
         private readonly clsHost db;
         private System.Timers.Timer timRead = new System.Timers.Timer();
+        private bool bOnline = true;
         public MidHost(List<ConveyorInfo> conveyors, WebApiConfig AgvApiConfig, DeviceInfo[] PCBA, DeviceInfo[] Box, string DeviceID_AGV, clsDbConfig config)
         {
             db = new clsHost(config);
@@ -31,12 +32,21 @@ namespace Mirle.Middle
             timRead.Enabled = true; timRead.Interval = 500;
         }
 
+        public bool Online
+        {
+            get { return bOnline; }
+            set { bOnline = value; }
+        }
+
         private void timRead_Elapsed(object source, System.Timers.ElapsedEventArgs e)
         {
             timRead.Enabled = false;
             try
             {
+                if (bOnline)
+                {
 
+                }
             }
             catch (Exception ex)
             {

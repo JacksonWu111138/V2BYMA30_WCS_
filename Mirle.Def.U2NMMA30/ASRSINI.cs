@@ -20,14 +20,14 @@ namespace Mirle.Def.U2NMMA30
         [Option(Alias = "ControllerID")]
         ControllerID_Config ControllerID { get; }
 
+        [Option(Alias = "Client API")]
+        SendAPI_Config Client_API { get; }
+
         [Option(Alias = "StnNo")]
         StnNoConfig StnNo { get; }
 
         [Option(Alias = "EquNo")]
         EquNoConfig EquNo { get; }
-
-        [Option(Alias = "Client API")]
-        APIConfig Client_API { get; }
 
         [Option(Alias = "Server API")]
         APIConfig Server_API { get; }
@@ -103,6 +103,22 @@ namespace Mirle.Def.U2NMMA30
         string Box { get; }
         string AGV { get; }
         string Tower { get; }
+    }
+
+    public interface SendAPI_Config
+    {
+        string WES { get; }
+        string AGV { get; }
+        string Tower { get; }
+        string Box { get; }
+        string PCBA { get; }
+        string SMTC { get; }
+        string Line { get; }
+        string SMT3C { get; }
+        string SMT5C { get; }
+        string SMT6C { get; }
+        string E04 { get; }
+        string E05 { get; }
     }
 
     public interface APIConfig

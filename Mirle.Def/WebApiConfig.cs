@@ -8,6 +8,6 @@ namespace Mirle.Def
 {
     public class WebApiConfig
     {
-        public string IP { get; set; }
+        public string IP { get; set; } = "";
     }
 }

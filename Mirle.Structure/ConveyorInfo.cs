@@ -17,6 +17,7 @@ namespace Mirle.Structure
         public int WaterLevel { get; set; } = 0;
         public DoubleType DoubleType { get; set; } = DoubleType.None;
         public string ControllerID { get; set; } = "";
+        public WebApiConfig API { get; set; } = new WebApiConfig();
     }
 
     public enum DoubleType

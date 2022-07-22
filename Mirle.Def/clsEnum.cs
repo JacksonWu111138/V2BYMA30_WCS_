@@ -8,6 +8,11 @@ namespace Mirle.Def
 {
     public class clsEnum
     {
+        public enum AsrsType
+        {
+           None, Box, PCBA
+        }
+
         public enum IOPortDirection
         {
             Both = 0,

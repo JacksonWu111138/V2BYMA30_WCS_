@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Mirle.Def;
+using Mirle.Structure;
 
 namespace Mirle.Middle.DB_Proc
 {
@@ -20,9 +21,9 @@ namespace Mirle.Middle.DB_Proc
             }
         }
 
-        public clsHost(clsDbConfig config)
+        public clsHost(clsDbConfig config, DeviceInfo[] PCBA, DeviceInfo[] Box)
         {
-            middleCmd = new clsMiddleCmd(config);
+            middleCmd = new clsMiddleCmd(config, PCBA, Box);
         }
 
         public clsMiddleCmd GetMiddleCmd() => middleCmd;

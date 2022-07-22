@@ -1,4 +1,5 @@
-﻿using Mirle.Structure;
+﻿using Mirle.Def;
+using Mirle.Structure;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -10,6 +11,65 @@ namespace Mirle.Middle.DB_Proc
 {
     public class clsTool
     {
+        private DeviceInfo[] pcba;
+        private DeviceInfo[] box;
+        public clsTool(DeviceInfo[] PCBA, DeviceInfo[] Box)
+        {
+            pcba = PCBA;
+            box = Box;
+        }
+
+        public string GetEquCmdLoc_BySysCmd(string sLoc)
+        {
+            if (string.IsNullOrWhiteSpace(sLoc)) return string.Empty;
+            else
+            {
+                int iRow = Convert.ToInt32(sLoc.Substring(0, 2));
+                if (iRow <= 4) return sLoc;
+                else
+                {
+                    if (iRow % 4 == 0) return "04" + sLoc.Substring(2);
+                    else return (iRow % 4).ToString().PadLeft(2, '0') + sLoc.Substring(2);
+                }
+            }
+        }
+
+        public bool CheckDeviceMatchCraneDevice(string sDeviceID, ref DeviceInfo device, ref clsEnum.AsrsType type)
+        {
+            bool check = pcba.Where(r => r.DeviceID == sDeviceID).Any();
+            if(check)
+            {
+                type = clsEnum.AsrsType.PCBA;
+                var devices = pcba.Where(r => r.DeviceID == sDeviceID);
+                foreach(var d in devices)
+                {
+                    device = d;
+                    return true;
+                }
+            }
+            else
+            {
+                check = box.Where(r => r.DeviceID == sDeviceID).Any();
+                if (check)
+                {
+                    type = clsEnum.AsrsType.Box;
+                    var devices = box.Where(r => r.DeviceID == sDeviceID);
+                    foreach (var d in devices)
+                    {
+                        device = d;
+                        return true;
+                    }
+                }
+                else
+                {
+                    type = clsEnum.AsrsType.None;
+                    return false;
+                }
+            }
+
+            return false;
+        }
+
         public MiddleCmd GetMiddleCmd(DataRow drTmp)
         {
             MiddleCmd cmd = new MiddleCmd

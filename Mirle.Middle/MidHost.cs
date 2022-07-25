@@ -45,7 +45,7 @@ namespace Mirle.Middle
             {
                 if (bOnline)
                 {
-
+                    db.GetMiddleCmd().MiddleCmd_Proc();
                 }
             }
             catch (Exception ex)

@@ -56,6 +56,7 @@ namespace Mirle.Middle.DB_Proc
                                             {
                                                 case clsConstValue.CmdMode.StockIn:
                                                 case clsConstValue.CmdMode.L2L:
+
                                                     break;
                                                 case clsConstValue.CmdMode.StockOut:
                                                 case clsConstValue.CmdMode.S2S:

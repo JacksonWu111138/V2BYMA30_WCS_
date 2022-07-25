@@ -238,6 +238,8 @@ namespace Mirle.Def.U2NMMA30
         string A4_15 { get; }
         string A4_18 { get; }
         string A4_19 { get; }
+        string WES_B800CV { get; }
+        string WES_E2_38_39 { get; }
         string WaterLevel { get; }
     }
 }

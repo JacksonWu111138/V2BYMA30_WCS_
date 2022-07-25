@@ -372,5 +372,104 @@ namespace Mirle.DB.Proc
                 dtTmp.Dispose();
             }
         }
+
+        public bool subCraneWrR2R(DeviceInfo Device, SignalHost CrnSignal)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        iRet = Cmd_Mst.FunGetR2RCommand(Device.DeviceID, ref dtTmp, db);
+                        if (iRet == DBResult.Success)
+                        {
+                            for (int i = 0; i < dtTmp.Rows.Count; i++)
+                            {
+                                CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
+                                int iEquNo_To = tool.funGetEquNoByLoc(cmd.Equ_No);
+                                if (int.Parse(cmd.Equ_No) != iEquNo_To) continue;
+                                if (!Cmd_Mst.CheckCraneStatus(cmd, Device, CrnSignal, db)) continue;
+                                string sRemark = "";
+                                iRet = MiddleCmd.CheckHasMiddleCmd(Device.DeviceID, db);
+                                if (iRet == DBResult.Success)
+                                {
+                                    sRemark = $"Error: 等候Stocker{Device.DeviceID}的Fork命令淨空";
+                                    if (sRemark != cmd.Remark)
+                                    {
+                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                    }
+
+                                    continue;
+                                }
+                                else if (iRet == DBResult.Exception)
+                                {
+                                    sRemark = $"Error: 取得Stocker{Device.DeviceID}的Fork命令失敗！";
+                                    if (sRemark != cmd.Remark)
+                                    {
+                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                    }
+
+                                    continue;
+                                }
+                                else { }
+
+                                MiddleCmd middleCmd = new MiddleCmd();
+                                if (!MiddleCmd.FunGetMiddleCmd_R2R(cmd, ref middleCmd, db)) continue;
+
+                                if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                {
+                                    sRemark = "Error: Begin失敗！";
+                                    if (sRemark != cmd.Remark)
+                                    {
+                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                    }
+
+                                    continue;
+                                }
+
+                                sRemark = $"下達Middle層命令 => <{Fun.Parameter.clsMiddleCmd.Column.DeviceID}>{Device.DeviceID}";
+                                if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
+                                {
+                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                    continue;
+                                }
+
+                                if (!MiddleCmd.FunInsMiddleCmd(middleCmd, db))
+                                {
+                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                    sRemark = "Error: 下達Middle層命令失敗";
+                                    if (sRemark != cmd.Remark)
+                                    {
+                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                    }
+
+                                    continue;
+                                }
+
+                                db.TransactionCtrl(TransactionTypes.Commit);
+                                return true;
+                            }
+
+                            return false;
+                        }
+                        else return false;
+                    }
+                    else return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+            finally
+            {
+                dtTmp.Dispose();
+            }
+        }
     }
 }

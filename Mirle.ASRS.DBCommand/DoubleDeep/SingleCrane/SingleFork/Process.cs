@@ -32,16 +32,30 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
         public void Start() => timRead.Enabled = true;
         public void Stop() => timRead.Enabled = false;
 
+        private bool bOnline = true;
+        public bool Online
+        {
+            get { return bOnline; }
+            set { bOnline = value; }
+        }
+
         private void timRead_Elapsed(object source, System.Timers.ElapsedEventArgs e)
         {
             timRead.Enabled = false;
             try
             {
-                _wcs.GetProc().FunAsrsCmd_Proc(device, clsTool.GetSqlLocation_ForIn(device),
-                       router, _wms, middle, signal);
-                if (clsHost.IsConn)
+                if (bOnline)
                 {
-                    _wcs.GetMiddleCmd().FunMiddleCmdFinish_Proc(device.DeviceID);
+                    _wcs.GetProc().FunAsrsCmd_Proc(device, clsTool.GetSqlLocation_ForIn(device),
+                           router, _wms, middle, signal);
+
+                    if (clsHost.IsConn)
+                    {
+                        _wcs.GetProc().subCraneWrR2R(device, signal);
+
+                        if (clsHost.IsConn)
+                            _wcs.GetMiddleCmd().FunMiddleCmdFinish_Proc(device.DeviceID);
+                    }
                 }
             }
             catch (Exception ex)

@@ -41,6 +41,43 @@ namespace Mirle.DB.Fun
             }
         }
 
+        public bool FunGetMiddleCmd_R2R(CmdMstInfo cmd, ref MiddleCmd middleCmd, DataBase.DB db)
+        {
+            try
+            {
+                middleCmd = new MiddleCmd();
+                middleCmd.TaskNo = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSUO, db);
+                if (string.IsNullOrWhiteSpace(middleCmd.TaskNo))
+                {
+                    string sRemark = "Error: 取得TaskNo失敗！";
+                    if (sRemark != cmd.Remark)
+                    {
+                        CMD_MST.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                    }
+
+                    return false;
+                }
+
+                middleCmd.CommandID = cmd.Cmd_Sno;
+                middleCmd.DeviceID = cmd.Equ_No;
+                middleCmd.CSTID = cmd.Loc_ID;
+                middleCmd.CmdMode = clsConstValue.CmdMode.L2L;
+                middleCmd.Source = cmd.Loc;
+                middleCmd.Destination = cmd.New_Loc;
+                middleCmd.Priority = Convert.ToInt32(cmd.Prty);
+                middleCmd.Path = 0;
+                middleCmd.BatchID = "";
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
         public bool FunGetMiddleCmd(CmdMstInfo cmd, Location sLoc_Start, Location sLoc_End, ref MiddleCmd middleCmd, DataBase.DB db, string BatchID = "")
         {
             try

@@ -52,7 +52,15 @@ namespace Mirle.Middle.DB_Proc
                                     {
                                         if(cmd.CmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Initial)
                                         {
-
+                                            switch(cmd.CmdMode)
+                                            {
+                                                case clsConstValue.CmdMode.StockIn:
+                                                case clsConstValue.CmdMode.L2L:
+                                                    break;
+                                                case clsConstValue.CmdMode.StockOut:
+                                                case clsConstValue.CmdMode.S2S:
+                                                    break;
+                                            }
                                         }
                                         else
                                         {

@@ -24,7 +24,7 @@ namespace Mirle.Structure
         public string CompleteCode { get; set; }
         public string CompleteIndex { get; set; }
         public string CarNo { get; set; }
-        public string ReNewFlag { get; set; }
+        public string ReNewFlag { get; set; } = "Y";
         public string SpeedLevel { get; set; }
     }
 }

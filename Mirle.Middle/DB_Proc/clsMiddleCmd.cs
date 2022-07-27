@@ -13,10 +13,79 @@ namespace Mirle.Middle.DB_Proc
     {
         private clsDbConfig _config = new clsDbConfig();
         private clsTool tool;
+        private clsEquCmd EquCmd;
         public clsMiddleCmd(clsDbConfig config, DeviceInfo[] PCBA, DeviceInfo[] Box)
         {
             tool = new clsTool(PCBA, Box);
+            EquCmd = new clsEquCmd(config);
             _config = config;
+        }
+
+        public bool FunUpdateRemark(string sCmdSno, string sRemark, DB db)
+        {
+            try
+            {
+                string strSql = $"update {Parameter.clsMiddleCmd.TableName} set " +
+                    $"{Parameter.clsMiddleCmd.Column.Remark} = N'" + sRemark +
+                    $"' where {Parameter.clsMiddleCmd.Column.CommandID} = '{sCmdSno}'";
+
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark, DB db)
+        {
+            try
+            {
+                string strSql = $"update {Parameter.clsMiddleCmd.TableName} set" +
+                    $" {Parameter.clsMiddleCmd.Column.Remark} = N'" + sRemark +
+                    $"', {Parameter.clsMiddleCmd.Column.CmdSts} = '{sCmdSts}' ";
+
+                if (sCmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Cancel_Wait || sCmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait)
+                {
+                    strSql += $", {Parameter.clsMiddleCmd.Column.EndDate} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
+                }
+                else
+                {
+                    strSql += $", {Parameter.clsMiddleCmd.Column.Expose_Date} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
+                }
+
+                strSql += $" where {Parameter.clsMiddleCmd.Column.CommandID} = '{sCmdSno}' ";
+
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
         }
 
         public bool MiddleCmd_Proc()
@@ -44,6 +113,17 @@ namespace Mirle.Middle.DB_Proc
                                 DeviceInfo device = new DeviceInfo(); clsEnum.AsrsType type = clsEnum.AsrsType.None;
                                 if (tool.CheckDeviceMatchCraneDevice(cmd.DeviceID, ref device, ref type))
                                 {
+                                    if (!EquCmd.funCheckCanInsertEquCmd(cmd.DeviceID, db))
+                                    {
+                                        sRemark = $"Error: 等候Line{cmd.DeviceID}命令完成";
+                                        if (sRemark != cmd.Remark)
+                                        {
+                                            FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                        }
+
+                                        continue;
+                                    }
+
                                     if(type == clsEnum.AsrsType.Box)
                                     {//需要考慮左右
 
@@ -56,6 +136,35 @@ namespace Mirle.Middle.DB_Proc
                                             {
                                                 case clsConstValue.CmdMode.StockIn:
                                                 case clsConstValue.CmdMode.L2L:
+                                                    EquCmdInfo equCmd = new EquCmdInfo
+                                                    {
+                                                        CmdSno = cmd.CommandID,
+                                                        CmdMode = cmd.CmdMode,
+                                                        CmdSts = cmd.CmdSts,
+                                                        CarNo = "1",
+                                                        EquNo = cmd.DeviceID,
+                                                        LocSize=" ",
+                                                        Priority=cmd.Priority.ToString(),
+                                                        SpeedLevel = "5",
+                                                        
+                                                    };
+
+                                                    if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                                    {
+                                                        sRemark = "Error: Begin失敗！";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+
+                                                    if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        continue;
+                                                    }
 
                                                     break;
                                                 case clsConstValue.CmdMode.StockOut:

@@ -407,7 +407,7 @@ namespace Mirle.DB.Fun
         }
 
         public bool CheckSourceIsOK(CmdMstInfo cmd, Location sLoc_Start, MidHost middle, DeviceInfo Device, WMS.Proc.clsHost wms, 
-            ref bool IsDoubleCmd, ref CmdMstInfo cmd_DD, DataBase.DB db)
+            ref bool IsDoubleCmd, ref CmdMstInfo cmd_DD, ref string[] sCmdSno_CV, DataBase.DB db)
         {
             try
             {
@@ -429,7 +429,7 @@ namespace Mirle.DB.Fun
                         if(buffer.DoubleType == DoubleType.Right)
                         {
                             #region 左右一定都要有東西
-                            if (!middle.CheckIsInReady(buffer))
+                            if (!middle.CheckIsInReady(buffer, ref sCmdSno_CV[1]))
                             {
                                 sRemark = $"Error: {buffer.BufferName}沒發入庫Ready";
 
@@ -440,7 +440,8 @@ namespace Mirle.DB.Fun
 
                                 return false;
                             }
-                            else if (!middle.CheckIsInReady(buffer_another))
+
+                            if (!middle.CheckIsInReady(buffer_another, ref sCmdSno_CV[0]))
                             {
                                 sRemark = $"Error: {buffer_another.BufferName}沒發入庫Ready";
 
@@ -451,28 +452,26 @@ namespace Mirle.DB.Fun
 
                                 return false;
                             }
-                            else
-                            {
-                                IsDoubleCmd = true;
-                                string sCmdSno_DD = middle.GetBufferCmd(buffer_another).ToString().PadLeft(5, '0');
-                                bool bFlag = Cmd_Mst.FunGetCommand(sCmdSno_DD, ref cmd_DD, ref iRet, db);
-                                if (!bFlag)
-                                {
-                                    sRemark = $"Error: 取得{buffer_another.BufferName}命令失敗 => " +
-                                        $"<{Parameter.clsCmd_Mst.Column.Cmd_Sno}>{sCmdSno_DD}";
-                                    if (sRemark != cmd.Remark)
-                                    {
-                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                    }
 
-                                    return false;
+                            IsDoubleCmd = true;
+                            string sCmdSno_DD = middle.GetBufferCmd(buffer_another).ToString().PadLeft(5, '0');
+                            bool bFlag = Cmd_Mst.FunGetCommand(sCmdSno_DD, ref cmd_DD, ref iRet, db);
+                            if (!bFlag)
+                            {
+                                sRemark = $"Error: 取得{buffer_another.BufferName}命令失敗 => " +
+                                    $"<{Parameter.clsCmd_Mst.Column.Cmd_Sno}>{sCmdSno_DD}";
+                                if (sRemark != cmd.Remark)
+                                {
+                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
                                 }
+
+                                return false;
                             }
                             #endregion 左右一定都要有東西
                         }
                         else
                         {
-                            if (!middle.CheckIsInReady(buffer))
+                            if (!middle.CheckIsInReady(buffer, ref sCmdSno_CV[0]))
                             {
                                 sRemark = $"Error: {buffer.BufferName}沒發入庫Ready";
 
@@ -492,7 +491,7 @@ namespace Mirle.DB.Fun
                                     {
                                         #region 左右都有
                                         IsDoubleCmd = true;
-                                        if (!middle.CheckIsInReady(buffer_another))
+                                        if (!middle.CheckIsInReady(buffer_another, ref sCmdSno_CV[1]))
                                         {
                                             sRemark = $"Error: {buffer_another.BufferName}沒發入庫Ready";
 

@@ -21,9 +21,9 @@ namespace Mirle.Middle.DB_Proc
             }
         }
 
-        public clsHost(clsDbConfig config, DeviceInfo[] PCBA, DeviceInfo[] Box)
+        public clsHost(clsDbConfig config, DeviceInfo[] PCBA, DeviceInfo[] Box, List<ConveyorInfo> conveyors)
         {
-            middleCmd = new clsMiddleCmd(config, PCBA, Box);
+            middleCmd = new clsMiddleCmd(config, PCBA, Box, conveyors);
         }
 
         public clsMiddleCmd GetMiddleCmd() => middleCmd;

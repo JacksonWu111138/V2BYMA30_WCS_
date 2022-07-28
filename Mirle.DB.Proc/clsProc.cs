@@ -261,8 +261,50 @@ namespace Mirle.DB.Proc
                                     else
                                     {
                                         bool IsDoubleCmd = false; CmdMstInfo cmd_DD = new CmdMstInfo();
+                                        string[] sCmdSno_CV = new string[2];
                                         #region 判斷狀態
-                                        if (!Routdef.CheckSourceIsOK(cmd, sLoc_Start, middle, Device, wms, ref IsDoubleCmd, ref cmd_DD, db)) continue;
+                                        if (!Routdef.CheckSourceIsOK(cmd, sLoc_Start, middle, Device, wms, ref IsDoubleCmd, ref cmd_DD,
+                                            ref sCmdSno_CV, db))
+                                            continue;
+
+                                        if(IsDoubleCmd)
+                                        {
+                                            if (!sCmdSno_CV.Where(r => r == cmd.Cmd_Sno).Any())
+                                            {
+                                                sRemark = $"Error: 此序號跟Buffer的序號不一樣 => <Left>{sCmdSno_CV[0]} <Right>{sCmdSno_CV[1]}";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            if (!sCmdSno_CV.Where(r => r == cmd_DD.Cmd_Sno).Any())
+                                            {
+                                                sRemark = $"Error: 此序號跟Buffer的序號不一樣 => <Left>{sCmdSno_CV[0]} <Right>{sCmdSno_CV[1]}";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd_DD.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (!sCmdSno_CV.Where(r => r == cmd.Cmd_Sno).Any())
+                                            {
+                                                sRemark = $"Error: 此序號跟Buffer的序號{sCmdSno_CV[0]}不一樣";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+                                        }
+
                                         if (!Routdef.CheckDestinationIsOK(cmd, sLoc_End, middle, Device, wms, IsDoubleCmd, db)) continue;
 
 

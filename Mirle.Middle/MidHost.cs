@@ -21,7 +21,7 @@ namespace Mirle.Middle
         private bool bOnline = true;
         public MidHost(List<ConveyorInfo> conveyors, WebApiConfig AgvApiConfig, DeviceInfo[] PCBA, DeviceInfo[] Box, string DeviceID_AGV, clsDbConfig config)
         {
-            db = new clsHost(config, PCBA, Box);
+            db = new clsHost(config, PCBA, Box, conveyors);
             Node_All = conveyors;
             AgvApi_Config = AgvApiConfig;
             _PCBA = PCBA;
@@ -103,7 +103,7 @@ namespace Mirle.Middle
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns></returns>
-        public bool CheckIsInReady(ConveyorInfo buffer)
+        public bool CheckIsInReady(ConveyorInfo buffer, ref string sCmdSno)
         {
             return true;
         }

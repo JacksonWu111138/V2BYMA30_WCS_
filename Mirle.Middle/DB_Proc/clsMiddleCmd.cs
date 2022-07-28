@@ -14,11 +14,13 @@ namespace Mirle.Middle.DB_Proc
         private clsDbConfig _config = new clsDbConfig();
         private clsTool tool;
         private clsEquCmd EquCmd;
-        public clsMiddleCmd(clsDbConfig config, DeviceInfo[] PCBA, DeviceInfo[] Box)
+        private static List<ConveyorInfo> Node_All = new List<ConveyorInfo>();
+        public clsMiddleCmd(clsDbConfig config, DeviceInfo[] PCBA, DeviceInfo[] Box, List<ConveyorInfo> conveyors)
         {
             tool = new clsTool(PCBA, Box);
             EquCmd = new clsEquCmd(config);
             _config = config;
+            Node_All = conveyors;
         }
 
         public bool FunUpdateRemark(string sCmdSno, string sRemark, DB db)
@@ -145,9 +147,25 @@ namespace Mirle.Middle.DB_Proc
                                                         EquNo = cmd.DeviceID,
                                                         LocSize=" ",
                                                         Priority=cmd.Priority.ToString(),
-                                                        SpeedLevel = "5",
-                                                        
+                                                        SpeedLevel = "5"
                                                     };
+
+                                                    if(cmd.CmdMode == clsConstValue.CmdMode.StockIn)
+                                                    {
+                                                        var obj = Node_All.Where(r => r.BufferName == cmd.Source);
+                                                        if (obj == null || obj.Count() == 0)
+                                                        {
+                                                            sRemark = "Error: Source站口不存在在所有節點裡";
+                                                            if (sRemark != cmd.Remark)
+                                                            {
+                                                                FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                            }
+
+                                                            continue;
+                                                        }
+
+
+                                                    }
 
                                                     if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                                     {

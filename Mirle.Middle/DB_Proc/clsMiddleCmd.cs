@@ -25,6 +25,30 @@ namespace Mirle.Middle.DB_Proc
             Node_All = conveyors;
         }
 
+        public ConveyorInfo GetCV_ByCmdLoc(MiddleCmd cmd, string Loc, DB db)
+        {
+            var lst = Node_All.Where(r => r.BufferName == Loc);
+            if (lst == null || lst.Count() == 0)
+            {
+                string sRemark = $"Error: {Loc}不存在在所有節點裡";
+                if (sRemark != cmd.Remark)
+                {
+                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                }
+
+                return new ConveyorInfo();
+            }
+
+            ConveyorInfo conveyor = new ConveyorInfo();
+            foreach (var cv in lst)
+            {
+                conveyor = cv;
+                break;
+            }
+
+            return conveyor;
+        }
+
         public bool FunUpdateRemark(string sCmdSno, string sRemark, DB db)
         {
             try
@@ -176,26 +200,11 @@ namespace Mirle.Middle.DB_Proc
 
                                                     if (FunWriEquCmd_Proc(cmd, equCmd, db)) return true;
                                                     else continue;
+
                                                 case clsConstValue.CmdMode.StockOut:
                                                 case clsConstValue.CmdMode.S2S:
-                                                    var lst = Node_All.Where(r => r.BufferName == cmd.Destination);
-                                                    if (lst == null || lst.Count() == 0)
-                                                    {
-                                                        sRemark = "Error: Destination站口不存在在所有節點裡";
-                                                        if (sRemark != cmd.Remark)
-                                                        {
-                                                            FunUpdateRemark(cmd.CommandID, sRemark, db);
-                                                        }
-
-                                                        continue;
-                                                    }
-
-                                                    ConveyorInfo conveyor = new ConveyorInfo();
-                                                    foreach (var cv in lst)
-                                                    {
-                                                        conveyor = cv;
-                                                        break;
-                                                    }
+                                                    ConveyorInfo conveyor = GetCV_ByCmdLoc(cmd, cmd.Destination, db);
+                                                    if (string.IsNullOrWhiteSpace(conveyor.BufferName)) continue;
 
                                                     CV_RECEIVE_NEW_BIN_CMD_Info info = new CV_RECEIVE_NEW_BIN_CMD_Info
                                                     {
@@ -241,7 +250,42 @@ namespace Mirle.Middle.DB_Proc
                                         }
                                         else
                                         {//CmdSts=1 已預約目的站
+                                            switch(cmd.CmdMode)
+                                            {
+                                                case clsConstValue.CmdMode.L2L:
+                                                case clsConstValue.CmdMode.StockIn:
+                                                    if (FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_Initial, "", db)) return true;
+                                                    else continue;
+                                            }
 
+                                            ConveyorInfo conveyor_From = new ConveyorInfo();
+                                            if(cmd.CmdMode == clsConstValue.CmdMode.S2S)
+                                            {
+                                                conveyor_From = GetCV_ByCmdLoc(cmd, cmd.Source, db);
+                                                if (string.IsNullOrWhiteSpace(conveyor_From.BufferName)) continue;
+                                            }
+
+                                            ConveyorInfo conveyor_To = GetCV_ByCmdLoc(cmd, cmd.Destination, db);
+                                            if (string.IsNullOrWhiteSpace(conveyor_To.BufferName)) continue;
+
+                                            EquCmdInfo equCmd = new EquCmdInfo
+                                            {
+                                                CmdSno = cmd.CommandID,
+                                                CmdMode = cmd.CmdMode,
+                                                CmdSts = cmd.CmdSts,
+                                                CarNo = "1",
+                                                EquNo = cmd.DeviceID,
+                                                LocSize = " ",
+                                                Priority = cmd.Priority.ToString(),
+                                                SpeedLevel = "5",
+                                                Destination = conveyor_To.StkPortID.ToString()
+                                            };
+
+                                            if (cmd.CmdMode == clsConstValue.CmdMode.S2S) equCmd.Source = conveyor_From.StkPortID.ToString();
+                                            else equCmd.Source = tool.GetEquCmdLoc_BySysCmd(cmd.Source);
+
+                                            if (FunWriEquCmd_Proc(cmd, equCmd, db)) return true;
+                                            else continue;
                                         }
                                     }
                                 }

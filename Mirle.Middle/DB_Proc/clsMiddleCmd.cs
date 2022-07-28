@@ -174,38 +174,8 @@ namespace Mirle.Middle.DB_Proc
                                                     }
                                                     else equCmd.Source = tool.GetEquCmdLoc_BySysCmd(cmd.Source);
 
-                                                    if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
-                                                    {
-                                                        sRemark = "Error: Begin失敗！";
-                                                        if (sRemark != cmd.Remark)
-                                                        {
-                                                            FunUpdateRemark(cmd.CommandID, sRemark, db);
-                                                        }
-
-                                                        continue;
-                                                    }
-
-                                                    sRemark = "下達EquCmd";
-                                                    if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
-                                                    {
-                                                        db.TransactionCtrl(TransactionTypes.Rollback);
-                                                        continue;
-                                                    }
-
-                                                    if (!EquCmd.FunInsEquCmd(equCmd, db))
-                                                    {
-                                                        db.TransactionCtrl(TransactionTypes.Rollback);
-                                                        sRemark = "Error: 下達EquCmd失敗！";
-                                                        if (sRemark != cmd.Remark)
-                                                        {
-                                                            FunUpdateRemark(cmd.CommandID, sRemark, db);
-                                                        }
-
-                                                        continue;
-                                                    }
-
-                                                    db.TransactionCtrl(TransactionTypes.Commit);
-                                                    return true;
+                                                    if (FunWriEquCmd_Proc(cmd, equCmd, db)) return true;
+                                                    else continue;
                                                 case clsConstValue.CmdMode.StockOut:
                                                 case clsConstValue.CmdMode.S2S:
                                                     var lst = Node_All.Where(r => r.BufferName == cmd.Destination);
@@ -270,7 +240,7 @@ namespace Mirle.Middle.DB_Proc
                                             }
                                         }
                                         else
-                                        {
+                                        {//CmdSts=1 已預約目的站
 
                                         }
                                     }
@@ -303,6 +273,54 @@ namespace Mirle.Middle.DB_Proc
             finally
             {
                 dtTmp.Dispose();
+            }
+        }
+
+        public bool FunWriEquCmd_Proc(MiddleCmd cmd, EquCmdInfo equCmd, DB db)
+        {
+            try
+            {
+                string sRemark = "";
+                if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                {
+                    sRemark = "Error: Begin失敗！";
+                    if (sRemark != cmd.Remark)
+                    {
+                        FunUpdateRemark(cmd.CommandID, sRemark, db);
+                    }
+
+                    return false;
+                }
+
+                sRemark = "下達EquCmd";
+                if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
+                {
+                    db.TransactionCtrl(TransactionTypes.Rollback);
+                    return false;
+                }
+
+                if (!EquCmd.FunInsEquCmd(equCmd, db))
+                {
+                    db.TransactionCtrl(TransactionTypes.Rollback);
+                    sRemark = "Error: 下達EquCmd失敗！";
+                    if (sRemark != cmd.Remark)
+                    {
+                        FunUpdateRemark(cmd.CommandID, sRemark, db);
+                    }
+
+                    return false;
+                }
+
+                db.TransactionCtrl(TransactionTypes.Commit);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                db.TransactionCtrl(TransactionTypes.Rollback);
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
             }
         }
     }

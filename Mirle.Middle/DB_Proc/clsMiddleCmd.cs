@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Mirle.Def;
 using Mirle.DataBase;
 using System.Data;
+using Mirle.WebAPI.U2NMMA30.ReportInfo;
 
 namespace Mirle.Middle.DB_Proc
 {
@@ -14,6 +15,7 @@ namespace Mirle.Middle.DB_Proc
         private clsDbConfig _config = new clsDbConfig();
         private clsTool tool;
         private clsEquCmd EquCmd;
+        private WebAPI.U2NMMA30.clsHost api = new WebAPI.U2NMMA30.clsHost();
         private static List<ConveyorInfo> Node_All = new List<ConveyorInfo>();
         public clsMiddleCmd(clsDbConfig config, DeviceInfo[] PCBA, DeviceInfo[] Box, List<ConveyorInfo> conveyors)
         {
@@ -147,10 +149,11 @@ namespace Mirle.Middle.DB_Proc
                                                         EquNo = cmd.DeviceID,
                                                         LocSize=" ",
                                                         Priority=cmd.Priority.ToString(),
-                                                        SpeedLevel = "5"
+                                                        SpeedLevel = "5",
+                                                        Destination = tool.GetEquCmdLoc_BySysCmd(cmd.Destination)
                                                     };
 
-                                                    if(cmd.CmdMode == clsConstValue.CmdMode.StockIn)
+                                                    if (cmd.CmdMode == clsConstValue.CmdMode.StockIn)
                                                     {
                                                         var obj = Node_All.Where(r => r.BufferName == cmd.Source);
                                                         if (obj == null || obj.Count() == 0)
@@ -164,8 +167,12 @@ namespace Mirle.Middle.DB_Proc
                                                             continue;
                                                         }
 
-
+                                                        foreach (var j in obj)
+                                                        {
+                                                            equCmd.Source = j.StkPortID.ToString();
+                                                        }
                                                     }
+                                                    else equCmd.Source = tool.GetEquCmdLoc_BySysCmd(cmd.Source);
 
                                                     if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                                     {
@@ -178,16 +185,88 @@ namespace Mirle.Middle.DB_Proc
                                                         continue;
                                                     }
 
+                                                    sRemark = "下達EquCmd";
                                                     if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
                                                     {
                                                         db.TransactionCtrl(TransactionTypes.Rollback);
                                                         continue;
                                                     }
 
-                                                    break;
+                                                    if (!EquCmd.FunInsEquCmd(equCmd, db))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        sRemark = "Error: 下達EquCmd失敗！";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+
+                                                    db.TransactionCtrl(TransactionTypes.Commit);
+                                                    return true;
                                                 case clsConstValue.CmdMode.StockOut:
                                                 case clsConstValue.CmdMode.S2S:
-                                                    break;
+                                                    var lst = Node_All.Where(r => r.BufferName == cmd.Destination);
+                                                    if (lst == null || lst.Count() == 0)
+                                                    {
+                                                        sRemark = "Error: Destination站口不存在在所有節點裡";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+
+                                                    ConveyorInfo conveyor = new ConveyorInfo();
+                                                    foreach (var cv in lst)
+                                                    {
+                                                        conveyor = cv;
+                                                        break;
+                                                    }
+
+                                                    CV_RECEIVE_NEW_BIN_CMD_Info info = new CV_RECEIVE_NEW_BIN_CMD_Info
+                                                    {
+                                                        bufferId = conveyor.BufferName,
+                                                        jobId = cmd.CommandID
+                                                    };
+
+                                                    if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                                    {
+                                                        sRemark = "Error: Begin失敗！";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+
+                                                    sRemark = $"預約{conveyor.BufferName}";
+                                                    if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        continue;
+                                                    }
+
+                                                    if (!api.GetCV_ReceiveNewBinCmd().FunReport(info, conveyor.API.IP))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        sRemark = $"Error: 預約{conveyor.BufferName}失敗！";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+
+                                                    db.TransactionCtrl(TransactionTypes.Commit);
+                                                    return true;
+                                                default:
+                                                    continue;
                                             }
                                         }
                                         else

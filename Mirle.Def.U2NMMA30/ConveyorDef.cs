@@ -296,6 +296,13 @@ namespace Mirle.Def.U2NMMA30
             public static ConveyorInfo A4_18 = new ConveyorInfo { Index = 18, BufferName = "A4-18" };
             public static ConveyorInfo A4_19 = new ConveyorInfo { Index = 19, BufferName = "A4-19" };
         }
+        /// <summary>
+        /// 電子料塔
+        /// </summary>
+        public class Tower
+        {
+            public static ConveyorInfo E1_04 = new ConveyorInfo { Index = 4, BufferName = "E1-04" };
+        }
 
         private static List<ConveyorInfo> Node_All = new List<ConveyorInfo>();
         /// <summary>
@@ -428,6 +435,7 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(AGV.B1_078);
             Node_All.Add(AGV.B1_079);
             Node_All.Add(AGV.E1_01);
+            Node_All.Add(Tower.E1_04);
             Node_All.Add(AGV.E1_08);
             Node_All.Add(AGV.E2_35);
             Node_All.Add(AGV.E2_36);
@@ -470,11 +478,6 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(AGV.S1_48);
             Node_All.Add(AGV.S1_49);
             Node_All.Add(AGV.S1_50);
-            //Node_All.Add(SMTC.S1_51);
-            //Node_All.Add(AGV.S1_52);
-            //Node_All.Add(AGV.S1_56);
-            //Node_All.Add(AGV.S1_60);
-            //Node_All.Add(AGV.S1_64);
             Node_All.Add(AGV.S2_01);
             Node_All.Add(AGV.S2_07);
             Node_All.Add(AGV.S2_13);
@@ -557,12 +560,25 @@ namespace Mirle.Def.U2NMMA30
             Stations.Add(SMT6C.A3_15);
             Stations.Add(SMT6C.A3_18);
             Stations.Add(SMT6C.A3_19);
+            Stations.Add(AGV.S1_01);
+            Stations.Add(AGV.S1_07);
+            Stations.Add(AGV.S1_13);
+            Stations.Add(AGV.S1_25);
+            Stations.Add(AGV.S1_31);
             Stations.Add(SMTC.S1_38);
             Stations.Add(SMTC.S1_39);
             Stations.Add(SMTC.S1_42);
             Stations.Add(SMTC.S1_43);
             Stations.Add(SMTC.S1_46);
             Stations.Add(SMTC.S1_47);
+            Stations.Add(AGV.S1_49);
+            Stations.Add(AGV.S1_50);
+            Stations.Add(AGV.S2_01);
+            Stations.Add(AGV.S2_07);
+            Stations.Add(AGV.S2_13);
+            Stations.Add(AGV.S2_25);
+            Stations.Add(AGV.S2_31);
+            Stations.Add(AGV.S2_49);
             Stations.Add(SMTC.S3_38);
             Stations.Add(SMTC.S3_39);
             Stations.Add(SMTC.S3_42);
@@ -581,6 +597,17 @@ namespace Mirle.Def.U2NMMA30
             Stations.Add(Line.A4_15);
             Stations.Add(Line.A4_18);
             Stations.Add(Line.A4_19);
+            Stations.Add(Tower.E1_04);
+            Stations.Add(AGV.E2_35);
+            Stations.Add(AGV.E2_36);
+            Stations.Add(AGV.E2_37);
+            Stations.Add(AGV.E2_38);
+            Stations.Add(AGV.E2_39);
+            Stations.Add(AGV.E2_44);
+            Stations.Add(AGV.M1_10);
+            Stations.Add(AGV.M1_20);
+            Stations.Add(AGV.M1_05);
+            Stations.Add(AGV.M1_15);
         }
 
         public static int GetPathByStn(string StnNo)

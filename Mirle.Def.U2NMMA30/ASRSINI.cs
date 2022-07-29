@@ -214,12 +214,25 @@ namespace Mirle.Def.U2NMMA30
         string A3_15 { get; }
         string A3_18 { get; }
         string A3_19 { get; }
+        string S1_01 { get; }
+        string S1_07 { get; }
+        string S1_13 { get; }
+        string S1_25 { get; }
+        string S1_31 { get; }
         string S1_38 { get; }
         string S1_39 { get; }
         string S1_42 { get; }
         string S1_43 { get; }
         string S1_46 { get; }
         string S1_47 { get; }
+        string S1_49 { get; }
+        string S1_50 { get; }
+        string S2_01 { get; }
+        string S2_07 { get; }
+        string S2_13 { get; }
+        string S2_25 { get; }
+        string S2_31 { get; }
+        string S2_49 { get; }
         string S3_38 { get; }
         string S3_39 { get; }
         string S3_42 { get; }
@@ -238,8 +251,18 @@ namespace Mirle.Def.U2NMMA30
         string A4_15 { get; }
         string A4_18 { get; }
         string A4_19 { get; }
+        string E1_04 { get; }
+        string E2_35 { get; }
+        string E2_36 { get; }
+        string E2_37 { get; }
+        string E2_38 { get; }
+        string E2_39 { get; }
+        string E2_44 { get; }
+        string M1_10 { get; }
+        string M1_20 { get; }
+        string M1_05 { get; }
+        string M1_15 { get; }
         string WES_B800CV { get; }
-        string WES_E2_38_39 { get; }
         string WaterLevel { get; }
     }
 }

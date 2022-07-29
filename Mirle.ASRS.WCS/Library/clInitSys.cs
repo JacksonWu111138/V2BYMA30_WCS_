@@ -22,7 +22,6 @@ namespace Mirle.ASRS.WCS
         public static int L2L_MaxCount = 5;
         public static string DeviceID_AGV = "";
         public static string WES_B800CV = "B800CV";
-        public static string WES_E2_38_39 = "E800-8";
         //API
         [DllImport("kernel32.dll")]
         private static extern int GetPrivateProfileString
@@ -86,6 +85,7 @@ namespace Mirle.ASRS.WCS
         private static void FunControllerID_Config(ASRSINI lcsini)
         {
             ConveyorDef.AGV.E1_01.ControllerID = lcsini.ControllerID.Tower;
+            ConveyorDef.Tower.E1_04.ControllerID = lcsini.ControllerID.Tower;
             ConveyorDef.AGV.E1_08.ControllerID = lcsini.ControllerID.Tower;
             ConveyorDef.AGV.E2_35.ControllerID = lcsini.ControllerID.Tower;
             ConveyorDef.AGV.E2_36.ControllerID = lcsini.ControllerID.Tower;
@@ -168,10 +168,6 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.S1_48.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S1_49.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S1_50.ControllerID = lcsini.ControllerID.SMTC;
-            //ConveyorDef.AGV.S1_52.ControllerID = lcsini.ControllerID.SMTC;
-            //ConveyorDef.AGV.S1_56.ControllerID = lcsini.ControllerID.SMTC;
-            //ConveyorDef.AGV.S1_60.ControllerID = lcsini.ControllerID.SMTC;
-            //ConveyorDef.AGV.S1_64.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S2_01.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S2_07.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S2_13.ControllerID = lcsini.ControllerID.SMTC;
@@ -334,12 +330,25 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.SMT6C.A3_15.StnNo = lcsini.StnNo.A3_15;
             ConveyorDef.SMT6C.A3_18.StnNo = lcsini.StnNo.A3_18;
             ConveyorDef.SMT6C.A3_19.StnNo = lcsini.StnNo.A3_19;
+            ConveyorDef.AGV.S1_01.StnNo = lcsini.StnNo.S1_01;
+            ConveyorDef.AGV.S1_07.StnNo = lcsini.StnNo.S1_07;
+            ConveyorDef.AGV.S1_13.StnNo = lcsini.StnNo.S1_13;
+            ConveyorDef.AGV.S1_25.StnNo = lcsini.StnNo.S1_25;
+            ConveyorDef.AGV.S1_31.StnNo = lcsini.StnNo.S1_31;
             ConveyorDef.SMTC.S1_38.StnNo = lcsini.StnNo.S1_38;
             ConveyorDef.SMTC.S1_39.StnNo = lcsini.StnNo.S1_39;
             ConveyorDef.SMTC.S1_42.StnNo = lcsini.StnNo.S1_42;
             ConveyorDef.SMTC.S1_43.StnNo = lcsini.StnNo.S1_43;
             ConveyorDef.SMTC.S1_46.StnNo = lcsini.StnNo.S1_46;
             ConveyorDef.SMTC.S1_47.StnNo = lcsini.StnNo.S1_47;
+            ConveyorDef.AGV.S1_49.StnNo = lcsini.StnNo.S1_49;
+            ConveyorDef.AGV.S1_50.StnNo = lcsini.StnNo.S1_50;
+            ConveyorDef.AGV.S2_01.StnNo = lcsini.StnNo.S2_01;
+            ConveyorDef.AGV.S2_07.StnNo = lcsini.StnNo.S2_07;
+            ConveyorDef.AGV.S2_13.StnNo = lcsini.StnNo.S2_13;
+            ConveyorDef.AGV.S2_25.StnNo = lcsini.StnNo.S2_25;
+            ConveyorDef.AGV.S2_31.StnNo = lcsini.StnNo.S2_31;
+            ConveyorDef.AGV.S2_49.StnNo = lcsini.StnNo.S2_49;
             ConveyorDef.SMTC.S3_38.StnNo = lcsini.StnNo.S3_38;
             ConveyorDef.SMTC.S3_39.StnNo = lcsini.StnNo.S3_39;
             ConveyorDef.SMTC.S3_42.StnNo = lcsini.StnNo.S3_42;
@@ -358,8 +367,18 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.Line.A4_15.StnNo = lcsini.StnNo.A4_15;
             ConveyorDef.Line.A4_18.StnNo = lcsini.StnNo.A4_18;
             ConveyorDef.Line.A4_19.StnNo = lcsini.StnNo.A4_19;
+            ConveyorDef.Tower.E1_04.StnNo = lcsini.StnNo.E1_04;
+            ConveyorDef.AGV.E2_35.StnNo = lcsini.StnNo.E2_35;
+            ConveyorDef.AGV.E2_36.StnNo = lcsini.StnNo.E2_36;
+            ConveyorDef.AGV.E2_37.StnNo = lcsini.StnNo.E2_37;
+            ConveyorDef.AGV.E2_38.StnNo = lcsini.StnNo.E2_38;
+            ConveyorDef.AGV.E2_39.StnNo = lcsini.StnNo.E2_39;
+            ConveyorDef.AGV.E2_44.StnNo = lcsini.StnNo.E2_44;
+            ConveyorDef.AGV.M1_10.StnNo = lcsini.StnNo.M1_10;
+            ConveyorDef.AGV.M1_20.StnNo = lcsini.StnNo.M1_20;
+            ConveyorDef.AGV.M1_05.StnNo = lcsini.StnNo.M1_05;
+            ConveyorDef.AGV.M1_15.StnNo = lcsini.StnNo.M1_15;
             WES_B800CV = lcsini.StnNo.WES_B800CV;
-            WES_E2_38_39 = lcsini.StnNo.WES_E2_38_39;
         }
 
         private static void FunDeviceConfig(ASRSINI lcsini)
@@ -389,6 +408,7 @@ namespace Mirle.ASRS.WCS
             WmsApi_Config.IP = lcsini.Client_API.WES;
             AgvApi_Config.IP = lcsini.Client_API.AGV;
             ConveyorDef.AGV.E1_01.API.IP = lcsini.Client_API.Tower;
+            ConveyorDef.Tower.E1_04.API.IP = lcsini.Client_API.Tower;
             ConveyorDef.AGV.E1_08.API.IP = lcsini.Client_API.Tower;
             ConveyorDef.AGV.E2_35.API.IP = lcsini.Client_API.Tower;
             ConveyorDef.AGV.E2_36.API.IP = lcsini.Client_API.Tower;

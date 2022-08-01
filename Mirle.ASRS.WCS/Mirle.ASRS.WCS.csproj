@@ -154,11 +154,11 @@
     </ProjectReference>
     <ProjectReference Include="..\Mirle.WebAPI.Event.U2NMMA30\Mirle.WebAPI.Event.csproj">
       <Project>{2e09050b-3bb2-482a-b27b-cf23db03e342}</Project>
-      <Name>Mirle.WebAPI.Event.U2NMMA30</Name>
+      <Name>Mirle.WebAPI.Event</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.WebAPI.U2NMMA30\Mirle.WebAPI.csproj">
       <Project>{646741d4-de4c-48ef-9b90-1785bd22cefd}</Project>
-      <Name>Mirle.WebAPI.U2NMMA30</Name>
+      <Name>Mirle.WebAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog_2.csproj">
       <Project>{fcb3bfde-2247-4aa4-a652-f87c081b63fc}</Project>

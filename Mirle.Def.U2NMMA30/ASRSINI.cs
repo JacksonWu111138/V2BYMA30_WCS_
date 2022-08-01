@@ -233,12 +233,26 @@ namespace Mirle.Def.U2NMMA30
         string S2_25 { get; }
         string S2_31 { get; }
         string S2_49 { get; }
+        string S3_01 { get; }
+        string S3_07 { get; }
+        string S3_13 { get; }
+        string S3_19 { get; }
+        string S3_25 { get; }
+        string S3_31 { get; }
         string S3_38 { get; }
         string S3_39 { get; }
         string S3_42 { get; }
         string S3_43 { get; }
         string S3_46 { get; }
         string S3_47 { get; }
+        string S3_49 { get; }
+        string S4_01 { get; }
+        string S4_07 { get; }
+        string S4_13 { get; }
+        string S4_19 { get; }
+        string S4_25 { get; }
+        string S4_49 { get; }
+        string S4_50 { get; }
         string S5_38 { get; }
         string S5_39 { get;}
         string A4_02 { get; }

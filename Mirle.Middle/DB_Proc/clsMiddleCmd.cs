@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Mirle.Def;
 using Mirle.DataBase;
 using System.Data;
-using Mirle.WebAPI.U2NMMA30.ReportInfo;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
 
 namespace Mirle.Middle.DB_Proc
 {
@@ -15,7 +15,7 @@ namespace Mirle.Middle.DB_Proc
         private clsDbConfig _config = new clsDbConfig();
         private clsTool tool;
         private clsEquCmd EquCmd;
-        private WebAPI.U2NMMA30.clsHost api = new WebAPI.U2NMMA30.clsHost();
+        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
         private static List<ConveyorInfo> Node_All = new List<ConveyorInfo>();
         public clsMiddleCmd(clsDbConfig config, DeviceInfo[] PCBA, DeviceInfo[] Box, List<ConveyorInfo> conveyors)
         {
@@ -206,7 +206,7 @@ namespace Mirle.Middle.DB_Proc
                                                     ConveyorInfo conveyor = GetCV_ByCmdLoc(cmd, cmd.Destination, db);
                                                     if (string.IsNullOrWhiteSpace(conveyor.BufferName)) continue;
 
-                                                    CV_RECEIVE_NEW_BIN_CMD_Info info = new CV_RECEIVE_NEW_BIN_CMD_Info
+                                                    CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
                                                     {
                                                         bufferId = conveyor.BufferName,
                                                         jobId = cmd.CommandID

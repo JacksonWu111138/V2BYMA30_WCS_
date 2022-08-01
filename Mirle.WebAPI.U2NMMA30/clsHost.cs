@@ -9,12 +9,12 @@ namespace Mirle.WebAPI.V2BYMA30
 {
     public class clsHost
     {
-        private CV_RECEIVE_NEW_BIN_CMD RECEIVE_NEW_BIN_CMD;
+        private CVReceiveNewBinCmd RECEIVE_NEW_BIN_CMD;
         public clsHost()
         {
-            RECEIVE_NEW_BIN_CMD = new CV_RECEIVE_NEW_BIN_CMD();
+            RECEIVE_NEW_BIN_CMD = new CVReceiveNewBinCmd();
         }
 
-        public CV_RECEIVE_NEW_BIN_CMD GetCV_ReceiveNewBinCmd() => RECEIVE_NEW_BIN_CMD;
+        public CVReceiveNewBinCmd GetCV_ReceiveNewBinCmd() => RECEIVE_NEW_BIN_CMD;
     }
 }

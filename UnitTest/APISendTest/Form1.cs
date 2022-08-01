@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Unity;
 using Mirle;
-using Mirle.WebAPI.U2NMMA30.Function;
-using Mirle.WebAPI.U2NMMA30.ReportInfo;
+using Mirle.WebAPI.V2BYMA30.Function;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
 using APISendTest.WebAPI;
 

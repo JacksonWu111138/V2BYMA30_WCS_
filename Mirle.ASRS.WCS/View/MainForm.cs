@@ -14,12 +14,11 @@ using Mirle.DataBase;
 using Mirle.WebAPI.Event.U2NMMA30;
 using Unity;
 using Mirle.Logger;
-using Mirle.WebAPI.U2NMMA30.View;
 using Mirle.ASRS.Close.Program;
 using System.Threading;
 using Mirle.MapController;
 using Mirle.Structure;
-using Mirle.WebAPI.U2NMMA30.ReportInfo;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.ASRS.DBCommand;
 using Mirle.Middle;
 using Mirle.EccsSignal;
@@ -111,28 +110,6 @@ namespace Mirle.ASRS.WCS.View
             //ASRS的Position回報
         }
 
-        private MainTestForm mainTest;
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (mainTest == null)
-            {
-                mainTest = new MainTestForm(clInitSys.WmsApi_Config);
-                mainTest.TopMost = true;
-                mainTest.FormClosed += new FormClosedEventHandler(funMainTest_FormClosed);
-                mainTest.Show();
-            }
-            else
-            {
-                mainTest.BringToFront();
-            }
-        }
-
-        private void funMainTest_FormClosed(object sender, FormClosedEventArgs e)
-        {
-            if (mainTest != null)
-                mainTest = null;
-        }
-
         private void chkOnline_CheckedChanged(object sender, EventArgs e)
         {
             if (chkOnline.Checked)
@@ -162,7 +139,6 @@ namespace Mirle.ASRS.WCS.View
             //Ctrl + L
             if (e.KeyCode == Keys.L && e.Modifiers == Keys.Control)
             {
-                Def.clsTool.FunVisbleChange(ref button1);
                 Def.clsTool.FunVisbleChange(ref btnTeachMaintain);
                 Def.clsTool.FunVisbleChange(ref chkCycleRun);
                 Def.clsTool.FunVisbleChange(ref chkIgnoreTkt);

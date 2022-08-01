@@ -73,9 +73,9 @@
       <Project>{cc7b0aac-3935-44cf-b363-55c0445358d0}</Project>
       <Name>Mirle.Structure</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mirle.WebAPI.U2NMMA30\Mirle.WebAPI.U2NMMA30.csproj">
+    <ProjectReference Include="..\Mirle.WebAPI.U2NMMA30\Mirle.WebAPI.csproj">
       <Project>{646741d4-de4c-48ef-9b90-1785bd22cefd}</Project>
-      <Name>Mirle.WebAPI.U2NMMA30</Name>
+      <Name>Mirle.WebAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog_2.csproj">
       <Project>{fcb3bfde-2247-4aa4-a652-f87c081b63fc}</Project>

@@ -8,7 +8,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Mirle.WebAPI.U2NMMA30
+namespace Mirle.WebAPI.V2BYMA30
 {
     public class clsTool
     {

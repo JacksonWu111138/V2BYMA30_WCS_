@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30621.155
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLL", "DLL", "{58EC0D04-15AD-46AB-BE9C-1B871F4BCD1A}"
 	ProjectSection(SolutionItems) = preProject
@@ -35,9 +35,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Grid.U2NMMA30", "Mirl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.DB.Object", "Mirle.DB.Object\Mirle.DB.Object.csproj", "{25DDA85B-35BE-429D-81B4-025731C0E826}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WebAPI.U2NMMA30", "Mirle.WebAPI.U2NMMA30\Mirle.WebAPI.U2NMMA30.csproj", "{646741D4-DE4C-48EF-9B90-1785BD22CEFD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WebAPI", "Mirle.WebAPI.U2NMMA30\Mirle.WebAPI.csproj", "{646741D4-DE4C-48EF-9B90-1785BD22CEFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WebAPI.Event.U2NMMA30", "Mirle.WebAPI.Event.U2NMMA30\Mirle.WebAPI.Event.U2NMMA30.csproj", "{2E09050B-3BB2-482A-B27B-CF23DB03E342}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WebAPI.Event", "Mirle.WebAPI.Event.U2NMMA30\Mirle.WebAPI.Event.csproj", "{2E09050B-3BB2-482A-B27B-CF23DB03E342}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.DB.ClearCmd.Proc", "Mirle.DB.ClearCmd.Proc\Mirle.DB.ClearCmd.Proc.csproj", "{31DEB747-36CA-4A92-8DF1-89EEE47A0FA4}"
 EndProject

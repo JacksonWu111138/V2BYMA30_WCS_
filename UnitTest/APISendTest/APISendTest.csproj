@@ -170,9 +170,9 @@
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def_2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\Mirle.WebAPI.U2NMMA30\Mirle.WebAPI.U2NMMA30.csproj">
+    <ProjectReference Include="..\..\Mirle.WebAPI.U2NMMA30\Mirle.WebAPI.csproj">
       <Project>{646741d4-de4c-48ef-9b90-1785bd22cefd}</Project>
-      <Name>Mirle.WebAPI.U2NMMA30</Name>
+      <Name>Mirle.WebAPI</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

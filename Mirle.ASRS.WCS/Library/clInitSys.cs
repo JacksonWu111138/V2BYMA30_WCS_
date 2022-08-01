@@ -39,6 +39,7 @@ namespace Mirle.ASRS.WCS
                 FunSysConfig(lcsini);
                 FunControllerID_Config(lcsini);
                 FunApiConfig(lcsini);
+                FunStkStnConfig(lcsini);
                 FunStnNoConfig(lcsini);
                 //MainForm.AGVBuffer_Initial();
                 MainForm.CraneBuffer_Initial();
@@ -633,6 +634,41 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.LO3_04.API.IP = lcsini.Client_API.E05;
 
             WcsApi_Config.IP = lcsini.Server_API.IP;
+        }
+
+        private static void FunStkStnConfig(ASRSINI lcsini)
+        {
+            ConveyorDef.PCBA.M1_01.StkPortID = lcsini.STK_STN.PCBA_Left;
+            ConveyorDef.PCBA.M1_06.StkPortID = lcsini.STK_STN.PCBA_Right;
+            ConveyorDef.PCBA.M1_11.StkPortID = lcsini.STK_STN.PCBA_Left;
+            ConveyorDef.PCBA.M1_16.StkPortID = lcsini.STK_STN.PCBA_Right;
+
+            ConveyorDef.Box.B1_001.StkPortID = lcsini.STK_STN.Left_Small_All;
+            ConveyorDef.Box.B1_004.StkPortID = lcsini.STK_STN.Left_Small_Half;
+            ConveyorDef.Box.B1_007.StkPortID = lcsini.STK_STN.Right_Small_Half;
+            ConveyorDef.Box.B1_010.StkPortID = lcsini.STK_STN.Right_Small_All;
+            ConveyorDef.Box.B1_081.StkPortID = lcsini.STK_STN.Left_Big_All;
+            ConveyorDef.Box.B1_084.StkPortID = lcsini.STK_STN.Left_Big_Half;
+            ConveyorDef.Box.B1_087.StkPortID = lcsini.STK_STN.Right_Big_Half;
+            ConveyorDef.Box.B1_090.StkPortID = lcsini.STK_STN.Right_Big_All;
+
+            ConveyorDef.Box.B1_013.StkPortID = lcsini.STK_STN.Left_Small_All;
+            ConveyorDef.Box.B1_016.StkPortID = lcsini.STK_STN.Left_Small_Half;
+            ConveyorDef.Box.B1_019.StkPortID = lcsini.STK_STN.Right_Small_Half;
+            ConveyorDef.Box.B1_022.StkPortID = lcsini.STK_STN.Right_Small_All;
+            ConveyorDef.Box.B1_093.StkPortID = lcsini.STK_STN.Left_Big_All;
+            ConveyorDef.Box.B1_096.StkPortID = lcsini.STK_STN.Left_Big_Half;
+            ConveyorDef.Box.B1_099.StkPortID = lcsini.STK_STN.Right_Big_Half;
+            ConveyorDef.Box.B1_102.StkPortID = lcsini.STK_STN.Right_Big_All;
+
+            ConveyorDef.Box.B1_025.StkPortID = lcsini.STK_STN.Left_Small_All;
+            ConveyorDef.Box.B1_028.StkPortID = lcsini.STK_STN.Left_Small_Half;
+            ConveyorDef.Box.B1_031.StkPortID = lcsini.STK_STN.Right_Small_Half;
+            ConveyorDef.Box.B1_034.StkPortID = lcsini.STK_STN.Right_Small_All;
+            ConveyorDef.Box.B1_105.StkPortID = lcsini.STK_STN.Left_Big_All;
+            ConveyorDef.Box.B1_108.StkPortID = lcsini.STK_STN.Left_Big_Half;
+            ConveyorDef.Box.B1_111.StkPortID = lcsini.STK_STN.Right_Big_Half;
+            ConveyorDef.Box.B1_114.StkPortID = lcsini.STK_STN.Right_Big_All;
         }
 
         /// <summary>

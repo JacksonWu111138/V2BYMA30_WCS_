@@ -23,6 +23,9 @@ namespace Mirle.Def.U2NMMA30
         [Option(Alias = "Client API")]
         SendAPI_Config Client_API { get; }
 
+        [Option(Alias = "STK_STN")]
+        StkPortConfig STK_STN { get; }
+
         [Option(Alias = "StnNo")]
         StnNoConfig StnNo { get; }
 
@@ -168,16 +171,34 @@ namespace Mirle.Def.U2NMMA30
     public interface StkPortConfig
     {
         [Option(DefaultValue = 1)]
-        int Left1 { get; }
+        int PCBA_Left { get; }
 
         [Option(DefaultValue = 2)]
-        int Left2 { get; }
+        int PCBA_Right { get; }
 
         [Option(DefaultValue = 3)]
-        int Right1 { get; }
+        int Left_Small_All { get; }
 
-        [Option(DefaultValue = 4)]
-        int Right2 { get; }
+        [Option(DefaultValue = 1)]
+        int Left_Small_Half { get; }
+
+        [Option(DefaultValue = 1)]
+        int Right_Small_Half { get; }
+
+        [Option(DefaultValue = 2)]
+        int Right_Small_All { get; }
+
+        [Option(DefaultValue = 3)]
+        int Left_Big_All { get; }
+
+        [Option(DefaultValue = 1)]
+        int Left_Big_Half { get; }
+
+        [Option(DefaultValue = 3)]
+        int Right_Big_Half { get; }
+
+        [Option(DefaultValue = 1)]
+        int Right_Big_All { get; }
     }
 
     public interface StnNoConfig

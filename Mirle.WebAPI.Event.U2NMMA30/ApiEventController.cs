@@ -8,7 +8,7 @@ using System.Web.Http;
 using Mirle.Structure;
 using Newtonsoft.Json;
 
-namespace Mirle.WebAPI.Event.U2NMMA30
+namespace Mirle.WebAPI.Event
 {
     public class WCSController : ApiController
     {

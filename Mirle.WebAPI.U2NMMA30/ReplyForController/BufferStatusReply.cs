@@ -9,5 +9,6 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
     public class BufferStatusReply : BufferReply
     {
         public string ready { get; set; }
+        public string isLoad { get; set; }
     }
 }

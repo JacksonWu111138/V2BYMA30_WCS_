@@ -54,6 +54,7 @@
     <Compile Include="Models\EqpDowntimeQueryInfo.cs" />
     <Compile Include="Models\CountListInfo.cs" />
     <Compile Include="Models\PortStsInfo.cs" />
+    <Compile Include="Models\PositionReportInfo.cs" />
     <Compile Include="Models\PutawayTransferInfo.cs" />
     <Compile Include="Models\RetrieveTransferInfo.cs" />
     <Compile Include="Models\ReturnCode.cs" />
@@ -67,6 +68,7 @@
     <Compile Include="Models\EqpOEEQueryInfo.cs" />
     <Compile Include="Models\UtilizationStsInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reply\ReplyCode.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="UnityResolver.cs" />
     <Compile Include="WebApiHost.cs" />
@@ -141,5 +143,6 @@
       <Version>5.11.10</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,6 +1,7 @@
 ﻿using Mirle.Def;
 using Mirle.Middle.DB_Proc;
 using Mirle.Structure;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace Mirle.Middle
         private WebApiConfig AgvApi_Config = new WebApiConfig();
         private DeviceInfo[] _PCBA = new DeviceInfo[2];
         private DeviceInfo[] _Box = new DeviceInfo[3];
+        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
         private string sDeviceID_AGV = "";
         private readonly clsHost db;
         private System.Timers.Timer timRead = new System.Timers.Timer();
@@ -67,7 +69,13 @@ namespace Mirle.Middle
         /// <returns></returns>
         public int GetBufferCmd(ConveyorInfo buffer)
         {
-            return 0;
+            BufferStatusQueryInfo info = new BufferStatusQueryInfo { bufferId = buffer.BufferName };
+            BufferStatusReply reply = new BufferStatusReply();
+            if (api.GetBufferStatusQuery().FunReport(info, buffer.API.IP, ref reply))
+            {
+                return Convert.ToInt32(reply.jobId);
+            }
+            else return -1;
         }
 
         /// <summary>
@@ -76,7 +84,7 @@ namespace Mirle.Middle
         /// <param name="Device"></param>
         /// <param name="location"></param>
         /// <returns></returns>
-        public bool CheckIsInReady(DeviceInfo Device, Location location)
+        public bool CheckIsInReady(DeviceInfo Device, Location location, ref string sCmdSno)
         {
             ConveyorInfo conveyor = new ConveyorInfo();
             foreach(var floor in Device.Floors)
@@ -95,7 +103,7 @@ namespace Mirle.Middle
                 if (bGet) break;
             }
 
-            return true;
+            return CheckIsInReady(conveyor, ref sCmdSno);
         }
 
         /// <summary>
@@ -105,7 +113,16 @@ namespace Mirle.Middle
         /// <returns></returns>
         public bool CheckIsInReady(ConveyorInfo buffer, ref string sCmdSno)
         {
-            return true;
+            BufferStatusQueryInfo info = new BufferStatusQueryInfo { bufferId = buffer.BufferName };
+            BufferStatusReply reply = new BufferStatusReply();
+            if (api.GetBufferStatusQuery().FunReport(info, buffer.API.IP, ref reply))
+            {
+                sCmdSno = reply.jobId.Trim().PadLeft(5, '0');
+                int.TryParse(reply.ready, out var ready);
+                if (ready == (int)clsEnum.ControllerApi.Ready.InReady) return true;
+                else return false;
+            }
+            else return false;
         }
 
         /// <summary>
@@ -133,7 +150,7 @@ namespace Mirle.Middle
                 if (bGet) break;
             }
 
-            return true;
+            return CheckIsOutReady(conveyor);
         }
 
         /// <summary>
@@ -143,7 +160,15 @@ namespace Mirle.Middle
         /// <returns></returns>
         public bool CheckIsOutReady(ConveyorInfo buffer)
         {
-            return true;
+            BufferStatusQueryInfo info = new BufferStatusQueryInfo { bufferId = buffer.BufferName };
+            BufferStatusReply reply = new BufferStatusReply();
+            if (api.GetBufferStatusQuery().FunReport(info, buffer.API.IP, ref reply))
+            {
+                int.TryParse(reply.ready, out var ready);
+                if (ready == (int)clsEnum.ControllerApi.Ready.OutReady) return true;
+                else return false;
+            }
+            else return false;
         }
 
         /// <summary>

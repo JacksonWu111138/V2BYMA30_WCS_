@@ -291,9 +291,21 @@ namespace Mirle.DB.Fun
                     case LocationTypes.Conveyor:
                     case LocationTypes.EQ:
                     case LocationTypes.IO:
-                        if (!middle.CheckIsInReady(Device, sLoc_Start))
+                        string sCmdSno_CV = "";
+                        if (!middle.CheckIsInReady(Device, sLoc_Start, ref sCmdSno_CV))
                         {
                             sRemark = $"Error: {sLoc_Start.LocationId}沒發入庫Ready";
+
+                            if (sRemark != cmd.Remark)
+                            {
+                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                            }
+
+                            return false;
+                        }
+                        else if(cmd.Cmd_Sno != sCmdSno_CV)
+                        {
+                            sRemark = $"Error: {sLoc_Start.LocationId}上的任務號不一致 => {sCmdSno_CV}";
 
                             if (sRemark != cmd.Remark)
                             {

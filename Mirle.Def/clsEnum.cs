@@ -111,6 +111,22 @@ namespace Mirle.Def
             }
         }
 
+        public class ControllerApi
+        {
+            public enum Ready
+            {
+                None = 0,
+                /// <summary>
+                /// 入庫Ready
+                /// </summary>
+                InReady = 1,
+                /// <summary>
+                /// 出庫Ready
+                /// </summary>
+                OutReady = 2
+            }
+        }
+
         public enum CraneSts
         {
             None = 0, 

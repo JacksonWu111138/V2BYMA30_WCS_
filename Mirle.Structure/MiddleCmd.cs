@@ -24,5 +24,6 @@ namespace Mirle.Structure
         public string Remark { get; set; } = "";
         public string BatchID { get; set; } = "";
         public string CompleteCode { get; set; } = "";
+        public string Iotype { get; set; }
     }
 }

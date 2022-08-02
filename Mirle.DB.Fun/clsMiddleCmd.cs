@@ -67,7 +67,7 @@ namespace Mirle.DB.Fun
                 middleCmd.Priority = Convert.ToInt32(cmd.Prty);
                 middleCmd.Path = 0;
                 middleCmd.BatchID = "";
-
+                middleCmd.Iotype = cmd.IO_Type;
                 return true;
             }
             catch (Exception ex)
@@ -133,7 +133,7 @@ namespace Mirle.DB.Fun
                 string sStnNo = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;
                 middleCmd.Path = ConveyorDef.GetPathByStn(sStnNo);
                 middleCmd.BatchID = BatchID;
-
+                middleCmd.Iotype = cmd.IO_Type;
                 return true;
             }
             catch (Exception ex)

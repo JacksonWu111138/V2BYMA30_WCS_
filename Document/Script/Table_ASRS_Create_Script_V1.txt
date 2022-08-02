@@ -36,6 +36,7 @@ EndDate			Varchar(20) Not Null     Default '',
 Remark          NVarchar(MAX) Not Null  Default '',
 BatchID         NVarchar(MAX) NOT NULL  Default '',
 CompleteCode VARCHAR(2) DEFAULT'',
+Iotype			Varchar(2)  NOT NULL     Default '',
 PRIMARY KEY(DeviceID,CommandID,TaskNo)
 );
 
@@ -57,7 +58,8 @@ ExpDate			Varchar(20) Not Null     Default '',
 EndDate			Varchar(20) Not Null     Default '',
 Remark          NVarchar(MAX) Not Null  Default '',
 BatchID         NVarchar(MAX) NOT NULL  Default '',
-CompleteCode VARCHAR(2) DEFAULT''
+CompleteCode VARCHAR(2) DEFAULT'',
+Iotype			Varchar(2)  NOT NULL     Default ''
 );
 
 Create Table UnitModeDef

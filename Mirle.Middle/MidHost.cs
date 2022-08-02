@@ -12,7 +12,6 @@ namespace Mirle.Middle
 {
     public class MidHost
     {
-        private static List<ConveyorInfo> Node_All = new List<ConveyorInfo>();
         private WebApiConfig AgvApi_Config = new WebApiConfig();
         private DeviceInfo[] _PCBA = new DeviceInfo[2];
         private DeviceInfo[] _Box = new DeviceInfo[3];
@@ -24,7 +23,6 @@ namespace Mirle.Middle
         public MidHost(List<ConveyorInfo> conveyors, WebApiConfig AgvApiConfig, DeviceInfo[] PCBA, DeviceInfo[] Box, string DeviceID_AGV, clsDbConfig config)
         {
             db = new clsHost(config, PCBA, Box, conveyors);
-            Node_All = conveyors;
             AgvApi_Config = AgvApiConfig;
             _PCBA = PCBA;
             _Box = Box;
@@ -179,7 +177,16 @@ namespace Mirle.Middle
         /// <returns></returns>
         public bool CheckIsLoad(ConveyorInfo buffer, ref bool IsLoad)
         {
-            return true;
+            BufferStatusQueryInfo info = new BufferStatusQueryInfo { bufferId = buffer.BufferName };
+            BufferStatusReply reply = new BufferStatusReply();
+            if (api.GetBufferStatusQuery().FunReport(info, buffer.API.IP, ref reply))
+            {
+                if (reply.isLoad == clsConstValue.YesNo.Yes) IsLoad = true;
+                else IsLoad = false;
+
+                return true;
+            }
+            else return false;
         }
     }
 }

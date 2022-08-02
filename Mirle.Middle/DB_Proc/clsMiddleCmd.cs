@@ -157,7 +157,13 @@ namespace Mirle.Middle.DB_Proc
                                         bool IsBatch = !string.IsNullOrWhiteSpace(cmd.BatchID);
                                         if (IsBatch)
                                         {
+                                            var batch = from myRow in dtTmp.AsEnumerable()
+                                                        where myRow.Field<string>(Parameter.clsMiddleCmd.Column.BatchID) == cmd.BatchID
+                                                        select myRow;
+                                            foreach(var data in batch)
+                                            {
 
+                                            }
                                         }
                                         else
                                         {

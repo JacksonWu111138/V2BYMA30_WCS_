@@ -14,5 +14,6 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         public string jobId { get; set; } = "";
         public string transactionId { get; set; } = "CV_RECEIVE_NEW_BIN_CMD";
         public string bufferId { get; set; }
+        public string ioType { get; set; }
     }
 }

@@ -49,6 +49,7 @@
     <Compile Include="clsHost.cs" />
     <Compile Include="clsTool.cs" />
     <Compile Include="clsWriLog.cs" />
+    <Compile Include="FunctionForController\BufferStatusQuery.cs" />
     <Compile Include="FunctionForController\TransferCommandRequest.cs" />
     <Compile Include="FunctionForController\TaskCancel.cs" />
     <Compile Include="FunctionForController\RollTask.cs" />

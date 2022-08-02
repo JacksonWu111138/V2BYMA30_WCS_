@@ -6,13 +6,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mirle.WebAPI.V2BYMA30.ReportInfo;
 
 namespace Mirle.WebAPI.V2BYMA30.Function
 {
     public class BufferStatusQuery
     {
-        public bool FunReport(BufferStatusQueryInfo info, string IP)
+        public bool FunReport(BufferStatusQueryInfo info, string IP, ref BufferStatusReply reply)
         {
             try
             {
@@ -22,8 +21,8 @@ namespace Mirle.WebAPI.V2BYMA30.Function
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"URL: {sLink}");
                 string re = clsTool.HttpPost(sLink, strJson);
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, re);
-                var info_controller = (BufferStatusReply)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(BufferStatusReply));
-                if (info_controller.returnCode == clsConstValue.ApiReturnCode.Success) return true;
+                reply = (BufferStatusReply)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(BufferStatusReply));
+                if (reply.returnCode == clsConstValue.ApiReturnCode.Success) return true;
                 else return false;
             }
             catch (Exception ex)

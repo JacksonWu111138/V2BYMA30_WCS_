@@ -167,13 +167,13 @@ namespace Mirle.Middle.DB_Proc
                                         }
                                         else
                                         {
-                                            if (FunSingleCmdProc(cmd, db)) return true;
+                                            if (FunSingleAsrsCmdProc(cmd, db)) return true;
                                             else continue;
                                         }
                                     }
                                     else
                                     {
-                                        if (FunSingleCmdProc(cmd, db)) return true;
+                                        if (FunSingleAsrsCmdProc(cmd, db)) return true;
                                         else continue;
                                     }
                                 }
@@ -208,7 +208,7 @@ namespace Mirle.Middle.DB_Proc
             }
         }
 
-        public bool FunSingleCmdProc(MiddleCmd cmd, DB db)
+        public bool FunSingleAsrsCmdProc(MiddleCmd cmd, DB db)
         {
             try
             {

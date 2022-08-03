@@ -116,6 +116,7 @@ namespace Mirle.DB.Fun
                     case clsEnum.enuSnoType.WCSTrxNo:
                         return DateTime.Now.ToString("HHmmss") + lngSeq1.ToString().PadLeft(intSnoLen, '0');
                     case clsEnum.enuSnoType.LOCTXNO:
+                    case clsEnum.enuSnoType.BATCH:
                         return DateTime.Now.ToString("yyMMdd") + lngSeq1.ToString().PadLeft(intSnoLen, '0');
                     default:
                         return lngSeq1.ToString().PadLeft(intSnoLen, '0');

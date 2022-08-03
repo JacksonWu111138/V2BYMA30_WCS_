@@ -289,7 +289,8 @@ namespace Mirle.Def
             /// WCS_Trans_In交易流水號
             /// </summary>
             WCSTrxNo,
-            LOCTXNO
+            LOCTXNO,
+            BATCH
         }
 
         public enum Ready

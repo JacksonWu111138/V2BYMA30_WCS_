@@ -2,6 +2,7 @@
 INSERT INTO Sno_Max (Sno_Type,Month_Flag,Init_Sno,Max_Sno,Sno_Len) 
 VALUES 
 ('CMDSNO', 'Y', 1, 19997, 5),
+('BATCH', 'N', 1, 29997, 5),
 ('CMDSUO', 'N', 20001, 29997, 5);
 
 INSERT INTO UnitModeDef (StockerID, In_enable) VALUES

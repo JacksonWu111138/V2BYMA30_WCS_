@@ -160,7 +160,109 @@ namespace Mirle.Middle.DB_Proc
                                             var batch = from myRow in dtTmp.AsEnumerable()
                                                         where myRow.Field<string>(Parameter.clsMiddleCmd.Column.BatchID) == cmd.BatchID
                                                         select myRow;
+                                            MiddleCmd[] BatchCmd = new MiddleCmd[2];
+                                            int idx = 0;
                                             foreach(var data in batch)
+                                            {
+                                                if (idx > 1) break;
+
+                                                BatchCmd[idx] = tool.GetMiddleCmd(data);
+                                                idx++;
+                                            }
+
+                                            if (cmd.CmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Initial)
+                                            {
+                                                switch (cmd.CmdMode)
+                                                {
+                                                    case clsConstValue.CmdMode.StockIn:
+                                                    case clsConstValue.CmdMode.L2L:
+                                                        EquCmdInfo equCmd = new EquCmdInfo
+                                                        {
+                                                            CmdSno = cmd.CommandID,
+                                                            CmdMode = cmd.CmdMode,
+                                                            CmdSts = clsConstValue.CmdSts.strCmd_Initial,
+                                                            CarNo = "1",
+                                                            EquNo = cmd.DeviceID,
+                                                            LocSize = " ",
+                                                            Priority = cmd.Priority.ToString(),
+                                                            SpeedLevel = "5",
+                                                            Destination = tool.GetEquCmdLoc_BySysCmd(cmd.Destination)
+                                                        };
+
+                                                        if (cmd.CmdMode == clsConstValue.CmdMode.StockIn)
+                                                        {
+                                                            ConveyorInfo[] conveyors = new ConveyorInfo[2];
+
+
+                                                            var obj = Node_All.Where(r => r.BufferName == cmd.Source);
+                                                            if (obj == null || obj.Count() == 0)
+                                                            {
+                                                                sRemark = "Error: Source站口不存在在所有節點裡";
+                                                                if (sRemark != cmd.Remark)
+                                                                {
+                                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                                }
+
+                                                                return false;
+                                                            }
+
+                                                            foreach (var j in obj)
+                                                            {
+                                                                equCmd.Source = j.StkPortID.ToString();
+                                                            }
+                                                        }
+                                                        else equCmd.Source = tool.GetEquCmdLoc_BySysCmd(cmd.Source);
+
+                                                        return FunWriEquCmd_Proc(cmd, equCmd, db);
+
+                                                    case clsConstValue.CmdMode.StockOut:
+                                                    case clsConstValue.CmdMode.S2S:
+                                                        ConveyorInfo conveyor = GetCV_ByCmdLoc(cmd, cmd.Destination, db);
+                                                        if (string.IsNullOrWhiteSpace(conveyor.BufferName)) return false;
+
+                                                        CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
+                                                        {
+                                                            bufferId = conveyor.BufferName,
+                                                            jobId = cmd.CommandID
+                                                        };
+
+                                                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                                        {
+                                                            sRemark = "Error: Begin失敗！";
+                                                            if (sRemark != cmd.Remark)
+                                                            {
+                                                                FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                            }
+
+                                                            return false;
+                                                        }
+
+                                                        sRemark = $"預約{conveyor.BufferName}";
+                                                        if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
+                                                        {
+                                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                                            return false;
+                                                        }
+
+                                                        if (!api.GetCV_ReceiveNewBinCmd().FunReport(info, conveyor.API.IP))
+                                                        {
+                                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                                            sRemark = $"Error: 預約{conveyor.BufferName}失敗！";
+                                                            if (sRemark != cmd.Remark)
+                                                            {
+                                                                FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                            }
+
+                                                            return false;
+                                                        }
+
+                                                        db.TransactionCtrl(TransactionTypes.Commit);
+                                                        return true;
+                                                    default:
+                                                        return false;
+                                                }
+                                            }
+                                            else
                                             {
 
                                             }
@@ -223,7 +325,7 @@ namespace Mirle.Middle.DB_Proc
                             {
                                 CmdSno = cmd.CommandID,
                                 CmdMode = cmd.CmdMode,
-                                CmdSts = cmd.CmdSts,
+                                CmdSts = clsConstValue.CmdSts.strCmd_Initial,
                                 CarNo = "1",
                                 EquNo = cmd.DeviceID,
                                 LocSize = " ",
@@ -325,7 +427,7 @@ namespace Mirle.Middle.DB_Proc
                     {
                         CmdSno = cmd.CommandID,
                         CmdMode = cmd.CmdMode,
-                        CmdSts = cmd.CmdSts,
+                        CmdSts = clsConstValue.CmdSts.strCmd_Initial,
                         CarNo = "1",
                         EquNo = cmd.DeviceID,
                         LocSize = " ",

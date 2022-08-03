@@ -154,7 +154,7 @@ namespace Mirle.DB.Fun
                 string sRemark = "";
                 if (IsDoubleCmd)
                 {
-                    string sBatchID = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSUO, db);
+                    string sBatchID = SNO.FunGetSeqNo(clsEnum.enuSnoType.BATCH, db);
                     if (string.IsNullOrWhiteSpace(sBatchID))
                     {
                         sRemark = $"Error: 取得{Parameter.clsMiddleCmd.Column.BatchID}失敗！";

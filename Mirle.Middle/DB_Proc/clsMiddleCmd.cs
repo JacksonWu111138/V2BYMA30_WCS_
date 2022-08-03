@@ -116,6 +116,52 @@ namespace Mirle.Middle.DB_Proc
             }
         }
 
+        public bool FunUpdateCmdSts(MiddleCmd[] cmds, string sCmdSts, string sRemark, DB db)
+        {
+            try
+            {
+                string CmdSno_Sql = "";
+                for (int i = 0; i < cmds.Length; i++)
+                {
+                    if (i == 0) CmdSno_Sql = $"'{cmds[i].CommandID}'";
+                    else CmdSno_Sql += $",'{cmds[i].CommandID}'";
+                }
+
+                string strSql = $"update {Parameter.clsMiddleCmd.TableName} set" +
+                    $" {Parameter.clsMiddleCmd.Column.Remark} = N'" + sRemark +
+                    $"', {Parameter.clsMiddleCmd.Column.CmdSts} = '{sCmdSts}' ";
+
+                if (sCmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Cancel_Wait || sCmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait)
+                {
+                    strSql += $", {Parameter.clsMiddleCmd.Column.EndDate} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
+                }
+                else
+                {
+                    strSql += $", {Parameter.clsMiddleCmd.Column.Expose_Date} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
+                }
+
+                strSql += $" where {Parameter.clsMiddleCmd.Column.CommandID} in ({CmdSno_Sql}) ";
+
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
         public bool MiddleCmd_Proc()
         {
             DataTable dtTmp = new DataTable();
@@ -299,8 +345,65 @@ namespace Mirle.Middle.DB_Proc
                                                 }
                                             }
                                             else
-                                            {
+                                            {//CmdSts=1 已預約目的站
+                                                switch (cmd.CmdMode)
+                                                {
+                                                    case clsConstValue.CmdMode.L2L:
+                                                    case clsConstValue.CmdMode.StockIn:
+                                                        if (FunUpdateCmdSts(BatchCmd, clsConstValue.CmdSts_MiddleCmd.strCmd_Initial, "", db)) return true;
+                                                        else continue;
+                                                }
 
+                                                EquCmdInfo equCmd = new EquCmdInfo
+                                                {
+                                                    CmdSno = cmd.CommandID,
+                                                    CmdMode = cmd.CmdMode,
+                                                    CmdSts = clsConstValue.CmdSts.strCmd_Initial,
+                                                    CarNo = "1",
+                                                    EquNo = cmd.DeviceID,
+                                                    LocSize = " ",
+                                                    Priority = cmd.Priority.ToString(),
+                                                    SpeedLevel = "5"
+                                                };
+
+                                                ConveyorInfo[] conveyors_To = new ConveyorInfo[2];
+                                                for (int con = 0; con < BatchCmd.Length; con++)
+                                                {
+                                                    conveyors_To[con] = GetCV_ByCmdLoc(BatchCmd[con], BatchCmd[con].Destination, db);
+                                                    if (conveyors_To[con].DoubleType == DoubleType.Left)
+                                                    {
+                                                        equCmd.Destination = conveyors_To[con].StkPortID.ToString();
+                                                        break;
+                                                    }
+                                                }
+
+                                                if (cmd.CmdMode == clsConstValue.CmdMode.S2S)
+                                                {
+                                                    ConveyorInfo[] conveyors_From = new ConveyorInfo[2];
+                                                    for (int con = 0; con < BatchCmd.Length; con++)
+                                                    {
+                                                        conveyors_From[con] = GetCV_ByCmdLoc(BatchCmd[con], BatchCmd[con].Source, db);
+                                                        if (conveyors_From[con].DoubleType == DoubleType.Right)
+                                                        {
+                                                            equCmd.Source = conveyors_From[con].StkPortID.ToString();
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    for (int con = 0; con < BatchCmd.Length; con++)
+                                                    {
+                                                        if (tool.GetShelfLocation(BatchCmd[con].Source) == clsEnum.Shelf.OutSide)
+                                                        {
+                                                            equCmd.Source = tool.GetEquCmdLoc_BySysCmd(BatchCmd[con].Source);
+                                                            break;
+                                                        }
+                                                    }
+                                                }
+
+                                                if (FunWriEquCmd_DoubleProc(BatchCmd, equCmd, db)) return true;
+                                                else continue;
                                             }
                                         }
                                         else

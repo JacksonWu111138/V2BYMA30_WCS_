@@ -8,6 +8,19 @@ namespace Mirle.Def
 {
     public class clsEnum
     {
+        public enum Shelf
+        {
+            None,
+            /// <summary>
+            /// 外儲位
+            /// </summary>
+            OutSide,
+            /// <summary>
+            /// 內儲位
+            /// </summary>
+            InSide
+        }
+
         public enum AsrsType
         {
            None, Box, PCBA

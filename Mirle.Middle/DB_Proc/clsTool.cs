@@ -19,6 +19,22 @@ namespace Mirle.Middle.DB_Proc
             box = Box;
         }
 
+        public clsEnum.Shelf GetShelfLocation(string sLoc)
+        {
+            if (string.IsNullOrWhiteSpace(sLoc) || sLoc.Length < 7) return clsEnum.Shelf.None;
+
+            int iRow = Convert.ToInt32(sLoc.Substring(0, 2));
+            switch (iRow % 4)
+            {
+                case 1:
+                case 2:
+                    return clsEnum.Shelf.InSide;
+                case 3:
+                default:
+                    return clsEnum.Shelf.OutSide;
+            }
+        }
+
         public string GetEquCmdLoc_BySysCmd(string sLoc)
         {
             if (string.IsNullOrWhiteSpace(sLoc)) return string.Empty;

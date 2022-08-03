@@ -185,81 +185,116 @@ namespace Mirle.Middle.DB_Proc
                                                             EquNo = cmd.DeviceID,
                                                             LocSize = " ",
                                                             Priority = cmd.Priority.ToString(),
-                                                            SpeedLevel = "5",
-                                                            Destination = tool.GetEquCmdLoc_BySysCmd(cmd.Destination)
+                                                            SpeedLevel = "5"
                                                         };
 
                                                         if (cmd.CmdMode == clsConstValue.CmdMode.StockIn)
                                                         {
                                                             ConveyorInfo[] conveyors = new ConveyorInfo[2];
-
-
-                                                            var obj = Node_All.Where(r => r.BufferName == cmd.Source);
-                                                            if (obj == null || obj.Count() == 0)
+                                                            for (int con = 0; con < BatchCmd.Length; con++)
                                                             {
-                                                                sRemark = "Error: Source站口不存在在所有節點裡";
+                                                                conveyors[con] = GetCV_ByCmdLoc(BatchCmd[con], BatchCmd[con].Source, db);
+                                                            }
+
+                                                            var right = conveyors.Where(r => r.DoubleType == DoubleType.Right);
+                                                            foreach (var r in right)
+                                                            {
+                                                                equCmd.Source = r.StkPortID.ToString();
+                                                            }
+                                                        }
+                                                        else
+                                                        {
+                                                            for (int con = 0; con < BatchCmd.Length; con++)
+                                                            {
+                                                                if(tool.GetShelfLocation(BatchCmd[con].Source) == clsEnum.Shelf.OutSide)
+                                                                {
+                                                                    equCmd.Source = tool.GetEquCmdLoc_BySysCmd(BatchCmd[con].Source);
+                                                                    break;
+                                                                }
+                                                            }
+                                                        }
+
+                                                        for (int con = 0; con < BatchCmd.Length; con++)
+                                                        {
+                                                            if (tool.GetShelfLocation(BatchCmd[con].Destination) == clsEnum.Shelf.OutSide)
+                                                            {
+                                                                equCmd.Destination = tool.GetEquCmdLoc_BySysCmd(BatchCmd[con].Destination);
+                                                                break;
+                                                            }
+                                                        }
+
+                                                        if (FunWriEquCmd_DoubleProc(BatchCmd, equCmd, db)) return true;
+                                                        else continue;
+
+                                                    case clsConstValue.CmdMode.StockOut:
+                                                    case clsConstValue.CmdMode.S2S:
+                                                        ConveyorInfo[] conveyors_To = new ConveyorInfo[2];
+                                                        CVReceiveNewBinCmdInfo[] infos = new CVReceiveNewBinCmdInfo[2];
+                                                        for (int con = 0; con < BatchCmd.Length; con++)
+                                                        {
+                                                            conveyors_To[con] = GetCV_ByCmdLoc(BatchCmd[con], BatchCmd[con].Destination, db);
+                                                            if (string.IsNullOrWhiteSpace(conveyors_To[con].BufferName)) return false;
+
+                                                            infos[con] = new CVReceiveNewBinCmdInfo
+                                                            {
+                                                                bufferId = conveyors_To[con].BufferName,
+                                                                jobId = BatchCmd[con].CommandID
+                                                            };
+                                                        }
+
+                                                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                                        {
+                                                            sRemark = "Error: Begin失敗！";
+                                                            for (int count = 0; count < BatchCmd.Length; count++)
+                                                            {
+                                                                if (sRemark != BatchCmd[count].Remark)
+                                                                {
+                                                                    FunUpdateRemark(BatchCmd[count].CommandID, sRemark, db);
+                                                                }
+                                                            }
+
+                                                            continue;
+                                                        }
+
+                                                        bool bCheck = true;
+                                                        for (int count = 0; count < BatchCmd.Length; count++)
+                                                        {
+                                                            sRemark = $"預約{conveyors_To[count].BufferName}";
+                                                            if (!FunUpdateCmdSts(BatchCmd[count].CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
+                                                            {
+                                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                                bCheck = false;
+                                                            }
+
+                                                            if (!bCheck) break;
+                                                        }
+
+                                                        if (!bCheck) continue;
+
+                                                        bCheck = true;
+                                                        for (int count = 0; count < BatchCmd.Length; count++)
+                                                        {
+                                                            if (!api.GetCV_ReceiveNewBinCmd().FunReport(infos[count], conveyors_To[count].API.IP))
+                                                            {
+                                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                                sRemark = $"Error: 預約{conveyors_To[count].BufferName}失敗！";
                                                                 if (sRemark != cmd.Remark)
                                                                 {
                                                                     FunUpdateRemark(cmd.CommandID, sRemark, db);
                                                                 }
 
-                                                                return false;
+                                                                bCheck = false;
                                                             }
 
-                                                            foreach (var j in obj)
-                                                            {
-                                                                equCmd.Source = j.StkPortID.ToString();
-                                                            }
-                                                        }
-                                                        else equCmd.Source = tool.GetEquCmdLoc_BySysCmd(cmd.Source);
-
-                                                        return FunWriEquCmd_Proc(cmd, equCmd, db);
-
-                                                    case clsConstValue.CmdMode.StockOut:
-                                                    case clsConstValue.CmdMode.S2S:
-                                                        ConveyorInfo conveyor = GetCV_ByCmdLoc(cmd, cmd.Destination, db);
-                                                        if (string.IsNullOrWhiteSpace(conveyor.BufferName)) return false;
-
-                                                        CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
-                                                        {
-                                                            bufferId = conveyor.BufferName,
-                                                            jobId = cmd.CommandID
-                                                        };
-
-                                                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
-                                                        {
-                                                            sRemark = "Error: Begin失敗！";
-                                                            if (sRemark != cmd.Remark)
-                                                            {
-                                                                FunUpdateRemark(cmd.CommandID, sRemark, db);
-                                                            }
-
-                                                            return false;
+                                                            if (!bCheck) break;
                                                         }
 
-                                                        sRemark = $"預約{conveyor.BufferName}";
-                                                        if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
-                                                        {
-                                                            db.TransactionCtrl(TransactionTypes.Rollback);
-                                                            return false;
-                                                        }
-
-                                                        if (!api.GetCV_ReceiveNewBinCmd().FunReport(info, conveyor.API.IP))
-                                                        {
-                                                            db.TransactionCtrl(TransactionTypes.Rollback);
-                                                            sRemark = $"Error: 預約{conveyor.BufferName}失敗！";
-                                                            if (sRemark != cmd.Remark)
-                                                            {
-                                                                FunUpdateRemark(cmd.CommandID, sRemark, db);
-                                                            }
-
-                                                            return false;
-                                                        }
+                                                        if (!bCheck) continue;
 
                                                         db.TransactionCtrl(TransactionTypes.Commit);
                                                         return true;
                                                     default:
-                                                        return false;
+                                                        continue;
                                                 }
                                             }
                                             else
@@ -482,6 +517,63 @@ namespace Mirle.Middle.DB_Proc
                     if (sRemark != cmd.Remark)
                     {
                         FunUpdateRemark(cmd.CommandID, sRemark, db);
+                    }
+
+                    return false;
+                }
+
+                db.TransactionCtrl(TransactionTypes.Commit);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                db.TransactionCtrl(TransactionTypes.Rollback);
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunWriEquCmd_DoubleProc(MiddleCmd[] cmd, EquCmdInfo equCmd, DB db)
+        {
+            try
+            {
+                string sRemark = "";
+                if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                {
+                    sRemark = "Error: Begin失敗！";
+                    for (int i = 0; i < cmd.Length; i++)
+                    {
+                        if (sRemark != cmd[i].Remark)
+                        {
+                            FunUpdateRemark(cmd[i].CommandID, sRemark, db);
+                        }
+                    }
+
+                    return false;
+                }
+
+                sRemark = "下達EquCmd";
+                for (int i = 0; i < cmd.Length; i++)
+                {
+                    if (!FunUpdateCmdSts(cmd[i].CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
+                    {
+                        db.TransactionCtrl(TransactionTypes.Rollback);
+                        return false;
+                    }
+                }
+
+                if (!EquCmd.FunInsEquCmd(equCmd, db))
+                {
+                    db.TransactionCtrl(TransactionTypes.Rollback);
+                    sRemark = "Error: 下達EquCmd失敗！";
+                    for (int i = 0; i < cmd.Length; i++)
+                    {
+                        if (sRemark != cmd[i].Remark)
+                        {
+                            FunUpdateRemark(cmd[i].CommandID, sRemark, db);
+                        }
                     }
 
                     return false;

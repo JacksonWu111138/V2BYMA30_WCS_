@@ -238,7 +238,8 @@ namespace Mirle.Middle.DB_Proc
                                                             infos[con] = new CVReceiveNewBinCmdInfo
                                                             {
                                                                 bufferId = conveyors_To[con].BufferName,
-                                                                jobId = BatchCmd[con].CommandID
+                                                                jobId = BatchCmd[con].CommandID,
+                                                                ioType = BatchCmd[con].Iotype
                                                             };
                                                         }
 
@@ -400,7 +401,8 @@ namespace Mirle.Middle.DB_Proc
                             CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
                             {
                                 bufferId = conveyor.BufferName,
-                                jobId = cmd.CommandID
+                                jobId = cmd.CommandID,
+                                ioType = cmd.Iotype
                             };
 
                             if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)

@@ -66,14 +66,7 @@ namespace Mirle.DB.Proc
                                     }
                                     else
                                     {
-                                        if(sLoc_Start.DeviceId != sLoc_End.DeviceId)
-                                        {
-                                            //CV Controller
-                                        }
-                                        else
-                                        {
-
-                                        }
+                                        
                                     }
                                 }
                             }

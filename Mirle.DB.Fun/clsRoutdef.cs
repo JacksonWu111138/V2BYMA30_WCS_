@@ -61,43 +61,6 @@ namespace Mirle.DB.Fun
             return location;
         }
 
-        public bool FunGetLocation_NonASRS(CmdMstInfo cmd, MapHost Router, ref Location sLoc_Start, ref Location sLoc_End, DataBase.DB db)
-        {
-            try
-            {
-                if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
-                    sLoc_Start = GetCurLoc_NonAsrsInitial(cmd, Router, ConveyorDef.GetStations());
-                else
-                {
-                    if (!string.IsNullOrWhiteSpace(cmd.CurLoc))
-                        sLoc_Start = GetCurLocation(cmd, Router, cmd.CurDeviceID, cmd.CurLoc, db);
-                    else
-                    {
-                        string sRemark = $"Error: 執行中的命令{Parameter.clsCmd_Mst.Column.CurLoc}不該為空" +
-                                   $" => <{Parameter.clsCmd_Mst.Column.Cmd_Sno}>{cmd.Cmd_Sno}";
-                        if (sRemark != cmd.Remark)
-                        {
-                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                        }
-
-                        return false;
-                    }
-                }
-
-                if (sLoc_Start == null) return false;
-                sLoc_End = GetFinialDestination_NonASRS(cmd, Router, ConveyorDef.GetStations());
-                if (sLoc_End == null) return false;
-
-                return true;
-            }
-            catch (Exception ex)
-            {
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                return false;
-            }
-        }
-
         public bool FunGetLocation(CmdMstInfo cmd, MapHost Router, ref Location sLoc_Start, ref Location sLoc_End, DataBase.DB db)
         {
             try
@@ -241,24 +204,6 @@ namespace Mirle.DB.Fun
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
                 return null;
-            }
-        }
-
-        public Location GetCurLoc_NonAsrsInitial(CmdMstInfo cmd, MapHost Router, List<ConveyorInfo> Stations)
-        {
-            switch(cmd.Cmd_Mode)
-            {
-                case clsConstValue.CmdMode.L2L:
-                case clsConstValue.CmdMode.StockOut:
-                    return Router.GetLocation(cmd.Equ_No, Location.LocationID.Shelf.ToString());
-                default:
-                    var StnList = Stations.Where(r => r.StnNo == cmd.Stn_No);
-                    foreach (var s in StnList)
-                    {
-                        return Router.GetLocation(s.ControllerID, s.BufferName);
-                    }
-
-                    return null;
             }
         }
 

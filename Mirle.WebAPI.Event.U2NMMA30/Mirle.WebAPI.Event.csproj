@@ -46,6 +46,26 @@
   <ItemGroup>
     <Compile Include="ApiEventController.cs" />
     <Compile Include="clsWriLog.cs" />
+    <Compile Include="ModelsForControllers\LocationDisableRequestInfo.cs" />
+    <Compile Include="ModelsForControllers\ForkStatusReportInfo.cs" />
+    <Compile Include="ModelsForControllers\ForkStatusList.cs" />
+    <Compile Include="ModelsForControllers\CmdDoubleStorageInfo.cs" />
+    <Compile Include="ModelsForControllers\CmdDestinationCheckInfo.cs" />
+    <Compile Include="ModelsForControllers\BlockStatusInfo.cs" />
+    <Compile Include="ModelsForControllers\BlockList.cs" />
+    <Compile Include="ModelsForControllers\BinEmptyLeaveInfo.cs" />
+    <Compile Include="ModelsForControllers\BCRCheckInfo.cs" />
+    <Compile Include="ModelsForControllers\AlarmInfo.cs" />
+    <Compile Include="ModelsForControllers\AGVPosReportInfo.cs" />
+    <Compile Include="ModelsForControllers\ControlChangeInfo.cs" />
+    <Compile Include="ModelsForControllers\WrongEquStockInInfo.cs" />
+    <Compile Include="ModelsForControllers\UnknownBinLeaveInfo.cs" />
+    <Compile Include="ModelsForControllers\TransferCommandDoneInfo.cs" />
+    <Compile Include="ModelsForControllers\StatusChangeInfo.cs" />
+    <Compile Include="ModelsForControllers\StageEmptyInfo.cs" />
+    <Compile Include="ModelsForControllers\ReelIdInfo.cs" />
+    <Compile Include="ModelsForControllers\RackIdInfo.cs" />
+    <Compile Include="ModelsForControllers\RackInfo.cs" />
     <Compile Include="ModelsForWES\LotList.cs" />
     <Compile Include="ModelsForWES\LotTransferCancelInfo.cs" />
     <Compile Include="ModelsForWES\LotShelfTransferInfo.cs" />
@@ -63,7 +83,7 @@
     <Compile Include="Models\EqpDowntimeQueryInfo.cs" />
     <Compile Include="Models\CountListInfo.cs" />
     <Compile Include="Models\PortStsInfo.cs" />
-    <Compile Include="Models\PositionReportInfo.cs" />
+    <Compile Include="ModelsForControllers\PositionReportInfo.cs" />
     <Compile Include="Models\PutawayTransferInfo.cs" />
     <Compile Include="Models\RetrieveTransferInfo.cs" />
     <Compile Include="Models\ReturnCode.cs" />
@@ -77,6 +97,11 @@
     <Compile Include="Models\EqpOEEQueryInfo.cs" />
     <Compile Include="Models\UtilizationStsInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ModelsForControllers\CommandCompleteInfo.cs" />
+    <Compile Include="ReplyForControllers\ReelStockInReply.cs" />
+    <Compile Include="ReplyForControllers\CmdDoubleStorageReply.cs" />
+    <Compile Include="ReplyForControllers\CmdDestinationCheckReply.cs" />
+    <Compile Include="ReplyForControllers\CarrierReply.cs" />
     <Compile Include="ReplyForWES\LotReply.cs" />
     <Compile Include="ReplyForWES\CarrierReply.cs" />
     <Compile Include="ReplyForWES\ReplyCode.cs" />

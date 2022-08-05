@@ -20,8 +20,6 @@ namespace Mirle.ASRS.WCS
         public static WebApiConfig WcsApi_Config = new WebApiConfig();
         public static ASRSINI lcsini;
         public static int L2L_MaxCount = 5;
-        public static string DeviceID_AGV = "";
-        public static string DeviceID_Tower = "";
         public static string WES_B800CV = "B800CV";
         //API
         [DllImport("kernel32.dll")]
@@ -411,8 +409,8 @@ namespace Mirle.ASRS.WCS
                 MainForm.Box[i].DeviceID = adBox[i];
             }
 
-            DeviceID_AGV = lcsini.EquNo.AGV.Trim();
-            DeviceID_Tower = lcsini.EquNo.Tower.Trim();
+            ConveyorDef.DeviceID_AGV = lcsini.EquNo.AGV.Trim();
+            ConveyorDef.DeviceID_Tower = lcsini.EquNo.Tower.Trim();
         }
       
         private static void FunApiConfig(ASRSINI lcsini)

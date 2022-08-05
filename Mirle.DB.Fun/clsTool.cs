@@ -1,9 +1,10 @@
 ﻿using System;
 using Mirle.Def;
 using Mirle.Structure;
-using Mirle.DataBase;
+using System.Linq;
 using System.Data;
 using System.Collections.Generic;
+using Mirle.Def.U2NMMA30;
 
 namespace Mirle.DB.Fun
 {
@@ -237,6 +238,16 @@ namespace Mirle.DB.Fun
             }
 
             return new List<ConveyorInfo>();
+        }
+
+        public bool IsAGV(string DeviceID_Router, ref string sDeviceID)
+        {
+            if (ConveyorDef.DeviceID_AGV_Router.Where(r => r == DeviceID_Router).Any())
+            {
+                sDeviceID = ConveyorDef.DeviceID_AGV;
+                return true;
+            }
+            else return false;
         }
     }
 }

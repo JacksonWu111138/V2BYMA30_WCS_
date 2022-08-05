@@ -30,7 +30,7 @@ namespace Mirle.DB.Proc
 
         public Fun.clsRoutdef GetFun_Routdef() => Routdef;
 
-        public bool FunNormalCmd_Proc(string sAsrsStockInLocation_Sql, string sAsrsEquNo_Sql, MapHost Router)
+        public bool FunNormalCmd_Proc(string sAsrsStockInLocation_Sql, string sAsrsEquNo_Sql, MapHost Router, MidHost middle)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -66,7 +66,68 @@ namespace Mirle.DB.Proc
                                     }
                                     else
                                     {
-                                        
+                                        if(sLoc_Start.DeviceId == sLoc_End.DeviceId)
+                                        {//是電子料塔或AGV的命令
+                                            string sDeviceID = "";
+                                            if (!tool.IsAGV(sLoc_Start.DeviceId, ref sDeviceID))
+                                            {
+                                                sDeviceID = ConveyorDef.DeviceID_Tower;
+                                            }
+
+                                            ConveyorInfo conveyor = new ConveyorInfo();
+                                            if(sLoc_Start.LocationTypes == LocationTypes.Conveyor)
+                                            {
+                                                conveyor = ConveyorDef.GetBuffer(sLoc_Start.LocationId);
+                                            }
+
+                                            ConveyorInfo conveyor_To = new ConveyorInfo();
+                                            if (sLoc_End.LocationTypes == LocationTypes.Conveyor)
+                                            {
+                                                conveyor_To = ConveyorDef.GetBuffer(sLoc_End.LocationId);
+                                            }
+
+                                            if (!Routdef.CheckSourceIsOK_NonASRS(cmd, sLoc_Start, middle, conveyor, db)) continue;
+                                            if (!Routdef.CheckDestinationIsOK_NonASRS(cmd, sLoc_End, middle, conveyor_To, db)) continue;
+                                            MiddleCmd middleCmd = new MiddleCmd();
+                                            if (!MiddleCmd.FunGetMiddleCmd_NonASRS(cmd, sLoc_Start, sLoc_End, ref middleCmd, sDeviceID, db)) continue;
+
+                                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                            {
+                                                sRemark = "Error: Begin失敗！";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            sRemark = $"下達Middle層命令 => <{Fun.Parameter.clsMiddleCmd.Column.DeviceID}>{sDeviceID}";
+                                            if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                continue;
+                                            }
+
+                                            if (!MiddleCmd.FunInsMiddleCmd(middleCmd, db))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                sRemark = "Error: 下達Middle層命令失敗";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            db.TransactionCtrl(TransactionTypes.Commit);
+                                            return true;
+                                        }
+                                        else
+                                        {
+
+                                        }
                                     }
                                 }
                             }

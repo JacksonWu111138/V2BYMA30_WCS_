@@ -154,7 +154,7 @@ namespace Mirle.ASRS.WCS.View
                 SubShowCmdtoGrid(ref Grid1);
                 if(clsDB_Proc.DBConn)
                 {
-                    clsDB_Proc.GetDB_Object().GetProc().FunNormalCmd_Proc(sAsrsStockIn_Sql, sAsrsEquNo_Sql, router);
+                    clsDB_Proc.GetDB_Object().GetProc().FunNormalCmd_Proc(sAsrsStockIn_Sql, sAsrsEquNo_Sql, router, middle);
                 }
             }
             catch (Exception ex)
@@ -517,7 +517,7 @@ namespace Mirle.ASRS.WCS.View
             ConveyorDef.FunNodeListAddInit();
             ConveyorDef.FunStnListAddInit();
             FunAsrsCmdInit();
-            middle = new MidHost(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box, clInitSys.DeviceID_AGV, clInitSys.DbConfig);
+            middle = new MidHost(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box, ConveyorDef.DeviceID_AGV, clInitSys.DbConfig);
             //_unityContainer = new UnityContainer();
             //_unityContainer.RegisterInstance(new WCSController());
             //_webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);

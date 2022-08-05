@@ -211,18 +211,18 @@ insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) 
 
 
 --電子料塔
-insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Tower', 'Shelf', 0, 1, 1, ' ',0);
-insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('Tower', 'E1-04', 3, 1, 4, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('7', 'Shelf', 0, 1, 1, ' ',0);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('7', 'E1-04', 3, 1, 4, ' ',1);
 
-insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Tower', 'Shelf', '68', 'E1-08', ' ');
-insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Tower', 'E1-04', '68', 'E1-08', ' ');
-insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('68', 'E1-01', 'Tower', 'E1-04', ' ');
-insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Tower', 'Shelf', '68', 'E2-35', ' ');
-insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Tower', 'Shelf', '68', 'E2-36', ' ');
-insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Tower', 'Shelf', '68', 'E2-37', ' ');
-insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Tower', 'Shelf', '68', 'E2-38', ' ');
-insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Tower', 'Shelf', '68', 'E2-39', ' ');
-insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('Tower', 'Shelf', '68', 'E2-44', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('7', 'Shelf', '68', 'E1-08', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('7', 'E1-04', '68', 'E1-08', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('68', 'E1-01', '7', 'E1-04', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('7', 'Shelf', '68', 'E2-35', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('7', 'Shelf', '68', 'E2-36', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('7', 'Shelf', '68', 'E2-37', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('7', 'Shelf', '68', 'E2-38', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('7', 'Shelf', '68', 'E2-39', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('7', 'Shelf', '68', 'E2-44', ' ');
 
 
 --E04電梯

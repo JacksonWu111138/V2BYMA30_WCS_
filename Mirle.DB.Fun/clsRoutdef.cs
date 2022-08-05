@@ -66,7 +66,18 @@ namespace Mirle.DB.Fun
             try
             {
                 if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
-                    sLoc_Start = GetCurLoc_Inital(cmd, Router, db);
+                {
+                    switch(cmd.Cmd_Mode)
+                    {
+                        case clsConstValue.CmdMode.S2S:
+                        case clsConstValue.CmdMode.StockIn:
+                            sLoc_Start = GetCurLoc_Inital_ByStnNo(cmd, Router, ConveyorDef.GetStations());
+                            break;
+                        default:
+                            sLoc_Start = GetCurLoc_Inital(cmd, Router, db);
+                            break;
+                    }
+                }
                 else
                 {
                     if (!string.IsNullOrWhiteSpace(cmd.CurLoc))
@@ -192,6 +203,15 @@ namespace Mirle.DB.Fun
                         foreach(var s in StnList)
                         {
                             End = Router.GetLocation(s.ControllerID, s.BufferName);
+                            if(End == null)
+                            {
+                                for (int i = 0; i < ConveyorDef.DeviceID_AGV_Router.Length; i++)
+                                {
+                                    End = Router.GetLocation(ConveyorDef.DeviceID_AGV_Router[i], s.BufferName);
+                                    if (End == null) continue;
+                                    else break;
+                                }
+                            }
                         }
 
                         break;
@@ -224,6 +244,21 @@ namespace Mirle.DB.Fun
 
             string sLocationID = IsTeach ? Location.LocationID.Teach.ToString() : Location.LocationID.Shelf.ToString();
             return GetCurLocation(cmd, Router, cmd.Equ_No, sLocationID, db);
+        }
+
+        public Location GetCurLoc_Inital_ByStnNo(CmdMstInfo cmd, MapHost Router, List<ConveyorInfo> Stations)
+        {
+            var StnList = Stations.Where(r => r.StnNo == cmd.Stn_No);
+            foreach (var s in StnList)
+            {
+                string sDeviceID = "";
+                if (s.BufferName == "E1-04") sDeviceID = ConveyorDef.DeviceID_Tower;
+                else sDeviceID = s.ControllerID;
+
+                return Router.GetLocation(sDeviceID, s.BufferName);
+            }
+
+            return null;
         }
 
         public bool CheckSourceIsOK(CmdMstInfo cmd, Location sLoc_Start, MidHost middle, DeviceInfo Device, WMS.Proc.clsHost wms, DataBase.DB db)
@@ -351,6 +386,55 @@ namespace Mirle.DB.Fun
                         }
 
                         break;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
+        public bool CheckSourceIsOK_NonASRS(CmdMstInfo cmd, Location sLoc_Start, MidHost middle, ConveyorInfo buffer, DataBase.DB db)
+        {
+            try
+            {
+                string sRemark = "";
+                switch (sLoc_Start.LocationTypes)
+                {
+                    case LocationTypes.Conveyor:
+                    case LocationTypes.EQ:
+                    case LocationTypes.IO:
+                        string sCmdSno_CV = "";
+                        if (!middle.CheckIsInReady(buffer, ref sCmdSno_CV))
+                        {
+                            sRemark = $"Error: {sLoc_Start.LocationId}沒發入庫Ready";
+
+                            if (sRemark != cmd.Remark)
+                            {
+                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                            }
+
+                            return false;
+                        }
+                        else if (cmd.Cmd_Sno != sCmdSno_CV)
+                        {
+                            sRemark = $"Error: {sLoc_Start.LocationId}上的任務號不一致 => {sCmdSno_CV}";
+
+                            if (sRemark != cmd.Remark)
+                            {
+                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                            }
+
+                            return false;
+                        }
+
+                        break;
+                    case LocationTypes.Shelf:
+                        return true;
                 }
 
                 return true;
@@ -731,6 +815,44 @@ namespace Mirle.DB.Fun
                             return false;
                         }
                         break;
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
+        public bool CheckDestinationIsOK_NonASRS(CmdMstInfo cmd, Location sLoc_End, MidHost middle, ConveyorInfo buffer, DataBase.DB db)
+        {
+            try
+            {
+                string sRemark = "";
+                switch (sLoc_End.LocationTypes)
+                {
+                    case LocationTypes.Conveyor:
+                    case LocationTypes.EQ:
+                    case LocationTypes.IO:
+                        if (sLoc_End.DeviceId == ConveyorDef.DeviceID_Tower) return true;
+
+                        if (!middle.CheckIsOutReady(buffer))
+                        {
+                            sRemark = $"Error: {sLoc_End.LocationId}沒發出庫Ready";
+                            if (sRemark != cmd.Remark)
+                            {
+                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                            }
+
+                            return false;
+                        }
+
+                        break;
+                    case LocationTypes.Shelf:
+                        return true;
                 }
 
                 return true;

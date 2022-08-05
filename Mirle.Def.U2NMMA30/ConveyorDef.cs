@@ -304,6 +304,10 @@ namespace Mirle.Def.U2NMMA30
             public static ConveyorInfo E1_04 = new ConveyorInfo { Index = 4, BufferName = "E1-04" };
         }
 
+        public static string DeviceID_AGV = "";
+        public static string[] DeviceID_AGV_Router = new string[] { "63", "65", "66", "68" };
+        public static string DeviceID_Tower = "";
+
         private static List<ConveyorInfo> Node_All = new List<ConveyorInfo>();
         /// <summary>
         /// 取得所有節點的ConveyerInfo
@@ -622,6 +626,17 @@ namespace Mirle.Def.U2NMMA30
             Stations.Add(AGV.M1_20);
             Stations.Add(AGV.M1_05);
             Stations.Add(AGV.M1_15);
+        }
+
+        public static ConveyorInfo GetBuffer(string BufferName)
+        {
+            var lst = GetAllNode().Where(r => r.BufferName == BufferName);
+            foreach(var con in lst)
+            {
+                return con;
+            }
+
+            return new ConveyorInfo();
         }
 
         public static int GetPathByStn(string StnNo)

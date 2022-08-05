@@ -144,6 +144,72 @@ namespace Mirle.DB.Fun
             }
         }
 
+        public bool FunGetMiddleCmd_NonASRS(CmdMstInfo cmd, Location sLoc_Start, Location sLoc_End, ref MiddleCmd middleCmd, string sDeviceID, DataBase.DB db, string BatchID = "")
+        {
+            try
+            {
+                middleCmd = new MiddleCmd();
+                middleCmd.TaskNo = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSUO, db);
+                if (string.IsNullOrWhiteSpace(middleCmd.TaskNo))
+                {
+                    string sRemark = "Error: 取得TaskNo失敗！";
+                    if (sRemark != cmd.Remark)
+                    {
+                        CMD_MST.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                    }
+
+                    return false;
+                }
+
+                middleCmd.CommandID = cmd.Cmd_Sno;
+                middleCmd.DeviceID = sDeviceID;
+                middleCmd.CSTID = cmd.Loc_ID;
+                string ToLoc = cmd.Cmd_Mode == clsConstValue.CmdMode.L2L ? cmd.New_Loc : cmd.Loc;
+                middleCmd.Source = tool.GetLocation(cmd.Loc, sLoc_Start);
+                middleCmd.Destination = tool.GetLocation(ToLoc, sLoc_End);
+                string sCmdMode = "";
+                if (sLoc_Start.LocationTypes == LocationTypes.Shelf)
+                {
+                    switch (sLoc_End.LocationTypes)
+                    {
+                        case LocationTypes.Shelf:
+                            sCmdMode = clsConstValue.CmdMode.L2L;
+                            break;
+                        default:
+                            sCmdMode = clsConstValue.CmdMode.StockOut;
+                            break;
+                    }
+                }
+                else
+                {
+                    switch (sLoc_End.LocationTypes)
+                    {
+                        case LocationTypes.Shelf:
+                            sCmdMode = clsConstValue.CmdMode.StockIn;
+                            break;
+                        default:
+                            sCmdMode = clsConstValue.CmdMode.S2S;
+                            break;
+                    }
+                }
+
+                middleCmd.CmdMode = sCmdMode;
+                middleCmd.Priority = Convert.ToInt32(cmd.Prty);
+
+                string sStnNo = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;
+                middleCmd.Path = 0;
+                middleCmd.BatchID = BatchID;
+                middleCmd.Iotype = cmd.IO_Type;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
         public bool FunGetMiddleCmd(CmdMstInfo cmd, Location sLoc_Start, Location sLoc_End, ref MiddleCmd middleCmd, ref MiddleCmd middleCmd_DD,
             bool IsDoubleCmd, CmdMstInfo cmd_DD, MapHost Router, DataBase.DB db)
         {

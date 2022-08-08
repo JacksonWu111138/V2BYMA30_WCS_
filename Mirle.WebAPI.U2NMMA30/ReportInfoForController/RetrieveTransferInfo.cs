@@ -16,7 +16,7 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         public string reelId { get; set; }
         public string fromShelfId { get; set; }
         public string toPortId { get; set; }
-        public string toStickId { get; set; }
+        public string rackLocation { get; set; }
         public string largest { get; set; }
         public string priority { get; set; }
     }

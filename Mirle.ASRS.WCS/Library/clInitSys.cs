@@ -16,6 +16,7 @@ namespace Mirle.ASRS.WCS
         public static clsDbConfig DbConfig = new clsDbConfig();
         public static clsDbConfig DbConfig_WMS = new clsDbConfig();
         public static WebApiConfig AgvApi_Config = new WebApiConfig();
+        public static WebApiConfig TowerApi_Config = new WebApiConfig();
         public static WebApiConfig WmsApi_Config = new WebApiConfig();
         public static WebApiConfig WcsApi_Config = new WebApiConfig();
         public static ASRSINI lcsini;
@@ -417,6 +418,7 @@ namespace Mirle.ASRS.WCS
         {
             WmsApi_Config.IP = lcsini.Client_API.WES;
             AgvApi_Config.IP = lcsini.Client_API.AGV;
+            TowerApi_Config.IP = lcsini.Client_API.Tower;
             ConveyorDef.AGV.E1_01.API.IP = lcsini.Client_API.Tower;
             ConveyorDef.Tower.E1_04.API.IP = lcsini.Client_API.Tower;
             ConveyorDef.AGV.E1_08.API.IP = lcsini.Client_API.Tower;

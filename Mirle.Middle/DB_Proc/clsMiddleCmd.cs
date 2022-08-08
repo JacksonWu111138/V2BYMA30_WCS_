@@ -19,8 +19,10 @@ namespace Mirle.Middle.DB_Proc
         private static List<ConveyorInfo> Node_All = new List<ConveyorInfo>();
         private string sDeviceID_AGV = "";
         private string sDeviceID_Tower = "";
+        private WebApiConfig _agvApi = new WebApiConfig();
+        private WebApiConfig _towerApi = new WebApiConfig();
         public clsMiddleCmd(clsDbConfig config, DeviceInfo[] PCBA, DeviceInfo[] Box, List<ConveyorInfo> conveyors,
-            string DeviceID_AGV, string DeviceID_Tower)
+            string DeviceID_AGV, string DeviceID_Tower, WebApiConfig AgvApi_Config, WebApiConfig TowerApi_Config)
         {
             tool = new clsTool(PCBA, Box);
             EquCmd = new clsEquCmd(config);
@@ -28,6 +30,8 @@ namespace Mirle.Middle.DB_Proc
             Node_All = conveyors;
             sDeviceID_AGV = DeviceID_AGV;
             sDeviceID_Tower = DeviceID_Tower;
+            _agvApi = AgvApi_Config;
+            _towerApi = TowerApi_Config;
         }
 
         public ConveyorInfo GetCV_ByCmdLoc(MiddleCmd cmd, string Loc, DB db)
@@ -427,7 +431,8 @@ namespace Mirle.Middle.DB_Proc
                                 {
                                     if(cmd.DeviceID == sDeviceID_Tower)
                                     {
-                                        RetrieveTransferInfo retrieve_info; PutawayTransferInfo putaway_info;
+                                        RetrieveTransferInfo retrieve_info = new RetrieveTransferInfo();
+                                        PutawayTransferInfo putaway_info = new PutawayTransferInfo();
                                         if(cmd.CmdMode == clsConstValue.CmdMode.StockIn)
                                         {
                                             putaway_info = new PutawayTransferInfo
@@ -450,10 +455,146 @@ namespace Mirle.Middle.DB_Proc
                                                 rackLocation = cmd.rackLocation
                                             };
                                         }
+
+                                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                        {
+                                            sRemark = "Error: Begin失敗！";
+                                            if (sRemark != cmd.Remark)
+                                            {
+                                                FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                            }
+
+                                            continue;
+                                        }
+
+                                        sRemark = "下達料塔搬運命令";
+                                        if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
+                                        {
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            continue;
+                                        }
+
+                                        if (cmd.CmdMode == clsConstValue.CmdMode.StockIn)
+                                        {
+                                            if (!api.GetPutawayTransfer().FunReport(putaway_info, _towerApi.IP))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                sRemark = "Error: 下達料塔搬運命令失敗";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (!api.GetRetrieveTransfer().FunReport(retrieve_info, _towerApi.IP))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                sRemark = "Error: 下達料塔搬運命令失敗";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+                                        }
+
+                                        db.TransactionCtrl(TransactionTypes.Commit);
+                                        return true;
                                     }
                                     else
                                     {
+                                        if (cmd.CmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Initial)
+                                        {
+                                            ConveyorInfo conveyor = GetCV_ByCmdLoc(cmd, cmd.Destination, db);
+                                            if (string.IsNullOrWhiteSpace(conveyor.BufferName)) continue;
 
+                                            CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
+                                            {
+                                                bufferId = conveyor.BufferName,
+                                                jobId = cmd.CommandID,
+                                                ioType = cmd.Iotype
+                                            };
+
+                                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                            {
+                                                sRemark = "Error: Begin失敗！";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            sRemark = $"預約{conveyor.BufferName}";
+                                            if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                continue;
+                                            }
+
+                                            if (!api.GetCV_ReceiveNewBinCmd().FunReport(info, conveyor.API.IP))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                sRemark = $"Error: 預約{conveyor.BufferName}失敗！";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            db.TransactionCtrl(TransactionTypes.Commit);
+                                            return true;
+                                        }
+                                        else
+                                        {
+                                            RackMoveInfo info = new RackMoveInfo
+                                            {
+                                                fromLoc = cmd.Source,
+                                                jobId = cmd.CommandID,
+                                                toLoc = cmd.Destination
+                                            };
+
+                                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                            {
+                                                sRemark = "Error: Begin失敗！";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            sRemark = "下達AGV搬運命令";
+                                            if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                continue;
+                                            }
+
+                                            if (!api.GetRackMove().FunReport(info, _agvApi.IP))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                sRemark = "Error: 下達AGV搬運命令失敗";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            db.TransactionCtrl(TransactionTypes.Commit);
+                                            return true;
+                                        }
                                     }
                                 }
                             }

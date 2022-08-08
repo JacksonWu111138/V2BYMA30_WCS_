@@ -21,9 +21,9 @@ namespace Mirle.Middle
         private System.Timers.Timer timRead = new System.Timers.Timer();
         private bool bOnline = true;
         public MidHost(List<ConveyorInfo> conveyors, WebApiConfig AgvApiConfig, DeviceInfo[] PCBA, DeviceInfo[] Box, 
-            string DeviceID_AGV, string DeviceID_Tower, clsDbConfig config)
+            string DeviceID_AGV, string DeviceID_Tower, clsDbConfig config, WebApiConfig AgvApi_Config, WebApiConfig TowerApi_Config)
         {
-            db = new clsHost(config, PCBA, Box, conveyors, DeviceID_AGV, DeviceID_Tower);
+            db = new clsHost(config, PCBA, Box, conveyors, DeviceID_AGV, DeviceID_Tower, AgvApi_Config, TowerApi_Config);
             AgvApi_Config = AgvApiConfig;
             _PCBA = PCBA;
             _Box = Box;

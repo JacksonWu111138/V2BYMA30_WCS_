@@ -517,7 +517,8 @@ namespace Mirle.ASRS.WCS.View
             ConveyorDef.FunNodeListAddInit();
             ConveyorDef.FunStnListAddInit();
             FunAsrsCmdInit();
-            middle = new MidHost(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box, ConveyorDef.DeviceID_AGV, clInitSys.DbConfig);
+            middle = new MidHost(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box, 
+                ConveyorDef.DeviceID_AGV, ConveyorDef.DeviceID_Tower, clInitSys.DbConfig);
             //_unityContainer = new UnityContainer();
             //_unityContainer.RegisterInstance(new WCSController());
             //_webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);

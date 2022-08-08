@@ -105,7 +105,10 @@ namespace Mirle.Middle.DB_Proc
                 Priority = Convert.ToInt32(drTmp[Parameter.clsMiddleCmd.Column.Priority]),
                 Remark = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.Remark]),
                 Source = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.Source]),
-                TaskNo = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.TaskNo])
+                TaskNo = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.TaskNo]),
+                Iotype = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.IoType]),
+                largest = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.largest]),
+                rackLocation = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.rackLocation])
             };
 
             return cmd;

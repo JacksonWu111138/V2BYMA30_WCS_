@@ -49,5 +49,7 @@ namespace Mirle.Structure
         public string Remark { get; set; }
         public string NeedShelfToShelf { get; set; }
         public string backupPortId { get; set; }
+        public string rackLocation { get; set; } = "";
+        public string largest { get; set; } = "N";
     }
 }

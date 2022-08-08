@@ -27,6 +27,15 @@ namespace Mirle.Middle.DB_Proc.Parameter
             public const string Remark = "Remark";
             public const string BatchID = "BatchID";
             public const string CompleteCode = "CompleteCode";
+            public const string IoType = "Iotype";
+            /// <summary>
+            /// 料架的位置
+            /// </summary>
+            public const string rackLocation = "rackLocation";
+            /// <summary>
+            /// 是否為最大捲
+            /// </summary>
+            public const string largest = "largest";
         }
     }
 }

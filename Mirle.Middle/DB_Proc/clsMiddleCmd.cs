@@ -17,12 +17,17 @@ namespace Mirle.Middle.DB_Proc
         private clsEquCmd EquCmd;
         private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
         private static List<ConveyorInfo> Node_All = new List<ConveyorInfo>();
-        public clsMiddleCmd(clsDbConfig config, DeviceInfo[] PCBA, DeviceInfo[] Box, List<ConveyorInfo> conveyors)
+        private string sDeviceID_AGV = "";
+        private string sDeviceID_Tower = "";
+        public clsMiddleCmd(clsDbConfig config, DeviceInfo[] PCBA, DeviceInfo[] Box, List<ConveyorInfo> conveyors,
+            string DeviceID_AGV, string DeviceID_Tower)
         {
             tool = new clsTool(PCBA, Box);
             EquCmd = new clsEquCmd(config);
             _config = config;
             Node_All = conveyors;
+            sDeviceID_AGV = DeviceID_AGV;
+            sDeviceID_Tower = DeviceID_Tower;
         }
 
         public ConveyorInfo GetCV_ByCmdLoc(MiddleCmd cmd, string Loc, DB db)
@@ -420,7 +425,36 @@ namespace Mirle.Middle.DB_Proc
                                 }
                                 else
                                 {
+                                    if(cmd.DeviceID == sDeviceID_Tower)
+                                    {
+                                        RetrieveTransferInfo retrieve_info; PutawayTransferInfo putaway_info;
+                                        if(cmd.CmdMode == clsConstValue.CmdMode.StockIn)
+                                        {
+                                            putaway_info = new PutawayTransferInfo
+                                            {
+                                                jobId = cmd.CommandID,
+                                                reelId = cmd.CSTID,
+                                                toShelfId = cmd.Destination
+                                            };
+                                        }
+                                        else
+                                        {
+                                            retrieve_info = new RetrieveTransferInfo
+                                            {
+                                                jobId = cmd.CommandID,
+                                                fromShelfId = cmd.Source,
+                                                priority = cmd.Priority.ToString(),
+                                                reelId = cmd.CSTID,
+                                                toPortId = cmd.Destination,
+                                                largest = cmd.largest,
+                                                rackLocation = cmd.rackLocation
+                                            };
+                                        }
+                                    }
+                                    else
+                                    {
 
+                                    }
                                 }
                             }
                         }

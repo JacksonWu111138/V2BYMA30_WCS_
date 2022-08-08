@@ -134,6 +134,8 @@ namespace Mirle.DB.Fun
                 middleCmd.Path = ConveyorDef.GetPathByStn(sStnNo);
                 middleCmd.BatchID = BatchID;
                 middleCmd.Iotype = cmd.IO_Type;
+                middleCmd.largest = cmd.largest;
+                middleCmd.rackLocation = cmd.rackLocation;
                 return true;
             }
             catch (Exception ex)
@@ -200,6 +202,8 @@ namespace Mirle.DB.Fun
                 middleCmd.Path = 0;
                 middleCmd.BatchID = BatchID;
                 middleCmd.Iotype = cmd.IO_Type;
+                middleCmd.rackLocation = cmd.rackLocation;
+                middleCmd.largest = cmd.largest;
                 return true;
             }
             catch (Exception ex)
@@ -294,11 +298,13 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsMiddleCmd.Column.Destination},{Parameter.clsMiddleCmd.Column.DeviceID}," +
                     $"{Parameter.clsMiddleCmd.Column.EndDate},{Parameter.clsMiddleCmd.Column.Expose_Date},{Parameter.clsMiddleCmd.Column.CompleteCode}," +
                     $"{Parameter.clsMiddleCmd.Column.Path},{Parameter.clsMiddleCmd.Column.Priority},{Parameter.clsMiddleCmd.Column.Remark}," +
-                    $"{Parameter.clsMiddleCmd.Column.Source},{Parameter.clsMiddleCmd.Column.TaskNo},{Parameter.clsMiddleCmd.Column.BatchID}) values (" +
+                    $"{Parameter.clsMiddleCmd.Column.Source},{Parameter.clsMiddleCmd.Column.TaskNo},{Parameter.clsMiddleCmd.Column.BatchID}," +
+                    $"{Parameter.clsMiddleCmd.Column.largest},{Parameter.clsMiddleCmd.Column.rackLocation},{Parameter.clsMiddleCmd.Column.IoType}) values (" +
                     $"'{middleCmd.CmdMode}','{middleCmd.CmdSts}','{middleCmd.CommandID}','{middleCmd.CrtDate}'," +
                     $"'{middleCmd.CSTID}','{middleCmd.Destination}','{middleCmd.DeviceID}','{middleCmd.EndDate}'," +
                     $"'{middleCmd.ExpDate}','{middleCmd.CompleteCode}',{middleCmd.Path},{middleCmd.Priority}," +
-                    $"'{middleCmd.Remark}','{middleCmd.Source}','{middleCmd.TaskNo}','{middleCmd.BatchID}')";
+                    $"'{middleCmd.Remark}','{middleCmd.Source}','{middleCmd.TaskNo}','{middleCmd.BatchID}'," +
+                    $"'{middleCmd.largest}','{middleCmd.rackLocation}','{middleCmd.Iotype}')";
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {

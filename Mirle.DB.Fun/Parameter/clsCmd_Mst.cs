@@ -127,6 +127,14 @@ namespace Mirle.DB.Fun.Parameter
             /// WMS備用出庫Port
             /// </summary>
             public const string backupPortId = "backupPortId";
+            /// <summary>
+            /// 料架的位置
+            /// </summary>
+            public const string rackLocation = "rackLocation";
+            /// <summary>
+            /// 是否為最大捲
+            /// </summary>
+            public const string largest = "largest";
         }
     }
 }

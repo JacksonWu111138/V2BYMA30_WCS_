@@ -20,9 +20,10 @@ namespace Mirle.Middle
         private readonly clsHost db;
         private System.Timers.Timer timRead = new System.Timers.Timer();
         private bool bOnline = true;
-        public MidHost(List<ConveyorInfo> conveyors, WebApiConfig AgvApiConfig, DeviceInfo[] PCBA, DeviceInfo[] Box, string DeviceID_AGV, clsDbConfig config)
+        public MidHost(List<ConveyorInfo> conveyors, WebApiConfig AgvApiConfig, DeviceInfo[] PCBA, DeviceInfo[] Box, 
+            string DeviceID_AGV, string DeviceID_Tower, clsDbConfig config)
         {
-            db = new clsHost(config, PCBA, Box, conveyors);
+            db = new clsHost(config, PCBA, Box, conveyors, DeviceID_AGV, DeviceID_Tower);
             AgvApi_Config = AgvApiConfig;
             _PCBA = PCBA;
             _Box = Box;

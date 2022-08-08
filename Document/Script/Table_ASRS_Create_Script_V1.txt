@@ -35,6 +35,8 @@ ExpDate			Varchar(20) Not Null     Default '',
 EndDate			Varchar(20) Not Null     Default '',
 Remark          NVarchar(MAX) Not Null  Default '',
 BatchID         NVarchar(MAX) NOT NULL  Default '',
+rackLocation  NVarchar(MAX) NOT NULL  Default '',
+largest          NVarchar(MAX) NOT NULL  Default 'N',
 CompleteCode VARCHAR(2) DEFAULT'',
 Iotype			Varchar(2)  NOT NULL     Default '',
 PRIMARY KEY(DeviceID,CommandID,TaskNo)
@@ -58,6 +60,8 @@ ExpDate			Varchar(20) Not Null     Default '',
 EndDate			Varchar(20) Not Null     Default '',
 Remark          NVarchar(MAX) Not Null  Default '',
 BatchID         NVarchar(MAX) NOT NULL  Default '',
+rackLocation  NVarchar(MAX) NOT NULL  Default '',
+largest          NVarchar(MAX) NOT NULL  Default 'N',
 CompleteCode VARCHAR(2) DEFAULT'',
 Iotype			Varchar(2)  NOT NULL     Default ''
 );
@@ -354,6 +358,8 @@ NeedShelfToShelf Varchar(1)   Not Null  Default 'N',
 backupPortId    NVarchar(MAX) NOT NULL  Default '',
 ticketId        Varchar(MAX) Not Null default '',
 manualStockIn	Varchar(1)   Not Null  Default 'N',
+rackLocation  NVarchar(MAX) NOT NULL  Default '',
+largest          NVarchar(MAX) NOT NULL  Default 'N',
 Primary Key(CmdMode, BoxId)
 );
 
@@ -384,6 +390,8 @@ Remark          NVarchar(MAX) Not Null  Default '',
 NeedShelfToShelf Varchar(1)   Not Null  Default 'N',
 backupPortId    NVarchar(MAX) NOT NULL  Default '',
 ticketId        Varchar(MAX) Not Null default '',
+rackLocation  NVarchar(MAX) NOT NULL  Default '',
+largest          NVarchar(MAX) NOT NULL  Default 'N',
 manualStockIn	Varchar(1)   Not Null  Default 'N'
 );
 

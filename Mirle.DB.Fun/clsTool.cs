@@ -36,6 +36,8 @@ namespace Mirle.DB.Fun
                 JobID = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.JobID]),
                 backupPortId = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.backupPortId]),
                 NeedShelfToShelf = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.NeedShelfToShelf]),
+                rackLocation = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.rackLocation]),
+                largest = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.largest]),
                 //Avail = Convert.ToDouble(drTmp[Parameter.clsCmd_Mst.Column.Avail]),
                 //WH_ID = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.WH_ID]),
                 Cmd_Abnormal = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Cmd_Abnormal]),

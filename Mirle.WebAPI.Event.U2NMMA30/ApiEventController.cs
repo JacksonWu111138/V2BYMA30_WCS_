@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Data;
 using Mirle.DB.Object;
+using Mirle.Middle.DB_Proc;
 using Mirle.Def;
 using Mirle.Def.U2NMMA30;
+using Mirle.DataBase;
 using Mirle.WebAPI.Event.U2NMMA30.Models;
 using Mirle.WebAPI.V2BYMA30;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
@@ -14,7 +16,9 @@ namespace Mirle.WebAPI.Event
 {
     public class WCSController : ApiController
     {
-        private clsHost api;
+        private V2BYMA30.clsHost api;
+        private Middle.DB_Proc.clsMiddleCmd middleCmdTool;
+        private clsDbConfig _config = new clsDbConfig();
         public WCSController()
         {
         }
@@ -1040,8 +1044,15 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>TASK_COMPLETE start!");
             try
             {
-
-
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        if (middleCmdTool.FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, "命令完成", db))
+                            throw new Exception();
+                    }
+                }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";

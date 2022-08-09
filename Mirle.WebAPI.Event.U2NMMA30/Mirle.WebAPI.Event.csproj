@@ -129,6 +129,10 @@
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def_2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mirle.Middle\Mirle.Middle.csproj">
+      <Project>{312ed336-0211-4e88-9f3f-6b15a133f864}</Project>
+      <Name>Mirle.Middle</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.Structure\Mirle.Structure.csproj">
       <Project>{cc7b0aac-3935-44cf-b363-55c0445358d0}</Project>
       <Name>Mirle.Structure</Name>

@@ -9,7 +9,7 @@ namespace Mirle.WebAPI.Event.U2NMMA30.Models
     public class BCRCheckInfo : BaseInfo
     {
         public string barcode { get; set; }
-        public string ioType { get; set; }
+        public string carrierType { get; set; }
         public string location { get; set; }
     }
 }

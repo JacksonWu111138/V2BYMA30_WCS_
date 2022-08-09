@@ -14,7 +14,7 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         public string jobId { get; set; } = "";
         public string transactionId { get; set; } = "TRANSFER_COMMAND_REQUEST";
         public string binId { get; set; }
-        public string ioType { get; set; }
+        public string carrierType { get; set; }
         public string source { get; set; }
         public string destination { get; set; }
     }

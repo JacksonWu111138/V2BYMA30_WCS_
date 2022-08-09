@@ -294,7 +294,7 @@ namespace Mirle.Middle.DB_Proc
                                                             {
                                                                 bufferId = conveyors_To[con].BufferName,
                                                                 jobId = BatchCmd[con].CommandID,
-                                                                ioType = BatchCmd[con].Iotype
+                                                                carrierType = BatchCmd[con].Iotype
                                                             };
                                                         }
 
@@ -517,7 +517,7 @@ namespace Mirle.Middle.DB_Proc
                                             {
                                                 bufferId = conveyor.BufferName,
                                                 jobId = cmd.CommandID,
-                                                ioType = cmd.Iotype
+                                                carrierType = cmd.Iotype
                                             };
 
                                             if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
@@ -680,7 +680,7 @@ namespace Mirle.Middle.DB_Proc
                             {
                                 bufferId = conveyor.BufferName,
                                 jobId = cmd.CommandID,
-                                ioType = cmd.Iotype
+                                carrierType = cmd.Iotype
                             };
 
                             if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)

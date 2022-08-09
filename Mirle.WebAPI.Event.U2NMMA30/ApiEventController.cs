@@ -4,6 +4,8 @@ using Mirle.DB.Object;
 using Mirle.Def;
 using Mirle.Def.U2NMMA30;
 using Mirle.WebAPI.Event.U2NMMA30.Models;
+using Mirle.WebAPI.V2BYMA30;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using System.Web.Http;
 using Mirle.Structure;
 using Newtonsoft.Json;
@@ -12,6 +14,7 @@ namespace Mirle.WebAPI.Event
 {
     public class WCSController : ApiController
     {
+        private clsHost api;
         public WCSController()
         {
         }
@@ -23,7 +26,7 @@ namespace Mirle.WebAPI.Event
         {
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace,$"<CARRIER_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
 
-            CarrierReply rMsg = new CarrierReply
+            U2NMMA30.Models.CarrierReply rMsg = new U2NMMA30.Models.CarrierReply
             {
                 carrierId = Body.carrierId,
                 jobId = Body.jobId,
@@ -58,7 +61,7 @@ namespace Mirle.WebAPI.Event
         {
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
 
-            CarrierReply rMsg = new CarrierReply
+            U2NMMA30.Models.CarrierReply rMsg = new U2NMMA30.Models.CarrierReply
             {
                 carrierId = Body.carrierId,
                 jobId = Body.jobId,
@@ -93,7 +96,7 @@ namespace Mirle.WebAPI.Event
         {
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_RETRIEVE_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
 
-            CarrierReply rMsg = new CarrierReply
+            U2NMMA30.Models.CarrierReply rMsg = new U2NMMA30.Models.CarrierReply
             {
                 carrierId = Body.carrierId,
                 jobId = Body.jobId,
@@ -128,7 +131,7 @@ namespace Mirle.WebAPI.Event
         {
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_SHELF_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
 
-            CarrierReply rMsg = new CarrierReply
+            U2NMMA30.Models.CarrierReply rMsg = new U2NMMA30.Models.CarrierReply
             {
                 carrierId = Body.carrierId,
                 jobId = Body.jobId,
@@ -163,7 +166,7 @@ namespace Mirle.WebAPI.Event
         {
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_TRANSFER_CANCEL> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
 
-            CarrierReply rMsg = new CarrierReply
+            U2NMMA30.Models.CarrierReply rMsg = new U2NMMA30.Models.CarrierReply
             {
                 carrierId = Body.carrierId,
                 jobId = Body.jobId,
@@ -198,7 +201,7 @@ namespace Mirle.WebAPI.Event
         {
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
 
-            LotReply rMsg = new LotReply
+            U2NMMA30.Models.LotReply rMsg = new U2NMMA30.Models.LotReply
             {
                 lotId = Body.lotId,
                 jobId = Body.jobId,
@@ -229,7 +232,7 @@ namespace Mirle.WebAPI.Event
 
         [Route("WCS/LOT_RETRIEVE_TRANSFER")]
         [HttpPost]
-        public IHttpActionResult LOT_RETRIEVE_TRANSFER([FromBody] LotRetrieveTransferInfo Body)
+        public IHttpActionResult LOT_RETRIEVE_TRANSFER([FromBody] U2NMMA30.Models.LotRetrieveTransferInfo Body)
         {
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_RETRIEVE_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
 
@@ -267,7 +270,7 @@ namespace Mirle.WebAPI.Event
         {
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_SHELF_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
 
-            LotReply rMsg = new LotReply
+            U2NMMA30.Models.LotReply rMsg = new U2NMMA30.Models.LotReply
             {
                 lotId = Body.lotId,
                 jobId = Body.jobId,
@@ -298,11 +301,11 @@ namespace Mirle.WebAPI.Event
 
         [Route("WCS/LOT_TRANSFER_CANCEL")]
         [HttpPost]
-        public IHttpActionResult LOT_TRANSFER_CANCEL([FromBody] LotTransferCancelInfo Body)
+        public IHttpActionResult LOT_TRANSFER_CANCEL([FromBody] U2NMMA30.Models.LotTransferCancelInfo Body)
         {
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_TRANSFER_CANCEL> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
 
-            LotReply rMsg = new LotReply
+            U2NMMA30.Models.LotReply rMsg = new U2NMMA30.Models.LotReply
             {
                 lotId = Body.lotId,
                 jobId = Body.jobId,
@@ -348,8 +351,15 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>AGV_POS_REPORT start!");
             try
             {
+                string strEM = "";
+                //執行BufferRoll
+                ConveyorInfo conveyor = new ConveyorInfo();
+                conveyor = ConveyorDef.GetBuffer(Body.currentLoc);
 
+                BufferRollInfo info = new BufferRollInfo { jobId = Body.jobId, bufferId = conveyor.BufferName };
 
+                if (!api.GetBufferRoll().FunReport(info, conveyor.API.IP))
+                    throw new Exception(strEM);
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -711,7 +721,7 @@ namespace Mirle.WebAPI.Event
 
         [Route("WCS/POSITION_REPORT")]
         [HttpPost]
-        public IHttpActionResult POSITION_REPORT([FromBody] PositionReportInfo Body)
+        public IHttpActionResult POSITION_REPORT([FromBody] U2NMMA30.Models.PositionReportInfo Body)
         {
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<POSITION_REPORT> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
 

@@ -11,7 +11,7 @@ using Mirle.Def.U2NMMA30;
 using Mirle.Structure.Info;
 using Mirle.DB.Object;
 using Mirle.DataBase;
-using Mirle.WebAPI.Event.U2NMMA30;
+using Mirle.WebAPI.Event;
 using Unity;
 using Mirle.Logger;
 using Mirle.ASRS.Close.Program;

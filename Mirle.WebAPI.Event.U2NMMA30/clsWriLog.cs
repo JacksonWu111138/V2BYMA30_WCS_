@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using Mirle.WriLog;
 
-namespace Mirle.WebAPI.Event.U2NMMA30
+namespace Mirle.WebAPI.Event
 {
     public class clsWriLog
     {
-        public static clsLog Log = new clsLog("Mirle.WebAPI.Event.U2NMMA30", true);
+        public static clsLog Log = new clsLog("Mirle.WebAPI.Event", true);
     }
 }

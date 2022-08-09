@@ -13,11 +13,13 @@ namespace Mirle.WebAPI.V2BYMA30
         private BufferStatusQuery BufferStatusQuery = new BufferStatusQuery();
         private PutawayTransfer PutawayTransfer = new PutawayTransfer();
         private RetrieveTransfer RetrieveTransfer = new RetrieveTransfer();
+        private BufferRoll BufferRoll = new BufferRoll();
         private RackMove RackMove = new RackMove();
         public CVReceiveNewBinCmd GetCV_ReceiveNewBinCmd() => RECEIVE_NEW_BIN_CMD;
         public BufferStatusQuery GetBufferStatusQuery() => BufferStatusQuery;
         public PutawayTransfer GetPutawayTransfer() => PutawayTransfer;
         public RetrieveTransfer GetRetrieveTransfer() => RetrieveTransfer;
         public RackMove GetRackMove() => RackMove;
+        public BufferRoll GetBufferRoll() => BufferRoll;
     }
 }

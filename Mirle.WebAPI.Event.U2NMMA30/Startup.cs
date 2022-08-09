@@ -4,8 +4,8 @@ using System.Web.Http;
 using Owin;
 using Unity;
 
-namespace Mirle.WebAPI.Event.U2NMMA30
-{
+namespace Mirle.WebAPI.Event 
+{ 
     public class Startup
     {
         private readonly UnityContainer _container;

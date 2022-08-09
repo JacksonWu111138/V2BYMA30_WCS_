@@ -9,6 +9,6 @@ namespace Mirle.WebAPI.Event.U2NMMA30.Models
     public class TransferCommandDoneInfo : BaseInfo
     {
         public string binId { get; set; }
-        public string ioType { get; set; }
+        public string carrierType { get; set; }
     }
 }

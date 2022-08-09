@@ -4,7 +4,7 @@ using System.Web.Http.Dependencies;
 
 using Unity;
 
-namespace Mirle.WebAPI.Event.U2NMMA30
+namespace Mirle.WebAPI.Event
 {
     public class UnityResolver : IDependencyResolver
     {

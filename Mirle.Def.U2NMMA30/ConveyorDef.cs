@@ -536,6 +536,11 @@ namespace Mirle.Def.U2NMMA30
             Stations.Add(E04.LO1_07);
             Stations.Add(Box.B1_062);
             Stations.Add(Box.B1_067);
+            Stations.Add(AGV.B1_070);
+            //Stations.Add(AGV.B1_071);
+            Stations.Add(AGV.B1_074);
+            Stations.Add(AGV.B1_078);
+            //Stations.Add(AGV.B1_079);
             Stations.Add(Box.B1_142);
             Stations.Add(Box.B1_147);
             Stations.Add(SMT3C.A1_02);
@@ -626,6 +631,35 @@ namespace Mirle.Def.U2NMMA30
             Stations.Add(AGV.M1_20);
             Stations.Add(AGV.M1_05);
             Stations.Add(AGV.M1_15);
+        }
+
+        private static int iCurrent = 1;
+        public static ConveyorInfo GetBuffer_ByStnNo(string StnNo)
+        {
+            var StnList = Stations.Where(r => r.StnNo == StnNo);
+            if (StnList.Count() > 1)
+            {
+                int count = 1;
+                foreach (var s in StnList)
+                {
+                    if (count == iCurrent)
+                    {
+                        iCurrent++;
+                        if (iCurrent > StnList.Count()) iCurrent = 1;
+
+                        return s;
+                    }
+                }
+            }
+            else
+            {
+                foreach (var s in StnList)
+                {
+                    return s;
+                }
+            }
+
+            return new ConveyorInfo();
         }
 
         public static ConveyorInfo GetBuffer(string BufferName)

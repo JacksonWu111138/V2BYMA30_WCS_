@@ -207,6 +207,11 @@ namespace Mirle.Def.U2NMMA30
         string LO1_07 { get; }
         string B1_062 { get; }
         string B1_067 { get; }
+        string B1_070 { get; }
+        //string B1_071 { get; }
+        string B1_074 { get; }
+        string B1_078 { get; }
+        //string B1_079 { get; }
         string B1_142 { get; }
         string B1_147 { get; }
         string A1_02 { get; }

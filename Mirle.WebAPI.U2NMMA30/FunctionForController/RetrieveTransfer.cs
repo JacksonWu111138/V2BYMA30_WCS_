@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mirle.WebAPI.V2BYMA30.ReportInfo;
 
 namespace Mirle.WebAPI.V2BYMA30.Function
 {

@@ -71,7 +71,7 @@ namespace Mirle.DB.Fun
                     {
                         case clsConstValue.CmdMode.S2S:
                         case clsConstValue.CmdMode.StockIn:
-                            sLoc_Start = GetCurLoc_Inital_ByStnNo(cmd, Router, ConveyorDef.GetStations());
+                            sLoc_Start = GetCurLoc_Inital_ByStnNo(cmd, Router);
                             break;
                         default:
                             sLoc_Start = GetCurLoc_Inital(cmd, Router, db);
@@ -96,7 +96,7 @@ namespace Mirle.DB.Fun
                 }
 
                 if (sLoc_Start == null) return false;
-                sLoc_End = GetFinialDestination(cmd, Router, ConveyorDef.GetStations(), db);
+                sLoc_End = GetFinialDestination(cmd, Router, db);
                 if (sLoc_End == null) return false;
 
                 return true;
@@ -135,40 +135,7 @@ namespace Mirle.DB.Fun
             }
         }
 
-        public Location GetFinialDestination_NonASRS(CmdMstInfo cmd, MapHost Router, List<ConveyorInfo> Stations)
-        {
-            try
-            {
-                Location End = null;
-                string Loc_End = cmd.Cmd_Mode == clsConstValue.CmdMode.L2L ? cmd.New_Loc : cmd.Loc;
-                switch (cmd.Cmd_Mode)
-                {
-                    case clsConstValue.CmdMode.StockIn:
-                        End = Router.GetLocation(cmd.Equ_No, Location.LocationID.Shelf.ToString());
-                        break;
-                    case clsConstValue.CmdMode.S2S:
-                    case clsConstValue.CmdMode.StockOut:
-                        string stn = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;
-                        var StnList = Stations.Where(r => r.StnNo == stn);
-                        foreach (var s in StnList)
-                        {
-                            End = Router.GetLocation(s.ControllerID, s.BufferName);
-                        }
-
-                        break;
-                }
-
-                return End;
-            }
-            catch (Exception ex)
-            {
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                return null;
-            }
-        }
-
-        public Location GetFinialDestination(CmdMstInfo cmd, MapHost Router, List<ConveyorInfo> Stations, DataBase.DB db)
+        public Location GetFinialDestination(CmdMstInfo cmd, MapHost Router, DataBase.DB db)
         {
             try
             {
@@ -199,18 +166,15 @@ namespace Mirle.DB.Fun
                     case clsConstValue.CmdMode.S2S:
                     case clsConstValue.CmdMode.StockOut:
                         string stn = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;
-                        var StnList = Stations.Where(r => r.StnNo == stn);
-                        foreach(var s in StnList)
+                        var s = ConveyorDef.GetBuffer_ByStnNo(stn);
+                        End = Router.GetLocation(s.ControllerID, s.BufferName);
+                        if (End == null)
                         {
-                            End = Router.GetLocation(s.ControllerID, s.BufferName);
-                            if(End == null)
+                            for (int i = 0; i < ConveyorDef.DeviceID_AGV_Router.Length; i++)
                             {
-                                for (int i = 0; i < ConveyorDef.DeviceID_AGV_Router.Length; i++)
-                                {
-                                    End = Router.GetLocation(ConveyorDef.DeviceID_AGV_Router[i], s.BufferName);
-                                    if (End == null) continue;
-                                    else break;
-                                }
+                                End = Router.GetLocation(ConveyorDef.DeviceID_AGV_Router[i], s.BufferName);
+                                if (End == null) continue;
+                                else break;
                             }
                         }
 
@@ -246,19 +210,14 @@ namespace Mirle.DB.Fun
             return GetCurLocation(cmd, Router, cmd.Equ_No, sLocationID, db);
         }
 
-        public Location GetCurLoc_Inital_ByStnNo(CmdMstInfo cmd, MapHost Router, List<ConveyorInfo> Stations)
+        public Location GetCurLoc_Inital_ByStnNo(CmdMstInfo cmd, MapHost Router)
         {
-            var StnList = Stations.Where(r => r.StnNo == cmd.Stn_No);
-            foreach (var s in StnList)
-            {
-                string sDeviceID = "";
-                if (s.BufferName == "E1-04") sDeviceID = ConveyorDef.DeviceID_Tower;
-                else sDeviceID = s.ControllerID;
+            var s = ConveyorDef.GetBuffer_ByStnNo(cmd.Stn_No);
+            string sDeviceID;
+            if (s.BufferName == "E1-04") sDeviceID = ConveyorDef.DeviceID_Tower;
+            else sDeviceID = s.ControllerID;
 
-                return Router.GetLocation(sDeviceID, s.BufferName);
-            }
-
-            return null;
+            return Router.GetLocation(sDeviceID, s.BufferName);
         }
 
         public bool CheckSourceIsOK(CmdMstInfo cmd, Location sLoc_Start, MidHost middle, DeviceInfo Device, WMS.Proc.clsHost wms, DataBase.DB db)

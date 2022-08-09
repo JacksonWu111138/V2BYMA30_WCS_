@@ -524,6 +524,34 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(AGV.S6_07);
         }
 
+        private static List<ConveyorInfo> B800CV = new List<ConveyorInfo>();
+        private static int Current = 1;
+        public static ConveyorInfo GetB800CV()
+        {
+            int count = 1;
+            foreach(var s in B800CV)
+            {
+                if(count == Current)
+                {
+                    Current++;
+                    if (Current > B800CV.Count()) Current = 1;
+
+                    return s;
+                }
+
+                count++;
+            }
+
+            return new ConveyorInfo();
+        }
+
+        private static void FunB800CVAddInit()
+        {
+            B800CV.Add(AGV.B1_070);
+            B800CV.Add(AGV.B1_074);
+            B800CV.Add(AGV.B1_078);
+        }
+
         private static List<ConveyorInfo> Stations = new List<ConveyorInfo>();
         /// <summary>
         /// 人員工作站List
@@ -532,6 +560,8 @@ namespace Mirle.Def.U2NMMA30
         public static List<ConveyorInfo> GetStations() => Stations;
         public static void FunStnListAddInit()
         {
+            FunB800CVAddInit();
+
             Stations.Add(E04.LO1_02);
             Stations.Add(E04.LO1_07);
             Stations.Add(Box.B1_062);
@@ -633,32 +663,12 @@ namespace Mirle.Def.U2NMMA30
             Stations.Add(AGV.M1_15);
         }
 
-        private static int iCurrent = 1;
         public static ConveyorInfo GetBuffer_ByStnNo(string StnNo)
         {
             var StnList = Stations.Where(r => r.StnNo == StnNo);
-            if (StnList.Count() > 1)
+            foreach (var s in StnList)
             {
-                int count = 1;
-                foreach (var s in StnList)
-                {
-                    if (count == iCurrent)
-                    {
-                        iCurrent++;
-                        if (iCurrent > StnList.Count()) iCurrent = 1;
-
-                        return s;
-                    }
-
-                    count++;
-                }
-            }
-            else
-            {
-                foreach (var s in StnList)
-                {
-                    return s;
-                }
+                return s;
             }
 
             return new ConveyorInfo();

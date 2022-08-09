@@ -13,9 +13,9 @@ namespace Mirle.DB.Object
     {
         private static Proc.clsHost wcs;
         private static WMS.Proc.clsHost wms;
-        public static void Initial(clsDbConfig dbConfig, clsDbConfig dbConfig_WMS)
+        public static void Initial(clsDbConfig dbConfig, clsDbConfig dbConfig_WMS, WebApiConfig wmsApi)
         {
-            wcs = new Proc.clsHost(dbConfig);
+            wcs = new Proc.clsHost(dbConfig, wmsApi);
             wms = new WMS.Proc.clsHost(dbConfig_WMS);
         }
 

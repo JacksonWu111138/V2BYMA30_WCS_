@@ -511,7 +511,7 @@ namespace Mirle.ASRS.WCS.View
         {
             var archive = new AutoArchive();
             archive.Start();
-            clsDB_Proc.Initial(clInitSys.DbConfig, clInitSys.DbConfig_WMS);
+            clsDB_Proc.Initial(clInitSys.DbConfig, clInitSys.DbConfig_WMS, clInitSys.WmsApi_Config);
             router = new MapHost(clInitSys.DbConfig);
             CVLocation = new clsGetCVLocation(router);
             ConveyorDef.FunNodeListAddInit();

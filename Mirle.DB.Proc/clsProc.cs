@@ -5,6 +5,7 @@ using Mirle.EccsSignal;
 using Mirle.MapController;
 using Mirle.Middle;
 using Mirle.Structure;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -23,9 +24,12 @@ namespace Mirle.DB.Proc
         private Fun.clsRoutdef Routdef = new Fun.clsRoutdef();
         private Fun.clsMiddleCmd MiddleCmd = new Fun.clsMiddleCmd();
         private clsDbConfig _config = new clsDbConfig();
-        public clsProc(clsDbConfig config)
+        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
+        private WebApiConfig _wmsApi = new WebApiConfig();
+        public clsProc(clsDbConfig config, WebApiConfig WmsApi_Config)
         {
             _config = config;
+            _wmsApi = WmsApi_Config;
         }
 
         public Fun.clsRoutdef GetFun_Routdef() => Routdef;
@@ -126,7 +130,93 @@ namespace Mirle.DB.Proc
                                         }
                                         else
                                         {
+                                            if(cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
+                                            {
+                                                var con = ConveyorDef.GetBuffer(sLoc_Start.LocationId);
+                                                string sCmdSno_CV = "";
+                                                if (!middle.CheckIsInReady(con, ref sCmdSno_CV))
+                                                {
+                                                    sRemark = $"Error: {con.BufferName}並非入庫Ready";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
 
+                                                    continue;
+                                                }
+                                                else if (!string.IsNullOrWhiteSpace(sCmdSno_CV) && sCmdSno_CV != cmd.Cmd_Sno)
+                                                {
+                                                    sRemark = $"Error: {con.BufferName}已被其他任務預約 => {sCmdSno_CV}";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+                                                else
+                                                {
+                                                    PositionReportInfo info = new PositionReportInfo
+                                                    {
+                                                        carrierId = cmd.Loc_ID,
+                                                        inStock = clsConstValue.YesNo.No,
+                                                        jobId = cmd.JobID,
+                                                        location = sLoc_Start.LocationId
+                                                    };
+
+                                                    CVReceiveNewBinCmdInfo info_cv = new CVReceiveNewBinCmdInfo
+                                                    {
+                                                        bufferId = con.BufferName,
+                                                        ioType = cmd.IO_Type,
+                                                        jobId = cmd.Cmd_Sno
+                                                    };
+
+                                                    if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                                    {
+                                                        sRemark = "Error: Begin失敗！";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+
+                                                    sRemark = $"預約{con.BufferName}";
+                                                    if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        continue;
+                                                    }
+
+                                                    if (!api.GetCV_ReceiveNewBinCmd().FunReport(info_cv, con.API.IP))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        sRemark = $"Error: 預約{con.BufferName}失敗";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+
+                                                    if (!api.GetPositionReport().FunReport(info, _wmsApi.IP))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        sRemark = "Error: 上報Position Report失敗";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+
+                                                    db.TransactionCtrl(TransactionTypes.Commit);
+                                                    return true;
+                                                }
+                                            }
                                         }
                                     }
                                 }

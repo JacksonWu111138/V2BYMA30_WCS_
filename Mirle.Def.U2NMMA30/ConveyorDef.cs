@@ -649,6 +649,8 @@ namespace Mirle.Def.U2NMMA30
 
                         return s;
                     }
+
+                    count++;
                 }
             }
             else

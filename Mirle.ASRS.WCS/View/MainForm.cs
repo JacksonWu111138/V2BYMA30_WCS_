@@ -22,6 +22,7 @@ using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.ASRS.DBCommand;
 using Mirle.Middle;
 using Mirle.EccsSignal;
+using Mirle.WebAPI.Test.AGVTaskCancel;
 
 namespace Mirle.ASRS.WCS.View
 {
@@ -722,6 +723,12 @@ namespace Mirle.ASRS.WCS.View
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            APITestAGVTaskCancel form = new APITestAGVTaskCancel();
+            form.Show();
         }
     }
 }

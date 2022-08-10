@@ -50,6 +50,7 @@
             this.btnTransferToTeachLoc = new System.Windows.Forms.Button();
             this.chkCycleRun = new System.Windows.Forms.CheckBox();
             this.btnOEEParameterMaintain = new System.Windows.Forms.Button();
+            this.AGVTaskCancelButten = new System.Windows.Forms.Button();
             this.Grid1 = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -77,7 +78,7 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.splitContainer1.Margin = new System.Windows.Forms.Padding(4);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -105,7 +106,7 @@
             this.tlpMainSts.Controls.Add(this.tableLayoutPanel2, 3, 0);
             this.tlpMainSts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMainSts.Location = new System.Drawing.Point(0, 0);
-            this.tlpMainSts.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tlpMainSts.Margin = new System.Windows.Forms.Padding(4);
             this.tlpMainSts.Name = "tlpMainSts";
             this.tlpMainSts.RowCount = 1;
             this.tlpMainSts.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
@@ -131,7 +132,7 @@
             this.picMirle.Dock = System.Windows.Forms.DockStyle.Fill;
             this.picMirle.Image = ((System.Drawing.Image)(resources.GetObject("picMirle.Image")));
             this.picMirle.Location = new System.Drawing.Point(4, 4);
-            this.picMirle.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.picMirle.Margin = new System.Windows.Forms.Padding(4);
             this.picMirle.Name = "picMirle";
             this.picMirle.Size = new System.Drawing.Size(237, 110);
             this.picMirle.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -147,7 +148,7 @@
             this.tableLayoutPanel2.Controls.Add(this.lblDBConn_WCS, 0, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(1512, 4);
-            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 3;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -178,7 +179,7 @@
             this.chkOnline.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkOnline.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.chkOnline.Location = new System.Drawing.Point(4, 74);
-            this.chkOnline.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkOnline.Margin = new System.Windows.Forms.Padding(4);
             this.chkOnline.Name = "chkOnline";
             this.chkOnline.Size = new System.Drawing.Size(232, 32);
             this.chkOnline.TabIndex = 2;
@@ -204,7 +205,7 @@
             // 
             this.spcView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.spcView.Location = new System.Drawing.Point(0, 0);
-            this.spcView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.spcView.Margin = new System.Windows.Forms.Padding(4);
             this.spcView.Name = "spcView";
             this.spcView.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -225,7 +226,7 @@
             this.spcMainView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.spcMainView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.spcMainView.Location = new System.Drawing.Point(0, 0);
-            this.spcMainView.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.spcMainView.Margin = new System.Windows.Forms.Padding(4);
             this.spcMainView.Name = "spcMainView";
             // 
             // spcMainView.Panel2
@@ -248,9 +249,10 @@
             this.tableLayoutPanel1.Controls.Add(this.btnTransferToTeachLoc, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.chkCycleRun, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.btnOEEParameterMaintain, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.AGVTaskCancelButten, 0, 8);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 9;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -272,7 +274,7 @@
             this.chkIgnoreTkt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkIgnoreTkt.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.chkIgnoreTkt.Location = new System.Drawing.Point(4, 442);
-            this.chkIgnoreTkt.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkIgnoreTkt.Margin = new System.Windows.Forms.Padding(4);
             this.chkIgnoreTkt.Name = "chkIgnoreTkt";
             this.chkIgnoreTkt.Size = new System.Drawing.Size(169, 36);
             this.chkIgnoreTkt.TabIndex = 10;
@@ -285,7 +287,7 @@
             // 
             this.btnCrandSpeedMaintain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCrandSpeedMaintain.Location = new System.Drawing.Point(4, 268);
-            this.btnCrandSpeedMaintain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCrandSpeedMaintain.Margin = new System.Windows.Forms.Padding(4);
             this.btnCrandSpeedMaintain.Name = "btnCrandSpeedMaintain";
             this.btnCrandSpeedMaintain.Size = new System.Drawing.Size(169, 58);
             this.btnCrandSpeedMaintain.TabIndex = 6;
@@ -296,7 +298,7 @@
             // 
             this.btnCmdMaintain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnCmdMaintain.Location = new System.Drawing.Point(4, 70);
-            this.btnCmdMaintain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnCmdMaintain.Margin = new System.Windows.Forms.Padding(4);
             this.btnCmdMaintain.Name = "btnCmdMaintain";
             this.btnCmdMaintain.Size = new System.Drawing.Size(169, 58);
             this.btnCmdMaintain.TabIndex = 4;
@@ -307,7 +309,7 @@
             // 
             this.btnStockerModeMaintain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnStockerModeMaintain.Location = new System.Drawing.Point(4, 4);
-            this.btnStockerModeMaintain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnStockerModeMaintain.Margin = new System.Windows.Forms.Padding(4);
             this.btnStockerModeMaintain.Name = "btnStockerModeMaintain";
             this.btnStockerModeMaintain.Size = new System.Drawing.Size(169, 58);
             this.btnStockerModeMaintain.TabIndex = 0;
@@ -318,7 +320,7 @@
             // 
             this.btnTeachMaintain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnTeachMaintain.Location = new System.Drawing.Point(4, 136);
-            this.btnTeachMaintain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnTeachMaintain.Margin = new System.Windows.Forms.Padding(4);
             this.btnTeachMaintain.Name = "btnTeachMaintain";
             this.btnTeachMaintain.Size = new System.Drawing.Size(169, 58);
             this.btnTeachMaintain.TabIndex = 5;
@@ -343,7 +345,7 @@
             this.chkCycleRun.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkCycleRun.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.chkCycleRun.Location = new System.Drawing.Point(4, 388);
-            this.chkCycleRun.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.chkCycleRun.Margin = new System.Windows.Forms.Padding(4);
             this.chkCycleRun.Name = "chkCycleRun";
             this.chkCycleRun.Size = new System.Drawing.Size(169, 46);
             this.chkCycleRun.TabIndex = 7;
@@ -364,12 +366,25 @@
             this.btnOEEParameterMaintain.Text = "OEE Parameter";
             this.btnOEEParameterMaintain.UseVisualStyleBackColor = true;
             // 
+            // AGVTaskCancelButten
+            // 
+            this.AGVTaskCancelButten.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.AGVTaskCancelButten.Location = new System.Drawing.Point(4, 487);
+            this.AGVTaskCancelButten.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.AGVTaskCancelButten.Name = "AGVTaskCancelButten";
+            this.AGVTaskCancelButten.Size = new System.Drawing.Size(169, 44);
+            this.AGVTaskCancelButten.TabIndex = 11;
+            this.AGVTaskCancelButten.Text = "AGV Task Cancel";
+            this.AGVTaskCancelButten.UseVisualStyleBackColor = true;
+            this.AGVTaskCancelButten.Click += new System.EventHandler(this.button1_Click);
+            // 
             // Grid1
             // 
             this.Grid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Grid1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Grid1.Location = new System.Drawing.Point(0, 0);
-            this.Grid1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Grid1.Margin = new System.Windows.Forms.Padding(4);
             this.Grid1.Name = "Grid1";
             this.Grid1.RowHeadersWidth = 62;
             this.Grid1.RowTemplate.Height = 24;
@@ -434,6 +449,7 @@
         private System.Windows.Forms.Button btnOEEParameterMaintain;
         private System.Windows.Forms.CheckBox chkIgnoreTkt;
         private System.Windows.Forms.Label lblDBConn_WMS;
+        private System.Windows.Forms.Button AGVTaskCancelButten;
     }
 }
 

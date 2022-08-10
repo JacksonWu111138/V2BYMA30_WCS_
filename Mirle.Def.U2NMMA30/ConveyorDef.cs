@@ -677,7 +677,18 @@ namespace Mirle.Def.U2NMMA30
         public static ConveyorInfo GetBuffer(string BufferName)
         {
             var lst = GetAllNode().Where(r => r.BufferName == BufferName);
-            foreach(var con in lst)
+            foreach (var con in lst)
+            {
+                return con;
+            }
+
+            return new ConveyorInfo();
+        }
+
+        public static ConveyorInfo GetBufferByDevice(string DeviceId)
+        {
+            var lst = GetAllNode().Where(r => r.bufferLocation.DeviceId == DeviceId);
+            foreach (var con in lst)
             {
                 return con;
             }

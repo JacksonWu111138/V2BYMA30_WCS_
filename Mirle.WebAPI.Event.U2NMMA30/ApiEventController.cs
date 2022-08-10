@@ -11,13 +11,17 @@ using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using System.Web.Http;
 using Mirle.Structure;
 using Newtonsoft.Json;
+using static Mirle.Structure.Info.VIDEnums;
+using static System.Net.WebRequestMethods;
+using System.Web.UI.WebControls;
 
 namespace Mirle.WebAPI.Event
 {
     public class WCSController : ApiController
     {
         private V2BYMA30.clsHost api;
-        private Middle.DB_Proc.clsMiddleCmd middleCmdTool;
+        private clsMiddleCmd middleCmdTool;
+        private Middle.DB_Proc.clsTool tool;
         private clsDbConfig _config = new clsDbConfig();
         public WCSController()
         {
@@ -1044,13 +1048,35 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>TASK_COMPLETE start!");
             try
             {
+                DataTable dtTmp = new DataTable();
                 using (var db = clsGetDB.GetDB(_config))
                 {
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        if (middleCmdTool.FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, "命令完成", db))
-                            throw new Exception();
+                        string strSql = $"select * from {Middle.DB_Proc.Parameter.clsMiddleCmd.TableName} where " +
+                            $"{Middle.DB_Proc.Parameter.clsMiddleCmd.Column.CommandID} = '{Body.jobId}' ";
+                        string strEM = "";
+                        iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                        if(iRet == DBResult.Success)
+                        {
+                            MiddleCmd cmd = tool.GetMiddleCmd(dtTmp.Rows[0]);
+                            string sRemark = "";
+                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                            {
+                                sRemark = "Error: Begin失敗！";
+                                if (sRemark != cmd.Remark)
+                                {
+                                    middleCmdTool.FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                }
+                            }
+
+                            sRemark = "命令完成";
+                            if (!middleCmdTool.FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark, db))
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+
+                            db.TransactionCtrl(TransactionTypes.Commit);
+                        }
                     }
                 }
 

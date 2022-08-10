@@ -559,7 +559,8 @@ namespace Mirle.Middle.DB_Proc
                                             {
                                                 fromLoc = cmd.Source,
                                                 jobId = cmd.CommandID,
-                                                toLoc = cmd.Destination
+                                                toLoc = cmd.Destination,
+                                                carrierType = cmd.Iotype
                                             };
 
                                             if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)

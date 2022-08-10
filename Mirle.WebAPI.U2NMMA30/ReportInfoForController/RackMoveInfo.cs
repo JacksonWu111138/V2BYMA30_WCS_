@@ -15,5 +15,6 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         public string transactionId { get; set; } = "RACK_MOVE";
         public string fromLoc { get; set; }
         public string toLoc { get; set; }
+        public string carrierType { get; set; }
     }
 }

@@ -575,7 +575,7 @@ namespace Mirle.DB.Proc
                             for (int i = 0; i < dtTmp.Rows.Count; i++)
                             {
                                 CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
-                                int iEquNo_To = tool.funGetEquNoByLoc(cmd.Equ_No);
+                                int iEquNo_To = tool.funGetEquNoByLoc(cmd.New_Loc);
                                 if (int.Parse(cmd.Equ_No) != iEquNo_To) continue;
                                 if (!Cmd_Mst.CheckCraneStatus(cmd, Device, CrnSignal, db)) continue;
                                 string sRemark = "";

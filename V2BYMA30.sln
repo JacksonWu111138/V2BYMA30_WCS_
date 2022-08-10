@@ -64,6 +64,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Filelayout", "Filelayout", 
 		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.6.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.6.doc
 		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.7.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.7.doc
 		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.8.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.8.doc
+		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.9.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.9.doc
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Script", "Script", "{51694A5A-772A-4A6E-AEFF-15C3B7F38738}"

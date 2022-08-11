@@ -269,7 +269,8 @@ namespace Mirle.DB.Fun
                 TaskNo = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.TaskNo]),
                 Iotype = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.IoType]),
                 largest = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.largest]),
-                rackLocation = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.rackLocation])
+                rackLocation = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.rackLocation]),
+                carrierType = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.carrierType])
             };
 
             return cmd;

@@ -36,6 +36,7 @@ namespace Mirle.DB.Fun.Parameter
             /// 是否為最大捲
             /// </summary>
             public const string largest = "largest";
+            public const string carrierType = "carrierType";
         }
     }
 }

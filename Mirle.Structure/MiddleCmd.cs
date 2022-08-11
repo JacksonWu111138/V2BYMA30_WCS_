@@ -27,5 +27,6 @@ namespace Mirle.Structure
         public string Iotype { get; set; }
         public string rackLocation { get; set; } = "";
         public string largest { get; set; } = "N";
+        public string carrierType { get; set; } = "";
     }
 }

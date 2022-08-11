@@ -59,7 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Mirle">
-      <Version>2.0.10</Version>
+      <Version>2.1.5</Version>
     </PackageReference>
     <PackageReference Include="Mirle.MPLC.MCProtocol">
       <Version>1.0.2</Version>

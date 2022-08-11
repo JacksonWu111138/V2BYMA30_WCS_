@@ -37,6 +37,7 @@ Remark          NVarchar(MAX) Not Null  Default '',
 BatchID         NVarchar(MAX) NOT NULL  Default '',
 rackLocation  NVarchar(MAX) NOT NULL  Default '',
 largest          NVarchar(MAX) NOT NULL  Default 'N',
+carrierType  NVarchar(MAX) NOT NULL  Default '',
 CompleteCode VARCHAR(2) DEFAULT'',
 Iotype			Varchar(2)  NOT NULL     Default '',
 PRIMARY KEY(DeviceID,CommandID,TaskNo)
@@ -62,6 +63,7 @@ Remark          NVarchar(MAX) Not Null  Default '',
 BatchID         NVarchar(MAX) NOT NULL  Default '',
 rackLocation  NVarchar(MAX) NOT NULL  Default '',
 largest          NVarchar(MAX) NOT NULL  Default 'N',
+carrierType  NVarchar(MAX) NOT NULL  Default '',
 CompleteCode VARCHAR(2) DEFAULT'',
 Iotype			Varchar(2)  NOT NULL     Default ''
 );
@@ -360,6 +362,7 @@ ticketId        Varchar(MAX) Not Null default '',
 manualStockIn	Varchar(1)   Not Null  Default 'N',
 rackLocation  NVarchar(MAX) NOT NULL  Default '',
 largest          NVarchar(MAX) NOT NULL  Default 'N',
+carrierType  NVarchar(MAX) NOT NULL  Default '',
 Primary Key(CmdMode, BoxId)
 );
 
@@ -391,6 +394,7 @@ NeedShelfToShelf Varchar(1)   Not Null  Default 'N',
 backupPortId    NVarchar(MAX) NOT NULL  Default '',
 ticketId        Varchar(MAX) Not Null default '',
 rackLocation  NVarchar(MAX) NOT NULL  Default '',
+carrierType  NVarchar(MAX) NOT NULL  Default '',
 largest          NVarchar(MAX) NOT NULL  Default 'N',
 manualStockIn	Varchar(1)   Not Null  Default 'N'
 );

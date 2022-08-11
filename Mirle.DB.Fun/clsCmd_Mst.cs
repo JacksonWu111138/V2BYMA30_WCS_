@@ -703,11 +703,13 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsCmd_Mst.Column.Cmd_Abnormal}, {Parameter.clsCmd_Mst.Column.Stn_No}, " +
                     $"{Parameter.clsCmd_Mst.Column.Cmd_Mode}, {Parameter.clsCmd_Mst.Column.IO_Type}, " +
                     $"{Parameter.clsCmd_Mst.Column.Loc}, {Parameter.clsCmd_Mst.Column.New_Loc},";
-                sSQL += $"{Parameter.clsCmd_Mst.Column.Create_Date}, " +
+                sSQL += $"{Parameter.clsCmd_Mst.Column.Create_Date}, {Parameter.clsCmd_Mst.Column.JobID}," +
                     $"{Parameter.clsCmd_Mst.Column.Expose_Date}, {Parameter.clsCmd_Mst.Column.End_Date}, {Parameter.clsCmd_Mst.Column.Trn_User}, " +
-                    $"{Parameter.clsCmd_Mst.Column.BoxID}," +
+                    $"{Parameter.clsCmd_Mst.Column.BoxID}, {Parameter.clsCmd_Mst.Column.BatchID}," +
                     $"{Parameter.clsCmd_Mst.Column.Equ_No}, {Parameter.clsCmd_Mst.Column.CurLoc}, " +
-                    $"{Parameter.clsCmd_Mst.Column.CurDeviceID}, {Parameter.clsCmd_Mst.Column.Zone}) values(";
+                    $"{Parameter.clsCmd_Mst.Column.CurDeviceID}, {Parameter.clsCmd_Mst.Column.Zone}, {Parameter.clsCmd_Mst.Column.Remark}," +
+                    $"{Parameter.clsCmd_Mst.Column.rackLocation}, {Parameter.clsCmd_Mst.Column.largest}, {Parameter.clsCmd_Mst.Column.carrierType}" +
+                    $") values(";
                 sSQL += "'" + stuCmdMst.Cmd_Sno + "', ";
                 sSQL += "'" + clsConstValue.CmdSts.strCmd_Initial + "', ";
                 sSQL += "" + stuCmdMst.Prty + ", 'NA', ";
@@ -718,13 +720,15 @@ namespace Mirle.DB.Fun
                 sSQL += "'" + stuCmdMst.Loc + "', ";
                 sSQL += "'" + stuCmdMst.New_Loc + "', ";
                 //sSQL += $"{stuCmdMst.Mix_Qty}, {stuCmdMst.Avail}, ";
-                sSQL += "'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + $"', '', '', " +
+                sSQL += "'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + $"','{stuCmdMst.JobID}', '', '', " +
                     $"'{stuCmdMst.Trn_User}', ";
                 sSQL += "'" + stuCmdMst.Loc_ID + $"',";
+                sSQL += $"'{stuCmdMst.BatchID}',";
                 sSQL += "'" + stuCmdMst.Equ_No + "', ";
                 sSQL += $"'{stuCmdMst.CurLoc}', ";
                 sSQL += "'" + stuCmdMst.CurDeviceID + "',";
-                sSQL += "'" + stuCmdMst.Zone_ID + "')";
+                sSQL += "'" + stuCmdMst.Zone_ID + "'," +
+                    $"'{stuCmdMst.Remark}','{stuCmdMst.rackLocation}','{stuCmdMst.largest}','{stuCmdMst.carrierType}')";
 
                 if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                 {

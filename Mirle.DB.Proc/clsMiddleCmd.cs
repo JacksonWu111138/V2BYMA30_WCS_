@@ -127,5 +127,50 @@ namespace Mirle.DB.Proc
                 dtTmp.Dispose();
             }
         }
+
+        public bool FunMiddleCmdUpdateRemark(string sCmdSno, string sRemark)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        return MiddleCmd.FunMiddleCmdUpdateRemark(sCmdSno, sRemark, db);
+                    }
+                    else
+                        return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+        public bool FunMiddleCmdUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        return MiddleCmd.FunMiddleCmdUpdateCmdSts(sCmdSno, sCmdSts, sRemark, db);
+                    }
+                    else
+                        return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
     }
 }

@@ -555,7 +555,7 @@ namespace Mirle.Middle.DB_Proc
                                         }
                                         else
                                         {
-                                            RackMoveInfo info = new RackMoveInfo
+                                            MoveTaskInfo info = new MoveTaskInfo
                                             {
                                                 fromLoc = cmd.Source,
                                                 jobId = cmd.CommandID,
@@ -581,7 +581,7 @@ namespace Mirle.Middle.DB_Proc
                                                 continue;
                                             }
 
-                                            if (!api.GetRackMove().FunReport(info, _agvApi.IP))
+                                            if (!api.GetMoveTask().FunReport(info, _agvApi.IP))
                                             {
                                                 db.TransactionCtrl(TransactionTypes.Rollback);
                                                 sRemark = "Error: 下達AGV搬運命令失敗";

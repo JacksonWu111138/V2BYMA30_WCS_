@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 using Mirle.DB.Object;
-using Mirle.Middle.DB_Proc;
+using Mirle.DB.Proc;
 using Mirle.Def;
 using Mirle.Def.U2NMMA30;
 using Mirle.DataBase;
@@ -19,10 +19,12 @@ namespace Mirle.WebAPI.Event
 {
     public class WCSController : ApiController
     {
-        private V2BYMA30.clsHost api;
-        private clsMiddleCmd middleCmdTool;
-        private Middle.DB_Proc.clsTool tool;
         private clsDbConfig _config = new clsDbConfig();
+        private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
+        private DB.Fun.clsTool tool;
+
+
+
         public WCSController()
         {
         }
@@ -1054,8 +1056,8 @@ namespace Mirle.WebAPI.Event
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        string strSql = $"select * from {Middle.DB_Proc.Parameter.clsMiddleCmd.TableName} where " +
-                            $"{Middle.DB_Proc.Parameter.clsMiddleCmd.Column.CommandID} = '{Body.jobId}' ";
+                        string strSql = $"select * from {DB.Fun.Parameter.clsMiddleCmd.TableName} where " +
+                            $"{DB.Fun.Parameter.clsMiddleCmd.Column.CommandID} = '{Body.jobId}' ";
                         string strEM = "";
                         iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                         if(iRet == DBResult.Success)
@@ -1067,12 +1069,12 @@ namespace Mirle.WebAPI.Event
                                 sRemark = "Error: Begin失敗！";
                                 if (sRemark != cmd.Remark)
                                 {
-                                    middleCmdTool.FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                    clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateRemark(strSql, sRemark);
                                 }
                             }
 
                             sRemark = "命令完成";
-                            if (!middleCmdTool.FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark, db))
+                            if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark))
                                 db.TransactionCtrl(TransactionTypes.Rollback);
 
                             db.TransactionCtrl(TransactionTypes.Commit);

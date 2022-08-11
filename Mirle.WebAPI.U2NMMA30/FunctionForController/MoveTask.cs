@@ -10,15 +10,15 @@ using Mirle.WebAPI.V2BYMA30.ReportInfo;
 
 namespace Mirle.WebAPI.V2BYMA30.Function
 {
-    public class RollTask
+    public class MoveTask
     {
-        public bool FunReport(RollTaskInfo info, string IP)
+        public bool FunReport(MoveTaskInfo info, string IP)
         {
             try
             {
                 string strJson = JsonConvert.SerializeObject(info);
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strJson);
-                string sLink = $"http://{IP}/ROLL_TASK";
+                string sLink = $"http://{IP}/MOVE_TASK";
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"URL: {sLink}");
                 string re = clsTool.HttpPost(sLink, strJson);
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, re);

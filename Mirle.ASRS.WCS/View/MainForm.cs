@@ -727,7 +727,7 @@ namespace Mirle.ASRS.WCS.View
 
         private void button1_Click(object sender, EventArgs e)
         {
-            APITestAGVTaskCancel form = new APITestAGVTaskCancel();
+            APITestAGVTaskCancel form = new APITestAGVTaskCancel(clInitSys.WmsApi_Config);
             form.Show();
         }
     }

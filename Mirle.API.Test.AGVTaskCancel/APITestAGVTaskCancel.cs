@@ -22,9 +22,16 @@ namespace Mirle.WebAPI.Test.AGVTaskCancel
         private V2BYMA30.clsHost api;
         private Middle.DB_Proc.clsTool tool;
         private clsDbConfig _config = new clsDbConfig();
+        private WebApiConfig AGVApi_config = new WebApiConfig();
+
         public APITestAGVTaskCancel()
         {
+        }
+
+        public APITestAGVTaskCancel(WebApiConfig aGVApi_config)
+        {
             InitializeComponent();
+            AGVApi_config = aGVApi_config;
         }
 
         private void ButtonTaskCancel_Click(object sender, EventArgs e)
@@ -41,32 +48,44 @@ namespace Mirle.WebAPI.Test.AGVTaskCancel
                 };
 
                 //找IP
-                DataTable dtTmp = new DataTable();
-                using (var db = clsGetDB.GetDB(_config))
+                if (!api.GetTaskCancel().FunReport(info, AGVApi_config.IP))
                 {
-                    int iRet = clsGetDB.FunDbOpen(db);
-                    if (iRet == DBResult.Success)
-                    {
-                        string strSql = $"select * from {Middle.DB_Proc.Parameter.clsMiddleCmd.TableName} where " +
-                                        $"{Middle.DB_Proc.Parameter.clsMiddleCmd.Column.CommandID} = '{info.jobId}' ";
-                        string strEM = "";
-                        iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
-                        if (iRet == DBResult.Success)
-                        {
-                            MiddleCmd cmd = tool.GetMiddleCmd(dtTmp.Rows[0]);
-                            ConveyorInfo conveyor = new ConveyorInfo();
-                            conveyor = ConveyorDef.GetBufferByDevice(cmd.DeviceID);
-
-                            //發送TaskCancel訊號
-                            if (!api.GetTaskCancel().FunReport(info, conveyor.API.IP))
-                                throw new Exception(strEM);
-                        }
-                        else
-                        {
-                            MessageBox.Show("藉由jobId讀取db錯誤", "Task Cancel", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
+                    MessageBox.Show($"取消命令失敗, jobId:{info.jobId}.", "Task Cancel", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
+                else
+                {
+                    MessageBox.Show($"取消命令成功, jobId:{info.jobId}.", "Task Cancel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                 
+              
+
+
+                //DataTable dtTmp = new DataTable();
+                //using (var db = clsGetDB.GetDB(_config))
+                //{
+                //    int iRet = clsGetDB.FunDbOpen(db);
+                //    if (iRet == DBResult.Success)
+                //    {
+                //        string strSql = $"select * from {Middle.DB_Proc.Parameter.clsMiddleCmd.TableName} where " +
+                //                        $"{Middle.DB_Proc.Parameter.clsMiddleCmd.Column.CommandID} = '{info.jobId}' ";
+                //        string strEM = "";
+                //        iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                //        if (iRet == DBResult.Success)
+                //        {
+                //            MiddleCmd cmd = tool.GetMiddleCmd(dtTmp.Rows[0]);
+                //            ConveyorInfo conveyor = new ConveyorInfo();
+                //            conveyor = ConveyorDef.GetBufferByDevice(cmd.DeviceID);
+
+                //            //發送TaskCancel訊號
+                //            if (!api.GetTaskCancel().FunReport(info, conveyor.API.IP))
+                //                throw new Exception(strEM);
+                //        }
+                //        else
+                //        {
+                //            MessageBox.Show("藉由jobId讀取db錯誤", "Task Cancel", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                //        }
+                //    }
+                //}
             }
             
 

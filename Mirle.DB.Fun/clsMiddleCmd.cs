@@ -372,5 +372,71 @@ namespace Mirle.DB.Fun
                 return false;
             }
         }
+
+        public bool FunMiddleCmdUpdateRemark(string sCmdSno, string sRemark, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"update {Parameter.clsMiddleCmd.TableName} set " +
+                    $"{Parameter.clsMiddleCmd.Column.Remark} = N'" + sRemark +
+                    $"' where {Parameter.clsMiddleCmd.Column.CommandID} = '{sCmdSno}'";
+
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+        public bool FunMiddleCmdUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"update {Parameter.clsMiddleCmd.TableName} set" +
+                    $" {Parameter.clsMiddleCmd.Column.Remark} = N'" + sRemark +
+                    $"', {Parameter.clsMiddleCmd.Column.CmdSts} = '{sCmdSts}' ";
+
+                if (sCmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Cancel_Wait || sCmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait)
+                {
+                    strSql += $", {Parameter.clsMiddleCmd.Column.EndDate} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
+                }
+                else
+                {
+                    strSql += $", {Parameter.clsMiddleCmd.Column.Expose_Date} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
+                }
+
+                strSql += $" where {Parameter.clsMiddleCmd.Column.CommandID} = '{sCmdSno}' ";
+
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
     }
 }

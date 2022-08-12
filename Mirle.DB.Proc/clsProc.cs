@@ -167,7 +167,7 @@ namespace Mirle.DB.Proc
                                                     CVReceiveNewBinCmdInfo info_cv = new CVReceiveNewBinCmdInfo
                                                     {
                                                         bufferId = con.BufferName,
-                                                        carrierType = cmd.IO_Type,
+                                                        carrierType = cmd.carrierType,
                                                         jobId = cmd.Cmd_Sno
                                                     };
 

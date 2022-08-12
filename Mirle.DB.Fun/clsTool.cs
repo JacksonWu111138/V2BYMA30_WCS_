@@ -38,13 +38,8 @@ namespace Mirle.DB.Fun
                 NeedShelfToShelf = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.NeedShelfToShelf]),
                 rackLocation = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.rackLocation]),
                 largest = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.largest]),
-                //Avail = Convert.ToDouble(drTmp[Parameter.clsCmd_Mst.Column.Avail]),
-                //WH_ID = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.WH_ID]),
                 Cmd_Abnormal = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Cmd_Abnormal]),
-                //Host_Name = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Host_Name]),
-                //Mix_Qty = Convert.ToInt32(drTmp[Parameter.clsCmd_Mst.Column.Mix_Qty]),
-                //Plt_Count = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Pallet_Count]),
-                //Trace = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Trace])
+                carrierType= Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.carrierType])
             };
 
             return cmd;
@@ -274,7 +269,8 @@ namespace Mirle.DB.Fun
                 TaskNo = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.TaskNo]),
                 Iotype = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.IoType]),
                 largest = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.largest]),
-                rackLocation = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.rackLocation])
+                rackLocation = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.rackLocation]),
+                carrierType = Convert.ToString(drTmp[Parameter.clsMiddleCmd.Column.carrierType])
             };
 
             return cmd;

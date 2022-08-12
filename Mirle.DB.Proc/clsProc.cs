@@ -657,5 +657,67 @@ namespace Mirle.DB.Proc
                 dtTmp.Dispose();
             }
         }
+
+        public bool FunAGVTaskCancel(string sCmdSno, ref string strEM, string IP)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        string sRemark = "";
+                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                        {
+                            sRemark = "Error: Begin失敗！";
+                            Cmd_Mst.FunUpdateRemark(sCmdSno, sRemark, db);
+                            return false;
+                        }
+
+                        sRemark = "";
+                        if(!Cmd_Mst.FunUpdateCmdSts(sCmdSno, clsConstValue.CmdSts.strCmd_Cancel_Wait,sRemark, db))
+                        {
+                            db.TransactionCtrl(TransactionTypes.Rollback);
+                            return false;
+                        }
+
+                        if (!MiddleCmd.FunMiddleCmdUpdateCmdSts(sCmdSno, clsConstValue.CmdSts.strCmd_Cancel_Wait, sRemark, db))
+                        {
+                            db.TransactionCtrl(TransactionTypes.Rollback);
+                            return false;
+                        }
+
+                        //call api
+                        TaskCancelInfo info = new TaskCancelInfo
+                        {
+                            jobId = sCmdSno
+                        };
+
+                        //找IP
+                        if (!api.GetTaskCancel().FunReport(info, IP))
+                        {
+                            MessageBox.Show($"取消命令失敗, jobId:{info.jobId}.", "Task Cancel", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            db.TransactionCtrl(TransactionTypes.Rollback);
+                            return false;
+                        }
+                        else
+                        {
+                            MessageBox.Show($"取消命令成功, jobId:{info.jobId}.", "Task Cancel", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        }
+
+                        db.TransactionCtrl(TransactionTypes.Commit);
+                        return true;
+                    }
+                    else return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
     }
 }

@@ -405,7 +405,7 @@ namespace Mirle.DB.Fun
                 return false;
             }
         }
-        public bool FunMiddleCmdUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark, DataBase.DB db, ref string strEM)
+        public bool FunMiddleCmdUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark, DataBase.DB db)
         {
             try
             {
@@ -424,6 +424,7 @@ namespace Mirle.DB.Fun
 
                 strSql += $" where {Parameter.clsMiddleCmd.Column.CommandID} = '{sCmdSno}' ";
 
+                string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
                     clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);

@@ -1107,7 +1107,7 @@ namespace Mirle.WebAPI.Event
             try
             {
                 string strEM="";
-                if(!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdStsByCommanId(Body.jobId, ref strEM))
+                if(!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateFinishByCommanId(Body.jobId, ref strEM))
                     throw new Exception(strEM);
                       
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;

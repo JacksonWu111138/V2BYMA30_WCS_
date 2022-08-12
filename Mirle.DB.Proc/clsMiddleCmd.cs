@@ -132,7 +132,7 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public bool FunMiddleCmdUpdateCmdStsByCommanId(string sCmdSno, ref string strEM)
+        public bool FunMiddleCmdUpdateFinishByCommanId(string sCmdSno, ref string strEM)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -162,7 +162,7 @@ namespace Mirle.DB.Proc
                             }
 
                             sRemark = "命令完成";
-                            if (!FunMiddleCmdUpdateCmdSts(sCmdSno, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark, ref strEM))
+                            if (!FunMiddleCmdUpdateCmdSts(sCmdSno, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark))
                             {
                                 db.TransactionCtrl(TransactionTypes.Rollback);
                                 return false;
@@ -211,7 +211,7 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
-        public bool FunMiddleCmdUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark, ref string strEM)
+        public bool FunMiddleCmdUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark)
         {
             try
             {
@@ -220,7 +220,7 @@ namespace Mirle.DB.Proc
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        return MiddleCmd.FunMiddleCmdUpdateCmdSts(sCmdSno, sCmdSts, sRemark, db, ref strEM);
+                        return MiddleCmd.FunMiddleCmdUpdateCmdSts(sCmdSno, sCmdSts, sRemark, db);
                     }
                     else
                         return false;

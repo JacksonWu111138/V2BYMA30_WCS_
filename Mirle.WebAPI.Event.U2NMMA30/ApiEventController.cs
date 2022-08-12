@@ -14,6 +14,7 @@ using Newtonsoft.Json;
 using static Mirle.Structure.Info.VIDEnums;
 using static System.Net.WebRequestMethods;
 using System.Web.UI.WebControls;
+using System.Drawing;
 
 namespace Mirle.WebAPI.Event
 {
@@ -45,7 +46,62 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CARRIER_TRANSFER start!");
             try
             {
+                CmdMstInfo cmd = new CmdMstInfo();
+                cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSNO);
+                if (string.IsNullOrWhiteSpace(cmd.Cmd_Sno))
+                {
+                    throw new Exception($"<{Body.jobId}>取得序號失敗！");
+                }
 
+                cmd.Cmd_Sts = "";
+                cmd.Cmd_Abnormal = "";
+                cmd.Prty = Body.priority;
+                cmd.Stn_No = "";
+                cmd.Cmd_Mode = clsConstValue.CmdMode.S2S;
+                cmd.IO_Type = "";
+                cmd.WH_ID = "";
+                cmd.Loc = Body.toLocation;
+                cmd.New_Loc = "";
+                //cmd.Mix_Qty ;
+                //cmd.Avail ;
+                cmd.Crt_Date = "";
+                cmd.EXP_Date = "";
+                cmd.End_Date = "";
+                cmd.Trn_User = "";
+                cmd.Host_Name = "";
+                cmd.Trace = "";
+                cmd.Plt_Count = "";
+                cmd.Loc_ID = "";
+                cmd.Equ_No = "";
+                cmd.CurLoc = "";
+                cmd.CurDeviceID = "";
+                cmd.JobID = Body.jobId;
+                cmd.BatchID = "";
+                cmd.Zone_ID = "";
+                cmd.Remark = "";
+                //cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
+                cmd.backupPortId = "";
+                cmd.rackLocation = "";
+                cmd.largest = "";
+                cmd.carrierType = "";
+                
+                //cmd.EquNo = Micron.U2R1MA30.clsTool.funGetEquNoByLoc(cmd.Loc).ToString();
+                //cmd.StnNo = Body.formPortId;
+                //cmd.Userid = "WES";
+                //cmd.ZoneID = Body.destZoneId;
+                //cmd.manualStockIn = Body.manual;
+
+                //string strEM = "";
+                //if (cmd.manualStockIn != "Y")
+                //{
+                //    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
+                //        throw new Exception(strEM);
+                //}
+                //else
+                //{
+                //    if (!clsDB_Proc.GetDB_Object().GetProcess().FunInsCmdForManual(cmd, ref strEM))
+                //        throw new Exception(strEM);
+                //}
 
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
@@ -1050,38 +1106,10 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>TASK_COMPLETE start!");
             try
             {
-                DataTable dtTmp = new DataTable();
-                using (var db = clsGetDB.GetDB(_config))
-                {
-                    int iRet = clsGetDB.FunDbOpen(db);
-                    if (iRet == DBResult.Success)
-                    {
-                        string strSql = $"select * from {DB.Fun.Parameter.clsMiddleCmd.TableName} where " +
-                            $"{DB.Fun.Parameter.clsMiddleCmd.Column.CommandID} = '{Body.jobId}' ";
-                        string strEM = "";
-                        iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
-                        if(iRet == DBResult.Success)
-                        {
-                            MiddleCmd cmd = tool.GetMiddleCmd(dtTmp.Rows[0]);
-                            string sRemark = "";
-                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
-                            {
-                                sRemark = "Error: Begin失敗！";
-                                if (sRemark != cmd.Remark)
-                                {
-                                    clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateRemark(strSql, sRemark);
-                                }
-                            }
-
-                            sRemark = "命令完成";
-                            if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark))
-                                db.TransactionCtrl(TransactionTypes.Rollback);
-
-                            db.TransactionCtrl(TransactionTypes.Commit);
-                        }
-                    }
-                }
-
+                string strEM="";
+                if(!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdStsByCommanId(Body.jobId, ref strEM))
+                    throw new Exception(strEM);
+                      
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
 

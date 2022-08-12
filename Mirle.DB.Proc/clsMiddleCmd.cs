@@ -8,6 +8,9 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Mirle.Structure.Info.VIDEnums;
+using static System.Net.WebRequestMethods;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace Mirle.DB.Proc
 {
@@ -20,6 +23,7 @@ namespace Mirle.DB.Proc
         private Fun.clsMiddleCmd MiddleCmd = new Fun.clsMiddleCmd();
         private Fun.clsCmd_Mst cmd_Mst = new Fun.clsCmd_Mst();
         private Fun.clsRoutdef routdef = new Fun.clsRoutdef();
+        private Fun.clsTool tool = new Fun.clsTool();
         private clsDbConfig _config = new clsDbConfig();
         public clsMiddleCmd(clsDbConfig config)
         {
@@ -128,7 +132,64 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public bool FunMiddleCmdUpdateRemark(string sCmdSno, string sRemark)
+        public bool FunMiddleCmdUpdateCmdStsByCommanId(string sCmdSno, ref string strEM)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        string strSql = $"select * from {Fun.Parameter.clsMiddleCmd.TableName} where " +
+                            $"{Fun.Parameter.clsMiddleCmd.Column.CommandID} = '{sCmdSno}' ";
+                        iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+
+                        if (iRet == DBResult.Success)
+                        {
+                            MiddleCmd cmd = tool.GetMiddleCmd(dtTmp.Rows[0]);
+                            string sRemark = "";
+
+                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                            {
+                                sRemark = "Error: Begin失敗！";
+                                if (sRemark != cmd.Remark)
+                                {
+                                    FunMiddleCmdUpdateRemark(sCmdSno, sRemark, dtTmp, ref strEM);
+                                }
+                                return false;
+                            }
+
+                            sRemark = "命令完成";
+                            if (!FunMiddleCmdUpdateCmdSts(sCmdSno, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark, ref strEM))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+
+                            db.TransactionCtrl(TransactionTypes.Commit);
+                            return true;
+                        }
+                        else return false;
+                    }
+                    else return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+            finally
+            {
+                dtTmp.Dispose();
+            }
+
+        }
+
+        public bool FunMiddleCmdUpdateRemark(string sCmdSno, string sRemark, DataTable dtTmp, ref string strEM)
         {
             try
             {
@@ -137,7 +198,7 @@ namespace Mirle.DB.Proc
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        return MiddleCmd.FunMiddleCmdUpdateRemark(sCmdSno, sRemark, db);
+                      return MiddleCmd.FunMiddleCmdUpdateRemark(sCmdSno, sRemark, db, ref strEM);
                     }
                     else
                         return false;
@@ -150,7 +211,7 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
-        public bool FunMiddleCmdUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark)
+        public bool FunMiddleCmdUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark, ref string strEM)
         {
             try
             {
@@ -159,7 +220,7 @@ namespace Mirle.DB.Proc
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        return MiddleCmd.FunMiddleCmdUpdateCmdSts(sCmdSno, sCmdSts, sRemark, db);
+                        return MiddleCmd.FunMiddleCmdUpdateCmdSts(sCmdSno, sCmdSts, sRemark, db, ref strEM);
                     }
                     else
                         return false;

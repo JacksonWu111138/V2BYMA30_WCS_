@@ -51,7 +51,19 @@
             this.chkCycleRun = new System.Windows.Forms.CheckBox();
             this.btnOEEParameterMaintain = new System.Windows.Forms.Button();
             this.AGVTaskCancelButten = new System.Windows.Forms.Button();
+            this.tbcCmdInfo = new System.Windows.Forms.TabControl();
+            this.tbpCmdMst = new System.Windows.Forms.TabPage();
+            this.tbpMiddleCmd = new System.Windows.Forms.TabPage();
             this.Grid1 = new System.Windows.Forms.DataGridView();
+            this.mnuTransferCmd = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuTransferCmdComplete = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuTransferCmdCancel = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuInsertCmd = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuUpdateCurLoc = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMiddleCmd = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.mnuMiddleComplete = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuMiddleCancel = new System.Windows.Forms.ToolStripMenuItem();
+            this.mnuInsertMiddleCmd = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -67,7 +79,11 @@
             this.spcMainView.Panel2.SuspendLayout();
             this.spcMainView.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
+            this.tbcCmdInfo.SuspendLayout();
+            this.tbpCmdMst.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid1)).BeginInit();
+            this.mnuTransferCmd.SuspendLayout();
+            this.mnuMiddleCmd.SuspendLayout();
             this.SuspendLayout();
             // 
             // timer1
@@ -215,7 +231,7 @@
             // 
             // spcView.Panel2
             // 
-            this.spcView.Panel2.Controls.Add(this.Grid1);
+            this.spcView.Panel2.Controls.Add(this.tbcCmdInfo);
             this.spcView.Size = new System.Drawing.Size(1756, 774);
             this.spcView.SplitterDistance = 567;
             this.spcView.SplitterWidth = 6;
@@ -379,17 +395,116 @@
             this.AGVTaskCancelButten.UseVisualStyleBackColor = true;
             this.AGVTaskCancelButten.Click += new System.EventHandler(this.button1_Click);
             // 
+            // tbcCmdInfo
+            // 
+            this.tbcCmdInfo.Controls.Add(this.tbpCmdMst);
+            this.tbcCmdInfo.Controls.Add(this.tbpMiddleCmd);
+            this.tbcCmdInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbcCmdInfo.Font = new System.Drawing.Font("微軟正黑體", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbcCmdInfo.Location = new System.Drawing.Point(0, 0);
+            this.tbcCmdInfo.Name = "tbcCmdInfo";
+            this.tbcCmdInfo.SelectedIndex = 0;
+            this.tbcCmdInfo.Size = new System.Drawing.Size(1756, 201);
+            this.tbcCmdInfo.TabIndex = 0;
+            // 
+            // tbpCmdMst
+            // 
+            this.tbpCmdMst.Controls.Add(this.Grid1);
+            this.tbpCmdMst.Location = new System.Drawing.Point(4, 34);
+            this.tbpCmdMst.Name = "tbpCmdMst";
+            this.tbpCmdMst.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpCmdMst.Size = new System.Drawing.Size(1748, 163);
+            this.tbpCmdMst.TabIndex = 0;
+            this.tbpCmdMst.Text = "System Command";
+            this.tbpCmdMst.UseVisualStyleBackColor = true;
+            // 
+            // tbpMiddleCmd
+            // 
+            this.tbpMiddleCmd.Location = new System.Drawing.Point(4, 34);
+            this.tbpMiddleCmd.Name = "tbpMiddleCmd";
+            this.tbpMiddleCmd.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpMiddleCmd.Size = new System.Drawing.Size(1748, 163);
+            this.tbpMiddleCmd.TabIndex = 1;
+            this.tbpMiddleCmd.Text = "Middle Command";
+            this.tbpMiddleCmd.UseVisualStyleBackColor = true;
+            // 
             // Grid1
             // 
             this.Grid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.Grid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Grid1.Location = new System.Drawing.Point(0, 0);
+            this.Grid1.Location = new System.Drawing.Point(3, 3);
             this.Grid1.Margin = new System.Windows.Forms.Padding(4);
             this.Grid1.Name = "Grid1";
             this.Grid1.RowHeadersWidth = 62;
             this.Grid1.RowTemplate.Height = 24;
-            this.Grid1.Size = new System.Drawing.Size(1756, 201);
-            this.Grid1.TabIndex = 0;
+            this.Grid1.Size = new System.Drawing.Size(1742, 157);
+            this.Grid1.TabIndex = 1;
+            this.Grid1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.Grid1_CellMouseDown);
+            // 
+            // mnuTransferCmd
+            // 
+            this.mnuTransferCmd.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.mnuTransferCmd.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuTransferCmdComplete,
+            this.mnuTransferCmdCancel,
+            this.mnuInsertCmd,
+            this.mnuUpdateCurLoc});
+            this.mnuTransferCmd.Name = "mnuFun";
+            this.mnuTransferCmd.Size = new System.Drawing.Size(215, 132);
+            // 
+            // mnuTransferCmdComplete
+            // 
+            this.mnuTransferCmdComplete.Name = "mnuTransferCmdComplete";
+            this.mnuTransferCmdComplete.Size = new System.Drawing.Size(248, 32);
+            this.mnuTransferCmdComplete.Text = "Complete";
+            // 
+            // mnuTransferCmdCancel
+            // 
+            this.mnuTransferCmdCancel.Image = ((System.Drawing.Image)(resources.GetObject("mnuTransferCmdCancel.Image")));
+            this.mnuTransferCmdCancel.Name = "mnuTransferCmdCancel";
+            this.mnuTransferCmdCancel.Size = new System.Drawing.Size(248, 32);
+            this.mnuTransferCmdCancel.Text = "Cancel";
+            // 
+            // mnuInsertCmd
+            // 
+            this.mnuInsertCmd.Name = "mnuInsertCmd";
+            this.mnuInsertCmd.Size = new System.Drawing.Size(248, 32);
+            this.mnuInsertCmd.Text = "Insert";
+            // 
+            // mnuUpdateCurLoc
+            // 
+            this.mnuUpdateCurLoc.Name = "mnuUpdateCurLoc";
+            this.mnuUpdateCurLoc.Size = new System.Drawing.Size(248, 32);
+            this.mnuUpdateCurLoc.Text = "Update CurLoc";
+            // 
+            // mnuMiddleCmd
+            // 
+            this.mnuMiddleCmd.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.mnuMiddleCmd.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mnuMiddleComplete,
+            this.mnuMiddleCancel,
+            this.mnuInsertMiddleCmd});
+            this.mnuMiddleCmd.Name = "mnuFun";
+            this.mnuMiddleCmd.Size = new System.Drawing.Size(172, 100);
+            // 
+            // mnuMiddleComplete
+            // 
+            this.mnuMiddleComplete.Name = "mnuMiddleComplete";
+            this.mnuMiddleComplete.Size = new System.Drawing.Size(171, 32);
+            this.mnuMiddleComplete.Text = "Complete";
+            // 
+            // mnuMiddleCancel
+            // 
+            this.mnuMiddleCancel.Image = ((System.Drawing.Image)(resources.GetObject("mnuMiddleCancel.Image")));
+            this.mnuMiddleCancel.Name = "mnuMiddleCancel";
+            this.mnuMiddleCancel.Size = new System.Drawing.Size(171, 32);
+            this.mnuMiddleCancel.Text = "Cancel";
+            // 
+            // mnuInsertMiddleCmd
+            // 
+            this.mnuInsertMiddleCmd.Name = "mnuInsertMiddleCmd";
+            this.mnuInsertMiddleCmd.Size = new System.Drawing.Size(171, 32);
+            this.mnuInsertMiddleCmd.Text = "Insert";
             // 
             // MainForm
             // 
@@ -422,7 +537,11 @@
             this.spcMainView.ResumeLayout(false);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
+            this.tbcCmdInfo.ResumeLayout(false);
+            this.tbpCmdMst.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Grid1)).EndInit();
+            this.mnuTransferCmd.ResumeLayout(false);
+            this.mnuMiddleCmd.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -432,7 +551,6 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label lblDBConn_WCS;
         private System.Windows.Forms.SplitContainer spcView;
-        private System.Windows.Forms.DataGridView Grid1;
         private System.Windows.Forms.CheckBox chkOnline;
         private System.Windows.Forms.SplitContainer spcMainView;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -450,6 +568,19 @@
         private System.Windows.Forms.CheckBox chkIgnoreTkt;
         private System.Windows.Forms.Label lblDBConn_WMS;
         private System.Windows.Forms.Button AGVTaskCancelButten;
+        private System.Windows.Forms.TabControl tbcCmdInfo;
+        private System.Windows.Forms.TabPage tbpCmdMst;
+        private System.Windows.Forms.DataGridView Grid1;
+        private System.Windows.Forms.TabPage tbpMiddleCmd;
+        private System.Windows.Forms.ContextMenuStrip mnuTransferCmd;
+        private System.Windows.Forms.ToolStripMenuItem mnuTransferCmdComplete;
+        private System.Windows.Forms.ToolStripMenuItem mnuTransferCmdCancel;
+        private System.Windows.Forms.ToolStripMenuItem mnuInsertCmd;
+        private System.Windows.Forms.ToolStripMenuItem mnuUpdateCurLoc;
+        private System.Windows.Forms.ContextMenuStrip mnuMiddleCmd;
+        private System.Windows.Forms.ToolStripMenuItem mnuMiddleComplete;
+        private System.Windows.Forms.ToolStripMenuItem mnuMiddleCancel;
+        private System.Windows.Forms.ToolStripMenuItem mnuInsertMiddleCmd;
     }
 }
 

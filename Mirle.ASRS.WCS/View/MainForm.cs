@@ -145,6 +145,56 @@ namespace Mirle.ASRS.WCS.View
                 Def.clsTool.FunVisbleChange(ref chkIgnoreTkt);
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            APITestAGVTaskCancel form = new APITestAGVTaskCancel(clInitSys.AgvApi_Config);
+            form.Show();
+        }
+
+        private DataGridViewRow dgrTransferCmdLastSelect = null;
+        private void Grid1_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Grid1.SelectedRows.Count > 0)
+                {
+                    mnuTransferCmdCancel.Visible = true;
+                    mnuTransferCmdComplete.Visible = true;
+                    mnuUpdateCurLoc.Visible = true;
+
+                    if (dgrTransferCmdLastSelect != null)
+                    {
+                        if (!Grid1.SelectedRows.Contains(dgrTransferCmdLastSelect))
+                        {
+                            Grid1.SelectedRows[0].ContextMenuStrip = mnuTransferCmd;
+                            dgrTransferCmdLastSelect.ContextMenuStrip = null;
+                            dgrTransferCmdLastSelect = Grid1.SelectedRows[0];
+                        }
+                        else if (dgrTransferCmdLastSelect.Index == e.RowIndex)
+                            Grid1.SelectedRows[0].ContextMenuStrip = mnuTransferCmd;
+                        else
+                        {
+                            dgrTransferCmdLastSelect.ContextMenuStrip = null;
+                            dgrTransferCmdLastSelect = Grid1.SelectedRows[0];
+                        }
+                    }
+                    else
+                    {
+                        Grid1.SelectedRows[0].ContextMenuStrip = mnuTransferCmd;
+                        dgrTransferCmdLastSelect = Grid1.SelectedRows[0];
+                    }
+                }
+                else
+                {
+                    mnuTransferCmdCancel.Visible = false;
+                    mnuTransferCmdComplete.Visible = false;
+                    mnuUpdateCurLoc.Visible = false;
+
+                    Grid1.ContextMenuStrip = mnuTransferCmd;
+                }
+            }
+        }
         #endregion Event
         #region Timer
         private void timRead_Elapsed(object source, System.Timers.ElapsedEventArgs e)
@@ -723,12 +773,6 @@ namespace Mirle.ASRS.WCS.View
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
             }
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            APITestAGVTaskCancel form = new APITestAGVTaskCancel(clInitSys.AgvApi_Config);
-            form.Show();
         }
     }
 }

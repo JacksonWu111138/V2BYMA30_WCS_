@@ -47,7 +47,7 @@ namespace Mirle.WebAPI.Event
             try
             {
                 CmdMstInfo cmd = new CmdMstInfo();
-                cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSNO);
+                //cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSNO);
                 if (string.IsNullOrWhiteSpace(cmd.Cmd_Sno))
                 {
                     throw new Exception($"<{Body.jobId}>取得序號失敗！");

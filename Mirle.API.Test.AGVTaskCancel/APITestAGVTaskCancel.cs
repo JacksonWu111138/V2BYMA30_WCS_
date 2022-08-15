@@ -47,7 +47,7 @@ namespace Mirle.WebAPI.Test.AGVTaskCancel
             {
                 string strEM = "";
                 if (!clsDB_Proc.GetDB_Object().GetProc().FunAGVTaskCancel(textBoxjobId.Text, ref strEM, AGVApi_config.IP))
-                    throw new Exception(strEM);
+                    MessageBox.Show(strEM, "Task Cancel", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

@@ -465,6 +465,7 @@
             this.mnuTransferCmdCancel.Name = "mnuTransferCmdCancel";
             this.mnuTransferCmdCancel.Size = new System.Drawing.Size(248, 32);
             this.mnuTransferCmdCancel.Text = "Cancel";
+            this.mnuTransferCmdCancel.Click += new System.EventHandler(this.mnuTransferCmdCancel_Click);
             // 
             // mnuInsertCmd
             // 

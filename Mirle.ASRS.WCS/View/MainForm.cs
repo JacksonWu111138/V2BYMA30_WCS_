@@ -232,6 +232,26 @@ namespace Mirle.ASRS.WCS.View
                 }
             }
         }
+
+        private void mnuTransferCmdCancel_Click(object sender, EventArgs e)
+        {
+            if (funTransferCmd_Validation(clsEnum.CmdMaintence.Cancel))
+            {
+                string sCmdSno = Convert.ToString(dgrTransferCmdLastSelect.Cells[ColumnDef.CMD_MST.CmdSno.Index].Value);
+                string sRemark = "手動取消命令";
+                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(sCmdSno, clsConstValue.CmdSts.strCmd_Cancel_Wait, 
+                    clsEnum.Cmd_Abnormal.CC, sRemark))
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"手動取消命令成功 => <CmdSno> {sCmdSno}");
+                    MessageBox.Show("Cancel Complete.");
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"NG: 手動取消命令失敗 => <CmdSno> {sCmdSno}");
+                    MessageBox.Show("Cancel Fail.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
         #endregion Event
         #region Timer
         private void timRead_Elapsed(object source, System.Timers.ElapsedEventArgs e)

@@ -53,8 +53,8 @@
             this.AGVTaskCancelButten = new System.Windows.Forms.Button();
             this.tbcCmdInfo = new System.Windows.Forms.TabControl();
             this.tbpCmdMst = new System.Windows.Forms.TabPage();
-            this.tbpMiddleCmd = new System.Windows.Forms.TabPage();
             this.Grid1 = new System.Windows.Forms.DataGridView();
+            this.tbpMiddleCmd = new System.Windows.Forms.TabPage();
             this.mnuTransferCmd = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuTransferCmdComplete = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTransferCmdCancel = new System.Windows.Forms.ToolStripMenuItem();
@@ -418,16 +418,6 @@
             this.tbpCmdMst.Text = "System Command";
             this.tbpCmdMst.UseVisualStyleBackColor = true;
             // 
-            // tbpMiddleCmd
-            // 
-            this.tbpMiddleCmd.Location = new System.Drawing.Point(4, 34);
-            this.tbpMiddleCmd.Name = "tbpMiddleCmd";
-            this.tbpMiddleCmd.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpMiddleCmd.Size = new System.Drawing.Size(1748, 163);
-            this.tbpMiddleCmd.TabIndex = 1;
-            this.tbpMiddleCmd.Text = "Middle Command";
-            this.tbpMiddleCmd.UseVisualStyleBackColor = true;
-            // 
             // Grid1
             // 
             this.Grid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -441,6 +431,16 @@
             this.Grid1.TabIndex = 1;
             this.Grid1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.Grid1_CellMouseDown);
             // 
+            // tbpMiddleCmd
+            // 
+            this.tbpMiddleCmd.Location = new System.Drawing.Point(4, 34);
+            this.tbpMiddleCmd.Name = "tbpMiddleCmd";
+            this.tbpMiddleCmd.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpMiddleCmd.Size = new System.Drawing.Size(1748, 163);
+            this.tbpMiddleCmd.TabIndex = 1;
+            this.tbpMiddleCmd.Text = "Middle Command";
+            this.tbpMiddleCmd.UseVisualStyleBackColor = true;
+            // 
             // mnuTransferCmd
             // 
             this.mnuTransferCmd.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -450,13 +450,14 @@
             this.mnuInsertCmd,
             this.mnuUpdateCurLoc});
             this.mnuTransferCmd.Name = "mnuFun";
-            this.mnuTransferCmd.Size = new System.Drawing.Size(215, 132);
+            this.mnuTransferCmd.Size = new System.Drawing.Size(249, 165);
             // 
             // mnuTransferCmdComplete
             // 
             this.mnuTransferCmdComplete.Name = "mnuTransferCmdComplete";
             this.mnuTransferCmdComplete.Size = new System.Drawing.Size(248, 32);
             this.mnuTransferCmdComplete.Text = "Complete";
+            this.mnuTransferCmdComplete.Click += new System.EventHandler(this.mnuTransferCmdComplete_Click);
             // 
             // mnuTransferCmdCancel
             // 

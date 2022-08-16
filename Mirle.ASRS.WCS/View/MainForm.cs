@@ -195,6 +195,43 @@ namespace Mirle.ASRS.WCS.View
                 }
             }
         }
+
+        private bool funTransferCmd_Validation(clsEnum.CmdMaintence type)
+        {
+            if (Grid1.SelectedRows.Count == 0) return false;
+            if (dgrTransferCmdLastSelect == null) return false;
+
+            DialogResult DlgResult;
+            if (type == clsEnum.CmdMaintence.Cancel)
+                DlgResult = MessageBox.Show("Are you sure cancel command？", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            else
+                DlgResult = MessageBox.Show("Are you sure complete command？", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (DlgResult == DialogResult.Yes)
+                return true;
+            else
+                return false;
+        }
+
+        private void mnuTransferCmdComplete_Click(object sender, EventArgs e)
+        {
+            if (funTransferCmd_Validation(clsEnum.CmdMaintence.Complete))
+            {
+                string sCmdSno = Convert.ToString(dgrTransferCmdLastSelect.Cells[ColumnDef.CMD_MST.CmdSno.Index].Value);
+                string sRemark = "手動完成命令";
+                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(sCmdSno, clsConstValue.CmdSts.strCmd_Finish_Wait, 
+                    clsEnum.Cmd_Abnormal.CF, sRemark))
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"手動完成命令成功 => <CmdSno> {sCmdSno}");
+                    MessageBox.Show("Finish Complete.");
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"NG: 手動完成命令失敗 => <CmdSno> {sCmdSno}");
+                    MessageBox.Show("Complete Fail.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
         #endregion Event
         #region Timer
         private void timRead_Elapsed(object source, System.Timers.ElapsedEventArgs e)

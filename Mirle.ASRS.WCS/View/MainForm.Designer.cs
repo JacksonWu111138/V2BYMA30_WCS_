@@ -472,6 +472,7 @@
             this.mnuInsertCmd.Name = "mnuInsertCmd";
             this.mnuInsertCmd.Size = new System.Drawing.Size(248, 32);
             this.mnuInsertCmd.Text = "Insert";
+            this.mnuInsertCmd.Click += new System.EventHandler(this.mnuInsertCmd_Click);
             // 
             // mnuUpdateCurLoc
             // 

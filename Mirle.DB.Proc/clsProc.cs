@@ -694,7 +694,6 @@ namespace Mirle.DB.Proc
                             jobId = sCmdSno
                         };
 
-                        //找IP
                         if (!api.GetTaskCancel().FunReport(info, IP))
                         {
                             MessageBox.Show($"取消命令失敗, jobId:{info.jobId}.", "Task Cancel", MessageBoxButtons.OK, MessageBoxIcon.Error);

@@ -27,6 +27,12 @@ namespace Mirle.DB.ClearCmd.Proc
             {
                 if (DB.Proc.clsHost.IsConn)
                 {
+                    //Tower
+                    //clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdFinish_Proc();
+
+                    //AGV
+                    //clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdFinish_Proc();
+
                     clsDB_Proc.GetDB_Object().GetCmd_Mst().FunMoveFinishCmdToHistory_Proc();
                 }
 

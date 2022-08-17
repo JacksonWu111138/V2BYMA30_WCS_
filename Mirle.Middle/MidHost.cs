@@ -125,6 +125,24 @@ namespace Mirle.Middle
         }
 
         /// <summary>
+        /// 確認是否是入庫Ready
+        /// </summary>
+        /// <param name="buffer"></param>
+        /// <returns></returns>
+        public bool CheckIsInReady(ConveyorInfo buffer)
+        {
+            BufferStatusQueryInfo info = new BufferStatusQueryInfo { bufferId = buffer.BufferName };
+            BufferStatusReply reply = new BufferStatusReply();
+            if (api.GetBufferStatusQuery().FunReport(info, buffer.API.IP, ref reply))
+            {
+                int.TryParse(reply.ready, out var ready);
+                if (ready == (int)clsEnum.ControllerApi.Ready.InReady) return true;
+                else return false;
+            }
+            else return false;
+        }
+
+        /// <summary>
         /// 確認是否是出庫Ready
         /// </summary>
         /// <param name="Device"></param>

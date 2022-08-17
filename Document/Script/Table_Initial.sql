@@ -213,6 +213,7 @@ insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) 
 --電子料塔
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('7', 'Shelf', 0, 1, 1, ' ',0);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('7', 'E1-04', 3, 1, 4, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('7', 'E1-10', 3, 2, 10, ' ',1);
 
 insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('7', 'Shelf', '68', 'E1-08', ' ');
 insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('7', 'E1-04', '68', 'E1-08', ' ');

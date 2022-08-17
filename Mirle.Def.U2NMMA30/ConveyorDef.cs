@@ -302,6 +302,7 @@ namespace Mirle.Def.U2NMMA30
         public class Tower
         {
             public static ConveyorInfo E1_04 = new ConveyorInfo { Index = 4, BufferName = "E1-04" };
+            public static ConveyorInfo E1_10 = new ConveyorInfo { Index = 10, BufferName = "E1-10" };
         }
 
         public static string DeviceID_AGV = "";
@@ -440,6 +441,7 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(AGV.B1_079);
             Node_All.Add(AGV.E1_01);
             Node_All.Add(Tower.E1_04);
+            Node_All.Add(Tower.E1_10);
             Node_All.Add(AGV.E1_08);
             Node_All.Add(AGV.E2_35);
             Node_All.Add(AGV.E2_36);
@@ -651,6 +653,7 @@ namespace Mirle.Def.U2NMMA30
             Stations.Add(Line.A4_18);
             Stations.Add(Line.A4_19);
             Stations.Add(Tower.E1_04);
+            Stations.Add(Tower.E1_10);
             Stations.Add(AGV.E2_35);
             Stations.Add(AGV.E2_36);
             Stations.Add(AGV.E2_37);

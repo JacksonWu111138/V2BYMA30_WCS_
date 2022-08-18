@@ -308,6 +308,7 @@ namespace Mirle.Def.U2NMMA30
         public static string DeviceID_AGV = "";
         public static string[] DeviceID_AGV_Router = new string[] { "63", "65", "66", "68" };
         public static string DeviceID_Tower = "";
+        public static string WES_B800CV = "B800CV";
 
         private static List<ConveyorInfo> Node_All = new List<ConveyorInfo>();
         /// <summary>
@@ -526,7 +527,15 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(AGV.S6_07);
         }
 
+
+        private static List<ConveyorInfo> AGV_All = new List<ConveyorInfo>();
+        public static void FunAGVListAddInit()
+        {
+            AGV_All.Add(AGV.A4_08);
+        }
+
         private static List<ConveyorInfo> B800CV = new List<ConveyorInfo>();
+        public static List<ConveyorInfo> GetB800CV_List() => B800CV;
         private static int Current = 1;
         public static ConveyorInfo GetB800CV()
         {

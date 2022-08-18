@@ -21,7 +21,7 @@ namespace Mirle.ASRS.WCS
         public static WebApiConfig WcsApi_Config = new WebApiConfig();
         public static ASRSINI lcsini;
         public static int L2L_MaxCount = 5;
-        public static string WES_B800CV = "B800CV";
+        
         //API
         [DllImport("kernel32.dll")]
         private static extern int GetPrivateProfileString
@@ -399,7 +399,7 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.M1_20.StnNo = lcsini.StnNo.M1_20;
             ConveyorDef.AGV.M1_05.StnNo = lcsini.StnNo.M1_05;
             ConveyorDef.AGV.M1_15.StnNo = lcsini.StnNo.M1_15;
-            WES_B800CV = lcsini.StnNo.WES_B800CV;
+            ConveyorDef.WES_B800CV = lcsini.StnNo.WES_B800CV;
         }
 
         private static void FunDeviceConfig(ASRSINI lcsini)

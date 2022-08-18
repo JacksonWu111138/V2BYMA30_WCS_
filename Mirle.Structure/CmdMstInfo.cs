@@ -52,5 +52,6 @@ namespace Mirle.Structure
         public string rackLocation { get; set; } = "";
         public string largest { get; set; } = "N";
         public string carrierType { get; set; } = "";
+        public string lotSize { get; set; } = "";
     }
 }

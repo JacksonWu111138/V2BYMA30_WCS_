@@ -14,6 +14,7 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         public string jobId { get; set; } = "";
         public string transactionId { get; set; } = "PUTAWAY_TRANSFER_INFO";
         public string reelId { get; set; }
+        public string lotSize { get; set; }
         public string toShelfId { get; set; }
     }
 }

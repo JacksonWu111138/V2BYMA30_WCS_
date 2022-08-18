@@ -10,9 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace Mirle.DB.Proc
 {
@@ -23,6 +25,7 @@ namespace Mirle.DB.Proc
         private Fun.clsTool tool = new Fun.clsTool();
         private Fun.clsRoutdef Routdef = new Fun.clsRoutdef();
         private Fun.clsMiddleCmd MiddleCmd = new Fun.clsMiddleCmd();
+        private Fun.clsEquCmd EquCmd = new Fun.clsEquCmd();
         private clsDbConfig _config = new clsDbConfig();
         private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
         private WebApiConfig _wmsApi = new WebApiConfig();
@@ -717,6 +720,99 @@ namespace Mirle.DB.Proc
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
                 return false;
             }
+        }
+
+        public bool FunCarrierTransferCancel(string sCmdSno, ref string strEM)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        CmdMstInfo cmd = new CmdMstInfo();
+                        if(Cmd_Mst.FunGetCommand(sCmdSno, ref cmd, ref iRet, db))
+                        {
+                            if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Running)
+                            {
+                                strEM = "Error: 命令已開始執行，無法取消！";
+                                return false;
+                            }
+
+                            int iRet_Middle = MiddleCmd.CheckHasMiddleCmdByCmdSno(cmd.Cmd_Sno, db);
+                            if (iRet_Middle == DBResult.Exception)
+                            {
+                                strEM = "取得Middle命令失敗！";
+                                return false;
+                            }
+
+                            int iRet_Equ = EquCmd.CheckHasEquCmdByCmdSno(cmd.Cmd_Sno, db);
+                            if(iRet_Equ == DBResult.Exception)
+                            {
+                                strEM = "取得Equ命令失敗！";
+                                return false;
+                            }
+
+                            if (iRet_Middle == DBResult.Success) MiddleCmd.FunInsertHisMiddleCmd(cmd.Cmd_Sno, db);
+
+                            string sRemark = ""; 
+                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                            {
+                                sRemark = "Error: Begin失敗！";
+                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                return false;
+                            }
+
+                            sRemark = "WES命令取消";
+                            if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Cancel_Wait, sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+
+                            if (iRet_Middle == DBResult.Success)
+                            {
+                                if (!MiddleCmd.FunDelMiddleCmd(cmd.Cmd_Sno, db))
+                                {
+                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                            }
+
+                            if (iRet_Equ == DBResult.Success)
+                            {
+                                if (!EquCmd.FunDelEquCmd(cmd.Cmd_Sno, db))
+                                {
+                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                            }
+
+                            db.TransactionCtrl(TransactionTypes.Commit);
+                            return true;
+                        }
+                        else
+                        {
+                            strEM = $"<Cmd_Sno> {sCmdSno} => 取得命令資料失敗！";
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+            return true;
         }
     }
 }

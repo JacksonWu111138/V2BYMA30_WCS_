@@ -3,6 +3,7 @@ using System.Data;
 using Mirle.Def;
 using Mirle.Structure;
 using Mirle.DataBase;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
 
 namespace Mirle.DB.Proc
 {
@@ -416,6 +417,6 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
-        
+
     }
 }

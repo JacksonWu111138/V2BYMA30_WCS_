@@ -655,7 +655,7 @@ namespace Mirle.ASRS.WCS.View
             middle = new MidHost(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box, 
                 ConveyorDef.DeviceID_AGV, ConveyorDef.DeviceID_Tower, clInitSys.DbConfig, clInitSys.AgvApi_Config, clInitSys.TowerApi_Config);
             _unityContainer = new UnityContainer();
-            _unityContainer.RegisterInstance(new WCSController(middle));
+            _unityContainer.RegisterInstance(new WCSController(middle, clInitSys.TowerApi_Config));
             _webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
             //clearCmd = new DB.ClearCmd.Proc.clsHost();
         }

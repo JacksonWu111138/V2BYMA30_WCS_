@@ -16,6 +16,8 @@ using static Mirle.Structure.Info.VIDEnums;
 using static System.Net.WebRequestMethods;
 using System.Web.UI.WebControls;
 using System.Drawing;
+using System.Linq;
+using PutawayTransferInfo = Mirle.WebAPI.V2BYMA30.ReportInfo.PutawayTransferInfo;
 
 namespace Mirle.WebAPI.Event
 {
@@ -24,19 +26,22 @@ namespace Mirle.WebAPI.Event
         private clsDbConfig _config = new clsDbConfig();
         private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
         private MidHost middle;
-        private DB.Fun.clsTool tool;
+        private DB.Fun.clsTool tool = new DB.Fun.clsTool();
+        private WebApiConfig _towerApi = new WebApiConfig();
 
 
 
-        public WCSController(MidHost Middle)
+        public WCSController(MidHost Middle, WebApiConfig towerApi)
         {
             middle = Middle;
+            _towerApi = towerApi;
         }
         public WCSController()
         {
         }
 
         #region WES-->WCS
+
         [Route("WCS/CARRIER_TRANSFER")]
         [HttpPost]
         public IHttpActionResult CARRIER_TRANSFER([FromBody] CarrierTransferInfo Body)
@@ -70,32 +75,25 @@ namespace Mirle.WebAPI.Event
                     //cmd.backupPortId ="";
                     //cmd.BatchID = Body.batchId;
 
-                    cmd.Loc_ID = Body.carrierId;//棧版 = carrierId?
+                    cmd.Loc_ID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.S2S;
                     cmd.CurDeviceID = "";
                     cmd.CurLoc = "";
                     cmd.End_Date = "";
                     cmd.Loc = "";
-
-                    cmd.Equ_No = ""; //待處理
-
-                    //cmd.Equ_No = clsTool.funGetEquNoByLoc(cmd.Loc).ToString();
-
+                    cmd.Equ_No = "";
                     cmd.EXP_Date = "";
-
                     cmd.JobID = Body.jobId;
                     cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
 
-                    if(Body.toLocation != "B800CV")
-                        cmd.New_Loc = Body.toLocation;
-                    else
+                    if (Body.toLocation == ConveyorDef.WES_B800CV)
                     {
                         int count = 0; bool check = false;
                         ConveyorInfo B800CV = new ConveyorInfo();
-                        while(count < 3)
+                        while (count < ConveyorDef.GetB800CV_List().Count())
                         {
                             B800CV = ConveyorDef.GetB800CV();
-                            if(middle.CheckIsInReady(B800CV))
+                            if (middle.CheckIsInReady(B800CV))
                             {
                                 cmd.New_Loc = B800CV.StnNo;
                                 check = true;
@@ -103,25 +101,29 @@ namespace Mirle.WebAPI.Event
                             }
                             count++;
                         }
-                        if(!check)
+                        if (!check)
                         {
                             throw new Exception("Error: B800CV 無InReady儲位");
                         }
                     }
+                    else 
+                    {
+                        var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.toLocation);
+                        cmd.New_Loc = cv_to.StnNo;
+                    }
+                    
 
                     cmd.Prty = Body.priority;
                     cmd.Remark = "";
 
-                    if (Body.fromLocation != "B800CV")
-                        cmd.Stn_No = Body.fromLocation;
-                    else
+                    if (Body.fromLocation == ConveyorDef.WES_B800CV)
                     {
                         int count = 0; bool check = false;
                         ConveyorInfo B800CV = new ConveyorInfo();
-                        while (count < 3)
+                        while (count < ConveyorDef.GetB800CV_List().Count())
                         {
                             B800CV = ConveyorDef.GetB800CV();
-                            if (middle.CheckIsOutReady(B800CV))
+                            if (middle.CheckIsInReady(B800CV))
                             {
                                 cmd.Stn_No = B800CV.StnNo;
                                 check = true;
@@ -131,8 +133,13 @@ namespace Mirle.WebAPI.Event
                         }
                         if (!check)
                         {
-                            throw new Exception("Error: B800CV 無OutReady儲位");
+                            throw new Exception("Error: B800CV 無InReady儲位");
                         }
+                    }
+                    else
+                    {
+                        var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.fromLocation);
+                        cmd.Stn_No = cv_to.StnNo;
                     }
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
@@ -193,24 +200,32 @@ namespace Mirle.WebAPI.Event
                     //cmd.backupPortId ="";
                     //cmd.BatchID = Body.batchId;
 
-                    cmd.Loc_ID = Body.carrierId;//棧版 = carrierId?
+                    cmd.Loc_ID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.StockIn;
                     cmd.CurDeviceID = "";
                     cmd.CurLoc = "";
                     cmd.End_Date = "";
 
-                    if (Body.toShelfId != "B800CV")
-                        cmd.Loc = Body.toShelfId;
-                    else
+                    cmd.Loc = Body.toShelfId;
+                    cmd.Equ_No = tool.funGetEquNoByLoc(cmd.Loc).ToString();
+
+                    cmd.EXP_Date = "";
+                    cmd.JobID = Body.jobId;
+                    cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
+                    cmd.New_Loc = "";
+                    cmd.Prty = Body.priority;
+                    cmd.Remark = "";
+
+                    if (Body.fromPortId == ConveyorDef.WES_B800CV)
                     {
                         int count = 0; bool check = false;
                         ConveyorInfo B800CV = new ConveyorInfo();
-                        while (count < 3)
+                        while (count < ConveyorDef.GetB800CV_List().Count())
                         {
                             B800CV = ConveyorDef.GetB800CV();
                             if (middle.CheckIsInReady(B800CV))
                             {
-                                cmd.Loc = B800CV.StnNo;
+                                cmd.Stn_No = B800CV.StnNo;
                                 check = true;
                                 break;
                             }
@@ -221,42 +236,10 @@ namespace Mirle.WebAPI.Event
                             throw new Exception("Error: B800CV 無InReady儲位");
                         }
                     }
-
-                    cmd.Equ_No = ""; //待處理
-
-                    //cmd.Equ_No = clsTool.funGetEquNoByLoc(cmd.Loc).ToString();
-
-                    cmd.EXP_Date = "";
-
-                    //cmd.IoType = clsConstValue.CmdMode.StockOut;
-
-                    cmd.JobID = Body.jobId;
-                    cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
-                    cmd.New_Loc = "";
-                    cmd.Prty = Body.priority;
-                    cmd.Remark = "";
-
-                    if (Body.fromPortId != "B800CV")
-                        cmd.Stn_No = Body.fromPortId;
                     else
                     {
-                        int count = 0; bool check = false;
-                        ConveyorInfo B800CV = new ConveyorInfo();
-                        while (count < 3)
-                        {
-                            B800CV = ConveyorDef.GetB800CV();
-                            if (middle.CheckIsOutReady(B800CV))
-                            {
-                                cmd.Stn_No = B800CV.StnNo;
-                                check = true;
-                                break;
-                            }
-                            count++;
-                        }
-                        if (!check)
-                        {
-                            throw new Exception("Error: B800CV 無OutReady儲位");
-                        }
+                        var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.fromPortId);
+                        cmd.Stn_No = cv_to.StnNo;
                     }
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
@@ -317,56 +300,27 @@ namespace Mirle.WebAPI.Event
                     //cmd.backupPortId ="";
                     //cmd.BatchID = Body.batchId;
 
-                    cmd.Loc_ID = Body.carrierId;//棧版 = carrierId?
+                    cmd.Loc_ID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.StockOut;
                     cmd.CurDeviceID = "";
                     cmd.CurLoc = "";
                     cmd.End_Date = "";
 
-                    if (Body.fromShelfId != "B800CV")
-                        cmd.Loc = Body.fromShelfId;
-                    else
-                    {
-                        int count = 0; bool check = false;
-                        ConveyorInfo B800CV = new ConveyorInfo();
-                        while (count < 3)
-                        {
-                            B800CV = ConveyorDef.GetB800CV();
-                            if (middle.CheckIsOutReady(B800CV))
-                            {
-                                cmd.Loc = B800CV.StnNo;
-                                check = true;
-                                break;
-                            }
-                            count++;
-                        }
-                        if (!check)
-                        {
-                            throw new Exception("Error: B800CV 無OutReady儲位");
-                        }
-                    }
-
-                    cmd.Equ_No = ""; //待處理
-
-                    //cmd.Equ_No = clsTool.funGetEquNoByLoc(cmd.Loc).ToString();
-
+                    cmd.Loc = Body.fromShelfId;
+                    cmd.Equ_No = tool.funGetEquNoByLoc(cmd.Loc).ToString();
+                    
                     cmd.EXP_Date = "";
-
-                    //cmd.IoType = clsConstValue.CmdMode.StockOut;
-
                     cmd.JobID = Body.jobId;
                     cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
                     cmd.New_Loc = "";
                     cmd.Prty = Body.priority;
                     cmd.Remark = "";
 
-                    if (Body.toLocation != "B800CV")
-                        cmd.Stn_No = Body.toLocation;
-                    else
+                    if (Body.toLocation == ConveyorDef.WES_B800CV)
                     {
                         int count = 0; bool check = false;
                         ConveyorInfo B800CV = new ConveyorInfo();
-                        while (count < 3)
+                        while (count < ConveyorDef.GetB800CV_List().Count())
                         {
                             B800CV = ConveyorDef.GetB800CV();
                             if (middle.CheckIsInReady(B800CV))
@@ -381,6 +335,11 @@ namespace Mirle.WebAPI.Event
                         {
                             throw new Exception("Error: B800CV 無InReady儲位");
                         }
+                    }
+                    else
+                    {
+                        var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.toLocation);
+                        cmd.Stn_No = cv_to.StnNo;
                     }
 
                     cmd.Host_Name = "WES";
@@ -442,67 +401,21 @@ namespace Mirle.WebAPI.Event
                     //cmd.backupPortId ="";
                     //cmd.BatchID = Body.batchId;
 
-                    cmd.Loc_ID = Body.carrierId;//棧版 = carrierId?
+                    cmd.Loc_ID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.L2L;
                     cmd.CurDeviceID = "";
                     cmd.CurLoc = "";
                     cmd.End_Date = "";
 
-                    if (Body.fromShelfId != "B800CV")
-                        cmd.Loc = Body.fromShelfId;
-                    else
-                    {
-                        int count = 0; bool check = false;
-                        ConveyorInfo B800CV = new ConveyorInfo();
-                        while (count < 3)
-                        {
-                            B800CV = ConveyorDef.GetB800CV();
-                            if (middle.CheckIsOutReady(B800CV))
-                            {
-                                cmd.Loc = B800CV.StnNo;
-                                check = true;
-                                break;
-                            }
-                            count++;
-                        }
-                        if (!check)
-                        {
-                            throw new Exception("Error: B800CV 無OutReady儲位");
-                        }
-                    }
-
-                    cmd.Equ_No = ""; //待處理
-
-
+                    cmd.Loc = Body.fromShelfId;
+                    cmd.Equ_No = tool.funGetEquNoByLoc(cmd.Loc).ToString();
+                    
                     cmd.EXP_Date = "";
-
-                    //cmd.IoType 
-
                     cmd.JobID = Body.jobId;
                     cmd.NeedShelfToShelf = clsEnum.NeedL2L.Y.ToString();
 
-                    if (Body.toShelfId != "B800CV")
-                        cmd.New_Loc = Body.toShelfId;
-                    else
-                    {
-                        int count = 0; bool check = false;
-                        ConveyorInfo B800CV = new ConveyorInfo();
-                        while (count < 3)
-                        {
-                            B800CV = ConveyorDef.GetB800CV();
-                            if (middle.CheckIsInReady(B800CV))
-                            {
-                                cmd.New_Loc = B800CV.StnNo;
-                                check = true;
-                                break;
-                            }
-                            count++;
-                        }
-                        if (!check)
-                        {
-                            throw new Exception("Error: B800CV 無InReady儲位");
-                        }
-                    }
+                    cmd.New_Loc = Body.toShelfId;
+
                     cmd.Prty = Body.priority;
                     cmd.Remark = "";
                     cmd.Stn_No = "";
@@ -547,8 +460,9 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CARRIER_TRANSFER_CANCEL start!");
             try
             {
-
-
+                string strEM = "";
+                if (!clsDB_Proc.GetDB_Object().GetProc().FunCarrierTransferCancel(Body.jobId, ref strEM))
+                    throw new Exception(strEM);
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -582,8 +496,98 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_PUTAWAY_TRANSFER start!");
             try
             {
+                CmdMstInfo cmd = new CmdMstInfo();
+                string strEM = "";
+                if (Body.priority == "1")
+                {   //更新優先級
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdatePry(Body.lotId, Body.priority, ref strEM))
+                        throw new Exception($"<{Body.jobId}> {strEM}");
+                }
+                else
+                {
+                    cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSNO);
+                    if (string.IsNullOrWhiteSpace(cmd.Cmd_Sno))
+                    {
+                        throw new Exception($"<{Body.jobId}>取得序號失敗！");
+                    }
 
+                    //cmd.backupPortId ="";
+                    //cmd.BatchID = Body.batchId;
 
+                    cmd.Loc_ID = Body.lotId;
+                    cmd.Cmd_Mode = clsConstValue.CmdMode.StockIn;
+                    cmd.CurDeviceID = "";
+                    cmd.CurLoc = "";
+                    cmd.End_Date = "";
+
+                    cmd.Loc = Body.toShelfId;
+                    cmd.Equ_No = tool.funGetEquNoByLoc(cmd.Loc).ToString();
+
+                    cmd.EXP_Date = "";
+                    cmd.JobID = Body.jobId;
+                    cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
+                    cmd.New_Loc = "";
+                    cmd.Prty = Body.priority;
+                    cmd.Remark = "";
+
+                    if (Body.fromPortId == ConveyorDef.WES_B800CV)
+                    {
+                        int count = 0; bool check = false;
+                        ConveyorInfo B800CV = new ConveyorInfo();
+                        while (count < ConveyorDef.GetB800CV_List().Count())
+                        {
+                            B800CV = ConveyorDef.GetB800CV();
+                            if (middle.CheckIsInReady(B800CV))
+                            {
+                                cmd.Stn_No = B800CV.StnNo;
+                                check = true;
+                                break;
+                            }
+                            count++;
+                        }
+                        if (!check)
+                        {
+                            throw new Exception("Error: B800CV 無InReady儲位");
+                        }
+                    }
+                    else
+                    {
+                        var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.fromPortId);
+                        cmd.Stn_No = cv_to.StnNo;
+                    }
+                    cmd.Host_Name = "WES";
+                    cmd.Zone_ID = "";
+
+                    cmd.carrierType = "";
+                    cmd.lotSize = Body.lotSize;
+
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
+                        throw new Exception(strEM);
+                }
+
+                PutawayTransferInfo putaway_info = new PutawayTransferInfo();
+                putaway_info = new PutawayTransferInfo
+                {
+                    jobId = cmd.Cmd_Sno,
+                    reelId = cmd.Loc_ID,
+                    toShelfId = cmd.Loc,
+                    lotSize = cmd.lotSize
+                };
+
+                if (!api.GetPutawayTransfer().FunReport(putaway_info, _towerApi.IP))
+                {
+                    strEM = "Error: PutawayTransfer E800C接收失敗";
+                    throw new Exception(strEM);
+                }
+                else
+                {
+                    string sRemark = "";
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark))
+                    {
+                        strEM = "Error: 更改CmdSts至Running失敗";
+                        throw new Exception(strEM);
+                    }
+                }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";

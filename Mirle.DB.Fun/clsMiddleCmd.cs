@@ -104,6 +104,7 @@ namespace Mirle.DB.Fun
                 string ToLoc = cmd.Cmd_Mode == clsConstValue.CmdMode.L2L ? cmd.New_Loc : cmd.Loc;
                 middleCmd.Source = tool.GetLocation(cmd.Loc, sLoc_Start);
                 middleCmd.Destination = tool.GetLocation(ToLoc, sLoc_End);
+                middleCmd.lotSize = cmd.lotSize;
                 string sCmdMode = "";
                 if (sLoc_Start.LocationTypes == LocationTypes.Shelf)
                 {
@@ -292,6 +293,33 @@ namespace Mirle.DB.Fun
                 dtTmp.Dispose();
             }
         }
+        public int CheckHasMiddleCmdByCmdSno(string sCmdSno, DataBase.DB db)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                string strSql = $"select * from {Parameter.clsMiddleCmd.TableName} where " +
+                    $"{Parameter.clsMiddleCmd.Column.CommandID} = '{sCmdSno}'";
+                string strEM = "";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                }
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+            finally
+            {
+                dtTmp.Dispose();
+            }
+        }
 
         public bool FunInsMiddleCmd(MiddleCmd middleCmd, DataBase.DB db)
         {
@@ -305,12 +333,12 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsMiddleCmd.Column.Path},{Parameter.clsMiddleCmd.Column.Priority},{Parameter.clsMiddleCmd.Column.Remark}," +
                     $"{Parameter.clsMiddleCmd.Column.Source},{Parameter.clsMiddleCmd.Column.TaskNo},{Parameter.clsMiddleCmd.Column.BatchID}," +
                     $"{Parameter.clsMiddleCmd.Column.largest},{Parameter.clsMiddleCmd.Column.rackLocation},{Parameter.clsMiddleCmd.Column.IoType}," +
-                    $"{Parameter.clsMiddleCmd.Column.carrierType}) values (" +
+                    $"{Parameter.clsMiddleCmd.Column.carrierType},{Parameter.clsMiddleCmd.Column.lotSize}) values (" +
                     $"'{middleCmd.CmdMode}','{middleCmd.CmdSts}','{middleCmd.CommandID}','{middleCmd.CrtDate}'," +
                     $"'{middleCmd.CSTID}','{middleCmd.Destination}','{middleCmd.DeviceID}','{middleCmd.EndDate}'," +
                     $"'{middleCmd.ExpDate}','{middleCmd.CompleteCode}',{middleCmd.Path},{middleCmd.Priority}," +
                     $"'{middleCmd.Remark}','{middleCmd.Source}','{middleCmd.TaskNo}','{middleCmd.BatchID}'," +
-                    $"'{middleCmd.largest}','{middleCmd.rackLocation}','{middleCmd.Iotype}','{middleCmd.carrierType}')";
+                    $"'{middleCmd.largest}','{middleCmd.rackLocation}','{middleCmd.Iotype}','{middleCmd.carrierType}','{middleCmd.lotSize}')";
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {

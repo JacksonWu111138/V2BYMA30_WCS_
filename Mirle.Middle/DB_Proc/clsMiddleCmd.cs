@@ -439,7 +439,8 @@ namespace Mirle.Middle.DB_Proc
                                             {
                                                 jobId = cmd.CommandID,
                                                 reelId = cmd.CSTID,
-                                                toShelfId = cmd.Destination
+                                                toShelfId = cmd.Destination,
+                                                lotSize = cmd.lotSize
                                             };
                                         }
                                         else

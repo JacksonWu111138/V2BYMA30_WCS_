@@ -136,6 +136,7 @@ namespace Mirle.DB.Fun.Parameter
             /// </summary>
             public const string largest = "largest";
             public const string carrierType = "carrierType";
+            public const string lotSize = "lotSize";
         }
     }
 }

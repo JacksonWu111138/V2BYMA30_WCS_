@@ -449,7 +449,7 @@
             this.mnuInsertCmd,
             this.mnuUpdateCurLoc});
             this.mnuTransferCmd.Name = "mnuFun";
-            this.mnuTransferCmd.Size = new System.Drawing.Size(215, 132);
+            this.mnuTransferCmd.Size = new System.Drawing.Size(249, 165);
             // 
             // mnuTransferCmdComplete
             // 
@@ -476,8 +476,9 @@
             // mnuUpdateCurLoc
             // 
             this.mnuUpdateCurLoc.Name = "mnuUpdateCurLoc";
-            this.mnuUpdateCurLoc.Size = new System.Drawing.Size(214, 32);
+            this.mnuUpdateCurLoc.Size = new System.Drawing.Size(248, 32);
             this.mnuUpdateCurLoc.Text = "Update CurLoc";
+            this.mnuUpdateCurLoc.Click += new System.EventHandler(this.mnuUpdateCurLoc_Click);
             // 
             // mnuMiddleCmd
             // 

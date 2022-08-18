@@ -274,6 +274,11 @@ namespace Mirle.ASRS.WCS.View
             if (insertCmd_CmdMst != null)
                 insertCmd_CmdMst = null;
         }
+
+        private void mnuUpdateCurLoc_Click(object sender, EventArgs e)
+        {
+
+        }
         #endregion Event
         #region Timer
         private void timRead_Elapsed(object source, System.Timers.ElapsedEventArgs e)

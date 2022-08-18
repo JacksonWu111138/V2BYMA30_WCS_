@@ -253,9 +253,26 @@ namespace Mirle.ASRS.WCS.View
             }
         }
 
+        private frmInsertCmd_CmdMst insertCmd_CmdMst;
         private void mnuInsertCmd_Click(object sender, EventArgs e)
         {
+            if (insertCmd_CmdMst == null)
+            {
+                insertCmd_CmdMst = new frmInsertCmd_CmdMst();
+                insertCmd_CmdMst.TopMost = true;
+                insertCmd_CmdMst.FormClosed += new FormClosedEventHandler(funCmdMaintain_FormClosed);
+                insertCmd_CmdMst.Show();
+            }
+            else
+            {
+                insertCmd_CmdMst.BringToFront();
+            }
+        }
 
+        private void funCmdMaintain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (insertCmd_CmdMst != null)
+                insertCmd_CmdMst = null;
         }
         #endregion Event
         #region Timer
@@ -640,6 +657,7 @@ namespace Mirle.ASRS.WCS.View
 
         private void FunEventInit()
         {
+            Grid1.CellMouseDown += new DataGridViewCellMouseEventHandler(Grid1_CellMouseDown);
             for (int i = 0; i < AsrsCommand.Length; i++)
             {
                 AsrsCommand[i].GetWCS().GetProc().GetFun_Routdef().OnNeedShelfToShelfEvent += MainForm_OnNeedShelfToShelfEvent;

@@ -33,7 +33,9 @@ namespace Mirle.DB.Proc
         public static int FunDbOpen(DataBase.DB db, ref string strEM)
         {
             int iRet = db.Open(ref strEM);
-            clsHost.IsConn = db.IsConnected;
+            if (iRet == DBResult.Success)
+                clsHost.IsConn = true;
+            else clsHost.IsConn = false;
             if(iRet != DBResult.Success)
             {
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"資料庫開啟失敗！=> {strEM}");

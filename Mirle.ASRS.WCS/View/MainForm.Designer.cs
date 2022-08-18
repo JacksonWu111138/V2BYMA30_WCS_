@@ -429,7 +429,6 @@
             this.Grid1.RowTemplate.Height = 24;
             this.Grid1.Size = new System.Drawing.Size(1742, 157);
             this.Grid1.TabIndex = 1;
-            this.Grid1.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.Grid1_CellMouseDown);
             // 
             // tbpMiddleCmd
             // 
@@ -450,12 +449,12 @@
             this.mnuInsertCmd,
             this.mnuUpdateCurLoc});
             this.mnuTransferCmd.Name = "mnuFun";
-            this.mnuTransferCmd.Size = new System.Drawing.Size(249, 165);
+            this.mnuTransferCmd.Size = new System.Drawing.Size(215, 132);
             // 
             // mnuTransferCmdComplete
             // 
             this.mnuTransferCmdComplete.Name = "mnuTransferCmdComplete";
-            this.mnuTransferCmdComplete.Size = new System.Drawing.Size(248, 32);
+            this.mnuTransferCmdComplete.Size = new System.Drawing.Size(214, 32);
             this.mnuTransferCmdComplete.Text = "Complete";
             this.mnuTransferCmdComplete.Click += new System.EventHandler(this.mnuTransferCmdComplete_Click);
             // 
@@ -463,21 +462,21 @@
             // 
             this.mnuTransferCmdCancel.Image = ((System.Drawing.Image)(resources.GetObject("mnuTransferCmdCancel.Image")));
             this.mnuTransferCmdCancel.Name = "mnuTransferCmdCancel";
-            this.mnuTransferCmdCancel.Size = new System.Drawing.Size(248, 32);
+            this.mnuTransferCmdCancel.Size = new System.Drawing.Size(214, 32);
             this.mnuTransferCmdCancel.Text = "Cancel";
             this.mnuTransferCmdCancel.Click += new System.EventHandler(this.mnuTransferCmdCancel_Click);
             // 
             // mnuInsertCmd
             // 
             this.mnuInsertCmd.Name = "mnuInsertCmd";
-            this.mnuInsertCmd.Size = new System.Drawing.Size(248, 32);
+            this.mnuInsertCmd.Size = new System.Drawing.Size(214, 32);
             this.mnuInsertCmd.Text = "Insert";
             this.mnuInsertCmd.Click += new System.EventHandler(this.mnuInsertCmd_Click);
             // 
             // mnuUpdateCurLoc
             // 
             this.mnuUpdateCurLoc.Name = "mnuUpdateCurLoc";
-            this.mnuUpdateCurLoc.Size = new System.Drawing.Size(248, 32);
+            this.mnuUpdateCurLoc.Size = new System.Drawing.Size(214, 32);
             this.mnuUpdateCurLoc.Text = "Update CurLoc";
             // 
             // mnuMiddleCmd

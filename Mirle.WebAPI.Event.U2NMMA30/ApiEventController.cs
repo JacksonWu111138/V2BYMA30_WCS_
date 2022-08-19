@@ -28,14 +28,11 @@ namespace Mirle.WebAPI.Event
         private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
         private MidHost middle;
         private DB.Fun.clsTool tool = new DB.Fun.clsTool();
-        private WebApiConfig _towerApi = new WebApiConfig();
+        private string _towerApi;
 
-
-
-        public WCSController(MidHost Middle, WebApiConfig towerApi)
+        public WCSController(MidHost Middle)
         {
-            middle = Middle;
-            _towerApi = towerApi;
+            middle = Middle;            
         }
         public WCSController()
         {
@@ -559,32 +556,8 @@ namespace Mirle.WebAPI.Event
                     cmd.carrierType = "";
                     cmd.lotSize = Body.lotSize;
 
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunLotPutawayInsCmdMst(cmd, ref strEM))
                         throw new Exception(strEM);
-                }
-
-                PutawayTransferInfo putaway_info = new PutawayTransferInfo();
-                putaway_info = new PutawayTransferInfo
-                {
-                    jobId = cmd.Cmd_Sno,
-                    reelId = cmd.Loc_ID,
-                    toShelfId = cmd.Loc,
-                    lotSize = cmd.lotSize
-                };
-
-                if (!api.GetPutawayTransfer().FunReport(putaway_info, _towerApi.IP))
-                {
-                    strEM = "Error: PutawayTransfer E800C接收失敗";
-                    throw new Exception(strEM);
-                }
-                else
-                {
-                    string sRemark = "";
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark))
-                    {
-                        strEM = "Error: 更改CmdSts至Running失敗";
-                        throw new Exception(strEM);
-                    }
                 }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
@@ -688,38 +661,11 @@ namespace Mirle.WebAPI.Event
                         cmd.Zone_ID = "";
                         //cmd.carrierType = Body.carrierType;
 
-                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
+                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunLotRetrieveInsCmdMst(cmd, ref strEM))
                         {
                             //送出【寫入cmdMst命令】失敗
                             //throw new Exception(strEM);
                         }
-
-                        RetrieveTransferInfo retrieve_Info = new RetrieveTransferInfo
-                        {
-                            jobId = cmd.Cmd_Sno,
-                            reelId = cmd.Loc_ID,
-                            fromShelfId = cmd.Loc,
-                            toPortId = cmd.Stn_No,
-                            rackLocation = cmd.rackLocation,
-                            largest = cmd.largest,
-                            priority = cmd.Prty
-                        };
-
-                        if (!api.GetRetrieveTransfer().FunReport(retrieve_Info, _towerApi.IP))
-                        {
-                            strEM = "Error: RetrieveTransfer E800C接收失敗";
-                            //throw new Exception(strEM);
-                        }
-                        else
-                        {
-                            string sRemark = "";
-                            if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark))
-                            {
-                                strEM = "Error: 更改CmdSts至Running失敗";
-                                //throw new Exception(strEM);
-                            }
-                        }
-
                     }
                 }
                     
@@ -791,7 +737,7 @@ namespace Mirle.WebAPI.Event
             try
             {
                 string strEM = "";
-                if (!clsDB_Proc.GetDB_Object().GetProc().FunLotTransferCancel(Body.jobId, ref strEM, _towerApi.IP))
+                if (!clsDB_Proc.GetDB_Object().GetProc().FunLotTransferCancel(Body.jobId, ref strEM))
                     throw new Exception(strEM);
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;

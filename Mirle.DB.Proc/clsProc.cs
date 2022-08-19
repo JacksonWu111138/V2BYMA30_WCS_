@@ -29,10 +29,12 @@ namespace Mirle.DB.Proc
         private clsDbConfig _config = new clsDbConfig();
         private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
         private WebApiConfig _wmsApi = new WebApiConfig();
-        public clsProc(clsDbConfig config, WebApiConfig WmsApi_Config)
+        private WebApiConfig _towerApi = new WebApiConfig();
+        public clsProc(clsDbConfig config, WebApiConfig WmsApi_Config, WebApiConfig TowerApi_Config)
         {
             _config = config;
             _wmsApi = WmsApi_Config;
+            _towerApi = TowerApi_Config;
         }
 
         public Fun.clsRoutdef GetFun_Routdef() => Routdef;
@@ -815,7 +817,7 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public bool FunLotTransferCancel(string JobID, ref string strEM, string towerIP)
+        public bool FunLotTransferCancel(string JobID, ref string strEM)
         {
             try
             {
@@ -855,7 +857,7 @@ namespace Mirle.DB.Proc
                                 jobId = cmd.Cmd_Sno,
                                 lotId = cmd.Loc_ID
                             };
-                            if(!api.GetLotTransferCancel().FunReport(lotcancel_info, towerIP))
+                            if(!api.GetLotTransferCancel().FunReport(lotcancel_info, _towerApi.IP))
                             {
                                 strEM = "Error: 下達LotCancel命令給E800C失敗";
                                 db.TransactionCtrl(TransactionTypes.Rollback);

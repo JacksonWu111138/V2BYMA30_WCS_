@@ -275,9 +275,31 @@ namespace Mirle.ASRS.WCS.View
                 insertCmd_CmdMst = null;
         }
 
+        private frmUpdCurLoc updCurLoc;
         private void mnuUpdateCurLoc_Click(object sender, EventArgs e)
         {
+            if (Grid1.SelectedRows.Count == 0) return;
 
+            string sCmdSno = Convert.ToString(dgrTransferCmdLastSelect.Cells[ColumnDef.CMD_MST.CmdSno.Index].Value);
+            string sCurLoc = Convert.ToString(dgrTransferCmdLastSelect.Cells[ColumnDef.CMD_MST.CurLoc.Index].Value);
+            string sCurDeviceID = Convert.ToString(dgrTransferCmdLastSelect.Cells[ColumnDef.CMD_MST.CurDeviceID.Index].Value);
+            if (updCurLoc == null)
+            {
+                updCurLoc = new frmUpdCurLoc(sCmdSno, sCurDeviceID, sCurLoc);
+                updCurLoc.TopMost = true;
+                updCurLoc.FormClosed += new FormClosedEventHandler(funCmdMaintain_CurLoc_FormClosed);
+                updCurLoc.Show();
+            }
+            else
+            {
+                updCurLoc.BringToFront();
+            }
+        }
+
+        private void funCmdMaintain_CurLoc_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (updCurLoc != null)
+                updCurLoc = null;
         }
         #endregion Event
         #region Timer

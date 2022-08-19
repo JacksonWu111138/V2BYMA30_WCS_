@@ -62,6 +62,12 @@
     <Compile Include="View\frmInsertCmd_CmdMst.Designer.cs">
       <DependentUpon>frmInsertCmd_CmdMst.cs</DependentUpon>
     </Compile>
+    <Compile Include="View\frmUpdCurLoc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="View\frmUpdCurLoc.Designer.cs">
+      <DependentUpon>frmUpdCurLoc.cs</DependentUpon>
+    </Compile>
     <Compile Include="View\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -72,6 +78,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="View\frmInsertCmd_CmdMst.resx">
       <DependentUpon>frmInsertCmd_CmdMst.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="View\frmUpdCurLoc.resx">
+      <DependentUpon>frmUpdCurLoc.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="View\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

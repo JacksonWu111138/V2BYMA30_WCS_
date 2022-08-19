@@ -697,10 +697,12 @@ namespace Mirle.DB.Fun
         {
             try
             {
+                string sCmdSts = string.IsNullOrWhiteSpace(sCurLoc) ? clsConstValue.CmdSts.strCmd_Initial : clsConstValue.CmdSts.strCmd_Running;
+
                 string strSql = $"update {Parameter.clsCmd_Mst.TableName} set " +
                     $"{Parameter.clsCmd_Mst.Column.CurDeviceID} = '" + sCurDeviceID + 
                     $"', {Parameter.clsCmd_Mst.Column.CurLoc} = '{sCurLoc}', " +
-                    $"{Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{clsConstValue.CmdSts.strCmd_Running}' ";
+                    $"{Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{sCmdSts}' ";
 
                 strSql += $", {Parameter.clsCmd_Mst.Column.Expose_Date} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
 

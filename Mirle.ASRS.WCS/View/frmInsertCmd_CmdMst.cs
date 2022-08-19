@@ -70,9 +70,16 @@ namespace Mirle.ASRS.WCS.View
                     cmd.Stn_No = txtStnNo.Text.Trim();
 
                     string strEM = "";
-                    if(clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
+                    if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
+                    {
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"手動產生命令成功 => <CmdSno>{cmd.Cmd_Sno} <BoxID>{cmd.Loc_ID}");
                         MessageBox.Show("儲存成功");
-                    else MessageBox.Show($"儲存失敗 => {strEM}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    else
+                    {
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"NG: 手動產生命令失敗 => <CmdSno>{cmd.Cmd_Sno} <BoxID>{cmd.Loc_ID}");
+                        MessageBox.Show($"儲存失敗 => {strEM}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
                 }
                 else
                 {

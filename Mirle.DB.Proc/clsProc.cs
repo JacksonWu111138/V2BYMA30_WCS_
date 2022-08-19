@@ -722,7 +722,7 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public bool FunCarrierTransferCancel(string sCmdSno, ref string strEM)
+        public bool FunCarrierTransferCancel(string JobID, ref string strEM)
         {
             try
             {
@@ -732,7 +732,7 @@ namespace Mirle.DB.Proc
                     if (iRet == DBResult.Success)
                     {
                         CmdMstInfo cmd = new CmdMstInfo();
-                        if(Cmd_Mst.FunGetCommand(sCmdSno, ref cmd, ref iRet, db))
+                        if(Cmd_Mst.FunGetCommandByJobID(JobID, ref cmd, ref iRet, db))
                         {
                             if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Running)
                             {
@@ -753,8 +753,8 @@ namespace Mirle.DB.Proc
                                 strEM = "取得Equ命令失敗！";
                                 return false;
                             }
-
-                            if (iRet_Middle == DBResult.Success) MiddleCmd.FunInsertHisMiddleCmd(cmd.Cmd_Sno, db);
+                            if (iRet_Middle == DBResult.Success)
+                                MiddleCmd.FunInsertHisMiddleCmd(cmd.Cmd_Sno, db);
 
                             string sRemark = ""; 
                             if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
@@ -778,6 +778,7 @@ namespace Mirle.DB.Proc
                                     db.TransactionCtrl(TransactionTypes.Rollback);
                                     return false;
                                 }
+
                             }
 
                             if (iRet_Equ == DBResult.Success)
@@ -794,7 +795,7 @@ namespace Mirle.DB.Proc
                         }
                         else
                         {
-                            strEM = $"<Cmd_Sno> {sCmdSno} => 取得命令資料失敗！";
+                            strEM = $"<JobID> {JobID} => 取得命令資料失敗！";
                             return false;
                         }
                     }
@@ -812,7 +813,78 @@ namespace Mirle.DB.Proc
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
                 return false;
             }
-            return true;
+        }
+
+        public bool FunLotTransferCancel(string JobID, ref string strEM, string towerIP)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        CmdMstInfo cmd = new CmdMstInfo();
+                        if (Cmd_Mst.FunGetCommandByJobID(JobID, ref cmd, ref iRet, db))
+                        {
+                            if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Running)
+                            {
+                                strEM = "Error: 命令已開始執行，無法取消！";
+                                return false;
+                            }
+
+                            string sRemark = "";
+                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                            {
+                                sRemark = "Error: Begin失敗！";
+                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                return false;
+                            }
+
+                            sRemark = "WES命令取消";
+                            if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Cancel_Wait, sRemark, db))
+                            {
+                                strEM = "Error: 更新CmdMst.CmdSts失敗";
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+
+                            //對E800C下達LotCancel
+                            LotTransferCancelInfo lotcancel_info = new LotTransferCancelInfo
+                            {
+                                jobId = cmd.Cmd_Sno,
+                                lotId = cmd.Loc_ID
+                            };
+                            if(!api.GetLotTransferCancel().FunReport(lotcancel_info, towerIP))
+                            {
+                                strEM = "Error: 下達LotCancel命令給E800C失敗";
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+
+                            db.TransactionCtrl(TransactionTypes.Commit);
+                            return true;
+                        }
+                        else
+                        {
+                            strEM = $"<JobID> {JobID} => 取得命令資料失敗！";
+                            return false;
+                        }
+                    }
+                    else
+                    {
+                        strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
         }
     }
 }

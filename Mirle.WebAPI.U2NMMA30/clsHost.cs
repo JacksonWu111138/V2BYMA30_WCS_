@@ -17,6 +17,7 @@ namespace Mirle.WebAPI.V2BYMA30
         private PositionReport PositionReport = new PositionReport();
         private BufferRoll BufferRoll = new BufferRoll();
         private TaskCancel TaskCancel = new TaskCancel();
+        private LotTransferCancel LotTransferCancel = new LotTransferCancel();
         public CVReceiveNewBinCmd GetCV_ReceiveNewBinCmd() => RECEIVE_NEW_BIN_CMD;
         public BufferStatusQuery GetBufferStatusQuery() => BufferStatusQuery;
         public PutawayTransfer GetPutawayTransfer() => PutawayTransfer;
@@ -25,5 +26,6 @@ namespace Mirle.WebAPI.V2BYMA30
         public PositionReport GetPositionReport() => PositionReport;
         public BufferRoll GetBufferRoll() => BufferRoll;
         public TaskCancel GetTaskCancel() => TaskCancel;    
+        public LotTransferCancel GetLotTransferCancel() => LotTransferCancel;  
     }
 }

@@ -161,6 +161,39 @@ namespace Mirle.DB.Fun
                 dtTmp = null;
             }
         }
+        public bool FunGetCommandByJobID(string JobID, ref CmdMstInfo cmd, ref int iRet, DataBase.DB db)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                string strEM = "";
+                string strSql = $"select * from {Parameter.clsCmd_Mst.TableName} " +
+                    $"where {Parameter.clsCmd_Mst.Column.JobID} = '" + JobID + "' ";
+                iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet == DBResult.Success)
+                {
+                    cmd = new CmdMstInfo();
+                    cmd = tool.GetCommand(dtTmp.Rows[0]);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+            finally
+            {
+                dtTmp = null;
+            }
+        }
 
         public int FunGetCommand_byBoxID(string sBoxID, ref CmdMstInfo cmd, DataBase.DB db)
         {

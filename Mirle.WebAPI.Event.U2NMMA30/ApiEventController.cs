@@ -18,6 +18,7 @@ using System.Web.UI.WebControls;
 using System.Drawing;
 using System.Linq;
 using PutawayTransferInfo = Mirle.WebAPI.V2BYMA30.ReportInfo.PutawayTransferInfo;
+using RetrieveTransferInfo = Mirle.WebAPI.V2BYMA30.ReportInfo.RetrieveTransferInfo;
 
 namespace Mirle.WebAPI.Event
 {
@@ -511,9 +512,6 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"<{Body.jobId}>取得序號失敗！");
                     }
 
-                    //cmd.backupPortId ="";
-                    //cmd.BatchID = Body.batchId;
-
                     cmd.Loc_ID = Body.lotId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.StockIn;
                     cmd.CurDeviceID = "";
@@ -620,8 +618,111 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_RETRIEVE_TRANSFER start!");
             try
             {
+                CmdMstInfo cmd = new CmdMstInfo();
+                string strEM = "";
+                if (Body.priority == "1")
+                {   //更新優先級
+                    foreach(var lot in Body.lotList)
+                    {
+                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdatePry(lot.lotId, Body.priority, ref strEM))
+                        {
+                            // throw new Exception($"<{Body.jobId}> {strEM}");
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var lot in Body.lotList)
+                    {
+                        cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSNO);
+                        if (string.IsNullOrWhiteSpace(cmd.Cmd_Sno))
+                        {
+                            //throw new Exception($"<{Body.jobId}>取得序號失敗！");
+                        }
 
+                        cmd.Loc_ID = lot.lotId;
+                        cmd.Cmd_Mode = clsConstValue.CmdMode.StockOut;
+                        cmd.CurDeviceID = "";
+                        cmd.CurLoc = "";
+                        cmd.End_Date = "";
 
+                        cmd.Loc = lot.fromShelfId;
+                        cmd.Equ_No = tool.funGetEquNoByLoc(cmd.Loc).ToString();
+
+                        cmd.EXP_Date = "";
+                        cmd.JobID = Body.jobId;
+                        cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
+                        cmd.New_Loc = "";
+                        cmd.Prty = Body.priority;
+                        cmd.Remark = "";
+
+                        if (lot.toPortId == ConveyorDef.WES_B800CV)
+                        {
+                            int count = 0; bool check = false;
+                            ConveyorInfo B800CV = new ConveyorInfo();
+                            while (count < ConveyorDef.GetB800CV_List().Count())
+                            {
+                                B800CV = ConveyorDef.GetB800CV();
+                                if (middle.CheckIsOutReady(B800CV))
+                                {
+                                    cmd.Stn_No = B800CV.StnNo;
+                                    check = true;
+                                    break;
+                                }
+                                count++;
+                            }
+                            if (!check)
+                            {
+                                
+                                //throw new Exception("Error: B800CV 無OutReady儲位");
+                            }
+                        }
+                        else
+                        {
+                            var cv_to = ConveyorDef.GetBuffer_ByStnNo(lot.toPortId);
+                            cmd.Stn_No = cv_to.StnNo;
+                        }
+                        cmd.rackLocation = lot.rackLocation;
+                        cmd.largest = lot.largest;
+                        cmd.Host_Name = "WES";
+                        cmd.Zone_ID = "";
+                        //cmd.carrierType = Body.carrierType;
+
+                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
+                        {
+                            //送出【寫入cmdMst命令】失敗
+                            //throw new Exception(strEM);
+                        }
+
+                        RetrieveTransferInfo retrieve_Info = new RetrieveTransferInfo
+                        {
+                            jobId = cmd.Cmd_Sno,
+                            reelId = cmd.Loc_ID,
+                            fromShelfId = cmd.Loc,
+                            toPortId = cmd.Stn_No,
+                            rackLocation = cmd.rackLocation,
+                            largest = cmd.largest,
+                            priority = cmd.Prty
+                        };
+
+                        if (!api.GetRetrieveTransfer().FunReport(retrieve_Info, _towerApi.IP))
+                        {
+                            strEM = "Error: RetrieveTransfer E800C接收失敗";
+                            //throw new Exception(strEM);
+                        }
+                        else
+                        {
+                            string sRemark = "";
+                            if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark))
+                            {
+                                strEM = "Error: 更改CmdSts至Running失敗";
+                                //throw new Exception(strEM);
+                            }
+                        }
+
+                    }
+                }
+                    
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -655,8 +756,7 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_SHELF_TRANSFER start!");
             try
             {
-
-
+               //不會出現，E800C沒有這個功能
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -690,8 +790,9 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_TRANSFER_CANCEL start!");
             try
             {
-
-
+                string strEM = "";
+                if (!clsDB_Proc.GetDB_Object().GetProc().FunLotTransferCancel(Body.jobId, ref strEM, _towerApi.IP))
+                    throw new Exception(strEM);
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";

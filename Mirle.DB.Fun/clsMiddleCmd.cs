@@ -266,6 +266,38 @@ namespace Mirle.DB.Fun
             }
         }
 
+        public int FunGetMiddleCmd_Grid(ref DataTable dtTmp, DataBase.DB db)
+        {
+            try
+            {
+                string strEM = "";
+                string strSql = $"select {Parameter.clsMiddleCmd.Column.DeviceID},{Parameter.clsMiddleCmd.Column.CommandID}," +
+                    $"{Parameter.clsMiddleCmd.Column.TaskNo},{Parameter.clsMiddleCmd.Column.CSTID}," +
+                    $"{Parameter.clsMiddleCmd.Column.CmdSts},{Parameter.clsMiddleCmd.Column.Priority}," +
+                    $"{Parameter.clsMiddleCmd.Column.CmdMode},{Parameter.clsMiddleCmd.Column.Source}," +
+                    $"{Parameter.clsMiddleCmd.Column.Destination},{Parameter.clsMiddleCmd.Column.Remark}," +
+                    $"{Parameter.clsMiddleCmd.Column.BatchID},{Parameter.clsMiddleCmd.Column.carrierType}," +
+                    $"{Parameter.clsMiddleCmd.Column.CompleteCode} from " +
+                    $"{Parameter.clsMiddleCmd.TableName}" +
+                    $" where {Parameter.clsMiddleCmd.Column.CmdSts} < '{clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait}' ";
+                strSql += $" ORDER BY {Parameter.clsMiddleCmd.Column.Priority}," +
+                    $" {Parameter.clsMiddleCmd.Column.Create_Date}, {Parameter.clsMiddleCmd.Column.CommandID}";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                }
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+        }
+
         public int CheckHasMiddleCmd(string DeviceID, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();

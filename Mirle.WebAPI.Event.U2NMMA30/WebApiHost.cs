@@ -17,7 +17,7 @@ namespace Mirle.WebAPI.Event
         public WebApiHost(Startup startup, string sIP)
         {
             sIP = "127.0.0.1:9000";
-        //    //sIP = "127.0.0.1";
+            //sIP = "127.0.0.1";
             _baseAddress = $"http://{sIP}/";
             _webService = WebApp.Start(url: _baseAddress, startup: startup.Configuration);
         }
@@ -26,7 +26,7 @@ namespace Mirle.WebAPI.Event
         {
             _webService.Dispose();
         }
-        public bool GetBufferRolling(string jobId, string location, string strEM)
+        public bool GetBufferRolliyng(string jobId, string location, string strEM)
         {
             ConveyorInfo conveyor = new ConveyorInfo();
             conveyor = ConveyorDef.GetBuffer(location);

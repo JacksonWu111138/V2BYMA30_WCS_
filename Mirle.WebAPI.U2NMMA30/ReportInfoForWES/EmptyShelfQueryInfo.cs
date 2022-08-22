@@ -11,6 +11,6 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         public string jobId { get; set; }
         public string transactionId { get; set; } = "EMPTY_SHELF_QUERY";
         public string lotIdCarrierId { get; set; }
-        public string craenId { get; set; }
+        public string craneId { get; set; }
     }
 }

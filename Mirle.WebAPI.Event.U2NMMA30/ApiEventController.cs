@@ -70,9 +70,6 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"<{Body.jobId}>取得序號失敗！");
                     }
 
-                    //cmd.backupPortId ="";
-                    //cmd.BatchID = Body.batchId;
-
                     cmd.Loc_ID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.S2S;
                     cmd.CurDeviceID = "";
@@ -110,7 +107,6 @@ namespace Mirle.WebAPI.Event
                         cmd.New_Loc = cv_to.StnNo;
                     }
                     
-
                     cmd.Prty = Body.priority;
                     cmd.Remark = "";
 
@@ -141,7 +137,6 @@ namespace Mirle.WebAPI.Event
                     }
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
-                    //cmd.ticketId = Body.ticketId;
                     cmd.carrierType = Body.carrierType;
 
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
@@ -195,9 +190,6 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"<{Body.jobId}>取得序號失敗！");
                     }
 
-                    //cmd.backupPortId ="";
-                    //cmd.BatchID = Body.batchId;
-
                     cmd.Loc_ID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.StockIn;
                     cmd.CurDeviceID = "";
@@ -241,7 +233,6 @@ namespace Mirle.WebAPI.Event
                     }
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
-                    //cmd.ticketId = Body.ticketId;
                     cmd.carrierType = Body.carrierType;
 
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
@@ -295,9 +286,6 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"<{Body.jobId}>取得序號失敗！");
                     }
 
-                    //cmd.backupPortId ="";
-                    //cmd.BatchID = Body.batchId;
-
                     cmd.Loc_ID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.StockOut;
                     cmd.CurDeviceID = "";
@@ -342,7 +330,6 @@ namespace Mirle.WebAPI.Event
 
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
-                    //cmd.ticketId = Body.ticketId;
                     cmd.carrierType = Body.carrierType;
 
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
@@ -396,9 +383,6 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"<{Body.jobId}>取得序號失敗！");
                     }
 
-                    //cmd.backupPortId ="";
-                    //cmd.BatchID = Body.batchId;
-
                     cmd.Loc_ID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.L2L;
                     cmd.CurDeviceID = "";
@@ -419,7 +403,6 @@ namespace Mirle.WebAPI.Event
                     cmd.Stn_No = "";
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
-                    //cmd.ticketId = Body.ticketId;
                     cmd.carrierType = Body.carrierType;
 
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))

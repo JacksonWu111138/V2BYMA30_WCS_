@@ -394,7 +394,7 @@
             this.AGVTaskCancelButten.Name = "AGVTaskCancelButten";
             this.AGVTaskCancelButten.Size = new System.Drawing.Size(169, 44);
             this.AGVTaskCancelButten.TabIndex = 11;
-            this.AGVTaskCancelButten.Text = "AGV Task Cancel";
+            this.AGVTaskCancelButten.Text = "WES API Testing";
             this.AGVTaskCancelButten.UseVisualStyleBackColor = true;
             this.AGVTaskCancelButten.Click += new System.EventHandler(this.button1_Click);
             // 

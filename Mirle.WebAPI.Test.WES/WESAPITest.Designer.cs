@@ -58,13 +58,16 @@
             this.WESEQPStatusUpdate = new System.Windows.Forms.Button();
             this.WESRemoveRackShow = new System.Windows.Forms.Button();
             this.WESRemoveRackDown = new System.Windows.Forms.Button();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // WESPosititonReport
             // 
-            this.WESPosititonReport.Location = new System.Drawing.Point(3, 3);
+            this.WESPosititonReport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESPosititonReport.Location = new System.Drawing.Point(744, 215);
             this.WESPosititonReport.Name = "WESPosititonReport";
-            this.WESPosititonReport.Size = new System.Drawing.Size(152, 35);
+            this.WESPosititonReport.Size = new System.Drawing.Size(242, 47);
             this.WESPosititonReport.TabIndex = 0;
             this.WESPosititonReport.Text = "PosititonReport";
             this.WESPosititonReport.UseVisualStyleBackColor = true;
@@ -72,9 +75,10 @@
             // 
             // WESLotPositionReport
             // 
-            this.WESLotPositionReport.Location = new System.Drawing.Point(3, 44);
+            this.WESLotPositionReport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESLotPositionReport.Location = new System.Drawing.Point(3, 3);
             this.WESLotPositionReport.Name = "WESLotPositionReport";
-            this.WESLotPositionReport.Size = new System.Drawing.Size(152, 29);
+            this.WESLotPositionReport.Size = new System.Drawing.Size(241, 47);
             this.WESLotPositionReport.TabIndex = 2;
             this.WESLotPositionReport.Text = "LotPositionReport";
             this.WESLotPositionReport.UseVisualStyleBackColor = true;
@@ -82,9 +86,10 @@
             // 
             // WESNGPositionReport
             // 
-            this.WESNGPositionReport.Location = new System.Drawing.Point(3, 79);
+            this.WESNGPositionReport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESNGPositionReport.Location = new System.Drawing.Point(744, 109);
             this.WESNGPositionReport.Name = "WESNGPositionReport";
-            this.WESNGPositionReport.Size = new System.Drawing.Size(152, 33);
+            this.WESNGPositionReport.Size = new System.Drawing.Size(242, 47);
             this.WESNGPositionReport.TabIndex = 3;
             this.WESNGPositionReport.Text = "NGPositionReport";
             this.WESNGPositionReport.UseVisualStyleBackColor = true;
@@ -92,9 +97,10 @@
             // 
             // WESCarrierReturnNext
             // 
-            this.WESCarrierReturnNext.Location = new System.Drawing.Point(3, 118);
+            this.WESCarrierReturnNext.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESCarrierReturnNext.Location = new System.Drawing.Point(250, 162);
             this.WESCarrierReturnNext.Name = "WESCarrierReturnNext";
-            this.WESCarrierReturnNext.Size = new System.Drawing.Size(152, 30);
+            this.WESCarrierReturnNext.Size = new System.Drawing.Size(241, 47);
             this.WESCarrierReturnNext.TabIndex = 4;
             this.WESCarrierReturnNext.Text = "CarrierReturnNext";
             this.WESCarrierReturnNext.UseVisualStyleBackColor = true;
@@ -102,9 +108,10 @@
             // 
             // WESCarrierTransferComplete
             // 
-            this.WESCarrierTransferComplete.Location = new System.Drawing.Point(3, 154);
+            this.WESCarrierTransferComplete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESCarrierTransferComplete.Location = new System.Drawing.Point(250, 374);
             this.WESCarrierTransferComplete.Name = "WESCarrierTransferComplete";
-            this.WESCarrierTransferComplete.Size = new System.Drawing.Size(192, 38);
+            this.WESCarrierTransferComplete.Size = new System.Drawing.Size(241, 47);
             this.WESCarrierTransferComplete.TabIndex = 5;
             this.WESCarrierTransferComplete.Text = "CarrierTransferComplete";
             this.WESCarrierTransferComplete.UseVisualStyleBackColor = true;
@@ -112,9 +119,10 @@
             // 
             // WESCarrierPutawayCheck
             // 
-            this.WESCarrierPutawayCheck.Location = new System.Drawing.Point(3, 198);
+            this.WESCarrierPutawayCheck.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESCarrierPutawayCheck.Location = new System.Drawing.Point(250, 3);
             this.WESCarrierPutawayCheck.Name = "WESCarrierPutawayCheck";
-            this.WESCarrierPutawayCheck.Size = new System.Drawing.Size(188, 30);
+            this.WESCarrierPutawayCheck.Size = new System.Drawing.Size(241, 47);
             this.WESCarrierPutawayCheck.TabIndex = 6;
             this.WESCarrierPutawayCheck.Text = "CarrierPutawayCheck";
             this.WESCarrierPutawayCheck.UseVisualStyleBackColor = true;
@@ -122,9 +130,10 @@
             // 
             // WESCarrierPutawayComplete
             // 
-            this.WESCarrierPutawayComplete.Location = new System.Drawing.Point(3, 234);
+            this.WESCarrierPutawayComplete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESCarrierPutawayComplete.Location = new System.Drawing.Point(250, 56);
             this.WESCarrierPutawayComplete.Name = "WESCarrierPutawayComplete";
-            this.WESCarrierPutawayComplete.Size = new System.Drawing.Size(192, 33);
+            this.WESCarrierPutawayComplete.Size = new System.Drawing.Size(241, 47);
             this.WESCarrierPutawayComplete.TabIndex = 7;
             this.WESCarrierPutawayComplete.Text = "CarrierPutawayComplete";
             this.WESCarrierPutawayComplete.UseVisualStyleBackColor = true;
@@ -132,9 +141,9 @@
             // 
             // WESLotPutawayCheck
             // 
-            this.WESLotPutawayCheck.Location = new System.Drawing.Point(3, 273);
+            this.WESLotPutawayCheck.Location = new System.Drawing.Point(3, 56);
             this.WESLotPutawayCheck.Name = "WESLotPutawayCheck";
-            this.WESLotPutawayCheck.Size = new System.Drawing.Size(184, 33);
+            this.WESLotPutawayCheck.Size = new System.Drawing.Size(241, 47);
             this.WESLotPutawayCheck.TabIndex = 8;
             this.WESLotPutawayCheck.Text = "LotPutawayCheck";
             this.WESLotPutawayCheck.UseVisualStyleBackColor = true;
@@ -142,9 +151,10 @@
             // 
             // WESLotPutawayComplete
             // 
-            this.WESLotPutawayComplete.Location = new System.Drawing.Point(3, 312);
+            this.WESLotPutawayComplete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESLotPutawayComplete.Location = new System.Drawing.Point(3, 109);
             this.WESLotPutawayComplete.Name = "WESLotPutawayComplete";
-            this.WESLotPutawayComplete.Size = new System.Drawing.Size(180, 32);
+            this.WESLotPutawayComplete.Size = new System.Drawing.Size(241, 47);
             this.WESLotPutawayComplete.TabIndex = 9;
             this.WESLotPutawayComplete.Text = "LotPutawayComplete";
             this.WESLotPutawayComplete.UseVisualStyleBackColor = true;
@@ -152,9 +162,10 @@
             // 
             // WESLotShelfReport
             // 
-            this.WESLotShelfReport.Location = new System.Drawing.Point(4, 350);
+            this.WESLotShelfReport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESLotShelfReport.Location = new System.Drawing.Point(3, 321);
             this.WESLotShelfReport.Name = "WESLotShelfReport";
-            this.WESLotShelfReport.Size = new System.Drawing.Size(183, 28);
+            this.WESLotShelfReport.Size = new System.Drawing.Size(241, 47);
             this.WESLotShelfReport.TabIndex = 10;
             this.WESLotShelfReport.Text = "LotShelfReport";
             this.WESLotShelfReport.UseVisualStyleBackColor = true;
@@ -162,9 +173,10 @@
             // 
             // WESCarrierShelfReport
             // 
-            this.WESCarrierShelfReport.Location = new System.Drawing.Point(252, 3);
+            this.WESCarrierShelfReport.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESCarrierShelfReport.Location = new System.Drawing.Point(250, 268);
             this.WESCarrierShelfReport.Name = "WESCarrierShelfReport";
-            this.WESCarrierShelfReport.Size = new System.Drawing.Size(170, 28);
+            this.WESCarrierShelfReport.Size = new System.Drawing.Size(241, 47);
             this.WESCarrierShelfReport.TabIndex = 11;
             this.WESCarrierShelfReport.Text = "CarrierShelfReport";
             this.WESCarrierShelfReport.UseVisualStyleBackColor = true;
@@ -172,9 +184,10 @@
             // 
             // WESCarrierShelfRequest
             // 
-            this.WESCarrierShelfRequest.Location = new System.Drawing.Point(252, 37);
+            this.WESCarrierShelfRequest.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESCarrierShelfRequest.Location = new System.Drawing.Point(250, 321);
             this.WESCarrierShelfRequest.Name = "WESCarrierShelfRequest";
-            this.WESCarrierShelfRequest.Size = new System.Drawing.Size(169, 29);
+            this.WESCarrierShelfRequest.Size = new System.Drawing.Size(241, 47);
             this.WESCarrierShelfRequest.TabIndex = 12;
             this.WESCarrierShelfRequest.Text = "CarrierShelfRequest";
             this.WESCarrierShelfRequest.UseVisualStyleBackColor = true;
@@ -182,9 +195,10 @@
             // 
             // WESLotShelfRequest
             // 
-            this.WESLotShelfRequest.Location = new System.Drawing.Point(252, 72);
+            this.WESLotShelfRequest.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESLotShelfRequest.Location = new System.Drawing.Point(3, 374);
             this.WESLotShelfRequest.Name = "WESLotShelfRequest";
-            this.WESLotShelfRequest.Size = new System.Drawing.Size(170, 35);
+            this.WESLotShelfRequest.Size = new System.Drawing.Size(241, 47);
             this.WESLotShelfRequest.TabIndex = 13;
             this.WESLotShelfRequest.Text = "LotShelfRequest";
             this.WESLotShelfRequest.UseVisualStyleBackColor = true;
@@ -192,9 +206,10 @@
             // 
             // WESCarrierShelfComplete
             // 
-            this.WESCarrierShelfComplete.Location = new System.Drawing.Point(252, 112);
+            this.WESCarrierShelfComplete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESCarrierShelfComplete.Location = new System.Drawing.Point(250, 215);
             this.WESCarrierShelfComplete.Name = "WESCarrierShelfComplete";
-            this.WESCarrierShelfComplete.Size = new System.Drawing.Size(170, 36);
+            this.WESCarrierShelfComplete.Size = new System.Drawing.Size(241, 47);
             this.WESCarrierShelfComplete.TabIndex = 14;
             this.WESCarrierShelfComplete.Text = "CarrierShelfComplete";
             this.WESCarrierShelfComplete.UseVisualStyleBackColor = true;
@@ -202,9 +217,10 @@
             // 
             // WESLotShelfComplete
             // 
-            this.WESLotShelfComplete.Location = new System.Drawing.Point(252, 154);
+            this.WESLotShelfComplete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESLotShelfComplete.Location = new System.Drawing.Point(3, 268);
             this.WESLotShelfComplete.Name = "WESLotShelfComplete";
-            this.WESLotShelfComplete.Size = new System.Drawing.Size(170, 38);
+            this.WESLotShelfComplete.Size = new System.Drawing.Size(241, 47);
             this.WESLotShelfComplete.TabIndex = 15;
             this.WESLotShelfComplete.Text = "LotShelfComplete";
             this.WESLotShelfComplete.UseVisualStyleBackColor = true;
@@ -212,9 +228,10 @@
             // 
             // WESEmptyShelfQuery
             // 
-            this.WESEmptyShelfQuery.Location = new System.Drawing.Point(252, 198);
+            this.WESEmptyShelfQuery.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESEmptyShelfQuery.Location = new System.Drawing.Point(497, 268);
             this.WESEmptyShelfQuery.Name = "WESEmptyShelfQuery";
-            this.WESEmptyShelfQuery.Size = new System.Drawing.Size(169, 30);
+            this.WESEmptyShelfQuery.Size = new System.Drawing.Size(241, 47);
             this.WESEmptyShelfQuery.TabIndex = 16;
             this.WESEmptyShelfQuery.Text = "EmptyShelfQuery";
             this.WESEmptyShelfQuery.UseVisualStyleBackColor = true;
@@ -222,9 +239,10 @@
             // 
             // WESWCSCancel
             // 
-            this.WESWCSCancel.Location = new System.Drawing.Point(252, 235);
+            this.WESWCSCancel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESWCSCancel.Location = new System.Drawing.Point(744, 427);
             this.WESWCSCancel.Name = "WESWCSCancel";
-            this.WESWCSCancel.Size = new System.Drawing.Size(170, 32);
+            this.WESWCSCancel.Size = new System.Drawing.Size(242, 53);
             this.WESWCSCancel.TabIndex = 17;
             this.WESWCSCancel.Text = "WCSCancel";
             this.WESWCSCancel.UseVisualStyleBackColor = true;
@@ -232,9 +250,10 @@
             // 
             // WESEmptyCarrierUnload
             // 
-            this.WESEmptyCarrierUnload.Location = new System.Drawing.Point(252, 273);
+            this.WESEmptyCarrierUnload.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESEmptyCarrierUnload.Location = new System.Drawing.Point(497, 3);
             this.WESEmptyCarrierUnload.Name = "WESEmptyCarrierUnload";
-            this.WESEmptyCarrierUnload.Size = new System.Drawing.Size(165, 33);
+            this.WESEmptyCarrierUnload.Size = new System.Drawing.Size(241, 47);
             this.WESEmptyCarrierUnload.TabIndex = 18;
             this.WESEmptyCarrierUnload.Text = "EmptyCarrierUnload";
             this.WESEmptyCarrierUnload.UseVisualStyleBackColor = true;
@@ -242,9 +261,10 @@
             // 
             // WESPortStatusUpdate
             // 
-            this.WESPortStatusUpdate.Location = new System.Drawing.Point(256, 312);
+            this.WESPortStatusUpdate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESPortStatusUpdate.Location = new System.Drawing.Point(744, 162);
             this.WESPortStatusUpdate.Name = "WESPortStatusUpdate";
-            this.WESPortStatusUpdate.Size = new System.Drawing.Size(160, 32);
+            this.WESPortStatusUpdate.Size = new System.Drawing.Size(242, 47);
             this.WESPortStatusUpdate.TabIndex = 19;
             this.WESPortStatusUpdate.Text = "PortStatusUpdate";
             this.WESPortStatusUpdate.UseVisualStyleBackColor = true;
@@ -252,9 +272,10 @@
             // 
             // WESLotRetrieveComplete
             // 
-            this.WESLotRetrieveComplete.Location = new System.Drawing.Point(255, 353);
+            this.WESLotRetrieveComplete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESLotRetrieveComplete.Location = new System.Drawing.Point(3, 215);
             this.WESLotRetrieveComplete.Name = "WESLotRetrieveComplete";
-            this.WESLotRetrieveComplete.Size = new System.Drawing.Size(180, 38);
+            this.WESLotRetrieveComplete.Size = new System.Drawing.Size(241, 47);
             this.WESLotRetrieveComplete.TabIndex = 20;
             this.WESLotRetrieveComplete.Text = "LotRetrieveComplete";
             this.WESLotRetrieveComplete.UseVisualStyleBackColor = true;
@@ -262,9 +283,10 @@
             // 
             // WESCarrierRetrieveComplete
             // 
-            this.WESCarrierRetrieveComplete.Location = new System.Drawing.Point(518, 8);
+            this.WESCarrierRetrieveComplete.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESCarrierRetrieveComplete.Location = new System.Drawing.Point(250, 109);
             this.WESCarrierRetrieveComplete.Name = "WESCarrierRetrieveComplete";
-            this.WESCarrierRetrieveComplete.Size = new System.Drawing.Size(182, 30);
+            this.WESCarrierRetrieveComplete.Size = new System.Drawing.Size(241, 47);
             this.WESCarrierRetrieveComplete.TabIndex = 21;
             this.WESCarrierRetrieveComplete.Text = "CarrierRetrieveComplete";
             this.WESCarrierRetrieveComplete.UseVisualStyleBackColor = true;
@@ -272,9 +294,10 @@
             // 
             // WESEmptyMagazineUnload
             // 
-            this.WESEmptyMagazineUnload.Location = new System.Drawing.Point(518, 44);
+            this.WESEmptyMagazineUnload.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESEmptyMagazineUnload.Location = new System.Drawing.Point(497, 215);
             this.WESEmptyMagazineUnload.Name = "WESEmptyMagazineUnload";
-            this.WESEmptyMagazineUnload.Size = new System.Drawing.Size(182, 31);
+            this.WESEmptyMagazineUnload.Size = new System.Drawing.Size(241, 47);
             this.WESEmptyMagazineUnload.TabIndex = 22;
             this.WESEmptyMagazineUnload.Text = "EmptyMagazineUnload";
             this.WESEmptyMagazineUnload.UseVisualStyleBackColor = true;
@@ -282,9 +305,10 @@
             // 
             // WESEmptyMagazineLoadRequest
             // 
-            this.WESEmptyMagazineLoadRequest.Location = new System.Drawing.Point(518, 79);
+            this.WESEmptyMagazineLoadRequest.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESEmptyMagazineLoadRequest.Location = new System.Drawing.Point(497, 162);
             this.WESEmptyMagazineLoadRequest.Name = "WESEmptyMagazineLoadRequest";
-            this.WESEmptyMagazineLoadRequest.Size = new System.Drawing.Size(241, 33);
+            this.WESEmptyMagazineLoadRequest.Size = new System.Drawing.Size(241, 47);
             this.WESEmptyMagazineLoadRequest.TabIndex = 23;
             this.WESEmptyMagazineLoadRequest.Text = "EmptyMagazineLoadRequest";
             this.WESEmptyMagazineLoadRequest.UseVisualStyleBackColor = true;
@@ -292,9 +316,10 @@
             // 
             // WESMagazineLoadRequest
             // 
-            this.WESMagazineLoadRequest.Location = new System.Drawing.Point(518, 115);
+            this.WESMagazineLoadRequest.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESMagazineLoadRequest.Location = new System.Drawing.Point(744, 56);
             this.WESMagazineLoadRequest.Name = "WESMagazineLoadRequest";
-            this.WESMagazineLoadRequest.Size = new System.Drawing.Size(176, 37);
+            this.WESMagazineLoadRequest.Size = new System.Drawing.Size(242, 47);
             this.WESMagazineLoadRequest.TabIndex = 24;
             this.WESMagazineLoadRequest.Text = "MagazineLoadRequest";
             this.WESMagazineLoadRequest.UseVisualStyleBackColor = true;
@@ -302,9 +327,10 @@
             // 
             // WESLotRenewRequest
             // 
-            this.WESLotRenewRequest.Location = new System.Drawing.Point(518, 154);
+            this.WESLotRenewRequest.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESLotRenewRequest.Location = new System.Drawing.Point(3, 162);
             this.WESLotRenewRequest.Name = "WESLotRenewRequest";
-            this.WESLotRenewRequest.Size = new System.Drawing.Size(172, 38);
+            this.WESLotRenewRequest.Size = new System.Drawing.Size(241, 47);
             this.WESLotRenewRequest.TabIndex = 25;
             this.WESLotRenewRequest.Text = "LotRenewRequest";
             this.WESLotRenewRequest.UseVisualStyleBackColor = true;
@@ -312,9 +338,10 @@
             // 
             // WESEmptyESDCarrierUnload
             // 
-            this.WESEmptyESDCarrierUnload.Location = new System.Drawing.Point(518, 196);
+            this.WESEmptyESDCarrierUnload.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESEmptyESDCarrierUnload.Location = new System.Drawing.Point(497, 109);
             this.WESEmptyESDCarrierUnload.Name = "WESEmptyESDCarrierUnload";
-            this.WESEmptyESDCarrierUnload.Size = new System.Drawing.Size(208, 32);
+            this.WESEmptyESDCarrierUnload.Size = new System.Drawing.Size(241, 47);
             this.WESEmptyESDCarrierUnload.TabIndex = 26;
             this.WESEmptyESDCarrierUnload.Text = "EmptyESDCarrierUnload";
             this.WESEmptyESDCarrierUnload.UseVisualStyleBackColor = true;
@@ -322,9 +349,10 @@
             // 
             // WESEmptyESDCarrierLoadRequest
             // 
-            this.WESEmptyESDCarrierLoadRequest.Location = new System.Drawing.Point(518, 234);
+            this.WESEmptyESDCarrierLoadRequest.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESEmptyESDCarrierLoadRequest.Location = new System.Drawing.Point(497, 56);
             this.WESEmptyESDCarrierLoadRequest.Name = "WESEmptyESDCarrierLoadRequest";
-            this.WESEmptyESDCarrierLoadRequest.Size = new System.Drawing.Size(215, 32);
+            this.WESEmptyESDCarrierLoadRequest.Size = new System.Drawing.Size(241, 47);
             this.WESEmptyESDCarrierLoadRequest.TabIndex = 27;
             this.WESEmptyESDCarrierLoadRequest.Text = "EmptyESDCarrierLoadRequest";
             this.WESEmptyESDCarrierLoadRequest.UseVisualStyleBackColor = true;
@@ -332,9 +360,10 @@
             // 
             // WESEQPStatusUpdate
             // 
-            this.WESEQPStatusUpdate.Location = new System.Drawing.Point(521, 271);
+            this.WESEQPStatusUpdate.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESEQPStatusUpdate.Location = new System.Drawing.Point(744, 3);
             this.WESEQPStatusUpdate.Name = "WESEQPStatusUpdate";
-            this.WESEQPStatusUpdate.Size = new System.Drawing.Size(179, 35);
+            this.WESEQPStatusUpdate.Size = new System.Drawing.Size(242, 47);
             this.WESEQPStatusUpdate.TabIndex = 28;
             this.WESEQPStatusUpdate.Text = "EQPStatusUpdate";
             this.WESEQPStatusUpdate.UseVisualStyleBackColor = true;
@@ -342,9 +371,10 @@
             // 
             // WESRemoveRackShow
             // 
-            this.WESRemoveRackShow.Location = new System.Drawing.Point(521, 312);
+            this.WESRemoveRackShow.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESRemoveRackShow.Location = new System.Drawing.Point(744, 321);
             this.WESRemoveRackShow.Name = "WESRemoveRackShow";
-            this.WESRemoveRackShow.Size = new System.Drawing.Size(169, 35);
+            this.WESRemoveRackShow.Size = new System.Drawing.Size(242, 47);
             this.WESRemoveRackShow.TabIndex = 29;
             this.WESRemoveRackShow.Text = "RemoveRackShow";
             this.WESRemoveRackShow.UseVisualStyleBackColor = true;
@@ -352,51 +382,76 @@
             // 
             // WESRemoveRackDown
             // 
-            this.WESRemoveRackDown.Location = new System.Drawing.Point(524, 353);
+            this.WESRemoveRackDown.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WESRemoveRackDown.Location = new System.Drawing.Point(744, 268);
             this.WESRemoveRackDown.Name = "WESRemoveRackDown";
-            this.WESRemoveRackDown.Size = new System.Drawing.Size(169, 37);
+            this.WESRemoveRackDown.Size = new System.Drawing.Size(242, 47);
             this.WESRemoveRackDown.TabIndex = 30;
             this.WESRemoveRackDown.Text = "RemoveRackDown";
             this.WESRemoveRackDown.UseVisualStyleBackColor = true;
             this.WESRemoveRackDown.Click += new System.EventHandler(this.WESRemoveRackDown_Click);
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.ColumnCount = 4;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Controls.Add(this.WESLotPositionReport, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.WESRemoveRackDown, 3, 5);
+            this.tableLayoutPanel1.Controls.Add(this.WESCarrierPutawayCheck, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.WESRemoveRackShow, 3, 6);
+            this.tableLayoutPanel1.Controls.Add(this.WESEmptyESDCarrierUnload, 2, 2);
+            this.tableLayoutPanel1.Controls.Add(this.WESLotRenewRequest, 0, 3);
+            this.tableLayoutPanel1.Controls.Add(this.WESPosititonReport, 3, 4);
+            this.tableLayoutPanel1.Controls.Add(this.WESLotRetrieveComplete, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.WESEmptyESDCarrierLoadRequest, 2, 1);
+            this.tableLayoutPanel1.Controls.Add(this.WESLotShelfReport, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.WESLotShelfComplete, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.WESEmptyMagazineUnload, 2, 4);
+            this.tableLayoutPanel1.Controls.Add(this.WESEmptyMagazineLoadRequest, 2, 3);
+            this.tableLayoutPanel1.Controls.Add(this.WESCarrierPutawayComplete, 1, 1);
+            this.tableLayoutPanel1.Controls.Add(this.WESEmptyShelfQuery, 2, 5);
+            this.tableLayoutPanel1.Controls.Add(this.WESCarrierRetrieveComplete, 1, 2);
+            this.tableLayoutPanel1.Controls.Add(this.WESCarrierReturnNext, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.WESCarrierShelfComplete, 1, 4);
+            this.tableLayoutPanel1.Controls.Add(this.WESCarrierShelfReport, 1, 5);
+            this.tableLayoutPanel1.Controls.Add(this.WESCarrierShelfRequest, 1, 6);
+            this.tableLayoutPanel1.Controls.Add(this.WESCarrierTransferComplete, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.WESEmptyCarrierUnload, 2, 0);
+            this.tableLayoutPanel1.Controls.Add(this.WESLotPutawayCheck, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.WESLotPutawayComplete, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.WESLotShelfRequest, 0, 7);
+            this.tableLayoutPanel1.Controls.Add(this.WESPortStatusUpdate, 3, 3);
+            this.tableLayoutPanel1.Controls.Add(this.WESNGPositionReport, 3, 2);
+            this.tableLayoutPanel1.Controls.Add(this.WESMagazineLoadRequest, 3, 1);
+            this.tableLayoutPanel1.Controls.Add(this.WESEQPStatusUpdate, 3, 0);
+            this.tableLayoutPanel1.Controls.Add(this.WESWCSCancel, 3, 8);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(39, 12);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 9;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 11.11111F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(989, 483);
+            this.tableLayoutPanel1.TabIndex = 31;
+            // 
             // WESAPITest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 578);
-            this.Controls.Add(this.WESRemoveRackDown);
-            this.Controls.Add(this.WESRemoveRackShow);
-            this.Controls.Add(this.WESEQPStatusUpdate);
-            this.Controls.Add(this.WESEmptyESDCarrierLoadRequest);
-            this.Controls.Add(this.WESEmptyESDCarrierUnload);
-            this.Controls.Add(this.WESLotRenewRequest);
-            this.Controls.Add(this.WESMagazineLoadRequest);
-            this.Controls.Add(this.WESEmptyMagazineLoadRequest);
-            this.Controls.Add(this.WESEmptyMagazineUnload);
-            this.Controls.Add(this.WESCarrierRetrieveComplete);
-            this.Controls.Add(this.WESLotRetrieveComplete);
-            this.Controls.Add(this.WESPortStatusUpdate);
-            this.Controls.Add(this.WESEmptyCarrierUnload);
-            this.Controls.Add(this.WESWCSCancel);
-            this.Controls.Add(this.WESEmptyShelfQuery);
-            this.Controls.Add(this.WESLotShelfComplete);
-            this.Controls.Add(this.WESCarrierShelfComplete);
-            this.Controls.Add(this.WESLotShelfRequest);
-            this.Controls.Add(this.WESCarrierShelfRequest);
-            this.Controls.Add(this.WESCarrierShelfReport);
-            this.Controls.Add(this.WESLotShelfReport);
-            this.Controls.Add(this.WESLotPutawayComplete);
-            this.Controls.Add(this.WESLotPutawayCheck);
-            this.Controls.Add(this.WESCarrierPutawayComplete);
-            this.Controls.Add(this.WESCarrierPutawayCheck);
-            this.Controls.Add(this.WESCarrierTransferComplete);
-            this.Controls.Add(this.WESCarrierReturnNext);
-            this.Controls.Add(this.WESNGPositionReport);
-            this.Controls.Add(this.WESLotPositionReport);
-            this.Controls.Add(this.WESPosititonReport);
+            this.ClientSize = new System.Drawing.Size(1198, 578);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "WESAPITest";
             this.Text = "WES API Testing";
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -433,6 +488,7 @@
         private System.Windows.Forms.Button WESEQPStatusUpdate;
         private System.Windows.Forms.Button WESRemoveRackShow;
         private System.Windows.Forms.Button WESRemoveRackDown;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
     }
 }
 

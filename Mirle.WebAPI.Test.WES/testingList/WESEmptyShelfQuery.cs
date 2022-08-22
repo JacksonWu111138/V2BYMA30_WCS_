@@ -28,7 +28,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
             {
                 jobId = textBox_jobId.Text,
                 lotIdCarrierId = textBox_lotIdCarrierId.Text,
-                craenId = textBox_craneId.Text
+                craneId = textBox_craneId.Text
             };
             if (!api.GetEmptyShelfQuery().FunReport(info, wesApiconfig.IP))
             {

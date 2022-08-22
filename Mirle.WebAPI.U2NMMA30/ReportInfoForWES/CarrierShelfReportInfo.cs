@@ -11,7 +11,8 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         public string jobId { get; set; }
         public string transactionId { get; set; } = "CARRIER_SHELF_REPORT";
         public string shelfId { get; set; }
+        public string shelfStatus { get; set; }
         public string carrierId { get; set; }
-        public string isComplete { get; set; }
+        public string disableLocation { get; set; }
     }
 }

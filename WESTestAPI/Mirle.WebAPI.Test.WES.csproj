@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{448A3C3E-39FD-49FF-B6D7-2D0D9E61AA49}</ProjectGuid>
+    <ProjectGuid>{90C81EFF-A19D-4DED-B304-5805B4B8F0B3}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Mirle.ASRS.WCS</RootNamespace>
-    <AssemblyName>Mirle.ASRS.WCS</AssemblyName>
+    <RootNamespace>WESTestAPI</RootNamespace>
+    <AssemblyName>WESTestAPI</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -22,7 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,59 +31,29 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mirle.ASRS.Close.Program">
-      <HintPath>..\Dll\Mirle.ASRS.Close.Program.exe</HintPath>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="System.Net" />
     <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="clsGetCVLocation.cs" />
-    <Compile Include="Event\LoadPortEventArgs.cs" />
-    <Compile Include="Library\clInitSys.cs" />
-    <Compile Include="Library\clsWriLog.cs" />
-    <Compile Include="View\frmInsertCmd_CmdMst.cs">
+    <Compile Include="WESAPITesting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="View\frmInsertCmd_CmdMst.Designer.cs">
-      <DependentUpon>frmInsertCmd_CmdMst.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\frmUpdCurLoc.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\frmUpdCurLoc.Designer.cs">
-      <DependentUpon>frmUpdCurLoc.cs</DependentUpon>
-    </Compile>
-    <Compile Include="View\MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="View\MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
+    <Compile Include="WESAPITesting.Designer.cs">
+      <DependentUpon>WESAPITesting.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="View\frmInsertCmd_CmdMst.resx">
-      <DependentUpon>frmInsertCmd_CmdMst.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\frmUpdCurLoc.resx">
-      <DependentUpon>frmUpdCurLoc.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="View\MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -94,9 +63,6 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <None Include="Config\ASRS.ini">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -106,28 +72,17 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Sqlite\LCSCODE.db">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mirle.API.Test.AGVTaskCancel\Mirle.WebAPI.Test.AGVTaskCancel.csproj">
-      <Project>{f79eae89-d2d1-41f1-b997-06f2432ca926}</Project>
-      <Name>Mirle.WebAPI.Test.AGVTaskCancel</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mirle.ASRS.DBCommand\Mirle.ASRS.DBCommand.csproj">
-      <Project>{9441796e-d9f9-45cc-b0c8-c8b5eeb679eb}</Project>
-      <Name>Mirle.ASRS.DBCommand</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mirle.DB.ClearCmd.Proc\Mirle.DB.ClearCmd.Proc.csproj">
       <Project>{31deb747-36ca-4a92-8df1-89eee47a0fa4}</Project>
       <Name>Mirle.DB.ClearCmd.Proc</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.DB.Fun\Mirle.DB.Fun.csproj">
-      <Project>{C40166B0-0F5D-4535-94A7-699764A59A83}</Project>
+      <Project>{c40166b0-0f5d-4535-94a7-699764a59a83}</Project>
       <Name>Mirle.DB.Fun</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.DB.Object\Mirle.DB.Object.csproj">
@@ -135,7 +90,7 @@
       <Name>Mirle.DB.Object</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.DB.Proc\Mirle.DB.Proc.csproj">
-      <Project>{60C72719-D780-4BC8-9198-FC21C9754918}</Project>
+      <Project>{60c72719-d780-4bc8-9198-fc21c9754918}</Project>
       <Name>Mirle.DB.Proc</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.Def.U2NMMA30\Mirle.Def.U2NMMA30.csproj">
@@ -146,29 +101,9 @@
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def_2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mirle.EccsSignal_2\Mirle.EccsSignal.csproj">
-      <Project>{f1280df7-4dac-4be5-8ecd-c7663697229d}</Project>
-      <Name>Mirle.EccsSignal</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mirle.Gird\Mirle.Gird.csproj">
-      <Project>{8ab5fac9-7cc2-4eec-b583-39778e66ce1f}</Project>
-      <Name>Mirle.Gird</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mirle.Grid.U2NMMA30\Mirle.Grid.U2NMMA30.csproj">
-      <Project>{39a4c47b-c53b-4057-9dc5-93b8907639e8}</Project>
-      <Name>Mirle.Grid.U2NMMA30</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mirle.MapController\Mirle.MapController_2.csproj">
-      <Project>{e9c71b96-e8f4-4124-9f18-444e8a05cf80}</Project>
-      <Name>Mirle.MapController_2</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mirle.Middle\Mirle.Middle.csproj">
-      <Project>{312ED336-0211-4E88-9F3F-6B15A133F864}</Project>
+      <Project>{312ed336-0211-4e88-9f3f-6b15a133f864}</Project>
       <Name>Mirle.Middle</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mirle.Stocker.Command\Mirle.Stocker.Command.csproj">
-      <Project>{8FE496D0-5503-4719-9C50-6C894E125B6F}</Project>
-      <Name>Mirle.Stocker.Command</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.Structure\Mirle.Structure.csproj">
       <Project>{cc7b0aac-3935-44cf-b363-55c0445358d0}</Project>
@@ -178,33 +113,10 @@
       <Project>{2e09050b-3bb2-482a-b27b-cf23db03e342}</Project>
       <Name>Mirle.WebAPI.Event</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mirle.WebAPI.Test.WES\Mirle.WebAPI.Test.WES.csproj">
-      <Project>{f3d01421-0e64-4b0c-b8bc-b6b71363516f}</Project>
-      <Name>Mirle.WebAPI.Test.WES</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mirle.WebAPI.U2NMMA30\Mirle.WebAPI.csproj">
       <Project>{646741d4-de4c-48ef-9b90-1785bd22cefd}</Project>
       <Name>Mirle.WebAPI</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog_2.csproj">
-      <Project>{fcb3bfde-2247-4aa4-a652-f87c081b63fc}</Project>
-      <Name>Mirle.WriLog_2</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Config.Net">
-      <Version>4.15.0</Version>
-    </PackageReference>
-    <PackageReference Include="Mirle">
-      <Version>2.1.5</Version>
-    </PackageReference>
-    <PackageReference Include="Mirle.MPLC.MCProtocol">
-      <Version>1.0.2</Version>
-    </PackageReference>
-    <PackageReference Include="Mirle.MPLC.MXComponent">
-      <Version>1.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

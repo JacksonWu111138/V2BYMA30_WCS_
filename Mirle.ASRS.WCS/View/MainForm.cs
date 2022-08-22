@@ -23,6 +23,7 @@ using Mirle.ASRS.DBCommand;
 using Mirle.Middle;
 using Mirle.EccsSignal;
 using Mirle.WebAPI.Test.AGVTaskCancel;
+using Mirle.WebAPI.Test.WES;
 
 namespace Mirle.ASRS.WCS.View
 {
@@ -148,7 +149,8 @@ namespace Mirle.ASRS.WCS.View
 
         private void button1_Click(object sender, EventArgs e)
         {
-            APITestAGVTaskCancel form = new APITestAGVTaskCancel(clInitSys.AgvApi_Config);
+            //APITestAGVTaskCancel form = new APITestAGVTaskCancel(clInitSys.AgvApi_Config);
+            WESAPITest form = new WESAPITest(clInitSys.WmsApi_Config);
             form.Show();
         }
 

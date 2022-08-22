@@ -83,6 +83,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Structure", "Mirle.St
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WebAPI.Test.AGVTaskCancel", "Mirle.API.Test.AGVTaskCancel\Mirle.WebAPI.Test.AGVTaskCancel.csproj", "{F79EAE89-D2D1-41F1-B997-06F2432CA926}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WebAPI.Test.WES", "Mirle.WebAPI.Test.WES\Mirle.WebAPI.Test.WES.csproj", "{F3D01421-0E64-4B0C-B8BC-B6B71363516F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -216,6 +218,12 @@ Global
 		{F79EAE89-D2D1-41F1-B997-06F2432CA926}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
 		{F79EAE89-D2D1-41F1-B997-06F2432CA926}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F79EAE89-D2D1-41F1-B997-06F2432CA926}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3D01421-0E64-4B0C-B8BC-B6B71363516F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3D01421-0E64-4B0C-B8BC-B6B71363516F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3D01421-0E64-4B0C-B8BC-B6B71363516F}.R0K5M320|Any CPU.ActiveCfg = Release|Any CPU
+		{F3D01421-0E64-4B0C-B8BC-B6B71363516F}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
+		{F3D01421-0E64-4B0C-B8BC-B6B71363516F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3D01421-0E64-4B0C-B8BC-B6B71363516F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

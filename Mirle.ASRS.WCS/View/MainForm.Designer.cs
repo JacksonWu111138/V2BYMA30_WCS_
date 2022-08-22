@@ -391,7 +391,7 @@
             this.AGVTaskCancelButten.Name = "AGVTaskCancelButten";
             this.AGVTaskCancelButten.Size = new System.Drawing.Size(169, 44);
             this.AGVTaskCancelButten.TabIndex = 11;
-            this.AGVTaskCancelButten.Text = "AGV Task Cancel";
+            this.AGVTaskCancelButten.Text = "WES API Testing";
             this.AGVTaskCancelButten.UseVisualStyleBackColor = true;
             this.AGVTaskCancelButten.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -449,7 +449,7 @@
             this.mnuInsertCmd,
             this.mnuUpdateCurLoc});
             this.mnuTransferCmd.Name = "mnuFun";
-            this.mnuTransferCmd.Size = new System.Drawing.Size(249, 165);
+            this.mnuTransferCmd.Size = new System.Drawing.Size(215, 132);
             // 
             // mnuTransferCmdComplete
             // 
@@ -476,7 +476,7 @@
             // mnuUpdateCurLoc
             // 
             this.mnuUpdateCurLoc.Name = "mnuUpdateCurLoc";
-            this.mnuUpdateCurLoc.Size = new System.Drawing.Size(248, 32);
+            this.mnuUpdateCurLoc.Size = new System.Drawing.Size(214, 32);
             this.mnuUpdateCurLoc.Text = "Update CurLoc";
             this.mnuUpdateCurLoc.Click += new System.EventHandler(this.mnuUpdateCurLoc_Click);
             // 

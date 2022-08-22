@@ -17,7 +17,7 @@ namespace Mirle.WebAPI.V2BYMA30.Function
             {
                 string strJson = JsonConvert.SerializeObject(info);
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strJson);
-                string sLink = $"http://{IP}/Carrier_Retrieve_COMPLETE";
+                string sLink = $"http://{IP}/CARRIER_RETRIEVE_COMPLETE";
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"URL: {sLink}");
                 string re = clsTool.HttpPost(sLink, strJson);
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, re);

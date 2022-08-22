@@ -40,8 +40,8 @@ largest          NVarchar(MAX) NOT NULL  Default 'N',
 carrierType  NVarchar(MAX) NOT NULL  Default '',
 CompleteCode VARCHAR(2) DEFAULT'',
 Iotype			Varchar(2)  NOT NULL     Default '',
-PRIMARY KEY(DeviceID,CommandID,TaskNo),
-lotSize Varchar(3) Default ''
+lotSize          Varchar(3)  Not Null        Default '',
+PRIMARY KEY(DeviceID,CommandID,TaskNo)
 );
 
 Create Table MiddleCmd_His
@@ -67,7 +67,7 @@ largest          NVarchar(MAX) NOT NULL  Default 'N',
 carrierType  NVarchar(MAX) NOT NULL  Default '',
 CompleteCode VARCHAR(2) DEFAULT'',
 Iotype			Varchar(2)  NOT NULL     Default '',
-lotSize		Varchar(3)		Default ''
+lotSize          Varchar(3)  Not Null        Default ''
 );
 
 Create Table UnitModeDef
@@ -365,8 +365,8 @@ manualStockIn	Varchar(1)   Not Null  Default 'N',
 rackLocation  NVarchar(MAX) NOT NULL  Default '',
 largest          NVarchar(MAX) NOT NULL  Default 'N',
 carrierType  NVarchar(MAX) NOT NULL  Default '',
-Primary Key(CmdMode, BoxId),
-lotSize Varchar(3) Default ''
+lotSize          Varchar(3)  Not Null        Default '',
+Primary Key(CmdMode, BoxId)
 );
 
 CREATE TABLE CMD_MST_His
@@ -400,7 +400,7 @@ rackLocation  NVarchar(MAX) NOT NULL  Default '',
 carrierType  NVarchar(MAX) NOT NULL  Default '',
 largest          NVarchar(MAX) NOT NULL  Default 'N',
 manualStockIn	Varchar(1)   Not Null  Default 'N',
-lotSize Varchar(3) Default ''
+lotSize          Varchar(3)  Not Null        Default ''
 );
 
 Create Table Teach_Loc

@@ -743,8 +743,8 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsCmd_Mst.Column.BoxID}, {Parameter.clsCmd_Mst.Column.BatchID}," +
                     $"{Parameter.clsCmd_Mst.Column.Equ_No}, {Parameter.clsCmd_Mst.Column.CurLoc}, " +
                     $"{Parameter.clsCmd_Mst.Column.CurDeviceID}, {Parameter.clsCmd_Mst.Column.Zone}, {Parameter.clsCmd_Mst.Column.Remark}," +
-                    $"{Parameter.clsCmd_Mst.Column.rackLocation}, {Parameter.clsCmd_Mst.Column.largest}, {Parameter.clsCmd_Mst.Column.carrierType}" +
-                    $") values(";
+                    $"{Parameter.clsCmd_Mst.Column.rackLocation}, {Parameter.clsCmd_Mst.Column.largest}, {Parameter.clsCmd_Mst.Column.carrierType}," +
+                    $"{Parameter.clsCmd_Mst.Column.lotSize}) values(";
                 sSQL += "'" + stuCmdMst.Cmd_Sno + "', ";
                 sSQL += "'" + clsConstValue.CmdSts.strCmd_Initial + "', ";
                 sSQL += "" + stuCmdMst.Prty + ", 'NA', ";
@@ -763,7 +763,7 @@ namespace Mirle.DB.Fun
                 sSQL += $"'{stuCmdMst.CurLoc}', ";
                 sSQL += "'" + stuCmdMst.CurDeviceID + "',";
                 sSQL += "'" + stuCmdMst.Zone_ID + "'," +
-                    $"'{stuCmdMst.Remark}','{stuCmdMst.rackLocation}','{stuCmdMst.largest}','{stuCmdMst.carrierType}')";
+                    $"'{stuCmdMst.Remark}','{stuCmdMst.rackLocation}','{stuCmdMst.largest}','{stuCmdMst.carrierType}','{stuCmdMst.lotSize}')";
 
                 if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                 {

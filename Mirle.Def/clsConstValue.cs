@@ -81,6 +81,10 @@ namespace Mirle.Def
         {
             public const string Success = "200";
             public const string Fail = "500";
+            /// <summary>
+            /// 等待並重試
+            /// </summary>
+            public const string Waitretry = "300";
         }
 
         public class CmdSts_MiddleCmd

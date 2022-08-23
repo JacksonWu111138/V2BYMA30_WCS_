@@ -12,7 +12,7 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         /// 命令序號
         /// </summary>
         public string jobId { get; set; } = "";
-        public string transactionId { get; set; } = "CONTORL_STATUS_QUERY";
+        public string transactionId { get; set; } = "CONTROL_STATUS_QUERY";
         public List<ChipSTKCListInfo> chipSTKCList { get; set; }
     }
 }

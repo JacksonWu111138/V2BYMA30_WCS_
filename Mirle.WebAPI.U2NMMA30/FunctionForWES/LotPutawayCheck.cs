@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Mirle.WebAPI.V2BYMA30.Function
 {
@@ -23,6 +24,11 @@ namespace Mirle.WebAPI.V2BYMA30.Function
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, re);
                 var info_controller = (LotPutawayCheckReply)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(LotPutawayCheckReply));
                 if (info_controller.returnCode == clsConstValue.ApiReturnCode.Success) return true;
+                else if (info_controller.returnCode == clsConstValue.ApiReturnCode.Waitretry)
+                {
+                    Thread.Sleep(30000);
+                    return FunReport(info, IP);
+                }
                 else return false;
             }
             catch (Exception ex)

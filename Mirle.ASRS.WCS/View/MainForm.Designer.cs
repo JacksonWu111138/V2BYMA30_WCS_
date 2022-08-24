@@ -519,6 +519,7 @@
             this.mnuMiddleCancel.Name = "mnuMiddleCancel";
             this.mnuMiddleCancel.Size = new System.Drawing.Size(248, 32);
             this.mnuMiddleCancel.Text = "Cancel";
+            this.mnuMiddleCancel.Click += new System.EventHandler(this.mnuMiddleCancel_Click);
             // 
             // mnuInsertMiddleCmd
             // 

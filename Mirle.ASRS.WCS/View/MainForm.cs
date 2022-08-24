@@ -259,6 +259,26 @@ namespace Mirle.ASRS.WCS.View
             }
         }
 
+        private void mnuMiddleCancel_Click(object sender, EventArgs e)
+        {
+            if (funMiddleCmd_Validation(clsEnum.CmdMaintence.Cancel))
+            {
+                string sCmdSno = Convert.ToString(dgrMiddleCmdLastSelect.Cells[ColumnDef.MiddleCmd.CmdSno.Index].Value);
+                string sRemark = "手動取消命令";
+                if (clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(sCmdSno, 
+                    clsConstValue.CmdSts_MiddleCmd.strCmd_Cancel_Wait, sRemark))
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"手動取消Middle命令成功 => <CommandID> {sCmdSno}");
+                    MessageBox.Show("Cancel Complete.");
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"NG: 手動取消Middle命令失敗 => <CommandID> {sCmdSno}");
+                    MessageBox.Show("Cancel Fail.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
         private bool funMiddleCmd_Validation(clsEnum.CmdMaintence type)
         {
             if (Grid_MiddleCmd.SelectedRows.Count == 0) return false;

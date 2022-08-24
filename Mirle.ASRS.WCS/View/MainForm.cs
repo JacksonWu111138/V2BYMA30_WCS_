@@ -310,16 +310,7 @@ namespace Mirle.ASRS.WCS.View
             timRead.Enabled = false;
             try
             {
-                if (tbcCmdInfo.SelectedTab == tbpCmdMst)
-                    SubShowCmdtoGrid(ref Grid1);
-                else if (tbcCmdInfo.SelectedTab == tbpMiddleCmd)
-                    SubShowMiddleCmdtoGrid(ref Grid_MiddleCmd);
-                else { }
-
-                if(clsDB_Proc.DBConn)
-                {
-                    clsDB_Proc.GetDB_Object().GetProc().FunNormalCmd_Proc(sAsrsStockIn_Sql, sAsrsEquNo_Sql, router, middle);
-                }
+                clsDB_Proc.GetDB_Object().GetProc().FunNormalCmd_Proc(sAsrsStockIn_Sql, sAsrsEquNo_Sql, router, middle);
             }
             catch (Exception ex)
             {
@@ -340,6 +331,12 @@ namespace Mirle.ASRS.WCS.View
             {
                 lblDBConn_WCS.BackColor = clsDB_Proc.DBConn ? Color.Blue : Color.Red;
                 lblTimer.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                if (tbcCmdInfo.SelectedTab == tbpCmdMst)
+                    SubShowCmdtoGrid(ref Grid1);
+                else if (tbcCmdInfo.SelectedTab == tbpMiddleCmd)
+                    SubShowMiddleCmdtoGrid(ref Grid_MiddleCmd);
+                else { }
             }
             catch (Exception ex)
             {
@@ -845,7 +842,7 @@ namespace Mirle.ASRS.WCS.View
                 }
                 else
                 {
-                    int iRet = clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCmdMst_Grid(ref dtTmp);
+                    int iRet = clsDB_Proc.GetDB_Object().GetMiddleCmd().FunGetMiddleCmd_Grid(ref dtTmp);
                     if (iRet == DBResult.Success)
                     {
                         if (oGrid.Columns.Count == 0)

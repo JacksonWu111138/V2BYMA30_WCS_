@@ -55,6 +55,7 @@
             this.tbpCmdMst = new System.Windows.Forms.TabPage();
             this.Grid1 = new System.Windows.Forms.DataGridView();
             this.tbpMiddleCmd = new System.Windows.Forms.TabPage();
+            this.Grid_MiddleCmd = new System.Windows.Forms.DataGridView();
             this.mnuTransferCmd = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuTransferCmdComplete = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTransferCmdCancel = new System.Windows.Forms.ToolStripMenuItem();
@@ -64,7 +65,6 @@
             this.mnuMiddleComplete = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMiddleCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuInsertMiddleCmd = new System.Windows.Forms.ToolStripMenuItem();
-            this.Grid_MiddleCmd = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -84,9 +84,9 @@
             this.tbpCmdMst.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid1)).BeginInit();
             this.tbpMiddleCmd.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Grid_MiddleCmd)).BeginInit();
             this.mnuTransferCmd.SuspendLayout();
             this.mnuMiddleCmd.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Grid_MiddleCmd)).BeginInit();
             this.SuspendLayout();
             // 
             // timer1
@@ -444,6 +444,18 @@
             this.tbpMiddleCmd.Text = "Middle Command";
             this.tbpMiddleCmd.UseVisualStyleBackColor = true;
             // 
+            // Grid_MiddleCmd
+            // 
+            this.Grid_MiddleCmd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Grid_MiddleCmd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Grid_MiddleCmd.Location = new System.Drawing.Point(3, 3);
+            this.Grid_MiddleCmd.Margin = new System.Windows.Forms.Padding(4);
+            this.Grid_MiddleCmd.Name = "Grid_MiddleCmd";
+            this.Grid_MiddleCmd.RowHeadersWidth = 62;
+            this.Grid_MiddleCmd.RowTemplate.Height = 24;
+            this.Grid_MiddleCmd.Size = new System.Drawing.Size(1742, 157);
+            this.Grid_MiddleCmd.TabIndex = 2;
+            // 
             // mnuTransferCmd
             // 
             this.mnuTransferCmd.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -492,38 +504,26 @@
             this.mnuMiddleCancel,
             this.mnuInsertMiddleCmd});
             this.mnuMiddleCmd.Name = "mnuFun";
-            this.mnuMiddleCmd.Size = new System.Drawing.Size(172, 100);
+            this.mnuMiddleCmd.Size = new System.Drawing.Size(249, 133);
             // 
             // mnuMiddleComplete
             // 
             this.mnuMiddleComplete.Name = "mnuMiddleComplete";
-            this.mnuMiddleComplete.Size = new System.Drawing.Size(171, 32);
+            this.mnuMiddleComplete.Size = new System.Drawing.Size(248, 32);
             this.mnuMiddleComplete.Text = "Complete";
             // 
             // mnuMiddleCancel
             // 
             this.mnuMiddleCancel.Image = ((System.Drawing.Image)(resources.GetObject("mnuMiddleCancel.Image")));
             this.mnuMiddleCancel.Name = "mnuMiddleCancel";
-            this.mnuMiddleCancel.Size = new System.Drawing.Size(171, 32);
+            this.mnuMiddleCancel.Size = new System.Drawing.Size(248, 32);
             this.mnuMiddleCancel.Text = "Cancel";
             // 
             // mnuInsertMiddleCmd
             // 
             this.mnuInsertMiddleCmd.Name = "mnuInsertMiddleCmd";
-            this.mnuInsertMiddleCmd.Size = new System.Drawing.Size(171, 32);
+            this.mnuInsertMiddleCmd.Size = new System.Drawing.Size(248, 32);
             this.mnuInsertMiddleCmd.Text = "Insert";
-            // 
-            // Grid_MiddleCmd
-            // 
-            this.Grid_MiddleCmd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Grid_MiddleCmd.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Grid_MiddleCmd.Location = new System.Drawing.Point(3, 3);
-            this.Grid_MiddleCmd.Margin = new System.Windows.Forms.Padding(4);
-            this.Grid_MiddleCmd.Name = "Grid_MiddleCmd";
-            this.Grid_MiddleCmd.RowHeadersWidth = 62;
-            this.Grid_MiddleCmd.RowTemplate.Height = 24;
-            this.Grid_MiddleCmd.Size = new System.Drawing.Size(1742, 157);
-            this.Grid_MiddleCmd.TabIndex = 2;
             // 
             // MainForm
             // 
@@ -560,9 +560,9 @@
             this.tbpCmdMst.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Grid1)).EndInit();
             this.tbpMiddleCmd.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.Grid_MiddleCmd)).EndInit();
             this.mnuTransferCmd.ResumeLayout(false);
             this.mnuMiddleCmd.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Grid_MiddleCmd)).EndInit();
             this.ResumeLayout(false);
 
         }

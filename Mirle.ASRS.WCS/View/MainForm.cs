@@ -198,6 +198,48 @@ namespace Mirle.ASRS.WCS.View
             }
         }
 
+        private DataGridViewRow dgrMiddleCmdLastSelect = null;
+        private void Grid_MiddleCmd_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                if (Grid_MiddleCmd.SelectedRows.Count > 0)
+                {
+                    mnuMiddleCancel.Visible = true;
+                    mnuMiddleComplete.Visible = true;
+
+                    if (dgrMiddleCmdLastSelect != null)
+                    {
+                        if (!Grid_MiddleCmd.SelectedRows.Contains(dgrMiddleCmdLastSelect))
+                        {
+                            Grid_MiddleCmd.SelectedRows[0].ContextMenuStrip = mnuMiddleCmd;
+                            dgrMiddleCmdLastSelect.ContextMenuStrip = null;
+                            dgrMiddleCmdLastSelect = Grid_MiddleCmd.SelectedRows[0];
+                        }
+                        else if (dgrMiddleCmdLastSelect.Index == e.RowIndex)
+                            Grid_MiddleCmd.SelectedRows[0].ContextMenuStrip = mnuMiddleCmd;
+                        else
+                        {
+                            dgrMiddleCmdLastSelect.ContextMenuStrip = null;
+                            dgrMiddleCmdLastSelect = Grid_MiddleCmd.SelectedRows[0];
+                        }
+                    }
+                    else
+                    {
+                        Grid_MiddleCmd.SelectedRows[0].ContextMenuStrip = mnuMiddleCmd;
+                        dgrMiddleCmdLastSelect = Grid_MiddleCmd.SelectedRows[0];
+                    }
+                }
+                else
+                {
+                    mnuMiddleCancel.Visible = false;
+                    mnuMiddleComplete.Visible = false;
+
+                    Grid_MiddleCmd.ContextMenuStrip = mnuMiddleCmd;
+                }
+            }
+        }
+
         private bool funTransferCmd_Validation(clsEnum.CmdMaintence type)
         {
             if (Grid1.SelectedRows.Count == 0) return false;
@@ -689,6 +731,7 @@ namespace Mirle.ASRS.WCS.View
         private void FunEventInit()
         {
             Grid1.CellMouseDown += new DataGridViewCellMouseEventHandler(Grid1_CellMouseDown);
+            Grid_MiddleCmd.CellMouseDown += new DataGridViewCellMouseEventHandler(Grid_MiddleCmd_CellMouseDown);
             for (int i = 0; i < AsrsCommand.Length; i++)
             {
                 AsrsCommand[i].GetWCS().GetProc().GetFun_Routdef().OnNeedShelfToShelfEvent += MainForm_OnNeedShelfToShelfEvent;

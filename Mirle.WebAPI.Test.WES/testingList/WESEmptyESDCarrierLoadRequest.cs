@@ -31,7 +31,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
             };
             if (textBox_reqQty.Text != "")
             {
-                info.reqQty = Int32.Parse(textBox_reqQty.Text);
+                info.reqQty = Convert.ToInt32(textBox_reqQty.Text);
                 if (!api.GetEmptyESDCarrierLoadRequest().FunReport(info, wesApiconfig.IP))
                 {
                     MessageBox.Show($"失敗, jobId:{info.jobId}.", "Empty ESDCarrier Load Request", MessageBoxButtons.OK, MessageBoxIcon.Error);

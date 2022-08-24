@@ -31,7 +31,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
             };
             if (textBox_qty.Text != "")
             {
-                info.qty = Int32.Parse(textBox_qty.Text);
+                info.qty = Convert.ToInt32(textBox_qty.Text);
                 if (!api.GetLotRenewRequest().FunReport(info, wesApiconfig.IP))
                 {
                     MessageBox.Show($"失敗, jobId:{info.jobId}.", "Lot Renew Request", MessageBoxButtons.OK, MessageBoxIcon.Error);

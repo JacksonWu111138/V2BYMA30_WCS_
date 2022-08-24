@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Mirle.DB.Object;
+using Mirle.Def.U2NMMA30;
 
 namespace Mirle.DB.ClearCmd.Proc
 {
@@ -28,10 +29,10 @@ namespace Mirle.DB.ClearCmd.Proc
                 if (DB.Proc.clsHost.IsConn)
                 {
                     //Tower
-                    //clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdFinish_Proc();
+                    clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdFinish_Proc(ConveyorDef.DeviceID_Tower);
 
                     //AGV
-                    //clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdFinish_Proc();
+                    clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdFinish_Proc(ConveyorDef.DeviceID_AGV);
 
                     clsDB_Proc.GetDB_Object().GetCmd_Mst().FunMoveFinishCmdToHistory_Proc();
                 }

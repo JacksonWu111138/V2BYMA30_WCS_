@@ -526,6 +526,7 @@
             this.mnuInsertMiddleCmd.Name = "mnuInsertMiddleCmd";
             this.mnuInsertMiddleCmd.Size = new System.Drawing.Size(248, 32);
             this.mnuInsertMiddleCmd.Text = "Insert";
+            this.mnuInsertMiddleCmd.Click += new System.EventHandler(this.mnuInsertMiddleCmd_Click);
             // 
             // MainForm
             // 

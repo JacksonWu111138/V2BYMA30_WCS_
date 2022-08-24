@@ -279,6 +279,11 @@ namespace Mirle.ASRS.WCS.View
             }
         }
 
+        private void mnuInsertMiddleCmd_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private bool funMiddleCmd_Validation(clsEnum.CmdMaintence type)
         {
             if (Grid_MiddleCmd.SelectedRows.Count == 0) return false;

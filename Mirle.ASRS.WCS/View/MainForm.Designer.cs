@@ -511,6 +511,7 @@
             this.mnuMiddleComplete.Name = "mnuMiddleComplete";
             this.mnuMiddleComplete.Size = new System.Drawing.Size(248, 32);
             this.mnuMiddleComplete.Text = "Complete";
+            this.mnuMiddleComplete.Click += new System.EventHandler(this.mnuMiddleComplete_Click);
             // 
             // mnuMiddleCancel
             // 

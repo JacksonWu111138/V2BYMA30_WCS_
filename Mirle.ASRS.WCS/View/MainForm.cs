@@ -240,6 +240,42 @@ namespace Mirle.ASRS.WCS.View
             }
         }
 
+        private void mnuMiddleComplete_Click(object sender, EventArgs e)
+        {
+            if (funMiddleCmd_Validation(clsEnum.CmdMaintence.Complete))
+            {
+                string sCmdSno = Convert.ToString(dgrMiddleCmdLastSelect.Cells[ColumnDef.MiddleCmd.CmdSno.Index].Value);
+                string sRemark = "手動完成命令";
+                if (clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(sCmdSno, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark))
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"手動完成Middle命令成功 => <CommandID> {sCmdSno}");
+                    MessageBox.Show("Finish Complete.");
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"NG: 手動完成Middle命令失敗 => <CommandID> {sCmdSno}");
+                    MessageBox.Show("Complete Fail.", Application.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private bool funMiddleCmd_Validation(clsEnum.CmdMaintence type)
+        {
+            if (Grid_MiddleCmd.SelectedRows.Count == 0) return false;
+            if (dgrMiddleCmdLastSelect == null) return false;
+
+            DialogResult DlgResult;
+            if (type == clsEnum.CmdMaintence.Cancel)
+                DlgResult = MessageBox.Show("Are you sure cancel MiddleCmd？", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            else
+                DlgResult = MessageBox.Show("Are you sure complete MiddleCmd？", Application.ProductName, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+            if (DlgResult == DialogResult.Yes)
+                return true;
+            else
+                return false;
+        }
+
         private bool funTransferCmd_Validation(clsEnum.CmdMaintence type)
         {
             if (Grid1.SelectedRows.Count == 0) return false;

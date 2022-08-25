@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32002.261
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLL", "DLL", "{58EC0D04-15AD-46AB-BE9C-1B871F4BCD1A}"
 	ProjectSection(SolutionItems) = preProject
@@ -85,6 +85,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WebAPI.Test.AGVTaskCancel", "Mirle.API.Test.AGVTaskCancel\Mirle.WebAPI.Test.AGVTaskCancel.csproj", "{F79EAE89-D2D1-41F1-B997-06F2432CA926}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WebAPI.Test.WES", "Mirle.WebAPI.Test.WES\Mirle.WebAPI.Test.WES.csproj", "{F3D01421-0E64-4B0C-B8BC-B6B71363516F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.WebAPI.Test.Controllers", "Mirle.WebAPI.Test.Controllers\Mirle.WebAPI.Test.Controllers.csproj", "{CE728034-AFA7-4984-B1FC-898A62B388B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -225,6 +227,12 @@ Global
 		{F3D01421-0E64-4B0C-B8BC-B6B71363516F}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
 		{F3D01421-0E64-4B0C-B8BC-B6B71363516F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F3D01421-0E64-4B0C-B8BC-B6B71363516F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE728034-AFA7-4984-B1FC-898A62B388B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE728034-AFA7-4984-B1FC-898A62B388B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE728034-AFA7-4984-B1FC-898A62B388B0}.R0K5M320|Any CPU.ActiveCfg = Release|Any CPU
+		{CE728034-AFA7-4984-B1FC-898A62B388B0}.R0K5M320|Any CPU.Build.0 = Release|Any CPU
+		{CE728034-AFA7-4984-B1FC-898A62B388B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE728034-AFA7-4984-B1FC-898A62B388B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

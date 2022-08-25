@@ -187,6 +187,10 @@
       <Project>{2e09050b-3bb2-482a-b27b-cf23db03e342}</Project>
       <Name>Mirle.WebAPI.Event</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mirle.WebAPI.Test.Controllers\Mirle.WebAPI.Test.Controllers.csproj">
+      <Project>{ce728034-afa7-4984-b1fc-898a62b388b0}</Project>
+      <Name>Mirle.WebAPI.Test.Controllers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.WebAPI.Test.WES\Mirle.WebAPI.Test.WES.csproj">
       <Project>{f3d01421-0e64-4b0c-b8bc-b6b71363516f}</Project>
       <Name>Mirle.WebAPI.Test.WES</Name>

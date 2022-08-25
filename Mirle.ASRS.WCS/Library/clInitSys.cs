@@ -18,6 +18,12 @@ namespace Mirle.ASRS.WCS
         public static WebApiConfig AgvApi_Config = new WebApiConfig();
         public static WebApiConfig TowerApi_Config = new WebApiConfig();
         public static WebApiConfig WmsApi_Config = new WebApiConfig();
+        public static WebApiConfig BoxApi_Config = new WebApiConfig();
+        public static WebApiConfig PcbaApi_Config = new WebApiConfig();
+        public static WebApiConfig SmtcApi_Config = new WebApiConfig();
+        public static WebApiConfig OsmtcApi_Config = new WebApiConfig();
+        public static WebApiConfig E04Api_Config = new WebApiConfig();
+        public static WebApiConfig E05Api_Config = new WebApiConfig();
         public static WebApiConfig WcsApi_Config = new WebApiConfig();
         public static ASRSINI lcsini;
         public static int L2L_MaxCount = 5;
@@ -425,6 +431,12 @@ namespace Mirle.ASRS.WCS
             WmsApi_Config.IP = lcsini.Client_API.WES;
             AgvApi_Config.IP = lcsini.Client_API.AGV;
             TowerApi_Config.IP = lcsini.Client_API.Tower;
+            BoxApi_Config.IP = lcsini.Client_API.Box;
+            PcbaApi_Config.IP = lcsini.Client_API.PCBA;
+            SmtcApi_Config.IP = lcsini.Client_API.SMTC;
+            OsmtcApi_Config.IP = lcsini.Client_API.SMT3C;
+            E04Api_Config.IP = lcsini.Client_API.E04;
+            E05Api_Config.IP = lcsini.Client_API.E05;
             ConveyorDef.AGV.E1_01.API.IP = lcsini.Client_API.Tower;
             ConveyorDef.Tower.E1_04.API.IP = lcsini.Client_API.Tower;
             ConveyorDef.AGV.E1_08.API.IP = lcsini.Client_API.Tower;

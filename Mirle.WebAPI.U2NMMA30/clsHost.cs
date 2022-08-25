@@ -47,6 +47,9 @@ namespace Mirle.WebAPI.V2BYMA30
         private EQPStatusUpdate EQPStatusUpdate = new EQPStatusUpdate();
         private RemoveRackShow RemoveRackShow = new RemoveRackShow();
         private RemoveRackDown RemoveRackDown = new RemoveRackDown();
+        private BlockStatusQuery BlockStatusQuery = new BlockStatusQuery();
+        private ControlStatusQuery ControlStatusQuery = new ControlStatusQuery();
+        private HealthCheck HealthCheck = new HealthCheck();
 
         public CVReceiveNewBinCmd GetCV_ReceiveNewBinCmd() => RECEIVE_NEW_BIN_CMD;
         public BufferStatusQuery GetBufferStatusQuery() => BufferStatusQuery;
@@ -86,5 +89,8 @@ namespace Mirle.WebAPI.V2BYMA30
         public EQPStatusUpdate GetEQPStatusUpdate() => EQPStatusUpdate;
         public RemoveRackShow GetRemoveRackShow() => RemoveRackShow;
         public RemoveRackDown GetRemoveRackDown() => RemoveRackDown;
+        public BlockStatusQuery GetBlockStatusQuery() => BlockStatusQuery;
+        public ControlStatusQuery GetControlStatusQuery() => ControlStatusQuery;
+        public HealthCheck GetHealthCheck() => HealthCheck;
     }
 }

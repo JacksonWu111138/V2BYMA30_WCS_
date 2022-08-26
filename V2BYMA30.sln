@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.3.32819.101
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32002.261
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLL", "DLL", "{58EC0D04-15AD-46AB-BE9C-1B871F4BCD1A}"
 	ProjectSection(SolutionItems) = preProject
@@ -57,6 +57,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.MapController_2", "Mi
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Filelayout", "Filelayout", "{BA3059FD-E10C-4FE3-B7D8-DF535C7FFC93}"
 	ProjectSection(SolutionItems) = preProject
+		Document\Filelayout\FileLayout_V7.2.pdf = Document\Filelayout\FileLayout_V7.2.pdf
 		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.0.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.0.doc
 		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.1.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.1.doc
 		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.10.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.10.doc
@@ -72,6 +73,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Script", "Script", "{51694A
 	ProjectSection(SolutionItems) = preProject
 		Document\Script\Table_ASRS_Create_Script_V1.txt = Document\Script\Table_ASRS_Create_Script_V1.txt
 		Document\Script\Table_Initial.sql = Document\Script\Table_Initial.sql
+		Document\Script\V7 Initial ECCS DB.sql = Document\Script\V7 Initial ECCS DB.sql
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mirle.Stocker.Command", "Mirle.Stocker.Command\Mirle.Stocker.Command.csproj", "{8FE496D0-5503-4719-9C50-6C894E125B6F}"

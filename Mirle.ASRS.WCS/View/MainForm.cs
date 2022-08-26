@@ -115,10 +115,12 @@ namespace Mirle.ASRS.WCS.View
 
         private void chkOnline_CheckedChanged(object sender, EventArgs e)
         {
+            middle.Online = chkOnline.Checked;
+
             if (chkOnline.Checked)
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "WCS OnLine.");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, "WCS OnLine.");
             else
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "WCS OffLine.");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, "WCS OffLine.");
         }
 
         private void chkCycleRun_CheckedChanged(object sender, EventArgs e)

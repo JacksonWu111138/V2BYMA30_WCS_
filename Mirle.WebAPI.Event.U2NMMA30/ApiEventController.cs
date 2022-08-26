@@ -24,11 +24,9 @@ namespace Mirle.WebAPI.Event
 {
     public class WCSController : ApiController
     {
-        private clsDbConfig _config = new clsDbConfig();
         private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
         private MidHost middle;
         private DB.Fun.clsTool tool = new DB.Fun.clsTool();
-        private string _towerApi;
 
         public WCSController(MidHost Middle)
         {
@@ -798,7 +796,20 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>ALARM_HAPPEN_REPORT start!");
             try
             {
+                string strEM = "";
+                if(Body.status == clsEnum.AlarmSts.OnGoing.ToString())
+                {
+                    if (!clsDB_Proc.GetDB_Object().GetAlarmData().FunAlarm_Occur(Body.jobId, Body.deviceId, Body.alarmCode,
+                        Body.alarmDef, Body.bufferId, Body.happenTime, ref strEM))
+                        throw new Exception(strEM);
 
+                }
+                else
+                {
+                    if (!clsDB_Proc.GetDB_Object().GetAlarmData().FunAlarm_Solved(Body.jobId, Body.deviceId, Body.alarmCode,
+                        Body.alarmDef, Body.bufferId, Body.happenTime, ref strEM))
+                        throw new Exception(strEM);
+                }
 
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;

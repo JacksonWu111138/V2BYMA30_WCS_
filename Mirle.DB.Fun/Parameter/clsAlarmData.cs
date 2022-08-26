@@ -12,13 +12,25 @@ namespace Mirle.DB.Fun.Parameter
         public class Column
         {
             /// <summary>
+            /// 任務編號
+            /// </summary>
+            public const string JobID = "JobID";
+            /// <summary>
             /// 設備編號
             /// </summary>
             public const string DeviceID = "EquNo";
             /// <summary>
+            /// 站口編號
+            /// </summary>
+            public const string BufferID = "BufferID";
+            /// <summary>
             /// 異常碼
             /// </summary>
             public const string AlarmCode = "AlarmCode";
+            /// <summary>
+            /// 異常解釋
+            /// </summary>
+            public const string AlarmDef = "AlarmDef";
             /// <summary>
             /// 狀態
             /// </summary>

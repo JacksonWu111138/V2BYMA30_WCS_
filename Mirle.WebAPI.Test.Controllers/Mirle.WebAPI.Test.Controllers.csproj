@@ -88,6 +88,66 @@
     <Compile Include="ApiList\CtrlLotRetrieveTransfer.Designer.cs">
       <DependentUpon>CtrlLotRetrieveTransfer.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApiList\CtrlLotTransferCancel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiList\CtrlLotTransferCancel.Designer.cs">
+      <DependentUpon>CtrlLotTransferCancel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApiList\CtrlNewCarrierToStage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiList\CtrlNewCarrierToStage.Designer.cs">
+      <DependentUpon>CtrlNewCarrierToStage.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApiList\CtrlPutawayTransferInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiList\CtrlPutawayTransferInfo.Designer.cs">
+      <DependentUpon>CtrlPutawayTransferInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApiList\CtrlMoveTask.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiList\CtrlMoveTask.Designer.cs">
+      <DependentUpon>CtrlMoveTask.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApiList\CtrlRackRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiList\CtrlRackRequest.Designer.cs">
+      <DependentUpon>CtrlRackRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApiList\CtrlRackTurn.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiList\CtrlRackTurn.Designer.cs">
+      <DependentUpon>CtrlRackTurn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApiList\CtrlRemoteLocalRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiList\CtrlRemoteLocalRequest.Designer.cs">
+      <DependentUpon>CtrlRemoteLocalRequest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApiList\CtrlRetrieveTransferInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiList\CtrlRetrieveTransferInfo.Designer.cs">
+      <DependentUpon>CtrlRetrieveTransferInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApiList\CtrlTaskCancel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiList\CtrlTaskCancel.Designer.cs">
+      <DependentUpon>CtrlTaskCancel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ApiList\CtrlTransferCommandRequest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiList\CtrlTransferCommandRequest.Designer.cs">
+      <DependentUpon>CtrlTransferCommandRequest.cs</DependentUpon>
+    </Compile>
     <Compile Include="ControllersAPITest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -116,6 +176,36 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApiList\CtrlLotRetrieveTransfer.resx">
       <DependentUpon>CtrlLotRetrieveTransfer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiList\CtrlLotTransferCancel.resx">
+      <DependentUpon>CtrlLotTransferCancel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiList\CtrlNewCarrierToStage.resx">
+      <DependentUpon>CtrlNewCarrierToStage.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiList\CtrlPutawayTransferInfo.resx">
+      <DependentUpon>CtrlPutawayTransferInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiList\CtrlMoveTask.resx">
+      <DependentUpon>CtrlMoveTask.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiList\CtrlRackRequest.resx">
+      <DependentUpon>CtrlRackRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiList\CtrlRackTurn.resx">
+      <DependentUpon>CtrlRackTurn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiList\CtrlRemoteLocalRequest.resx">
+      <DependentUpon>CtrlRemoteLocalRequest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiList\CtrlRetrieveTransferInfo.resx">
+      <DependentUpon>CtrlRetrieveTransferInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiList\CtrlTaskCancel.resx">
+      <DependentUpon>CtrlTaskCancel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiList\CtrlTransferCommandRequest.resx">
+      <DependentUpon>CtrlTransferCommandRequest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ControllersAPITest.resx">
       <DependentUpon>ControllersAPITest.cs</DependentUpon>

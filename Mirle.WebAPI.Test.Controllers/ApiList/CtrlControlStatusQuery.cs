@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
-using Mirle.Def.U2NMMA30;
 
 namespace Mirle.WebAPI.Test.Controllers.ApiList
 {
@@ -17,6 +16,7 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
     {
         public static WebApiConfig Apiconfig = new WebApiConfig();
         private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
+        private ControlStatusQueryInfo info = new ControlStatusQueryInfo { chipSTKCList = new List<ChipSTKCListInfo>()};
         public CtrlControlStatusQuery(WebApiConfig TowerAPIconfig)
         {
             InitializeComponent();
@@ -25,16 +25,8 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
 
         private void button_ControlStatusQuery_Click(object sender, EventArgs e)
         {
-            ChipSTKCListInfo list = new ChipSTKCListInfo
-            {
-                chipSTKCId = textBox_chipSTKCId.Text
-            };
-            ControlStatusQueryInfo info = new ControlStatusQueryInfo
-            {
-                jobId = textBox_jobId.Text,
-                chipSTKCList = new List<ChipSTKCListInfo>()
-            };
-            info.chipSTKCList.Add(list);
+            
+            info.jobId = textBox_jobId.Text;
 
             if (!api.GetControlStatusQuery().FunReport(info, Apiconfig.IP))
             {
@@ -44,6 +36,17 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
             {
                 MessageBox.Show($"成功, jobId:{info.jobId}.", "Control Status Query", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void button_add_Click(object sender, EventArgs e)
+        {
+            ChipSTKCListInfo list = new ChipSTKCListInfo
+            {
+                chipSTKCId = textBox_chipSTKCId.Text
+            };
+
+            info.chipSTKCList.Add(list);
+            MessageBox.Show($"加入完成, lotId:{list.chipSTKCId}.", "Control Status Query", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

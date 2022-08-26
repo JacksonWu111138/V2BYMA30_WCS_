@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel.Channels;
 using System.Text;
 using Mirle.Def;
 using Mirle.WebAPI.V2BYMA30.Function;
@@ -50,6 +51,12 @@ namespace Mirle.WebAPI.V2BYMA30
         private BlockStatusQuery BlockStatusQuery = new BlockStatusQuery();
         private ControlStatusQuery ControlStatusQuery = new ControlStatusQuery();
         private HealthCheck HealthCheck = new HealthCheck();
+        private LotRetrieveTransfer LotRetrieveTransfer = new LotRetrieveTransfer();
+        private NewCarrierToStage NewCarrierToStage = new NewCarrierToStage();
+        private RackRequest RackRequest = new RackRequest();
+        private RackTurn RackTurn = new RackTurn();
+        private RemoteLocalRequest RemoteLocalRequest = new RemoteLocalRequest();
+        private TransferCommandRequest TransferCommandRequest = new TransferCommandRequest();
 
         public CVReceiveNewBinCmd GetCV_ReceiveNewBinCmd() => RECEIVE_NEW_BIN_CMD;
         public BufferStatusQuery GetBufferStatusQuery() => BufferStatusQuery;
@@ -92,5 +99,12 @@ namespace Mirle.WebAPI.V2BYMA30
         public BlockStatusQuery GetBlockStatusQuery() => BlockStatusQuery;
         public ControlStatusQuery GetControlStatusQuery() => ControlStatusQuery;
         public HealthCheck GetHealthCheck() => HealthCheck;
+        public LotRetrieveTransfer GetLotRetrieveTransfer() => LotRetrieveTransfer;
+        public NewCarrierToStage GetNewCarrierToStage() => NewCarrierToStage;
+        public RackRequest GetRackRequest() => RackRequest;
+        public RackTurn GetRackTurn() => RackTurn;
+        public RemoteLocalRequest GetRemoteLocalRequest() => RemoteLocalRequest;
+        public TransferCommandRequest GetTransferCommandRequest() => TransferCommandRequest;
+
     }
 }

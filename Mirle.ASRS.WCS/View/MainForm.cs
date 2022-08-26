@@ -283,9 +283,26 @@ namespace Mirle.ASRS.WCS.View
             }
         }
 
+        private frmInsertCmd_MiddleCmd insertCmd_MiddleCmd;
         private void mnuInsertMiddleCmd_Click(object sender, EventArgs e)
         {
+            if (insertCmd_MiddleCmd == null)
+            {
+                insertCmd_MiddleCmd = new frmInsertCmd_MiddleCmd();
+                insertCmd_MiddleCmd.TopMost = true;
+                insertCmd_MiddleCmd.FormClosed += new FormClosedEventHandler(funMiddleCmdMaintain_FormClosed);
+                insertCmd_MiddleCmd.Show();
+            }
+            else
+            {
+                insertCmd_MiddleCmd.BringToFront();
+            }
+        }
 
+        private void funMiddleCmdMaintain_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            if (insertCmd_MiddleCmd != null)
+                insertCmd_MiddleCmd = null;
         }
 
         private bool funMiddleCmd_Validation(clsEnum.CmdMaintence type)

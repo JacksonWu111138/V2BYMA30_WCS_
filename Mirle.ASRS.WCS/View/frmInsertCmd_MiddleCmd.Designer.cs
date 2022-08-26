@@ -476,6 +476,7 @@ namespace Mirle.ASRS.WCS.View
             this.ClientSize = new System.Drawing.Size(624, 664);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "frmInsertCmd_MiddleCmd";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Insert Middle Command";
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();

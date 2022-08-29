@@ -19,6 +19,8 @@ namespace Mirle.Middle.DB_Proc
             box = Box;
         }
 
+        public clsTool() { }
+
         public clsEnum.Shelf GetShelfLocation(string sLoc)
         {
             if (string.IsNullOrWhiteSpace(sLoc) || sLoc.Length < 7) return clsEnum.Shelf.None;

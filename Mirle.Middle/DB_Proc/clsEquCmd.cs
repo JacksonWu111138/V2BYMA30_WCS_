@@ -46,6 +46,40 @@ namespace Mirle.Middle.DB_Proc
             }
         }
 
+        public int GetMiddleCmd_byBatchID(string sBatchID, ref MiddleCmd[] cmds, DB db)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                string strSql = $"select * from {Parameter.clsMiddleCmd.TableName} where " +
+                            $"{Parameter.clsMiddleCmd.Column.BatchID} = '{sBatchID}' ";
+                string strEM = "";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet == DBResult.Success)
+                {
+                    cmds = new MiddleCmd[dtTmp.Rows.Count];
+                    for (int i = 0; i < dtTmp.Rows.Count; i++)
+                    {
+                        cmds[i] = tool.GetMiddleCmd(dtTmp.Rows[i]);
+                    }
+                }
+                else { }
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return DBResult.Exception;
+            }
+            finally
+            {
+                dtTmp.Dispose();
+            }
+        }
+
         public bool funCheckCanInsertEquCmd(string EquNo, DB db)
         {
             DataTable objDataTable = new DataTable();
@@ -215,6 +249,53 @@ namespace Mirle.Middle.DB_Proc
             }
         }
 
+        public bool FunUpdateCmdSts_MiddleCmd(MiddleCmd[] cmds, string sCmdSts, string sCompleteCode, string sRemark, DB db)
+        {
+            try
+            {
+                string CmdSno_Sql = "";
+                for (int i = 0; i < cmds.Length; i++)
+                {
+                    if (i == 0) CmdSno_Sql = $"'{cmds[i].CommandID}'";
+                    else CmdSno_Sql += $",'{cmds[i].CommandID}'";
+                }
+
+                string strSql = $"update {Parameter.clsMiddleCmd.TableName} set" +
+                    $" {Parameter.clsMiddleCmd.Column.Remark} = N'" + sRemark +
+                    $"', {Parameter.clsMiddleCmd.Column.CmdSts} = '{sCmdSts}' " +
+                    $", {Parameter.clsMiddleCmd.Column.CompleteCode} = '{sCompleteCode}'";
+
+                if (sCmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Cancel_Wait || sCmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait)
+                {
+                    strSql += $", {Parameter.clsMiddleCmd.Column.EndDate} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
+                }
+                else
+                {
+                    strSql += $", {Parameter.clsMiddleCmd.Column.Expose_Date} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
+                }
+
+                strSql += $" where {Parameter.clsMiddleCmd.Column.CommandID} in ({CmdSno_Sql}) ";
+
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
         public bool FunInsEquCmd(EquCmdInfo cmd, DB db)
         {
             try
@@ -350,8 +431,52 @@ namespace Mirle.Middle.DB_Proc
                                             #endregion 單板命令
                                         }
                                         else
-                                        {//雙板命令
+                                        {
+                                            #region 雙板命令
+                                            MiddleCmd[] middleCmds = new MiddleCmd[2];
+                                            if (GetMiddleCmd_byBatchID(middleCmd.BatchID, ref middleCmds, db) == DBResult.Success)
+                                            {
+                                                if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                                {
+                                                    sRemark = "Error: Begin失敗！";
+                                                    if (sRemark != middleCmd.Remark)
+                                                    {
+                                                        FunUpdateRemark_MiddleCmd(middleCmd.CommandID, sRemark, db);
+                                                    }
 
+                                                    continue;
+                                                }
+
+                                                sRemark = "Crane命令完成";
+                                                if (!FunUpdateCmdSts_MiddleCmd(middleCmds, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait,
+                                                    equCmd.CompleteCode, sRemark, db))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    continue;
+                                                }
+
+                                                if (!FunDelEquCmd(equCmd, db))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    sRemark = "Error: 更新EquCmd失敗";
+                                                    if (sRemark != middleCmd.Remark)
+                                                    {
+                                                        FunUpdateRemark_MiddleCmd(middleCmd.CommandID, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
+                                                db.TransactionCtrl(TransactionTypes.Commit);
+                                                return true;
+                                            }
+                                            else
+                                            {
+                                                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, "NG: 取得MiddleCmd雙板資料失敗 => " +
+                                                                          $"<{Parameter.clsMiddleCmd.Column.BatchID}>{middleCmd.BatchID}");
+                                                continue;
+                                            } 
+                                            #endregion 雙板命令
                                         }
                                     }
                                 }

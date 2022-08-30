@@ -257,6 +257,56 @@ namespace Mirle.DB.Proc
             }
         }
 
+        public bool CheckHasMiddleCmdbyCmdSno(string sCmdSno)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        iRet = MiddleCmd.CheckHasMiddleCmdByCmdSno(sCmdSno, db);
+                        if (iRet == DBResult.Success)
+                            return true;
+                        else return false;
+                    }
+                    else
+                        return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunGetMiddleCmdbyCommandID(string CmdSno, ref MiddleCmd middleCmd)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        return MiddleCmd.FunGetMiddleCmdbyCommandID(CmdSno, ref middleCmd, ref dtTmp, db);
+                    }
+                    else
+                        return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
         public bool FunInsMiddleCmd(MiddleCmd middleCmd)
         {
             try

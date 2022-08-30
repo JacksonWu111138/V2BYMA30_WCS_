@@ -827,7 +827,7 @@ namespace Mirle.DB.Proc
                     if (iRet == DBResult.Success)
                     {
                         CmdMstInfo cmd = new CmdMstInfo();
-                        if (Cmd_Mst.FunGetCommandByJobID(JobID, ref cmd, ref iRet, db))
+                        if (Cmd_Mst.FunGetCommand(JobID, ref cmd, ref iRet, db))
                         {
                             if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Running)
                             {
@@ -871,6 +871,65 @@ namespace Mirle.DB.Proc
                         {
                             strEM = $"<JobID> {JobID} => 取得命令資料失敗！";
                             return false;
+                        }
+                    }
+                    else
+                    {
+                        strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
+        
+
+        public bool FunUpdateCmdMstCurLocOrCarrierReturnNext(string jobId, string deviceId, string loc, string carrierId, ref string strEM)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        CmdMstInfo cmd = new CmdMstInfo();
+                        if (Cmd_Mst.FunGetCommand(jobId, ref cmd, ref iRet, db))
+                        {
+                            if (Cmd_Mst.FunUpdateCurLoc(jobId, deviceId, loc, db))
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                strEM = $"Error: UpdateCurLoc fail, jobid = {jobId}.";
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            ConveyorInfo con = new ConveyorInfo();
+                            con = ConveyorDef.GetBuffer(loc);
+
+                            CarrierReturnNextInfo info = new CarrierReturnNextInfo
+                            {
+                                jobId = jobId,
+                                carrierId = carrierId,
+                                fromLocation = con.StnNo
+                            };
+                            if (!api.GetCarrierReturnNext().FunReport(info, _wmsApi.IP))
+                            {
+                                strEM = $"Error: CarrierRetrurnNext fail, jobid = {jobId}.";
+                                return false;
+                            }
+                            else return true;
                         }
                     }
                     else

@@ -88,7 +88,7 @@ namespace Mirle.WebAPI.Event
                             B800CV = ConveyorDef.GetB800CV();
                             if (middle.CheckIsInReady(B800CV))
                             {
-                                cmd.New_Loc = B800CV.StnNo;
+                                cmd.New_Loc = B800CV.BufferName;
                                 check = true;
                                 break;
                             }
@@ -102,7 +102,7 @@ namespace Mirle.WebAPI.Event
                     else 
                     {
                         var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.toLocation);
-                        cmd.New_Loc = cv_to.StnNo;
+                        cmd.New_Loc = cv_to.BufferName;
                     }
                     
                     cmd.Prty = Body.priority;
@@ -213,7 +213,7 @@ namespace Mirle.WebAPI.Event
                             B800CV = ConveyorDef.GetB800CV();
                             if (middle.CheckIsInReady(B800CV))
                             {
-                                cmd.Stn_No = B800CV.StnNo;
+                                cmd.Stn_No = B800CV.BufferName;
                                 check = true;
                                 break;
                             }
@@ -227,7 +227,7 @@ namespace Mirle.WebAPI.Event
                     else
                     {
                         var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.fromPortId);
-                        cmd.Stn_No = cv_to.StnNo;
+                        cmd.Stn_No = cv_to.BufferName;
                     }
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
@@ -309,7 +309,7 @@ namespace Mirle.WebAPI.Event
                             B800CV = ConveyorDef.GetB800CV();
                             if (middle.CheckIsInReady(B800CV))
                             {
-                                cmd.Stn_No = B800CV.StnNo;
+                                cmd.Stn_No = B800CV.BufferName;
                                 check = true;
                                 break;
                             }
@@ -323,7 +323,7 @@ namespace Mirle.WebAPI.Event
                     else
                     {
                         var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.toLocation);
-                        cmd.Stn_No = cv_to.StnNo;
+                        cmd.Stn_No = cv_to.BufferName;
                     }
 
                     cmd.Host_Name = "WES";
@@ -515,7 +515,7 @@ namespace Mirle.WebAPI.Event
                             B800CV = ConveyorDef.GetB800CV();
                             if (middle.CheckIsInReady(B800CV))
                             {
-                                cmd.Stn_No = B800CV.StnNo;
+                                cmd.Stn_No = B800CV.BufferName;
                                 check = true;
                                 break;
                             }
@@ -529,7 +529,7 @@ namespace Mirle.WebAPI.Event
                     else
                     {
                         var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.fromPortId);
-                        cmd.Stn_No = cv_to.StnNo;
+                        cmd.Stn_No = cv_to.BufferName;
                     }
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
@@ -619,7 +619,7 @@ namespace Mirle.WebAPI.Event
                                 B800CV = ConveyorDef.GetB800CV();
                                 if (middle.CheckIsOutReady(B800CV))
                                 {
-                                    cmd.Stn_No = B800CV.StnNo;
+                                    cmd.Stn_No = B800CV.BufferName;
                                     check = true;
                                     break;
                                 }
@@ -634,7 +634,7 @@ namespace Mirle.WebAPI.Event
                         else
                         {
                             var cv_to = ConveyorDef.GetBuffer_ByStnNo(lot.toPortId);
-                            cmd.Stn_No = cv_to.StnNo;
+                            cmd.Stn_No = cv_to.BufferName;
                         }
                         cmd.rackLocation = lot.rackLocation;
                         cmd.largest = lot.largest;
@@ -802,7 +802,6 @@ namespace Mirle.WebAPI.Event
                     if (!clsDB_Proc.GetDB_Object().GetAlarmData().FunAlarm_Occur(Body.jobId, Body.deviceId, Body.alarmCode,
                         Body.alarmDef, Body.bufferId, Body.happenTime, ref strEM))
                         throw new Exception(strEM);
-
                 }
                 else
                 {
@@ -877,9 +876,11 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BIN_EMPTY_LEAVE_REQUEST start!");
             try
             {
-
-
-
+                string strEM = "";
+                if(!clsDB_Proc.GetDB_Object().GetProc().FunUpdateCmdMstCurLocOrCarrierReturnNext(Body.jobId, ConveyorDef.DeviceID_Tower
+                    , Body.position, Body.binId, ref strEM))
+                    throw new Exception(strEM);
+                
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
 
@@ -945,9 +946,15 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CMD_DESTINATION_CHECK start!");
             try
             {
-
-
-
+                if(!clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCmdSno(Body.jobId))
+                    throw new Exception($"Error: MiddleCmd table has no this jobId: {Body.jobId}");
+                else
+                {
+                    MiddleCmd middle = new MiddleCmd();
+                    if(!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunGetMiddleCmdbyCommandID(Body.jobId, ref middle))
+                        throw new Exception($"Error: Get middle command fail jobId: {Body.jobId}");
+                    rMsg.toLocation = middle.Destination;
+                }
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
 
@@ -980,8 +987,7 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CMD_DOUBLE_STORAGE_REQUEST start!");
             try
             {
-
-
+                //要放在哪個地方上拋?
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -1014,8 +1020,8 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>COMMAND_COMPLETE start!");
             try
             {
-
-
+                if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Finish_Wait, ""))
+                    throw new Exception($"Error: Update CmdSts Fail. jobId = {Body.jobId}.");
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -1151,6 +1157,28 @@ namespace Mirle.WebAPI.Event
             try
             {
 
+                if(clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCmdSno(Body.jobId))
+                {
+                    MiddleCmd cmd = new MiddleCmd();
+                    if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunGetMiddleCmdbyCommandID(Body.jobId, ref cmd))
+                        throw new Exception($"Error: Get MiddleCmd fail. jobId : {Body.jobId}.");
+                    if (Body.position == cmd.Destination)
+                        if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, ""))
+                            throw new Exception($"Error: Update MiddleCmd fail. jobId : {Body.jobId}.");
+                }
+                else
+                {
+                    //非middle控制
+                    CmdMstInfo cmd = new CmdMstInfo();
+                    if(!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
+                        throw new Exception($"Error: Get CmdMst fail. jobId : {Body.jobId}.");
+
+                    ConveyorInfo con = new ConveyorInfo();
+                    con = ConveyorDef.GetBuffer(Body.position);
+
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, con.bufferLocation.DeviceId, Body.position))
+                        throw new Exception($"Error: Update CmdMst fail. jobId : {Body.jobId}.");
+                }
 
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;

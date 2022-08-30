@@ -116,5 +116,29 @@ namespace Mirle.Middle.DB_Proc
 
             return cmd;
         }
+
+        public EquCmdInfo GetEquCmd(DataRow drTmp)
+        {
+            EquCmdInfo equCmd = new EquCmdInfo
+            {
+                Destination = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.Destination]),
+                ACTDT = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.ActionDate]),
+                CSTPresenceDT = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.CSTPresenceDT]),
+                ENDDT = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.EndDate]),
+                RCVDT = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.CreateDate]),
+                ReNewFlag = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.ReNewFlag]),
+                CmdMode = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.CmdMode]),
+                CmdSno = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.CmdSno]),
+                CmdSts = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.CmdSts]),
+                CompleteCode = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.CompleteCode]),
+                EquNo = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.EquNo]),
+                LocSize = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.LocSize]),
+                Priority = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.Priority]),
+                Source = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.Source]),
+                SpeedLevel = Convert.ToString(drTmp[Parameter.clsEquCmd.Column.SpeedLevel])
+            };
+
+            return equCmd;
+        }
     }
 }

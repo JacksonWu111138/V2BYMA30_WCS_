@@ -17,22 +17,7 @@ DROP TABLE SNO_MAX
 DROP TABLE CMD_MST;
 Drop Table CMD_MST_His;
 Drop Table Teach_Loc;
-Drop Table AlarmLog;
 
-CREATE TABLE AlarmLog
-(
-JobID			Varchar(5),
-EquNo			VARCHAR(2) NOT NULL,
-BufferID		VARCHAR(64),
-EquMode			VARCHAR(1) NOT NULL Default '',
-AlarmCode		VARCHAR(10) NOT NULL,
-AlarmDef		NVarchar(MAX) NOT NULL  Default '',
-AlarmSts		VARCHAR(1) NOT NULL,
-STRDT			VARCHAR(20) NOT NULL,
-CLRDT			VARCHAR(20) DEFAULT ' ',
-TOTALSECS		INT DEFAULT 0,
-PRIMARY KEY(EQUNO,ALARMCODE,STRDT)
-);
 
 Create Table MiddleCmd
 (

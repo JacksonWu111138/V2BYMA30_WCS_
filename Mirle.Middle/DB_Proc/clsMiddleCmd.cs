@@ -42,7 +42,7 @@ namespace Mirle.Middle.DB_Proc
                 string sRemark = $"Error: {Loc}不存在在所有節點裡";
                 if (sRemark != cmd.Remark)
                 {
-                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                 }
 
                 return new ConveyorInfo();
@@ -56,73 +56,6 @@ namespace Mirle.Middle.DB_Proc
             }
 
             return conveyor;
-        }
-
-        public bool FunUpdateRemark(string sCmdSno, string sRemark, DB db)
-        {
-            try
-            {
-                string strSql = $"update {Parameter.clsMiddleCmd.TableName} set " +
-                    $"{Parameter.clsMiddleCmd.Column.Remark} = N'" + sRemark +
-                    $"' where {Parameter.clsMiddleCmd.Column.CommandID} = '{sCmdSno}'";
-
-                string strEM = "";
-                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
-                {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
-                    return true;
-                }
-                else
-                {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                return false;
-            }
-        }
-
-        public bool FunUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark, DB db)
-        {
-            try
-            {
-                string strSql = $"update {Parameter.clsMiddleCmd.TableName} set" +
-                    $" {Parameter.clsMiddleCmd.Column.Remark} = N'" + sRemark +
-                    $"', {Parameter.clsMiddleCmd.Column.CmdSts} = '{sCmdSts}' ";
-
-                if (sCmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Cancel_Wait || sCmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait)
-                {
-                    strSql += $", {Parameter.clsMiddleCmd.Column.EndDate} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
-                }
-                else
-                {
-                    strSql += $", {Parameter.clsMiddleCmd.Column.Expose_Date} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
-                }
-
-                strSql += $" where {Parameter.clsMiddleCmd.Column.CommandID} = '{sCmdSno}' ";
-
-                string strEM = "";
-                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
-                {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
-                    return true;
-                }
-                else
-                {
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
-                    return false;
-                }
-            }
-            catch (Exception ex)
-            {
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                return false;
-            }
         }
 
         public bool FunUpdateCmdSts(MiddleCmd[] cmds, string sCmdSts, string sRemark, DB db)
@@ -201,7 +134,7 @@ namespace Mirle.Middle.DB_Proc
                                         sRemark = $"Error: 等候Line{cmd.DeviceID}命令完成";
                                         if (sRemark != cmd.Remark)
                                         {
-                                            FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                            EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                                         }
 
                                         continue;
@@ -305,7 +238,7 @@ namespace Mirle.Middle.DB_Proc
                                                             {
                                                                 if (sRemark != BatchCmd[count].Remark)
                                                                 {
-                                                                    FunUpdateRemark(BatchCmd[count].CommandID, sRemark, db);
+                                                                    EquCmd.FunUpdateRemark_MiddleCmd(BatchCmd[count].CommandID, sRemark, db);
                                                                 }
                                                             }
 
@@ -316,7 +249,7 @@ namespace Mirle.Middle.DB_Proc
                                                         for (int count = 0; count < BatchCmd.Length; count++)
                                                         {
                                                             sRemark = $"預約{conveyors_To[count].BufferName}";
-                                                            if (!FunUpdateCmdSts(BatchCmd[count].CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
+                                                            if (!EquCmd.FunUpdateCmdSts_MiddleCmd(BatchCmd[count].CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
                                                             {
                                                                 db.TransactionCtrl(TransactionTypes.Rollback);
                                                                 bCheck = false;
@@ -336,7 +269,7 @@ namespace Mirle.Middle.DB_Proc
                                                                 sRemark = $"Error: 預約{conveyors_To[count].BufferName}失敗！";
                                                                 if (sRemark != cmd.Remark)
                                                                 {
-                                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                                                                 }
 
                                                                 bCheck = false;
@@ -462,14 +395,14 @@ namespace Mirle.Middle.DB_Proc
                                             sRemark = "Error: Begin失敗！";
                                             if (sRemark != cmd.Remark)
                                             {
-                                                FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                                             }
 
                                             continue;
                                         }
 
                                         sRemark = "下達料塔搬運命令";
-                                        if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
+                                        if (!EquCmd.FunUpdateCmdSts_MiddleCmd(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
                                         {
                                             db.TransactionCtrl(TransactionTypes.Rollback);
                                             continue;
@@ -483,7 +416,7 @@ namespace Mirle.Middle.DB_Proc
                                                 sRemark = "Error: 下達料塔搬運命令失敗";
                                                 if (sRemark != cmd.Remark)
                                                 {
-                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                                                 }
 
                                                 continue;
@@ -497,7 +430,7 @@ namespace Mirle.Middle.DB_Proc
                                                 sRemark = "Error: 下達料塔搬運命令失敗";
                                                 if (sRemark != cmd.Remark)
                                                 {
-                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                                                 }
 
                                                 continue;
@@ -526,14 +459,14 @@ namespace Mirle.Middle.DB_Proc
                                                 sRemark = "Error: Begin失敗！";
                                                 if (sRemark != cmd.Remark)
                                                 {
-                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                                                 }
 
                                                 continue;
                                             }
 
                                             sRemark = $"預約{conveyor.BufferName}";
-                                            if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
+                                            if (!EquCmd.FunUpdateCmdSts_MiddleCmd(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
                                             {
                                                 db.TransactionCtrl(TransactionTypes.Rollback);
                                                 continue;
@@ -545,7 +478,7 @@ namespace Mirle.Middle.DB_Proc
                                                 sRemark = $"Error: 預約{conveyor.BufferName}失敗！";
                                                 if (sRemark != cmd.Remark)
                                                 {
-                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                                                 }
 
                                                 continue;
@@ -569,14 +502,14 @@ namespace Mirle.Middle.DB_Proc
                                                 sRemark = "Error: Begin失敗！";
                                                 if (sRemark != cmd.Remark)
                                                 {
-                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                                                 }
 
                                                 continue;
                                             }
 
                                             sRemark = "下達AGV搬運命令";
-                                            if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
+                                            if (!EquCmd.FunUpdateCmdSts_MiddleCmd(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
                                             {
                                                 db.TransactionCtrl(TransactionTypes.Rollback);
                                                 continue;
@@ -588,7 +521,7 @@ namespace Mirle.Middle.DB_Proc
                                                 sRemark = "Error: 下達AGV搬運命令失敗";
                                                 if (sRemark != cmd.Remark)
                                                 {
-                                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                                                 }
 
                                                 continue;
@@ -658,7 +591,7 @@ namespace Mirle.Middle.DB_Proc
                                     sRemark = "Error: Source站口不存在在所有節點裡";
                                     if (sRemark != cmd.Remark)
                                     {
-                                        FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                        EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                                     }
 
                                     return false;
@@ -690,14 +623,14 @@ namespace Mirle.Middle.DB_Proc
                                 sRemark = "Error: Begin失敗！";
                                 if (sRemark != cmd.Remark)
                                 {
-                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                                 }
 
                                 return false;
                             }
 
                             sRemark = $"預約{conveyor.BufferName}";
-                            if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
+                            if (!EquCmd.FunUpdateCmdSts_MiddleCmd(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
                             {
                                 db.TransactionCtrl(TransactionTypes.Rollback);
                                 return false;
@@ -709,7 +642,7 @@ namespace Mirle.Middle.DB_Proc
                                 sRemark = $"Error: 預約{conveyor.BufferName}失敗！";
                                 if (sRemark != cmd.Remark)
                                 {
-                                    FunUpdateRemark(cmd.CommandID, sRemark, db);
+                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                                 }
 
                                 return false;
@@ -727,7 +660,7 @@ namespace Mirle.Middle.DB_Proc
                     {
                         case clsConstValue.CmdMode.L2L:
                         case clsConstValue.CmdMode.StockIn:
-                            return FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_Initial, "", db);
+                            return EquCmd.FunUpdateCmdSts_MiddleCmd(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_Initial, "", db);
                     }
 
                     ConveyorInfo conveyor_From = new ConveyorInfo();
@@ -779,14 +712,14 @@ namespace Mirle.Middle.DB_Proc
                     sRemark = "Error: Begin失敗！";
                     if (sRemark != cmd.Remark)
                     {
-                        FunUpdateRemark(cmd.CommandID, sRemark, db);
+                        EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                     }
 
                     return false;
                 }
 
                 sRemark = "下達EquCmd";
-                if (!FunUpdateCmdSts(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
+                if (!EquCmd.FunUpdateCmdSts_MiddleCmd(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
                 {
                     db.TransactionCtrl(TransactionTypes.Rollback);
                     return false;
@@ -798,7 +731,7 @@ namespace Mirle.Middle.DB_Proc
                     sRemark = "Error: 下達EquCmd失敗！";
                     if (sRemark != cmd.Remark)
                     {
-                        FunUpdateRemark(cmd.CommandID, sRemark, db);
+                        EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
                     }
 
                     return false;
@@ -829,7 +762,7 @@ namespace Mirle.Middle.DB_Proc
                     {
                         if (sRemark != cmd[i].Remark)
                         {
-                            FunUpdateRemark(cmd[i].CommandID, sRemark, db);
+                            EquCmd.FunUpdateRemark_MiddleCmd(cmd[i].CommandID, sRemark, db);
                         }
                     }
 
@@ -839,7 +772,7 @@ namespace Mirle.Middle.DB_Proc
                 sRemark = "下達EquCmd";
                 for (int i = 0; i < cmd.Length; i++)
                 {
-                    if (!FunUpdateCmdSts(cmd[i].CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
+                    if (!EquCmd.FunUpdateCmdSts_MiddleCmd(cmd[i].CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteDeviceCmd, sRemark, db))
                     {
                         db.TransactionCtrl(TransactionTypes.Rollback);
                         return false;
@@ -854,7 +787,7 @@ namespace Mirle.Middle.DB_Proc
                     {
                         if (sRemark != cmd[i].Remark)
                         {
-                            FunUpdateRemark(cmd[i].CommandID, sRemark, db);
+                            EquCmd.FunUpdateRemark_MiddleCmd(cmd[i].CommandID, sRemark, db);
                         }
                     }
 

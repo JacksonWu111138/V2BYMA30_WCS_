@@ -10,10 +10,12 @@ namespace Mirle.DB.Proc.Events
     {
         public string DeviceID { get; }
         public string Location { get; }
-        public PositionReportArgs(string sDeviceID, string sLocation)
+        public string CmdSno { get; }
+        public PositionReportArgs(string sDeviceID, string sLocation, string sCmdSno)
         {
             DeviceID = sDeviceID;
             Location = sLocation;
+            CmdSno = sCmdSno;
         }
 
     }

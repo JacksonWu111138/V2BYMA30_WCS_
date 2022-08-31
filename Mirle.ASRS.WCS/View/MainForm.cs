@@ -31,6 +31,7 @@ namespace Mirle.ASRS.WCS.View
     public partial class MainForm : Form
     {
         private DB.ClearCmd.Proc.clsHost clearCmd;
+        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
         private WebApiHost _webApiHost;
         private UnityContainer _unityContainer;
         private clsGetCVLocation CVLocation;
@@ -110,7 +111,19 @@ namespace Mirle.ASRS.WCS.View
 
         private void MainForm_OnPostionReportEvent_ASRS(object sender, DB.Proc.Events.PositionReportArgs e)
         {
-            //ASRS的Position回報
+            CmdMstInfo cmd = new CmdMstInfo();
+            if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(e.CmdSno, ref cmd))
+            {
+                PositionReportInfo info = new PositionReportInfo
+                {
+                    carrierId = cmd.Loc_ID,
+                    jobId = cmd.JobID,
+                    location = e.Location,
+                    inStock = e.Location == Def.Location.LocationID.Shelf.ToString() ? clsConstValue.YesNo.Yes : clsConstValue.YesNo.No
+                };
+
+                api.GetPositionReport().FunReport(info, clInitSys.WmsApi_Config.IP);
+            }
         }
 
         private void chkOnline_CheckedChanged(object sender, EventArgs e)

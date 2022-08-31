@@ -120,10 +120,10 @@ namespace Mirle.DB.Proc
                                         if (!reportedFlag)
                                         {
                                             reportedFlag = true;
-                                            OnPostionReportEvent?.Invoke(this, new PositionReportArgs(DeviceID, sCurLoc));
+                                            OnPostionReportEvent?.Invoke(this, new PositionReportArgs(DeviceID, sCurLoc, sCmdSno));
                                             reportedFlag = false;
                                             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"觸發Position回報Event => " +
-                                                $"<Device>{DeviceID} <Location>{sCurLoc}");
+                                                $"<Device>{DeviceID} <Location>{sCurLoc} <{Fun.Parameter.clsCmd_Mst.Column.Cmd_Sno}>{sCmdSno}");
                                         }
                                     }
 

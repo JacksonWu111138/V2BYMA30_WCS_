@@ -10,6 +10,16 @@ namespace Mirle.DB.Fun
 {
     public class clsTool
     {
+        public clsTool() { }
+
+        private DeviceInfo[] pcba;
+        private DeviceInfo[] box;
+        public clsTool(DeviceInfo[] PCBA, DeviceInfo[] Box)
+        {
+            pcba = PCBA;
+            box = Box;
+        }
+
         public CmdMstInfo GetCommand(DataRow drTmp)
         {
             CmdMstInfo cmd = new CmdMstInfo
@@ -245,6 +255,30 @@ namespace Mirle.DB.Fun
                 return true;
             }
             else return false;
+        }
+
+        public bool CheckWhId_ASRS(string sDeviceID, ref clsEnum.AsrsType type)
+        {
+            bool check = pcba.Where(r => r.DeviceID == sDeviceID).Any();
+            if (check)
+            {
+                type = clsEnum.AsrsType.PCBA;
+                return true;
+            }
+            else
+            {
+                check = box.Where(r => r.DeviceID == sDeviceID).Any();
+                if (check)
+                {
+                    type = clsEnum.AsrsType.Box;
+                    return true;
+                }
+                else
+                {
+                    type = clsEnum.AsrsType.None;
+                    return false;
+                }
+            }
         }
 
         public MiddleCmd GetMiddleCmd(DataRow drTmp)

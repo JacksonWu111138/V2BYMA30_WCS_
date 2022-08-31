@@ -45,6 +45,7 @@ namespace Mirle.ASRS.WCS.View
         private MidHost middle;
         private string sAsrsStockIn_Sql = "";
         private string sAsrsEquNo_Sql = "";
+        private DB.Fun.clsTool tool;
         public MainForm()
         {
             InitializeComponent();
@@ -105,8 +106,12 @@ namespace Mirle.ASRS.WCS.View
 
         private void MainForm_OnNeedShelfToShelfEvent(object sender, DB.Fun.Events.NeedShelfToShelfArgs e)
         {
-            //通知WMS產生庫對庫
+            clsEnum.AsrsType type = clsEnum.AsrsType.None;
+            if (tool.CheckWhId_ASRS(e.EquNo, ref type))
+            {
 
+            }
+            else clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"NG: 確認ASRS倉別失敗 => <{DB.Fun.Parameter.clsCmd_Mst.Column.Equ_No}>{e.EquNo}");
         }
 
         private void MainForm_OnPostionReportEvent_ASRS(object sender, DB.Proc.Events.PositionReportArgs e)
@@ -817,6 +822,7 @@ namespace Mirle.ASRS.WCS.View
             ConveyorDef.FunNodeListAddInit();
             ConveyorDef.FunStnListAddInit();
             FunAsrsCmdInit();
+            tool = new DB.Fun.clsTool(PCBA, Box);
             middle = new MidHost(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box, 
                 ConveyorDef.DeviceID_AGV, ConveyorDef.DeviceID_Tower, clInitSys.DbConfig, clInitSys.AgvApi_Config, clInitSys.TowerApi_Config);
             _unityContainer = new UnityContainer();

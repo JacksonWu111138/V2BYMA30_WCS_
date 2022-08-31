@@ -724,7 +724,7 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public bool FunCarrierTransferCancel(string JobID, ref string strEM)
+        public bool FunCarrierTransferCancel(string sCmdSno, ref string strEM)
         {
             try
             {
@@ -734,7 +734,7 @@ namespace Mirle.DB.Proc
                     if (iRet == DBResult.Success)
                     {
                         CmdMstInfo cmd = new CmdMstInfo();
-                        if(Cmd_Mst.FunGetCommandByJobID(JobID, ref cmd, ref iRet, db))
+                        if(Cmd_Mst.FunGetCommandByJobID(sCmdSno, ref cmd, ref iRet, db))
                         {
                             if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Running)
                             {
@@ -797,7 +797,7 @@ namespace Mirle.DB.Proc
                         }
                         else
                         {
-                            strEM = $"<JobID> {JobID} => 取得命令資料失敗！";
+                            strEM = $"<JobID> {sCmdSno} => 取得命令資料失敗！";
                             return false;
                         }
                     }
@@ -817,7 +817,7 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public bool FunLotTransferCancel(string JobID, ref string strEM)
+        public bool FunLotTransferCancel(string sCmdSno, ref string strEM)
         {
             try
             {
@@ -827,7 +827,7 @@ namespace Mirle.DB.Proc
                     if (iRet == DBResult.Success)
                     {
                         CmdMstInfo cmd = new CmdMstInfo();
-                        if (Cmd_Mst.FunGetCommand(JobID, ref cmd, ref iRet, db))
+                        if (Cmd_Mst.FunGetCommand(sCmdSno, ref cmd, ref iRet, db))
                         {
                             if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Running)
                             {
@@ -869,7 +869,7 @@ namespace Mirle.DB.Proc
                         }
                         else
                         {
-                            strEM = $"<JobID> {JobID} => 取得命令資料失敗！";
+                            strEM = $"<JobID> {sCmdSno} => 取得命令資料失敗！";
                             return false;
                         }
                     }
@@ -889,9 +889,7 @@ namespace Mirle.DB.Proc
             }
         }
 
-        
-
-        public bool FunUpdateCmdMstCurLocOrCarrierReturnNext(string jobId, string deviceId, string loc, string carrierId, ref string strEM)
+        public bool FunRackReceivedInfo(string sCmdSno, string rackId, string loc, ref string strEM)
         {
             try
             {
@@ -901,15 +899,71 @@ namespace Mirle.DB.Proc
                     if (iRet == DBResult.Success)
                     {
                         CmdMstInfo cmd = new CmdMstInfo();
-                        if (Cmd_Mst.FunGetCommand(jobId, ref cmd, ref iRet, db))
+                        iRet = Cmd_Mst.FunCheckHasCommand(loc, ref cmd, db);
+                        if (iRet == DBResult.NoDataSelect)
                         {
-                            if (Cmd_Mst.FunUpdateCurLoc(jobId, deviceId, loc, db))
+                            ConveyorInfo con = new ConveyorInfo();
+                            con = ConveyorDef.GetBuffer(loc);
+                            PortStatusUpdateInfo info = new PortStatusUpdateInfo
+                            {
+                                jobId = sCmdSno,
+                                portId = con.StnNo,
+                                //待確定名稱與新增eum欄位?
+                                //portStatus = clsConstValue.
+                            };
+                            if (!api.GetPortStatusUpdate().FunReport(info, _wmsApi.IP))
+                            {
+                                strEM = $"Error: Port Status Update Fail. jobId = {sCmdSno}";
+                                throw new Exception(strEM);
+                            }
+                            return true;
+                        }
+                        else if (iRet == DBResult.Success)
+                        {
+                            strEM = $"Error: 該站口已存在命令. jobId = {sCmdSno}.";
+                            throw new Exception(strEM);
+                        }
+                        else
+                        {
+                            strEM = $"Error: 該站口異常. jobId = {sCmdSno}.";
+                            throw new Exception(strEM);
+                        }
+                    }
+                    else
+                    {
+                        strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunUpdateCmdMstCurLocOrCarrierReturnNext(string sCmdSno, string deviceId, string loc, string carrierId, ref string strEM)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        CmdMstInfo cmd = new CmdMstInfo();
+                        if (Cmd_Mst.FunGetCommand(sCmdSno, ref cmd, ref iRet, db))
+                        {
+                            if (Cmd_Mst.FunUpdateCurLoc(sCmdSno, deviceId, loc, db))
                             {
                                 return true;
                             }
                             else
                             {
-                                strEM = $"Error: UpdateCurLoc fail, jobid = {jobId}.";
+                                strEM = $"Error: UpdateCurLoc fail, jobid = {sCmdSno}.";
                                 return false;
                             }
                         }
@@ -920,13 +974,13 @@ namespace Mirle.DB.Proc
 
                             CarrierReturnNextInfo info = new CarrierReturnNextInfo
                             {
-                                jobId = jobId,
+                                jobId = sCmdSno,
                                 carrierId = carrierId,
                                 fromLocation = con.StnNo
                             };
                             if (!api.GetCarrierReturnNext().FunReport(info, _wmsApi.IP))
                             {
-                                strEM = $"Error: CarrierRetrurnNext fail, jobid = {jobId}.";
+                                strEM = $"Error: CarrierRetrurnNext fail, jobid = {sCmdSno}.";
                                 return false;
                             }
                             else return true;

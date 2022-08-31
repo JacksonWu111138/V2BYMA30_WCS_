@@ -161,6 +161,7 @@ namespace Mirle.DB.Fun
                 dtTmp = null;
             }
         }
+
         public bool FunGetCommandByJobID(string JobID, ref CmdMstInfo cmd, ref int iRet, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();

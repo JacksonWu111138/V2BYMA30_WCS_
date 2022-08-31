@@ -122,6 +122,22 @@ namespace Mirle.Def
             {
                 Down, Run, StockOutOnly
             }
+
+            public enum portStatus
+            {
+                /// <summary>
+                /// 撿料口沒有料架或Carrier在Port上
+                /// </summary>
+                Empty = 0,
+                /// <summary>
+                /// 撿料口有空料架或靜電箱在Port上，但還沒有搬送指令
+                /// </summary>
+                Pickup_Ready = 1,
+                /// <summary>
+                /// 撿料口有空料架或靜電箱在Port上，已有搬送指令
+                /// </summary>
+                Processing = 2
+            }
         }
 
         public class ControllerApi

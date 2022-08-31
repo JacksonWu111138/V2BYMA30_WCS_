@@ -580,7 +580,7 @@ namespace Mirle.WebAPI.Event
                     {
                         if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdatePry(lot.lotId, Body.priority, ref strEM))
                         {
-                            // throw new Exception($"<{Body.jobId}> {strEM}");
+                            throw new Exception($"<{Body.jobId}> {strEM}");
                         }
                     }
                 }
@@ -591,7 +591,7 @@ namespace Mirle.WebAPI.Event
                         cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSNO);
                         if (string.IsNullOrWhiteSpace(cmd.Cmd_Sno))
                         {
-                            //throw new Exception($"<{Body.jobId}>取得序號失敗！");
+                            throw new Exception($"<{Body.jobId}>取得序號失敗！");
                         }
 
                         cmd.Loc_ID = lot.lotId;
@@ -628,7 +628,7 @@ namespace Mirle.WebAPI.Event
                             if (!check)
                             {
                                 
-                                //throw new Exception("Error: B800CV 無OutReady儲位");
+                                throw new Exception("Error: B800CV 無OutReady儲位");
                             }
                         }
                         else
@@ -642,11 +642,11 @@ namespace Mirle.WebAPI.Event
                         cmd.Zone_ID = "";
                         //cmd.carrierType = Body.carrierType;
 
-                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunLotRetrieveInsCmdMst(cmd, ref strEM))
-                        {
-                            //送出【寫入cmdMst命令】失敗
-                            //throw new Exception(strEM);
-                        }
+                    }
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunLotRetrieveInsCmdMst(cmd, ref strEM))
+                    {
+                        //送出【寫入cmdMst命令】失敗
+                        throw new Exception(strEM);
                     }
                 }
                     
@@ -871,7 +871,8 @@ namespace Mirle.WebAPI.Event
             BinReply rMsg = new BinReply
             {
                 jobId = Body.jobId,
-                transactionId = Body.transactionId
+                transactionId = Body.transactionId,
+                binId = Body.binId
             };
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BIN_EMPTY_LEAVE_REQUEST start!");
             try
@@ -1212,7 +1213,19 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>RACK_AWAY_INFO start!");
             try
             {
-
+                string strEM = "";
+                if(Body.rackId == "unknown")
+                {
+                    //判斷body.stagePosition是否來自縣邊倉(S0-05)，如果不是:送到這個位置，如果是:call AGV來讀barcode
+                }
+                else
+                {
+                    ConveyorInfo con = new ConveyorInfo();
+                    con = ConveyorDef.GetBuffer(Body.stagePosition);
+                    if(!clsDB_Proc.GetDB_Object().GetProc().FunUpdateCmdMstCurLocOrCarrierReturnNext(Body.jobId, con.bufferLocation.DeviceId,
+                        Body.stagePosition, Body.rackId, ref strEM))
+                        throw new Exception(strEM);
+                }
 
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
@@ -1246,8 +1259,12 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>RACK_COMMAND_DONE start!");
             try
             {
-
-
+                string strEM = "";
+                ConveyorInfo con = new ConveyorInfo();
+                con = ConveyorDef.GetBuffer(Body.stagePosition);
+                if (!clsDB_Proc.GetDB_Object().GetProc().FunUpdateCmdMstCurLocOrCarrierReturnNext(Body.jobId, con.bufferLocation.DeviceId,
+                    Body.stagePosition, Body.rackId, ref strEM))
+                    throw new Exception(strEM);
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -1280,8 +1297,12 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>RACK_ID_REPORT start!");
             try
             {
-
-
+                string strEM = "";
+                ConveyorInfo con = new ConveyorInfo();
+                con = ConveyorDef.GetBuffer(Body.rackLoc);
+                if (!clsDB_Proc.GetDB_Object().GetProc().FunUpdateCmdMstCurLocOrCarrierReturnNext(Body.jobId, con.bufferLocation.DeviceId,
+                    Body.rackLoc, Body.rackId, ref strEM))
+                    throw new Exception(strEM);
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -1314,8 +1335,9 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>RACK_RECEIVED_INFO start!");
             try
             {
-
-
+                string strEM = "";
+                if (!clsDB_Proc.GetDB_Object().GetProc().FunRackReceivedInfo(Body.jobId, Body.rackId, Body.stagePosition, ref strEM))
+                    throw new Exception(strEM);
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -1383,7 +1405,7 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>REEL_STOCK_IN start!");
             try
             {
-
+                LotPutawayCheckReply reply = new LotPutawayCheckReply();
 
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
@@ -1520,8 +1542,9 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>TRANSFER_COMMAND_DONE start!");
             try
             {
-
-
+                string strEM = "";
+                if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateFinishByCommanId(Body.jobId, ref strEM))
+                    throw new Exception(strEM);
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";

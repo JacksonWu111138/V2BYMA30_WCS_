@@ -30,7 +30,8 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 portId = textBox_portId.Text,
                 lotId = textBox_lotId.Text
             };
-            if (!api.GetLotPutawayCheck().FunReport(info, wesApiconfig.IP))
+            LotPutawayCheckReply reply = new LotPutawayCheckReply();
+            if (!api.GetLotPutawayCheck().FunReport(info, wesApiconfig.IP, ref reply))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Lot PutAway Check", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

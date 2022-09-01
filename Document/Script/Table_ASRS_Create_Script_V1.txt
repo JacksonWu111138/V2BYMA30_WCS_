@@ -3,7 +3,6 @@ Drop Table MiddleCmd_His;
 Drop Table UnitModeDef;
 Drop Table UnitStsLog;
 DROP TABLE AlarmDef;
-DROP TABLE ALARMDATA;
 DROP TABLE DeviceDef;
 DROP TABLE EQ_Alarm;
 DROP TABLE PortDef;
@@ -143,54 +142,12 @@ PRIMARY KEY(StockerID, UnitID, STRDT)
 
 CREATE TABLE AlarmDef
 (
-AlarmType Numeric (2, 0) NOT NULL,
-AlarmCode VARCHAR(4) NOT NULL,
-AlarmID VARCHAR(10) DEFAULT' ',
-AlarmLevel Numeric (1, 0) NOT NULL,
-ReportEnable VARCHAR(250) NOT NULL DEFAULT'Y',
-AlarmDesc NVARCHAR(250) DEFAULT' ',
-AlarmDesc_EN VARCHAR(250) DEFAULT' ',
-AlarmDetail NVARCHAR(250) DEFAULT' ',
-RestoreStep NVARCHAR(500) DEFAULT' ',
-RestoreStepByUserDefine NVARCHAR(500) DEFAULT' ',
-HyperLinkPath VARCHAR(100) DEFAULT' ',
-TrnDT VARCHAR(25) NOT NULL DEFAULT' ',
-PRIMARY KEY(AlarmType,AlarmCode)
+AlarmCode VARCHAR(10) NOT NULL,
+AlarmLevel VARCHAR(1) NOT NULL DEFAULT ' ',
+AlarmDesc VARCHAR(250) DEFAULT ' ',
+AlarmDesc_EN VARCHAR(250) DEFAULT ' ',
+PRIMARY KEY(AlarmCode)
 );
-
-
-CREATE TABLE [dbo].[ALARMDATA](
-	[DeviceID] [varchar](64) NOT NULL,
-	[ALARMTYPE] [numeric](2, 0) NOT NULL DEFAULT 0,
-	[UnitID] [varchar](64) NULL Default ' ',
-	[AlarmState] [numeric](1, 0) NULL DEFAULT 0,
-	[ALARMCODE] [varchar](5) NOT NULL,
-	[StartDT] [varchar](25) NOT NULL Default CONVERT([VARCHAR], GETDATE(), (121)),
-	[ENDDT] [varchar](25) NULL Default ' ',
-	[RECOVERTIME] [numeric](10, 0) NULL Default 0,
-	[ALARMTIME] [numeric](10, 0) NULL Default 0,
-	[REPORTFLAG] [varchar](1)   NULL Default 'N',
-	[ALARMLOC] [varchar](64) NULL Default ' ',
-	[COMMANDID] [varchar](64) NULL Default ' ',
-	[COMMANDID_RF] [varchar](64)  NULL Default ' ',
-        [TaskNo] [varchar](15)  NULL Default ' ',
-	[TaskNo_RF] [varchar](15)  NULL Default ' ',
-	[CSTID] [varchar](64)  NULL Default ' ',
-        [CSTID_RF] [varchar](64)  NULL Default ' ',
-	[CSTLOC] [varchar](64) NULL Default ' ',
-        [CSTLOC_RF] [varchar](64) NULL Default ' ',
-	[SOURCE] [varchar](64) NULL Default ' ',
-        [SOURCE_RF] [varchar](64) NULL Default ' ',
-	[Destination] [varchar](64) NULL Default ' ',
-        [Destination_RF] [varchar](64) NULL Default ' ',
-	[UnitStatus] [numeric](2,0) NULL Default 0,
-	[MPLCALARMINDEX] [numeric](5,0) NULL Default 0,
-	[SafeDoorOpenDT] [varchar](25) NULL Default ' ',
-	[SafeDoorClosedDT] [varchar](25) NULL Default ' ',
-	[AlarmResetDT] [varchar](25) NULL Default ' ',
-        [TrnDT] [varchar](25) NOT NULL Default CONVERT([VARCHAR], GETDATE(), (121)),
-        PRIMARY KEY(DeviceID,ALARMTYPE,ALARMCODE,StartDT)
-        );
 
 CREATE TABLE DeviceDef
 (

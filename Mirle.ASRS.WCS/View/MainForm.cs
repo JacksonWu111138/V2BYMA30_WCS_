@@ -817,6 +817,9 @@ namespace Mirle.ASRS.WCS.View
             var archive = new AutoArchive();
             archive.Start();
             clsDB_Proc.Initial(clInitSys.DbConfig, clInitSys.DbConfig_WMS, clInitSys.WmsApi_Config, clInitSys.TowerApi_Config);
+            clsMiddle.Initial(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box,
+                ConveyorDef.DeviceID_AGV, ConveyorDef.DeviceID_Tower, clInitSys.DbConfig, clInitSys.AgvApi_Config, clInitSys.TowerApi_Config);
+            clsAPI.Initial(clInitSys.WmsApi_Config);
             router = new MapHost(clInitSys.DbConfig);
             CVLocation = new clsGetCVLocation(router);
             ConveyorDef.FunNodeListAddInit();
@@ -826,7 +829,7 @@ namespace Mirle.ASRS.WCS.View
             middle = new MidHost(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box, 
                 ConveyorDef.DeviceID_AGV, ConveyorDef.DeviceID_Tower, clInitSys.DbConfig, clInitSys.AgvApi_Config, clInitSys.TowerApi_Config);
             _unityContainer = new UnityContainer();
-            _unityContainer.RegisterInstance(new WCSController(middle));
+            _unityContainer.RegisterInstance(new WCSController());
             _webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
             //clearCmd = new DB.ClearCmd.Proc.clsHost();
         }

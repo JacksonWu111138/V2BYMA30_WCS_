@@ -44,6 +44,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Service\clsAPI.cs" />
+    <Compile Include="Service\clsMiddle.cs" />
     <Compile Include="Service\clsDB_Proc.cs" />
     <Compile Include="clsWriLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,9 +76,17 @@
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def_2</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mirle.Middle\Mirle.Middle.csproj">
+      <Project>{312ed336-0211-4e88-9f3f-6b15a133f864}</Project>
+      <Name>Mirle.Middle</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.Structure\Mirle.Structure.csproj">
       <Project>{cc7b0aac-3935-44cf-b363-55c0445358d0}</Project>
       <Name>Mirle.Structure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mirle.WebAPI.U2NMMA30\Mirle.WebAPI.csproj">
+      <Project>{646741d4-de4c-48ef-9b90-1785bd22cefd}</Project>
+      <Name>Mirle.WebAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.WriLog\Mirle.WriLog_2.csproj">
       <Project>{fcb3bfde-2247-4aa4-a652-f87c081b63fc}</Project>

@@ -24,14 +24,8 @@ namespace Mirle.WebAPI.Event
 {
     public class WCSController : ApiController
     {
-        private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
-        private MidHost middle;
         private DB.Fun.clsTool tool = new DB.Fun.clsTool();
 
-        public WCSController(MidHost Middle)
-        {
-            middle = Middle;            
-        }
         public WCSController()
         {
         }
@@ -86,7 +80,7 @@ namespace Mirle.WebAPI.Event
                         while (count < ConveyorDef.GetB800CV_List().Count())
                         {
                             B800CV = ConveyorDef.GetB800CV();
-                            if (middle.CheckIsInReady(B800CV))
+                            if (clsMiddle.GetMiddle().CheckIsInReady(B800CV))
                             {
                                 cmd.New_Loc = B800CV.BufferName;
                                 check = true;
@@ -115,7 +109,7 @@ namespace Mirle.WebAPI.Event
                         while (count < ConveyorDef.GetB800CV_List().Count())
                         {
                             B800CV = ConveyorDef.GetB800CV();
-                            if (middle.CheckIsInReady(B800CV))
+                            if (clsMiddle.GetMiddle().CheckIsInReady(B800CV))
                             {
                                 cmd.Stn_No = B800CV.StnNo;
                                 check = true;
@@ -187,7 +181,7 @@ namespace Mirle.WebAPI.Event
                     {
                         throw new Exception($"<{Body.jobId}>取得序號失敗！");
                     }
-
+                    
                     cmd.Loc_ID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.StockIn;
                     cmd.CurDeviceID = "";
@@ -211,7 +205,7 @@ namespace Mirle.WebAPI.Event
                         while (count < ConveyorDef.GetB800CV_List().Count())
                         {
                             B800CV = ConveyorDef.GetB800CV();
-                            if (middle.CheckIsInReady(B800CV))
+                            if (clsMiddle.GetMiddle().CheckIsInReady(B800CV))
                             {
                                 cmd.Stn_No = B800CV.BufferName;
                                 check = true;
@@ -307,7 +301,7 @@ namespace Mirle.WebAPI.Event
                         while (count < ConveyorDef.GetB800CV_List().Count())
                         {
                             B800CV = ConveyorDef.GetB800CV();
-                            if (middle.CheckIsInReady(B800CV))
+                            if (clsMiddle.GetMiddle().CheckIsInReady(B800CV))
                             {
                                 cmd.Stn_No = B800CV.BufferName;
                                 check = true;
@@ -513,7 +507,7 @@ namespace Mirle.WebAPI.Event
                         while (count < ConveyorDef.GetB800CV_List().Count())
                         {
                             B800CV = ConveyorDef.GetB800CV();
-                            if (middle.CheckIsInReady(B800CV))
+                            if (clsMiddle.GetMiddle().CheckIsInReady(B800CV))
                             {
                                 cmd.Stn_No = B800CV.BufferName;
                                 check = true;
@@ -617,7 +611,7 @@ namespace Mirle.WebAPI.Event
                             while (count < ConveyorDef.GetB800CV_List().Count())
                             {
                                 B800CV = ConveyorDef.GetB800CV();
-                                if (middle.CheckIsOutReady(B800CV))
+                                if (clsMiddle.GetMiddle().CheckIsOutReady(B800CV))
                                 {
                                     cmd.Stn_No = B800CV.BufferName;
                                     check = true;
@@ -762,7 +756,7 @@ namespace Mirle.WebAPI.Event
 
                 BufferRollInfo info = new BufferRollInfo { jobId = Body.jobId, bufferId = conveyor.BufferName };
 
-                if (!api.GetBufferRoll().FunReport(info, conveyor.API.IP))
+                if (!clsAPI.GetAPI().GetBufferRoll().FunReport(info, conveyor.API.IP))
                     throw new Exception(strEM);
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;

@@ -799,13 +799,13 @@ namespace Mirle.WebAPI.Event
                 string strEM = "";
                 if(Body.status == clsEnum.AlarmSts.OnGoing.ToString())
                 {
-                    if (!clsDB_Proc.GetDB_Object().GetAlarmData().FunAlarm_Occur(Body.jobId, Body.deviceId, Body.alarmCode,
+                    if (!clsDB_Proc.GetDB_Object().GetAlarmCVCLog().FunAlarm_Occur(Body.jobId, Body.deviceId, Body.alarmCode,
                         Body.alarmDef, Body.bufferId, Body.happenTime, ref strEM))
                         throw new Exception(strEM);
                 }
                 else
                 {
-                    if (!clsDB_Proc.GetDB_Object().GetAlarmData().FunAlarm_Solved(Body.jobId, Body.deviceId, Body.alarmCode,
+                    if (!clsDB_Proc.GetDB_Object().GetAlarmCVCLog().FunAlarm_Solved(Body.jobId, Body.deviceId, Body.alarmCode,
                         Body.alarmDef, Body.bufferId, Body.happenTime, ref strEM))
                         throw new Exception(strEM);
                 }

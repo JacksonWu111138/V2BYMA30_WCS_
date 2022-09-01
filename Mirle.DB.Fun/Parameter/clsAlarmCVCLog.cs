@@ -6,15 +6,23 @@ using System.Threading.Tasks;
 
 namespace Mirle.DB.Fun.Parameter
 {
-    public class clsAlarmData
+    public class clsAlarmCVCLog
     {
-        public const string TableName = "AlarmLog";
+        public const string TableName = "AlarmCVCLog";
         public class Column
         {
+            /// <summary>
+            /// 任務ID
+            /// </summary>
+            public const string CmdSno = "CmdSno";
             /// <summary>
             /// 設備編號
             /// </summary>
             public const string DeviceID = "EquNo";
+            /// <summary>
+            /// 站口ID
+            /// </summary>
+            public const string BufferID = "BufferID";
             /// <summary>
             /// 設備模式
             /// </summary>
@@ -23,6 +31,10 @@ namespace Mirle.DB.Fun.Parameter
             /// 異常碼
             /// </summary>
             public const string AlarmCode = "AlarmCode";
+            /// <summary>
+            /// 異常描述
+            /// </summary>
+            public const string AlarmDef = "AlarmDef";
             /// <summary>
             /// 狀態
             /// </summary>

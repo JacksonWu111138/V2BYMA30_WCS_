@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsAlarmCVCLog.cs" />
     <Compile Include="clsAlarmData.cs" />
     <Compile Include="clsCMD_DTL.cs" />
     <Compile Include="clsCmd_Mst.cs" />
@@ -65,6 +66,7 @@
     <Compile Include="clsUnitStsLog.cs" />
     <Compile Include="clsWriLog.cs" />
     <Compile Include="Events\NeedShelfToShelfArgs.cs" />
+    <Compile Include="Parameter\clsAlarmCVCLog.cs" />
     <Compile Include="Parameter\clsAlarmData.cs" />
     <Compile Include="Parameter\clsCmd_Dtl.cs" />
     <Compile Include="Parameter\clsCmd_Dtl_His.cs" />

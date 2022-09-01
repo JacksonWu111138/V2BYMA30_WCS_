@@ -12,6 +12,7 @@ namespace Mirle.DB.Proc
         private readonly clsLocMst LocMst;
         private readonly clsLoc_Dtl Loc_Dtl;
         private readonly clsAlarmData ALARMDATA;
+        private readonly clsAlarmCVCLog ALARMCACLOG;
         private readonly clsEQ_Alarm EQ_Alarm;
         private readonly clsUnitStsLog unitStsLog;
         private readonly clsUnitModeDef unitModeDef;
@@ -40,6 +41,7 @@ namespace Mirle.DB.Proc
             LocMst = new clsLocMst(config);
             Loc_Dtl = new clsLoc_Dtl(config);
             ALARMDATA = new clsAlarmData(config);
+            ALARMCACLOG = new clsAlarmCVCLog(config);
             unitStsLog = new clsUnitStsLog(config);
             unitModeDef = new clsUnitModeDef(config);
             EQ_Alarm = new clsEQ_Alarm(config);
@@ -70,6 +72,10 @@ namespace Mirle.DB.Proc
             return ALARMDATA;
         }
 
+        public clsAlarmCVCLog GetAlarmCVCLog()
+        {
+            return ALARMCACLOG;
+        }
         public clsEQ_Alarm GetEQ_Alarm()
         {
             return EQ_Alarm;

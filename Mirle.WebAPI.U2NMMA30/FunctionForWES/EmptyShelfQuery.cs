@@ -11,7 +11,7 @@ namespace Mirle.WebAPI.V2BYMA30.Function
 {
     public class EmptyShelfQuery
     {
-        public bool FunReport(EmptyShelfQueryInfo info, string IP)
+        public bool FunReport(EmptyShelfQueryInfo info, ref EmptyShelfQueryReply replyInfo, string IP)
         {
             try
             {
@@ -21,8 +21,8 @@ namespace Mirle.WebAPI.V2BYMA30.Function
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"URL: {sLink}");
                 string re = clsTool.HttpPost(sLink, strJson);
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, re);
-                var info_controller = (EmptyShelfQueryReply)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(EmptyShelfQueryReply));
-                if (info_controller.returnCode == clsConstValue.ApiReturnCode.Success) return true;
+                replyInfo = (EmptyShelfQueryReply)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(EmptyShelfQueryReply));
+                if (replyInfo.returnCode == clsConstValue.ApiReturnCode.Success) return true;
                 else return false;
             }
             catch (Exception ex)

@@ -109,7 +109,36 @@ namespace Mirle.ASRS.WCS.View
             clsEnum.AsrsType type = clsEnum.AsrsType.None;
             if (tool.CheckWhId_ASRS(e.EquNo, ref type))
             {
+                CmdMstInfo cmd = new CmdMstInfo();
+                int iRet = clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand_byBoxID(e.BoxID, ref cmd);
+                if(iRet == DBResult.NoDataSelect)
+                {
+                    if(type == clsEnum.AsrsType.PCBA)
+                    {
+                        EmptyShelfQueryInfo info = new EmptyShelfQueryInfo
+                        {
+                            craneId = e.EquNo,
+                            lotIdCarrierId = e.BoxID
+                        };
 
+                        EmptyShelfQueryReply reply = new EmptyShelfQueryReply();
+                        if (api.GetEmptyShelfQuery().FunReport(info, ref reply, clInitSys.WmsApi_Config.IP))
+                        {
+                            CarrierShelfRequestInfo shelfRequestInfo = new CarrierShelfRequestInfo
+                            {
+                                disableLocation = clsConstValue.YesNo.No,
+                                fromShelfId = e.Loc,
+                                toShelfId = reply.shelfId
+                            };
+
+                            api.GetCarrierShelfRequest().FunReport(shelfRequestInfo, clInitSys.WmsApi_Config.IP);
+                        }
+                    }
+                    else
+                    {
+
+                    }
+                }
             }
             else clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"NG: 確認ASRS倉別失敗 => <{DB.Fun.Parameter.clsCmd_Mst.Column.Equ_No}>{e.EquNo}");
         }

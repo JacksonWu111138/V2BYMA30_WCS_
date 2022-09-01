@@ -30,7 +30,9 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 lotIdCarrierId = textBox_lotIdCarrierId.Text,
                 craneId = textBox_craneId.Text
             };
-            if (!api.GetEmptyShelfQuery().FunReport(info, wesApiconfig.IP))
+
+            EmptyShelfQueryReply reply = new EmptyShelfQueryReply();
+            if (!api.GetEmptyShelfQuery().FunReport(info, ref reply, wesApiconfig.IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Empty Shelf Query", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

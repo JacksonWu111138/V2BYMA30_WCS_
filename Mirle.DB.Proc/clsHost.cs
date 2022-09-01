@@ -17,6 +17,7 @@ namespace Mirle.DB.Proc
         private readonly clsUnitStsLog unitStsLog;
         private readonly clsUnitModeDef unitModeDef;
         private readonly clsL2LCount L2LCount;
+        private readonly clsLotRetrieveNG LOTRETRIEVENG;
         private readonly clsProc proc;
         private readonly clsMiddleCmd middleCmd;
         private static object _Lock = new object();
@@ -46,6 +47,7 @@ namespace Mirle.DB.Proc
             unitModeDef = new clsUnitModeDef(config);
             EQ_Alarm = new clsEQ_Alarm(config);
             L2LCount = new clsL2LCount(config);
+            LOTRETRIEVENG = new clsLotRetrieveNG(config);
             proc = new clsProc(config, wmsApi, TowerApi_Config);
             middleCmd = new clsMiddleCmd(config);
         }
@@ -95,7 +97,10 @@ namespace Mirle.DB.Proc
         {
             return L2LCount;
         }
-
+        public clsLotRetrieveNG GetLotRetrieveNG()
+        {
+            return LOTRETRIEVENG;
+        }
         public clsProc GetProc() => proc;
         public clsMiddleCmd GetMiddleCmd() => middleCmd;
     }

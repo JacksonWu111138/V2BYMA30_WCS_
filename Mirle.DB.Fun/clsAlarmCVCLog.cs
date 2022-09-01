@@ -11,7 +11,7 @@ namespace Mirle.DB.Fun
 {
     public class clsAlarmCVCLog
     {
-                public bool FunAlarm_Occur(string sCmdSno, string deviceId, string alarmCode, string alarmDef, string bufferId, 
+        public bool FunAlarm_Occur(string sCmdSno, string deviceId, string alarmCode, string alarmDef, string bufferId, 
             string happenTime, DataBase.DB db, ref string strEM)
         {
             DataTable dtTmp = new DataTable();

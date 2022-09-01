@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsLotRetrieveNG.cs" />
     <Compile Include="clsAlarmCVCLog.cs" />
     <Compile Include="clsAlarmData.cs" />
     <Compile Include="clsCmd_Dtl.cs" />

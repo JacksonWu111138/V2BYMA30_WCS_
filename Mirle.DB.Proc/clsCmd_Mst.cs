@@ -157,6 +157,28 @@ namespace Mirle.DB.Proc
             }
         }
 
+        public int FunCheckHasCommand_ByBoxID(string BoxId, ref CmdMstInfo cmd)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        return CMD_MST.FunCheckHasCommand_ByBoxID(BoxId, ref cmd, db);
+                    }
+                    else return iRet;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+        }
+
         public bool FunUpdateStnNo(string sCmdSno, string sStnNo, string sRemark)
         {
             try

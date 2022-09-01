@@ -836,8 +836,26 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST start!");
             try
             {
+                CmdMstInfo cmd = new CmdMstInfo();
+                int iRet = clsDB_Proc.GetDB_Object().GetCmd_Mst().FunCheckHasCommand_ByBoxID(Body.barcode, ref cmd);
+                ConveyorInfo con = new ConveyorInfo();
+                con = ConveyorDef.GetBuffer(Body.location);
 
-
+                if (iRet == DBResult.Success)
+                {
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, con.bufferLocation.DeviceId, Body.location))
+                        throw new Exception($"Error: UpdateCurLoc Fail. jobId = {Body.jobId}");
+                }
+                else if (iRet == DBResult.NoDataSelect)
+                {
+                    CarrierReturnNextInfo info = new CarrierReturnNextInfo
+                    {
+                        carrierId = Body.barcode,
+                        fromLocation = con.StnNo
+                    };
+                    if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                        throw new Exception("Error: Sending CarrierReturnNext to WES Fail.");
+                }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";

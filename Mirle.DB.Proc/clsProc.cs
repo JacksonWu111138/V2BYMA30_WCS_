@@ -908,8 +908,7 @@ namespace Mirle.DB.Proc
                             {
                                 jobId = sCmdSno,
                                 portId = con.StnNo,
-                                //待確定名稱與新增eum欄位?
-                                //portStatus = clsConstValue.
+                                portStatus = clsEnum.WmsApi.portStatus.Pickup_Ready.ToString()
                             };
                             if (!api.GetPortStatusUpdate().FunReport(info, _wmsApi.IP))
                             {

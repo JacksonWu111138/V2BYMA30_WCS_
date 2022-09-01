@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="clsLotRetrieveNG.cs" />
     <Compile Include="clsAlarmCVCLog.cs" />
-    <Compile Include="clsAlarmData.cs" />
     <Compile Include="clsCmd_Dtl.cs" />
     <Compile Include="clsCmd_Mst.cs" />
     <Compile Include="clsEQ_Alarm.cs" />

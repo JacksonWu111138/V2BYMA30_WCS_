@@ -46,7 +46,6 @@
   <ItemGroup>
     <Compile Include="clsLotRetrieveNG.cs" />
     <Compile Include="clsAlarmCVCLog.cs" />
-    <Compile Include="clsAlarmData.cs" />
     <Compile Include="clsCMD_DTL.cs" />
     <Compile Include="clsCmd_Mst.cs" />
     <Compile Include="clsEquCmd.cs" />
@@ -69,7 +68,6 @@
     <Compile Include="Events\NeedShelfToShelfArgs.cs" />
     <Compile Include="Parameter\clsLotRetrieveNG.cs" />
     <Compile Include="Parameter\clsAlarmCVCLog.cs" />
-    <Compile Include="Parameter\clsAlarmData.cs" />
     <Compile Include="Parameter\clsCmd_Dtl.cs" />
     <Compile Include="Parameter\clsCmd_Dtl_His.cs" />
     <Compile Include="Parameter\clsCmd_Mst.cs" />

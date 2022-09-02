@@ -108,6 +108,12 @@ namespace Mirle.Def
                 HWS, FOB
             }
 
+            public enum StorageType
+            {
+                B800,
+                M800
+            }
+
             public enum IsComplete
             {
                 Y, N

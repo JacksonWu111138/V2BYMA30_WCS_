@@ -360,7 +360,37 @@ namespace Mirle.DB.Fun
             try
             {
                 string strSql = $"select * from {Parameter.clsMiddleCmd.TableName} where " +
-                    $"{Parameter.clsMiddleCmd.Column.CommandID} = '{sCmdSno}'";
+                    $"{Parameter.clsMiddleCmd.Column.CommandID} = '{sCmdSno}' and {Parameter.clsMiddleCmd.Column.CmdSts} not in " +
+                    $"('{clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait}', '{clsConstValue.CmdSts_MiddleCmd.strCmd_Cancel_Wait}')";
+                string strEM = "";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                }
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+            finally
+            {
+                dtTmp.Dispose();
+            }
+        }
+
+        public int CheckHasMiddleCmdByCSTID(string CSTID, DataBase.DB db)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                string strSql = $"select * from {Parameter.clsMiddleCmd.TableName} where " +
+                    $"{Parameter.clsMiddleCmd.Column.CSTID} = '{CSTID}' and {Parameter.clsMiddleCmd.Column.CmdSts} not in " +
+                    $"('{clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait}', '{clsConstValue.CmdSts_MiddleCmd.strCmd_Cancel_Wait}')";
                 string strEM = "";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)

@@ -8,7 +8,7 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
 {
     public class CarrierPutawayCheckInfo
     {
-        public string jobId { get; set; }
+        public string jobId { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         public string transactionId { get; set; } = "CARRIER_PUTAWAY_CHECK";
         public string portId { get; set; }
         public string carrierId { get; set; }

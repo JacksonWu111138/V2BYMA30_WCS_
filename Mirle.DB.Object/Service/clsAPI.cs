@@ -14,15 +14,18 @@ namespace Mirle.DB.Object
         private static WebAPI.V2BYMA30.clsHost api;
         private static WebApiConfig wesApiconfig;
         private static WebApiConfig agvcApiconfig;
-        public static void Initial(WebApiConfig WesApiConfig, WebApiConfig AgvcApiConfig)
+        private static WebApiConfig towerApiconfig;
+        public static void Initial(WebApiConfig WesApiConfig, WebApiConfig AgvcApiConfig, WebApiConfig TowerApiConfig)
         {
             api = new WebAPI.V2BYMA30.clsHost();
             wesApiconfig = WesApiConfig;
             agvcApiconfig = AgvcApiConfig;
+            towerApiconfig = TowerApiConfig;
         }
 
         public static WebAPI.V2BYMA30.clsHost GetAPI() => api;
         public static WebApiConfig GetWesApiConfig() => wesApiconfig;
         public static WebApiConfig GetAgvcApiConfig() => agvcApiconfig;
+        public static WebApiConfig GetTowerApiConfig() => towerApiconfig;
     }
 }

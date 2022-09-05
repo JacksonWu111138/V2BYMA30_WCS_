@@ -90,17 +90,34 @@ namespace Mirle.Def
             public enum CancelType
             {
                 /// <summary>
+                /// 取消電子料塔入庫命令
+                /// </summary>
+                LotPUTAWAY,
+                /// <summary>
+                /// 取消電子料塔出庫命令
+                /// </summary>
+                LotRETRIEVE,
+                /// <summary>
+                /// 取消電子料塔庫對庫命令
+                /// </summary>
+                LotSHELF,
+                /// <summary>
                 /// 取消入庫命令
                 /// </summary>
-                PUTAWAY,
+                CarrierPUTAWAY,
                 /// <summary>
                 /// 取消出庫命令
                 /// </summary>
-                RETRIEVE,
+                CarrierRETRIEVE,
                 /// <summary>
                 /// 取消庫對庫命令
                 /// </summary>
-                SHELF
+                CarreirSHELF,
+                /// <summary>
+                /// 取消站對站命令
+                /// </summary>
+                CarrierTRANSFER
+
             }
 
             public enum CarrierType

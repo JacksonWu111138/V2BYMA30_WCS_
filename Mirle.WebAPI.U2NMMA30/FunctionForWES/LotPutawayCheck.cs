@@ -12,7 +12,7 @@ namespace Mirle.WebAPI.V2BYMA30.Function
 {
     public class LotPutawayCheck
     {
-        public bool FunReport(LotPutawayCheckInfo info, string IP, ref LotPutawayCheckReply info_controller)
+        public bool FunReport(LotPutawayCheckInfo info, string IP)
         {
             try
             {
@@ -22,12 +22,12 @@ namespace Mirle.WebAPI.V2BYMA30.Function
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"URL: {sLink}");
                 string re = clsTool.HttpPost(sLink, strJson);
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, re);
-                info_controller = (LotPutawayCheckReply)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(LotPutawayCheckReply));
+                var info_controller = (LotPutawayCheckReply)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(LotPutawayCheckReply));
                 if (info_controller.returnCode == clsConstValue.ApiReturnCode.Success) return true;
                 else if (info_controller.returnCode == clsConstValue.ApiReturnCode.Waitretry)
                 {
                     Thread.Sleep(30000);
-                    return FunReport(info, IP, ref info_controller);
+                    return FunReport(info, IP);
                 }
                 else return false;
             }

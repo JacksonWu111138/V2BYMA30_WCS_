@@ -56,6 +56,27 @@ namespace Mirle.DB.Fun
                 dtTmp.Dispose();
             }
         }
+        public int FunGetOccurCommand(ref DataTable dtTmp, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"select * from {Parameter.clsLotRetrieveNG.TableName}" +
+                    $" where {Parameter.clsLotRetrieveNG.Column.CmdSts} = '{Parameter.clsLotRetrieveNG.Status.Occur}'";
+                string strEM = "";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return DBResult.Exception;
+            }
+        }
         public bool FunLotRetrieveNG_Solved (string sCmdSno, string lotId, DataBase.DB db, ref string strEM)
         {
             DataTable dtTmp = new DataTable();
@@ -113,6 +134,27 @@ namespace Mirle.DB.Fun
             finally
             {
                 dtTmp.Dispose();
+            }
+        }
+        public bool FunDelLotRetrieveNGSolved(double dblDay, DataBase.DB db)
+        {
+            try
+            {
+                string strDelDay = DateTime.Today.Date.AddDays(dblDay * (-1)).ToString("yyyy-MM-dd");
+                string strSql = $"delete from {Parameter.clsLotRetrieveNG.TableName} where {Parameter.clsLotRetrieveNG.Column.Clear_Date} <= '" + strDelDay + "' ";
+
+                int iRet = db.ExecuteSQL(strSql);
+                if (iRet == DBResult.Success)
+                {
+                   return true;
+                }
+                else return false;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
             }
         }
     }

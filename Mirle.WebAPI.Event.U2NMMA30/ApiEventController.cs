@@ -22,6 +22,7 @@ using RetrieveTransferInfo = Mirle.WebAPI.V2BYMA30.ReportInfo.RetrieveTransferIn
 using static Mirle.Def.clsEnum;
 using Mirle.DB.Fun;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
+using static Mirle.Def.clsConstValue;
 
 namespace Mirle.WebAPI.Event
 {
@@ -583,6 +584,8 @@ namespace Mirle.WebAPI.Event
                 }
                 else
                 {
+                    V2BYMA30.ReportInfo.LotRetrieveTransferInfo info = new V2BYMA30.ReportInfo.LotRetrieveTransferInfo();
+                    LotListInfo oklot = new LotListInfo();
                     foreach (var lot in Body.lotList)
                     {
                         cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSNO);
@@ -639,12 +642,30 @@ namespace Mirle.WebAPI.Event
                         cmd.Zone_ID = "";
                         //cmd.carrierType = Body.carrierType;
 
+                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
+                        {
+                            if (!clsDB_Proc.GetDB_Object().GetLotRetrieveNG().FunRetrieveNG_Occur(cmd.Cmd_Sno, cmd.JobID, lot.lotId, ref strEM))
+                            {
+                                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, strEM);
+                                continue;
+                            }
+                            continue;
+                        }
+                        
+                        oklot.cmdSno = cmd.Cmd_Sno;
+                        oklot.lotId = lot.lotId;
+                        oklot.toPortId = lot.toPortId;
+                        oklot.fromShelfId = lot.fromShelfId;
+                        oklot.rackLocation = lot.rackLocation;
+                        oklot.largest = lot.largest;
+
+                        info.lotList.Add(oklot);
                     }
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunLotRetrieveInsCmdMst(cmd, ref strEM))
-                    {
-                        //送出【寫入cmdMst命令】失敗
-                        throw new Exception(strEM);
-                    }
+                    info.priority = Body.priority;
+                    if (!clsAPI.GetAPI().GetLotRetrieveTransfer().FunReport(info, clsAPI.GetTowerApiConfig().IP))
+                        throw new Exception($"Error: LotRetrieveTransfer to E800 fail, jobId = {Body.jobId}");
+                    //E800端出庫失敗後如何回覆lotId?
                 }
                     
 
@@ -851,7 +872,10 @@ namespace Mirle.WebAPI.Event
                 }
                 else if (iRet == DBResult.NoDataSelect)
                 {
-                    if(Body.location == ""/*箱式倉減料口*/ )
+                    if( Body.location == ConveyorDef.Box.B1_062.BufferName ||
+                        Body.location == ConveyorDef.Box.B1_067.BufferName ||
+                        Body.location == ConveyorDef.Box.B1_142.BufferName ||
+                        Body.location == ConveyorDef.Box.B1_147.BufferName )
                     {
                         CarrierPutawayCheckInfo info = new CarrierPutawayCheckInfo
                         {
@@ -1039,14 +1063,34 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CMD_DOUBLE_STORAGE_REQUEST start!");
             try
             {
+                
                 EmptyShelfQueryInfo info = new EmptyShelfQueryInfo
                 {
-                    lotIdCarrierId = Body.reelId,
-                    craneId = Body.locationId //WES 的 craneId要填什麼
+                    lotIdCarrierId = Body.reelId
                 };
+                switch (Body.locationId.Substring(0, 1))
+                {
+                    case "A":
+                        info.craneId = "E801";
+                        break;
+                    case "B":
+                        info.craneId = "E802";
+                        break;
+                    case "C":
+                        info.craneId = "E803";
+                        break;
+                    case "D":
+                        info.craneId = "E804";
+                        break;
+                    case "E":
+                        info.craneId = "E805";
+                        break;
+                    default: throw new ArgumentOutOfRangeException(nameof(Body.locationId), "Error: E800 儲位ID不合格式.");
+                }
+
                 EmptyShelfQueryReply reply = new EmptyShelfQueryReply();
                 if (!clsAPI.GetAPI().GetEmptyShelfQuery().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
-                    throw new Exception($"Error: EmptyShelfQuery to WES fail, jobId = {Body.jobId}");
+                    throw new Exception($"Error: EmptyShelfQuery to WES fail, jobId = {Body.jobId}.");
 
                 rMsg.newLoc = reply.shelfId;
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
@@ -1619,24 +1663,15 @@ namespace Mirle.WebAPI.Event
                 if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
                     throw new Exception($"Error: Get Cmd form CmdMst fail, jobId = {Body.jobId}.");
 
-                ConveyorInfo con = new ConveyorInfo();
-                con = ConveyorDef.GetBuffer("E1-10");
-
                 LotPutawayCheckInfo info = new LotPutawayCheckInfo
                 {
                     jobId = cmd.JobID,
                     lotId = Body.reelId,
-                    portId = con.StnNo
+                    portId = Body.portId
                 };
-                LotPutawayCheckReply reply = new LotPutawayCheckReply();
 
-                if (!clsAPI.GetAPI().GetLotPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP, ref reply))
+                if (!clsAPI.GetAPI().GetLotPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     throw new Exception($"Error: LotPutawayCheck fail, jobId = {Body.jobId}.");
-
-                con = ConveyorDef.GetBuffer(reply.portId);
-                rMsg.stockerId = con.StkPortID.ToString(); //不確定
-                
-                rMsg.locationId = reply.portId; //不確定
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -1902,7 +1937,7 @@ namespace Mirle.WebAPI.Event
         {
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<WRONG_EQU_STOCK_IN_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
 
-            ReelStockInReply rMsg = new ReelStockInReply
+            WrongEquStockInRequestReply rMsg = new WrongEquStockInRequestReply
             {
                 reelId = Body.reelId,
                 jobId = Body.jobId,
@@ -1911,19 +1946,33 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>WRONG_EQU_STOCK_IN_REQUEST start!");
             try
             {
-
                 EmptyShelfQueryInfo info = new EmptyShelfQueryInfo
                 {
                     lotIdCarrierId = Body.reelId,
-                    craneId = Body.stockerId //WES 的 craneId要填什麼
                 };
+                switch (Body.stockerId.Substring(0, 1))
+                {
+                    case "A":
+                        info.craneId = "E801";
+                        break;
+                    case "B":
+                        info.craneId = "E802";
+                        break;
+                    case "C":
+                        info.craneId = "E803";
+                        break;
+                    case "D":
+                        info.craneId = "E804";
+                        break;
+                    case "E":
+                        info.craneId = "E805";
+                        break;
+                    default: throw new ArgumentOutOfRangeException(nameof(Body.stockerId), "Error: E800 stocker ID不合格式.");
+                }
                 EmptyShelfQueryReply reply = new EmptyShelfQueryReply();
                 if (!clsAPI.GetAPI().GetEmptyShelfQuery().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
                     throw new Exception($"Error: EmptyShelfQuery to WES fail, jobId = {Body.jobId}");
 
-                //rMsg.stockerId = ???
-
-                rMsg.locationId = reply.shelfId;
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
 

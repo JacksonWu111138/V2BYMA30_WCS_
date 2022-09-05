@@ -6,11 +6,12 @@ using Mirle.Def.U2NMMA30;
 
 namespace Mirle.DB.ClearCmd.Proc
 {
-    public class clsMoveCmdInHistory_Proc
+    public class clsLotRetrieveFailCancel_Proc
     {
         private System.Timers.Timer timRead = new System.Timers.Timer();
+        private string strLastExportTime = string.Empty;
 
-        public clsMoveCmdInHistory_Proc()
+        public clsLotRetrieveFailCancel_Proc()
         {
             timRead.Elapsed += new System.Timers.ElapsedEventHandler(timRead_Elapsed);
             timRead.Enabled = false; timRead.Interval = 1000;
@@ -28,14 +29,21 @@ namespace Mirle.DB.ClearCmd.Proc
             {
                 if (DB.Proc.clsHost.IsConn)
                 {
-                    //Tower
-                    clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdFinish_Proc(ConveyorDef.DeviceID_Tower);
-                    //AGV
-                    clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdFinish_Proc(ConveyorDef.DeviceID_AGV);
-
-                    clsDB_Proc.GetDB_Object().GetCmd_Mst().FunMoveFinishCmdToHistory_Proc();
+                    clsDB_Proc.GetDB_Object().GetLotRetrieveNG().FunLotRetrieveFailCancel_Proc();
                 }
 
+                string strExportTime = DateTime.Now.ToString("yyyy-MM-dd") + " 00:00";
+                string strNowTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+                if (strNowTime == strExportTime && strNowTime != strLastExportTime)
+                {
+                    if (DB.Proc.clsHost.IsConn)
+                    {
+                        if (clsDB_Proc.GetDB_Object().GetLotRetrieveNG().FunDelLotRetrieveNGSolved(180))
+                        {
+                            strLastExportTime = strNowTime;
+                        }
+                    }
+                }
             }
             catch (Exception ex)
             {

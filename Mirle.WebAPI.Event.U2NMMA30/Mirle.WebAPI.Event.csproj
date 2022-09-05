@@ -98,6 +98,7 @@
     <Compile Include="Models\UtilizationStsInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ModelsForControllers\CommandCompleteInfo.cs" />
+    <Compile Include="ReplyForControllers\WrongEquStockInRequestReply.cs" />
     <Compile Include="ReplyForControllers\ReelStockInReply.cs" />
     <Compile Include="ReplyForControllers\CmdDoubleStorageReply.cs" />
     <Compile Include="ReplyForControllers\CmdDestinationCheckReply.cs" />

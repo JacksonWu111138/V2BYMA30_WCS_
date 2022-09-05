@@ -45,7 +45,7 @@ namespace Mirle.DB.Proc
             unitModeDef = new clsUnitModeDef(config);
             EQ_Alarm = new clsEQ_Alarm(config);
             L2LCount = new clsL2LCount(config);
-            LOTRETRIEVENG = new clsLotRetrieveNG(config);
+            LOTRETRIEVENG = new clsLotRetrieveNG(config, wmsApi);
             proc = new clsProc(config, wmsApi, TowerApi_Config);
             middleCmd = new clsMiddleCmd(config);
         }

@@ -9,5 +9,6 @@ namespace Mirle.WebAPI.Event.U2NMMA30.Models
     public class ReelIdInfo : BaseInfo
     {
         public string reelId { get; set; }
+        public string portId { get; set; }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Mirle.DataBase;
 using Mirle.Def;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -13,9 +14,12 @@ namespace Mirle.DB.Proc
     {
         private Fun.clsLotRetrieveNG LotRetrieveNG = new Fun.clsLotRetrieveNG();
         private clsDbConfig _config = new clsDbConfig();
-        public clsLotRetrieveNG(clsDbConfig config)
+        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
+        private WebApiConfig wesApiConfig = new WebApiConfig();
+        public clsLotRetrieveNG(clsDbConfig config, WebApiConfig WesApiConfig)
         {
             _config = config;
+            wesApiConfig = WesApiConfig;
         }
 
         public bool FunRetrieveNG_Occur(string sCmdSno, string jobId, string lotId, ref string strEM)
@@ -41,7 +45,68 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
-        public bool FunRetrieveNG_Solved(string sCmdSno, string jobId, string lotId, ref string strEM)
+        
+        public bool FunLotRetrieveFailCancel_Proc()
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        if (LotRetrieveNG.FunGetOccurCommand(ref dtTmp, db) == DBResult.Success)
+                        {
+                            string strEM = "";
+                            for (int i = 0; i < dtTmp.Rows.Count; i++)
+                            {
+                                string sCmdSno = Convert.ToString(dtTmp.Rows[i]["CmdSno"]);
+                                string slotId = Convert.ToString(dtTmp.Rows[i]["lotId"]);
+
+                                WCSCancelInfo info = new WCSCancelInfo
+                                {
+                                    lotIdCarrierId = slotId,
+                                    cancelType = clsEnum.WmsApi.CancelType.LotRETRIEVE.ToString()
+                                };
+
+                                if(!api.GetWCSCancel().FunReport(info, wesApiConfig.IP))
+                                {
+                                    var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                                    clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, 
+                                        $"Error: WCS Cancel Fail, lotId = {slotId}.");
+                                    continue;
+                                }
+
+                                if(!LotRetrieveNG.FunLotRetrieveNG_Solved(sCmdSno, slotId, db, ref strEM))
+                                {
+                                    var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                                    clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, strEM);
+                                    continue;
+                                }
+                                
+                            }
+
+                            return true;
+                        }
+                        else return false;
+                    }
+                    else return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+            finally
+            {
+                dtTmp = null;
+            }
+        }
+
+        public bool FunDelLotRetrieveNGSolved(double dblDay)
         {
             try
             {
@@ -50,17 +115,15 @@ namespace Mirle.DB.Proc
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        return LotRetrieveNG.FunLotRetrieveNG_Solved(sCmdSno, lotId, db, ref strEM);
+                        return LotRetrieveNG.FunDelLotRetrieveNGSolved(dblDay, db);
                     }
-
-                    return false;
+                    else return false;
                 }
             }
             catch (Exception ex)
             {
-                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
                 return false;
             }
         }

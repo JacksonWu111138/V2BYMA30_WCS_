@@ -58,6 +58,7 @@
   <ItemGroup>
     <Compile Include="clsDelCmdMst_His_Proc.cs" />
     <Compile Include="clsHost.cs" />
+    <Compile Include="clsLotRetrieveFailCancel_Proc.cs" />
     <Compile Include="clsMoveCmdInHistory_Proc.cs" />
     <Compile Include="clsWriLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

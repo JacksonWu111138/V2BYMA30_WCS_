@@ -267,5 +267,75 @@ namespace Mirle.DB.WMS.Fun
                 dtTmp = null;
             }
         }
+
+        public string funSearchEmptyLoc_Abnormal(string Equ_No, clsEnum.LocSts_Double locSts, string sSource, DataBase.DB db)
+        {
+            string sSQL = "";
+            string sNewLoc = "";
+            string strEM = "";
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                sSQL = "SELECT TOP 1 LOC, Equ_RowNo FROM LOC_MST WHERE LocSts = '" + clsEnum.LocSts.N.ToString() + "' ";
+                sSQL += " AND Equ_No = " + Equ_No + " ";
+                switch (sSource.Substring(0, 2))
+                {
+                    //case 1:
+                    //case 3:
+                    //    sSQL += " and Equ_RowNo IN (1,3) ";
+                    //    break;
+                    //case 2:
+                    //case 4:
+                    //    sSQL += " and Equ_RowNo IN (2,4) ";
+                    //    break;
+                    //default:
+                    //    return "";
+                }
+
+                if (locSts == clsEnum.LocSts_Double.NNNN) //找外側空庫位
+                {
+                    sSQL += " AND LOC IN (SELECT Loc_DD FROM LOC_MST WHERE LocSts='N' AND Equ_RowNo IN (1,2) ) ";
+                }
+
+                if (locSts == clsEnum.LocSts_Double.SNNS)
+                {
+                    sSQL += " AND LOC IN (SELECT Loc_DD FROM LOC_MST WHERE LocSts='S' AND Equ_RowNo IN (3,4) ) ";
+                }
+
+                if (locSts == clsEnum.LocSts_Double.ENNE)
+                {
+                    sSQL += " AND LOC IN (SELECT Loc_DD FROM LOC_MST WHERE LocSts='E' AND Equ_RowNo IN (3,4) ) ";
+                }
+
+                if (locSts == clsEnum.LocSts_Double.XNNX)
+                {
+                    sSQL += " AND LOC IN (SELECT Loc_DD FROM LOC_MST WHERE LocSts='X' AND Equ_RowNo IN (3,4) ) ";
+                }
+
+                sSQL += " ORDER BY BAY_Y,LVL_Z,ROW_X DESC";
+
+                dtTmp = new DataTable();
+                if (db.GetDataTable(sSQL, ref dtTmp, ref strEM) == DBResult.Success)
+                {
+                    sNewLoc = dtTmp.Rows[0]["Loc"].ToString();
+                }
+                else
+                {
+                    sNewLoc = "";
+                }
+
+                return sNewLoc;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return "";
+            }
+            finally
+            {
+                dtTmp = null;
+            }
+        }
     }
 }

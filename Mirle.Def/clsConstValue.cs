@@ -333,7 +333,7 @@ namespace Mirle.Def
             /// <summary>
             /// 入庫預約
             /// </summary>
-            public const string IN = "INT";
+            public const string IN = "IN";
             /// <summary>
             /// 出庫預約
             /// </summary>

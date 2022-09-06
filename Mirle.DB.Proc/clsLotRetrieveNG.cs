@@ -67,7 +67,7 @@ namespace Mirle.DB.Proc
                                 WCSCancelInfo info = new WCSCancelInfo
                                 {
                                     lotIdCarrierId = slotId,
-                                    cancelType = clsEnum.WmsApi.CancelType.LotRETRIEVE.ToString()
+                                    cancelType = "Lot RETRIEVE"
                                 };
 
                                 if(!api.GetWCSCancel().FunReport(info, wesApiConfig.IP))

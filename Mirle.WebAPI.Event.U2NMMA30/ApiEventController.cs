@@ -535,8 +535,22 @@ namespace Mirle.WebAPI.Event
                     cmd.carrierType = "";
                     cmd.lotSize = Body.lotSize;
 
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunLotPutawayInsCmdMst(cmd, ref strEM))
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                         throw new Exception(strEM);
+
+                    PutawayTransferInfo info = new PutawayTransferInfo
+                    {
+                        jobId = cmd.Cmd_Sno,
+                        reelId = cmd.Loc_ID,
+                        lotSize = cmd.lotSize,
+                        toShelfId = cmd.Loc
+                    };
+                    if (!clsAPI.GetAPI().GetPutawayTransfer().FunReport(info, clsAPI.GetTowerApiConfig().IP))
+                        throw new Exception($"Error: PutawayTransfer E800C接收失敗, jobId = {cmd.Cmd_Sno}.");
+
+                    if(!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running,""))
+                        throw new Exception($"Error: 更改CmdSts至Running失敗, jobId = {cmd.Cmd_Sno}.");
+                   
                 }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
@@ -877,13 +891,15 @@ namespace Mirle.WebAPI.Event
                         Body.location == ConveyorDef.Box.B1_142.BufferName ||
                         Body.location == ConveyorDef.Box.B1_147.BufferName )
                     {
+                        //來自箱式倉減料口
                         CarrierPutawayCheckInfo info = new CarrierPutawayCheckInfo
                         {
+                            portId = con.StnNo,
                             carrierId = Body.barcode,
-                            storageType = clsEnum.WmsApi.StorageType.B800.ToString()
+                            storageType = "B800"
                         };
-                        if(!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info,clsAPI.GetWesApiConfig().IP))
-                            throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}");
+                        if(!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                            throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}.");
                     }
                     else
                     {
@@ -1124,8 +1140,77 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>COMMAND_COMPLETE start!");
             try
             {
-                if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Finish_Wait, ""))
-                    throw new Exception($"Error: Update CmdSts Fail. jobId = {Body.jobId}.");
+                //須更新enum & LotRetrieve收E800 API之內容
+                if(Body.cmdMode == clsConstValue.CmdMode.StockIn)
+                {
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Finish_Wait, ""))
+                        throw new Exception($"Error: Update CmdSts fail, jobId = {Body.jobId}.");
+
+                    CmdMstInfo cmd = new CmdMstInfo();
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
+                        throw new Exception($"Error: 取得cmdMst命令失敗, jobId = {Body.jobId}.");
+
+                    LotPutawayCompleteInfo info = new LotPutawayCompleteInfo
+                    {
+                        jobId = Body.jobId,
+                        lotId = Body.reelId,
+                        shelfId = cmd.Loc,
+                        isComplete = clsEnum.WmsApi.IsComplete.Y.ToString()
+                    };
+                    if(!clsAPI.GetAPI().GetLotPutawayComplete().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                        throw new Exception($"Error: LotPutawayComplete to WES fail, jobId = {Body.jobId}.");
+                }
+                if(Body.cmdMode == clsConstValue.CmdMode.StockOut)
+                {
+                    CmdMstInfo cmd = new CmdMstInfo();
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
+                        throw new Exception($"Error: 取得cmdMst命令失敗, jobId = {Body.jobId}.");
+
+                    LotRetrieveCompleteInfo info = new LotRetrieveCompleteInfo
+                    {
+                        jobId = cmd.JobID,
+                        lotId = Body.reelId,
+                        portId = cmd.Stn_No,
+                        //carrierId
+                    };
+                    if (Body.emptyRetrieval == clsEnum.WmsApi.EmptyRetrieval.N.ToString())
+                    {
+                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Finish_Wait, ""))
+                            throw new Exception($"Error: Update CmdSts fail, jobId = {Body.jobId}.");
+                        info.isComplete = clsEnum.WmsApi.IsComplete.Y.ToString();
+                        info.disableLocation = "N";
+                    }
+                    else if (Body.emptyRetrieval == clsEnum.WmsApi.EmptyRetrieval.Y.ToString())
+                    {
+                        string sRemark = "異常：空出庫";
+                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Cancel_Wait,
+                            clsEnum.Cmd_Abnormal.E2, sRemark))
+                            throw new Exception($"Error: Update cmdSts【空出庫】 fail, jobId = {Body.jobId}.");
+                        info.isComplete = clsEnum.WmsApi.IsComplete.N.ToString();
+                        info.emptyTransfer = clsEnum.WmsApi.EmptyTransfer.Y.ToString();
+                        info.disableLocation = clsEnum.WmsApi.DisableLocation.Y.ToString();
+                    }
+                    else if (Body.emptyRetrieval == clsEnum.WmsApi.EmptyRetrieval.F.ToString())
+                    {
+                        string sRemark = "異常：料捲取出失敗";
+                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Cancel_Wait,
+                            clsEnum.Cmd_Abnormal.EP, sRemark))
+                            throw new Exception($"Error: Update cmdSts【料捲取出失敗】 fail, jobId = {Body.jobId}.");
+
+                        info.isComplete = clsEnum.WmsApi.IsComplete.N.ToString();
+                        info.disableLocation = clsEnum.WmsApi.DisableLocation.Y.ToString();
+                    }
+                    else
+                    {
+                        throw new Exception($"Error: emptyRetrieval 格式不合, jobId = {Body.jobId}.");
+                    }
+
+
+
+                    if (!clsAPI.GetAPI().GetLotRetrieveComplete().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                        throw new Exception($"Error: LotRetrieveComplete to WES fail, jobId = {Body.jobId}.");
+                }
+                
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -1260,15 +1345,18 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>POSITION_REPORT start!");
             try
             {
-
+                //須更新 update cmdsts方法
                 if(clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCmdSno(Body.jobId))
                 {
                     MiddleCmd cmd = new MiddleCmd();
                     if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunGetMiddleCmdbyCommandID(Body.jobId, ref cmd))
                         throw new Exception($"Error: Get MiddleCmd fail. jobId : {Body.jobId}.");
                     if (Body.position == cmd.Destination)
-                        if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, ""))
+                    {
+                        string sRemark = "命令完成";
+                        if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark))
                             throw new Exception($"Error: Update MiddleCmd fail. jobId : {Body.jobId}.");
+                    }
                 }
                 else
                 {
@@ -1328,7 +1416,7 @@ namespace Mirle.WebAPI.Event
 
                         if(!clsAPI.GetAPI().GetRackRequest().FunReport(info, clsAPI.GetAgvcApiConfig().IP))
                         {
-                            strEM = $"Error: Call AGV RackRequest fail, jobId = {Body.jobId}";
+                            strEM = $"Error: Call AGV RackRequest fail, jobId = {Body.jobId}.";
                             throw new Exception(strEM);
                         }
                     }
@@ -1365,7 +1453,6 @@ namespace Mirle.WebAPI.Event
 
                         if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                             throw new Exception(strEM);
-                        
                     }
                 }
                 else
@@ -1378,7 +1465,8 @@ namespace Mirle.WebAPI.Event
                     {
                         if(clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCSTID(Body.rackId))
                         {
-                            if(!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait,""))
+                            string sRemark = "命令完成";
+                            if(!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark))
                             {
                                 strEM = $"Error: Update Middle cmdsts fail, jobId = {Body.jobId}.";
                                 throw new Exception(strEM);
@@ -1504,7 +1592,8 @@ namespace Mirle.WebAPI.Event
 
                 if(clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCmdSno(Body.jobId))
                 {
-                    if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, ""))
+                    string sRemark = "命令完成";
+                    if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark))
                     {
                         strEM = $"Error: Update Middle cmdsts fail, jobId = {Body.jobId}.";
                         throw new Exception(strEM);

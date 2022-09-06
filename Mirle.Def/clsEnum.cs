@@ -92,31 +92,31 @@ namespace Mirle.Def
                 /// <summary>
                 /// 取消電子料塔入庫命令
                 /// </summary>
-                LotPUTAWAY,
+                LOT_PUTAWAY,
                 /// <summary>
                 /// 取消電子料塔出庫命令
                 /// </summary>
-                LotRETRIEVE,
+                LOT_RETRIEVE,
                 /// <summary>
                 /// 取消電子料塔庫對庫命令
                 /// </summary>
-                LotSHELF,
+                LOT_SHELF,
                 /// <summary>
                 /// 取消入庫命令
                 /// </summary>
-                CarrierPUTAWAY,
+                CARRIER_PUTAWAY,
                 /// <summary>
                 /// 取消出庫命令
                 /// </summary>
-                CarrierRETRIEVE,
+                CARRIER_RETRIEVE,
                 /// <summary>
                 /// 取消庫對庫命令
                 /// </summary>
-                CarreirSHELF,
+                CARRIER_SHELF,
                 /// <summary>
                 /// 取消站對站命令
                 /// </summary>
-                CarrierTRANSFER
+                CARRIER_TRANSFER
 
             }
 
@@ -136,6 +136,30 @@ namespace Mirle.Def
                 Y, N
             }
 
+            public enum EmptyTransfer
+            {
+                Y, N
+            }
+
+            public enum EmptyRetrieval
+            {
+                /// <summary>
+                /// 空出庫
+                /// </summary>
+                Y,
+                /// <summary>
+                /// 正常
+                /// </summary>
+                N,
+                /// <summary>
+                /// 料捲取出失敗
+                /// </summary>
+                F
+            }
+            public enum DisableLocation
+            {
+                Y, N
+            }
             public enum IsOnline
             {
                 Y, N
@@ -428,6 +452,10 @@ namespace Mirle.Def
             /// 空出庫
             /// </summary>
             E2,
+            /// <summary>
+            /// 料捲取出失敗
+            /// </summary>
+            EP,
             /// <summary>
             /// 二重格
             /// </summary>

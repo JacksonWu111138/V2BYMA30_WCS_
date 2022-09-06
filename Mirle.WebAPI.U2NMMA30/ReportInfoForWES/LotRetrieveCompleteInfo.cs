@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Mirle.Def;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,7 +15,7 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         public string lotId { get; set; }
         public string carrierId { get; set; }
         public string isComplete { get; set; }
-        public string emptyTransfer { get; set; }
+        public string emptyTransfer { get; set; } = clsEnum.WmsApi.EmptyTransfer.N.ToString();
         public string disableLocation { get; set; }
     }
 }

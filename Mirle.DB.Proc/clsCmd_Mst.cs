@@ -420,55 +420,7 @@ namespace Mirle.DB.Proc
                 dtTmp = null;
             }
         }
-        public bool FunLotPutawayInsCmdMst(CmdMstInfo stuCmdMst, ref string strErrMsg)
-        {
-            try
-            {
-                using (var db = clsGetDB.GetDB(_config))
-                {
-                    int iRet = clsGetDB.FunDbOpen(db);
-                    if (iRet == DBResult.Success)
-                    {
-                        if (CMD_MST.FunInsCmdMst(stuCmdMst, ref strErrMsg, db))
-                        {
-                            PutawayTransferInfo putaway_info = new PutawayTransferInfo();
-                            putaway_info = new PutawayTransferInfo
-                            {
-                                jobId = stuCmdMst.Cmd_Sno,
-                                reelId = stuCmdMst.Loc_ID,
-                                toShelfId = stuCmdMst.Loc,
-                                lotSize = stuCmdMst.lotSize
-                            };
-
-                            if (!api.GetPutawayTransfer().FunReport(putaway_info, _towerApi.IP))
-                            {
-                                strErrMsg = "Error: PutawayTransfer E800C接收失敗";
-                                return false;
-                            }
-                            else
-                            {
-                                string sRemark = "";
-                                if (!FunUpdateCmdSts(stuCmdMst.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark))
-                                {
-                                    strErrMsg = "Error: 更改CmdSts至Running失敗";
-                                    return false;
-                                }
-                                return true;
-                            }
-                        }
-                        else return false;
-                    }
-                    else return false;
-                }
-                
-            }
-            catch (Exception ex)
-            {
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                return false;
-            }
-        }
+        
 
         public bool FunDelCMD_MST_His(double dblDay)
         {
@@ -492,57 +444,6 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public bool FunLotRetrieveInsCmdMst(CmdMstInfo stuCmdMst, ref string strErrMsg)
-        {
-            try
-            {
-                using (var db = clsGetDB.GetDB(_config))
-                {
-                    int iRet = clsGetDB.FunDbOpen(db);
-                    if (iRet == DBResult.Success)
-                    {
-                        if (CMD_MST.FunInsCmdMst(stuCmdMst, ref strErrMsg, db))
-                        {
-                            RetrieveTransferInfo retrieve_info = new RetrieveTransferInfo();
-                            retrieve_info = new RetrieveTransferInfo
-                            {
-                                jobId = stuCmdMst.Cmd_Sno,
-                                reelId = stuCmdMst.Loc_ID,
-                                fromShelfId = stuCmdMst.Loc,
-                                toPortId = stuCmdMst.Stn_No,
-                                rackLocation = stuCmdMst.rackLocation,
-                                largest = stuCmdMst.largest,
-                                priority = stuCmdMst.Prty
-                            };
-
-                            if (!api.GetRetrieveTransfer().FunReport(retrieve_info, _towerApi.IP))
-                            {
-                                strErrMsg = "Error: RetrieveTransfer E800C接收失敗";
-                                return false;
-                            }
-                            else
-                            {
-                                string sRemark = "";
-                                if (!FunUpdateCmdSts(stuCmdMst.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark))
-                                {
-                                    strErrMsg = "Error: 更改CmdSts至Running失敗";
-                                    return false;
-                                }
-                                return true;
-                            }
-                        }
-                        else return false;
-                    }
-                    else return false;
-                }
-
-            }
-            catch (Exception ex)
-            {
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                return false;
-            }
-        }
+        
     }
 }

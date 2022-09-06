@@ -195,5 +195,41 @@ namespace Mirle.DB.WMS.Proc
                 return DBResult.Exception;
             }
         }
+
+        public string funSearchEmptyLoc_Abnormal_Proc(string Equ_No, string sSource)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        string sNewLoc = LocMst.funSearchEmptyLoc_Abnormal(Equ_No, clsEnum.LocSts_Double.NNNN, sSource, db);
+                        if (string.IsNullOrWhiteSpace(sNewLoc))
+                        {
+                            sNewLoc = LocMst.funSearchEmptyLoc_Abnormal(Equ_No, clsEnum.LocSts_Double.ENNE, sSource, db);
+                            if (string.IsNullOrWhiteSpace(sNewLoc))
+                            {
+                                sNewLoc = LocMst.funSearchEmptyLoc_Abnormal(Equ_No, clsEnum.LocSts_Double.SNNS, sSource, db);
+                                if (string.IsNullOrWhiteSpace(sNewLoc))
+                                {
+                                    sNewLoc = LocMst.funSearchEmptyLoc_Abnormal(Equ_No, clsEnum.LocSts_Double.XNNX, sSource, db);
+                                }
+                            }
+                        }
+
+                        return sNewLoc;
+                    }
+                    else return string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return string.Empty;
+            }
+        }
     }
 }

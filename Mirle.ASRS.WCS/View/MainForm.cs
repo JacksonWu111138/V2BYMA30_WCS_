@@ -136,7 +136,23 @@ namespace Mirle.ASRS.WCS.View
                     }
                     else
                     {
-                        
+                        string sNewLoc = clsDB_Proc.GetWmsDB_Object().GetLocMst().funSearchEmptyLoc_Abnormal_Proc(e.EquNo, e.Loc);
+                        if (string.IsNullOrWhiteSpace(sNewLoc))
+                        {
+                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"NG: 庫對庫找不到空儲位 => <Source>{e.Loc} " +
+                                $"<{DB.Fun.Parameter.clsCmd_Mst.Column.Equ_No}>{e.EquNo} <{DB.Fun.Parameter.clsCmd_Mst.Column.BoxID}>{e.BoxID}");
+                        }
+                        else
+                        {
+                            CarrierShelfRequestInfo shelfRequestInfo = new CarrierShelfRequestInfo
+                            {
+                                disableLocation = clsConstValue.YesNo.No,
+                                fromShelfId = e.Loc,
+                                toShelfId = sNewLoc
+                            };
+
+                            api.GetCarrierShelfRequest().FunReport(shelfRequestInfo, clInitSys.WmsApi_Config.IP);
+                        }
                     }
                 }
             }

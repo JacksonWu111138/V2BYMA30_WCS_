@@ -270,54 +270,79 @@ namespace Mirle.DB.WMS.Fun
 
         public string funSearchEmptyLoc_Abnormal(string Equ_No, clsEnum.LocSts_Double locSts, string sSource, DataBase.DB db)
         {
-            string sSQL = "";
             string sNewLoc = "";
             string strEM = "";
             DataTable dtTmp = new DataTable();
             try
             {
-                sSQL = "SELECT TOP 1 LOC, Equ_RowNo FROM LOC_MST WHERE LocSts = '" + clsEnum.LocSts.N.ToString() + "' ";
-                sSQL += " AND Equ_No = " + Equ_No + " ";
+                string sSQL = $"SELECT TOP 1 {Parameter.clsLocMst.Column.Loc} FROM " +
+                      $"{Parameter.clsLocMst.TableName} WHERE STORAGE_STATUS = '" + clsConstValue.LocSts.Empty + "' ";
+                sSQL += $" AND OPERATE_STATUS = '{clsConstValue.LocSts.Normal}' and {Parameter.clsLocMst.Column.EquNo} = '" + Equ_No + "' ";
                 switch (sSource.Substring(0, 2))
                 {
-                    //case 1:
-                    //case 3:
-                    //    sSQL += " and Equ_RowNo IN (1,3) ";
-                    //    break;
-                    //case 2:
-                    //case 4:
-                    //    sSQL += " and Equ_RowNo IN (2,4) ";
-                    //    break;
-                    //default:
-                    //    return "";
+                    case "09":
+                    case "11":
+                        sSQL += $" and SUBSTRING({Parameter.clsLocMst.Column.Loc},1,2) IN ('09','11') ";
+                        break;
+                    case "10":
+                    case "12":
+                        sSQL += $" and SUBSTRING({Parameter.clsLocMst.Column.Loc},1,2) IN ('10','12') ";
+                        break;
+                    case "13":
+                    case "15":
+                        sSQL += $" and SUBSTRING({Parameter.clsLocMst.Column.Loc},1,2) IN ('13','15') ";
+                        break;
+                    case "14":
+                    case "16":
+                        sSQL += $" and SUBSTRING({Parameter.clsLocMst.Column.Loc},1,2) IN ('14','16') ";
+                        break;
+                    case "17":
+                    case "19":
+                        sSQL += $" and SUBSTRING({Parameter.clsLocMst.Column.Loc},1,2) IN ('17','19') ";
+                        break;
+                    case "18":
+                    case "20":
+                        sSQL += $" and SUBSTRING({Parameter.clsLocMst.Column.Loc},1,2) IN ('18','20') ";
+                        break;
+                    default:
+                        return "";
                 }
 
                 if (locSts == clsEnum.LocSts_Double.NNNN) //找外側空庫位
                 {
-                    sSQL += " AND LOC IN (SELECT Loc_DD FROM LOC_MST WHERE LocSts='N' AND Equ_RowNo IN (1,2) ) ";
+                    sSQL += $" AND {Parameter.clsLocMst.Column.Loc} IN (SELECT {Parameter.clsLocMst.Column.LocDD} FROM " +
+                       $"{Parameter.clsLocMst.TableName}" +
+                       $" WHERE STORAGE_STATUS='{clsConstValue.LocSts.Empty}' AND OPERATE_STATUS = '{clsConstValue.LocSts.Normal}'" +
+                       $" AND IS_INSIDE = 'Y') ";
                 }
-
-                if (locSts == clsEnum.LocSts_Double.SNNS)
+                else if (locSts == clsEnum.LocSts_Double.SNNS)
                 {
-                    sSQL += " AND LOC IN (SELECT Loc_DD FROM LOC_MST WHERE LocSts='S' AND Equ_RowNo IN (3,4) ) ";
+                    sSQL += $" AND {Parameter.clsLocMst.Column.Loc} IN (SELECT {Parameter.clsLocMst.Column.LocDD} FROM " +
+                        $"{Parameter.clsLocMst.TableName}" +
+                        $" WHERE STORAGE_STATUS in ('{clsConstValue.LocSts.Full}','{clsConstValue.LocSts.NotFull}')" +
+                        $" AND OPERATE_STATUS = '{clsConstValue.LocSts.Normal}' AND IS_INSIDE = 'N') ";
                 }
-
-                if (locSts == clsEnum.LocSts_Double.ENNE)
+                else if (locSts == clsEnum.LocSts_Double.ENNE)
                 {
-                    sSQL += " AND LOC IN (SELECT Loc_DD FROM LOC_MST WHERE LocSts='E' AND Equ_RowNo IN (3,4) ) ";
+                    sSQL += $" AND {Parameter.clsLocMst.Column.Loc} IN (SELECT {Parameter.clsLocMst.Column.LocDD} FROM " +
+                       $"{Parameter.clsLocMst.TableName}" +
+                       $" WHERE STORAGE_STATUS = '{clsConstValue.LocSts.EmptyBox}' AND OPERATE_STATUS = '{clsConstValue.LocSts.Normal}'" +
+                       " AND IS_INSIDE = 'N') ";
                 }
-
-                if (locSts == clsEnum.LocSts_Double.XNNX)
+                else if (locSts == clsEnum.LocSts_Double.XNNX)
                 {
-                    sSQL += " AND LOC IN (SELECT Loc_DD FROM LOC_MST WHERE LocSts='X' AND Equ_RowNo IN (3,4) ) ";
+                    sSQL += $" AND {Parameter.clsLocMst.Column.Loc} IN (SELECT {Parameter.clsLocMst.Column.LocDD} FROM " +
+                       $"{Parameter.clsLocMst.TableName}" +
+                       $" WHERE OPERATE_STATUS = '{clsConstValue.LocSts.Block}' AND IS_INSIDE = 'N') ";
                 }
+                else return "";
 
-                sSQL += " ORDER BY BAY_Y,LVL_Z,ROW_X DESC";
+                sSQL += $" ORDER BY {Parameter.clsLocMst.Column.BAY}, {Parameter.clsLocMst.Column.LEVEL}, {Parameter.clsLocMst.Column.ROW} DESC";
 
                 dtTmp = new DataTable();
                 if (db.GetDataTable(sSQL, ref dtTmp, ref strEM) == DBResult.Success)
                 {
-                    sNewLoc = dtTmp.Rows[0]["Loc"].ToString();
+                    sNewLoc = dtTmp.Rows[0][Parameter.clsLocMst.Column.Loc].ToString();
                 }
                 else
                 {

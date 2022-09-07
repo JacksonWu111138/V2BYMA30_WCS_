@@ -353,6 +353,43 @@ namespace Mirle.Def
             /// </summary>
             public const string NotFull = "NOTFULL";
         }
+        public class WesApi
+        {
+            public class EmptyRetrieval
+            {
+                /// <summary>
+                /// 空出庫
+                /// </summary>
+                public const string EmptyRetrieve = "Y";
+                /// <summary>
+                /// 正常
+                /// </summary>
+                public const string Normal = "N";
+                /// <summary>
+                /// 料捲取出失敗
+                /// </summary>
+                public const string RetrieveFail = "F";
+            }
+
+            public class CarrierType
+            {
+                /// <summary>
+                /// 電子料捲
+                /// </summary>
+                public const string Lot = "Reel";
+                /// <summary>
+                /// 料架
+                /// </summary>
+                public const string Rack = "Rack";
+                /// <summary>
+                /// 靜電箱
+                /// </summary>
+                public const string Bin = "Bin";
+                public const string Mag = "Mag";
+            }
+
+        }
+        
 
         public class CompleteCode
         {
@@ -427,6 +464,11 @@ namespace Mirle.Def
             /// 電腦強制取消
             /// </summary>
             public const string ComputerCancel = "CC";
+
+            /// <summary>
+            /// 出庫料捲取出失敗
+            /// </summary>
+            public const string RetrieveFail = "RF";         //電子料塔 出庫命令料捲取出失敗
         }
     }
 }

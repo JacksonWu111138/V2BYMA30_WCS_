@@ -63,7 +63,7 @@ namespace Mirle.ASRS.WCS.View
                     cmd.JobID = txtJobID.Text.Trim();
                     cmd.largest = txtLargest.Text.Trim();
                     cmd.Loc = txtLoc.Text.Trim();
-                    cmd.Loc_ID = txtBoxID.Text.Trim();
+                    cmd.BoxID = txtBoxID.Text.Trim();
                     cmd.New_Loc = txtNewLoc.Text.Trim();
                     cmd.Prty = cbbPriority.Text.Trim();
                     cmd.rackLocation = txtRackLocation.Text.Trim();
@@ -72,12 +72,12 @@ namespace Mirle.ASRS.WCS.View
                     string strEM = "";
                     if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                     {
-                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"手動產生命令成功 => <CmdSno>{cmd.Cmd_Sno} <BoxID>{cmd.Loc_ID}");
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"手動產生命令成功 => <CmdSno>{cmd.Cmd_Sno} <BoxID>{cmd.BoxID}");
                         MessageBox.Show("儲存成功");
                     }
                     else
                     {
-                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"NG: 手動產生命令失敗 => <CmdSno>{cmd.Cmd_Sno} <BoxID>{cmd.Loc_ID}");
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"NG: 手動產生命令失敗 => <CmdSno>{cmd.Cmd_Sno} <BoxID>{cmd.BoxID}");
                         MessageBox.Show($"儲存失敗 => {strEM}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }

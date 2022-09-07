@@ -66,7 +66,7 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"<{Body.jobId}>取得序號失敗！");
                     }
 
-                    cmd.Loc_ID = Body.carrierId;
+                    cmd.BoxID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.S2S;
                     cmd.CurDeviceID = "";
                     cmd.CurLoc = "";
@@ -186,7 +186,7 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"<{Body.jobId}>取得序號失敗！");
                     }
                     
-                    cmd.Loc_ID = Body.carrierId;
+                    cmd.BoxID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.StockIn;
                     cmd.CurDeviceID = "";
                     cmd.CurLoc = "";
@@ -282,7 +282,7 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"<{Body.jobId}>取得序號失敗！");
                     }
 
-                    cmd.Loc_ID = Body.carrierId;
+                    cmd.BoxID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.StockOut;
                     cmd.CurDeviceID = "";
                     cmd.CurLoc = "";
@@ -379,7 +379,7 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"<{Body.jobId}>取得序號失敗！");
                     }
 
-                    cmd.Loc_ID = Body.carrierId;
+                    cmd.BoxID = Body.carrierId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.L2L;
                     cmd.CurDeviceID = "";
                     cmd.CurLoc = "";
@@ -488,7 +488,7 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"<{Body.jobId}>取得序號失敗！");
                     }
 
-                    cmd.Loc_ID = Body.lotId;
+                    cmd.BoxID = Body.lotId;
                     cmd.Cmd_Mode = clsConstValue.CmdMode.StockIn;
                     cmd.CurDeviceID = "";
                     cmd.CurLoc = "";
@@ -541,7 +541,7 @@ namespace Mirle.WebAPI.Event
                     PutawayTransferInfo info = new PutawayTransferInfo
                     {
                         jobId = cmd.Cmd_Sno,
-                        reelId = cmd.Loc_ID,
+                        reelId = cmd.BoxID,
                         lotSize = cmd.lotSize,
                         toShelfId = cmd.Loc
                     };
@@ -608,7 +608,7 @@ namespace Mirle.WebAPI.Event
                             throw new Exception($"<{Body.jobId}>取得序號失敗！");
                         }
 
-                        cmd.Loc_ID = lot.lotId;
+                        cmd.BoxID = lot.lotId;
                         cmd.Cmd_Mode = clsConstValue.CmdMode.StockOut;
                         cmd.CurDeviceID = "";
                         cmd.CurLoc = "";
@@ -1429,7 +1429,7 @@ namespace Mirle.WebAPI.Event
                             throw new Exception($"<{Body.jobId}>取得序號失敗！");
                         }
 
-                        cmd.Loc_ID = Body.rackId;
+                        cmd.BoxID = Body.rackId;
                         cmd.Cmd_Mode = clsConstValue.CmdMode.S2S;
                         cmd.CurDeviceID = "";
                         cmd.CurLoc = "";
@@ -1961,7 +1961,7 @@ namespace Mirle.WebAPI.Event
                     throw new Exception($"<{Body.jobId}>取得序號失敗！");
                 }
 
-                cmd.Loc_ID = "";
+                cmd.BoxID = "";
                 cmd.Cmd_Mode = clsConstValue.CmdMode.S2S;
                 cmd.CurDeviceID = "";
                 cmd.CurLoc = "";

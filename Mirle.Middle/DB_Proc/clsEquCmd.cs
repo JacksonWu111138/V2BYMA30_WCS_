@@ -455,7 +455,6 @@ namespace Mirle.Middle.DB_Proc
                                         if (string.IsNullOrWhiteSpace(middleCmd.BatchID))
                                         {
                                             #region 單板命令
-                                            FunInsertEquCmd_His(equCmd, db);
                                             if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                             {
                                                 sRemark = "Error: Begin失敗！";
@@ -475,10 +474,22 @@ namespace Mirle.Middle.DB_Proc
                                                 continue;
                                             }
 
+                                            if (!FunInsertEquCmd_His(equCmd, db))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                sRemark = "Error: Insert EquCmdHis失敗";
+                                                if (sRemark != middleCmd.Remark)
+                                                {
+                                                    FunUpdateRemark_MiddleCmd(middleCmd.CommandID, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
                                             if (!FunDelEquCmd(equCmd, db))
                                             {
                                                 db.TransactionCtrl(TransactionTypes.Rollback);
-                                                sRemark = "Error: 更新EquCmd失敗";
+                                                sRemark = "Error: 刪除EquCmd失敗";
                                                 if (sRemark != middleCmd.Remark)
                                                 {
                                                     FunUpdateRemark_MiddleCmd(middleCmd.CommandID, sRemark, db);
@@ -497,7 +508,6 @@ namespace Mirle.Middle.DB_Proc
                                             MiddleCmd[] middleCmds = new MiddleCmd[2];
                                             if (GetMiddleCmd_byBatchID(middleCmd.BatchID, ref middleCmds, db) == DBResult.Success)
                                             {
-                                                FunInsertEquCmd_His(equCmd, db);
                                                 if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                                 {
                                                     sRemark = "Error: Begin失敗！";
@@ -517,10 +527,22 @@ namespace Mirle.Middle.DB_Proc
                                                     continue;
                                                 }
 
+                                                if (!FunInsertEquCmd_His(equCmd, db))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    sRemark = "Error: Insert EquCmdHis失敗";
+                                                    if (sRemark != middleCmd.Remark)
+                                                    {
+                                                        FunUpdateRemark_MiddleCmd(middleCmd.CommandID, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
                                                 if (!FunDelEquCmd(equCmd, db))
                                                 {
                                                     db.TransactionCtrl(TransactionTypes.Rollback);
-                                                    sRemark = "Error: 更新EquCmd失敗";
+                                                    sRemark = "Error: 刪除EquCmd失敗";
                                                     if (sRemark != middleCmd.Remark)
                                                     {
                                                         FunUpdateRemark_MiddleCmd(middleCmd.CommandID, sRemark, db);

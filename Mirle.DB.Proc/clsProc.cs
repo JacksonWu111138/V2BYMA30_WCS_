@@ -163,7 +163,7 @@ namespace Mirle.DB.Proc
                                                 {
                                                     PositionReportInfo info = new PositionReportInfo
                                                     {
-                                                        carrierId = cmd.Loc_ID,
+                                                        carrierId = cmd.BoxID,
                                                         inStock = clsConstValue.YesNo.No,
                                                         jobId = cmd.JobID,
                                                         location = sLoc_Start.LocationId
@@ -582,17 +582,126 @@ namespace Mirle.DB.Proc
                             case DBResult.Success:
                                 for (int i = 0; i < dtTmp.Rows.Count; i++)
                                 {
+                                    string sRemark = ""; string strEM = "";
                                     MiddleCmd middleCmd = tool.GetMiddleCmd(dtTmp.Rows[i]);
                                     CmdMstInfo cmd = new CmdMstInfo();
-
-
-                                    if(middleCmd.CompleteCode == clsConstValue.CompleteCode.EmptyRetrieval)
+                                    if (Cmd_Mst.FunGetCommand(middleCmd.CommandID, ref cmd, ref iRet, db))
                                     {
+                                        if (middleCmd.CompleteCode == clsConstValue.CompleteCode.EmptyRetrieval)
+                                        {
+                                            #region 空出庫流程
+                                            CarrierShelfCompleteInfo shelfCompleteInfo = new CarrierShelfCompleteInfo();
+                                            CarrierRetrieveCompleteInfo retrieveCompleteInfo = new CarrierRetrieveCompleteInfo();
+                                            if (cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut)
+                                            {
+                                                retrieveCompleteInfo = new CarrierRetrieveCompleteInfo
+                                                {
+                                                    carrierId = cmd.BoxID,
+                                                    emptyTransfer = clsEnum.WmsApi.EmptyRetrieval.Y.ToString(),
+                                                    isComplete = clsConstValue.YesNo.Yes,
+                                                    jobId = cmd.JobID,
+                                                    location = "",
+                                                    portId = ""
+                                                };
+                                            }
+                                            else
+                                            {
+                                                shelfCompleteInfo = new CarrierShelfCompleteInfo
+                                                {
+                                                    carrierId = cmd.BoxID,
+                                                    emptyTransfer = clsEnum.WmsApi.EmptyRetrieval.Y.ToString(),
+                                                    jobId = cmd.JobID,
+                                                    shelfId = ""
+                                                };
+                                            }
 
+                                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                            {
+                                                sRemark = "Error: Begin失敗！";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            sRemark = "Error: 儲位空出庫";
+                                            if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Finish_Wait, clsEnum.Cmd_Abnormal.E2, sRemark, db))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                continue;
+                                            }
+
+                                            if (!MiddleCmd.FunInsertHisMiddleCmd(cmd.Cmd_Sno, db))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                sRemark = "Error: insert MiddleCmd_His失敗";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            if (!MiddleCmd.FunDelMiddleCmd(cmd.Cmd_Sno, db))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                sRemark = "Error: 刪除MiddleCmd失敗";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            if (cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut)
+                                            {
+                                                if (!api.GetCarrierRetrieveComplete().FunReport(retrieveCompleteInfo, _wmsApi.IP))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    sRemark = "Error: 上報RetrieveComplete失敗";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (!api.GetCarrierShelfComplete().FunReport(shelfCompleteInfo, _wmsApi.IP))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    sRemark = "Error: 上報ShelfComplete失敗";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+                                            }
+
+                                            db.TransactionCtrl(TransactionTypes.Commit);
+                                            return true;
+                                            #endregion 空出庫流程
+                                        }
+                                        else
+                                        {
+
+                                        }
                                     }
                                     else
                                     {
-
+                                        sRemark = $"Error: 找不到系統命令";
+                                        if(sRemark != middleCmd.Remark)
+                                        {
+                                            MiddleCmd.FunMiddleCmdUpdateRemark(middleCmd.CommandID, sRemark, db, ref strEM);
+                                        }
                                     }
                                 }
 
@@ -909,7 +1018,7 @@ namespace Mirle.DB.Proc
                             LotTransferCancelInfo lotcancel_info = new LotTransferCancelInfo
                             {
                                 jobId = cmd.Cmd_Sno,
-                                lotId = cmd.Loc_ID
+                                lotId = cmd.BoxID
                             };
                             if(!api.GetLotTransferCancel().FunReport(lotcancel_info, _towerApi.IP))
                             {

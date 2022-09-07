@@ -793,7 +793,7 @@ namespace Mirle.DB.Fun
                 //sSQL += $"{stuCmdMst.Mix_Qty}, {stuCmdMst.Avail}, ";
                 sSQL += "'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + $"','{stuCmdMst.JobID}', '', '', " +
                     $"'{stuCmdMst.Trn_User}', ";
-                sSQL += "'" + stuCmdMst.Loc_ID + $"',";
+                sSQL += "'" + stuCmdMst.BoxID + $"',";
                 sSQL += $"'{stuCmdMst.BatchID}',";
                 sSQL += "'" + stuCmdMst.Equ_No + "', ";
                 sSQL += $"'{stuCmdMst.CurLoc}', ";

@@ -166,7 +166,7 @@ namespace Mirle.ASRS.WCS.View
             {
                 PositionReportInfo info = new PositionReportInfo
                 {
-                    carrierId = cmd.Loc_ID,
+                    carrierId = cmd.BoxID,
                     jobId = cmd.JobID,
                     location = e.Location,
                     inStock = e.Location == Def.Location.LocationID.Shelf.ToString() ? clsConstValue.YesNo.Yes : clsConstValue.YesNo.No

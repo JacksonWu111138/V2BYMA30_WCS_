@@ -85,7 +85,7 @@ namespace Mirle.DB.Fun
 
                 middleCmd.CommandID = cmd.Cmd_Sno;
                 middleCmd.DeviceID = cmd.Equ_No;
-                middleCmd.CSTID = cmd.Loc_ID;
+                middleCmd.CSTID = cmd.BoxID;
                 middleCmd.CmdMode = clsConstValue.CmdMode.L2L;
                 middleCmd.Source = cmd.Loc;
                 middleCmd.Destination = cmd.New_Loc;
@@ -125,7 +125,7 @@ namespace Mirle.DB.Fun
 
                 middleCmd.CommandID = cmd.Cmd_Sno;
                 middleCmd.DeviceID = sLoc_Start.DeviceId;
-                middleCmd.CSTID = cmd.Loc_ID;
+                middleCmd.CSTID = cmd.BoxID;
                 string ToLoc = cmd.Cmd_Mode == clsConstValue.CmdMode.L2L ? cmd.New_Loc : cmd.Loc;
                 middleCmd.Source = tool.GetLocation(cmd.Loc, sLoc_Start);
                 middleCmd.Destination = tool.GetLocation(ToLoc, sLoc_End);
@@ -195,7 +195,7 @@ namespace Mirle.DB.Fun
 
                 middleCmd.CommandID = cmd.Cmd_Sno;
                 middleCmd.DeviceID = sDeviceID;
-                middleCmd.CSTID = cmd.Loc_ID;
+                middleCmd.CSTID = cmd.BoxID;
                 string ToLoc = cmd.Cmd_Mode == clsConstValue.CmdMode.L2L ? cmd.New_Loc : cmd.Loc;
                 middleCmd.Source = tool.GetLocation(cmd.Loc, sLoc_Start);
                 middleCmd.Destination = tool.GetLocation(ToLoc, sLoc_End);

@@ -36,7 +36,7 @@ namespace Mirle.Structure
         /// <summary>
         /// 棧板ID
         /// </summary>
-        public string Loc_ID { get; set; }
+        public string BoxID { get; set; }
         public string Equ_No { get; set; }
         /// <summary>
         /// 當前位置

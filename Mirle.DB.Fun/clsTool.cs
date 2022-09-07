@@ -24,7 +24,7 @@ namespace Mirle.DB.Fun
         {
             CmdMstInfo cmd = new CmdMstInfo
             {
-                Loc_ID = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.BoxID]),
+                BoxID = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.BoxID]),
                 Cmd_Mode = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Cmd_Mode]),
                 Cmd_Sno = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Cmd_Sno]),
                 Cmd_Sts = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Cmd_Sts]),
@@ -116,7 +116,7 @@ namespace Mirle.DB.Fun
                 MixQty = cmd.Mix_Qty,
                 Avail = cmd.Avail,
                 ZoneId = cmd.Zone_ID,
-                LocId = cmd.Loc_ID,
+                LocId = cmd.BoxID,
                 CrtDate = cmd.Crt_Date,
                 ExpDate = cmd.EXP_Date,
                 EndDate = cmd.End_Date,

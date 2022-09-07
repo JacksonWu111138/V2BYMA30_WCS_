@@ -88,7 +88,6 @@ namespace Mirle.DB.Proc
                                     }
 
                                     string sCurLoc = routdef.GetLocaionByCmdMode(sCmdMode, sCmdSts, DeviceID, sLocation, db);
-                                    MiddleCmd.FunInsertHisMiddleCmd(sCmdSno, db);
                                     string sRemark = "";
                                     if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                     {
@@ -102,6 +101,12 @@ namespace Mirle.DB.Proc
                                     }
 
                                     if (!cmd_Mst.FunUpdateCurLoc(sCmdSno, DeviceID, sCurLoc, db))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        continue;
+                                    }
+
+                                    if (!MiddleCmd.FunInsertHisMiddleCmd(sCmdSno, db))
                                     {
                                         db.TransactionCtrl(TransactionTypes.Rollback);
                                         continue;

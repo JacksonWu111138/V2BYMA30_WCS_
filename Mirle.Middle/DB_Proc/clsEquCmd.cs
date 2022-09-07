@@ -142,6 +142,35 @@ namespace Mirle.Middle.DB_Proc
             }
         }
 
+        public bool FunUpdEquCmdSts(EquCmdInfo equCmd, string sNewSts, string sNewMode, string sNewCompleteCode, DB db)
+        {
+            try
+            {
+                string strSql = $"UPDATE {Parameter.clsEquCmd.TableName} SET " +
+                    $"{Parameter.clsEquCmd.Column.CmdSts} = '{sNewSts}'" +
+                    $", {Parameter.clsEquCmd.Column.CompleteCode} = '{sNewCompleteCode}'" +
+                    $", {Parameter.clsEquCmd.Column.CmdMode} = '{sNewMode}' where " +
+                    $"{Parameter.clsEquCmd.Column.CmdSno} = '{equCmd.CmdSno}' and {Parameter.clsEquCmd.Column.EquNo} = '{equCmd.EquNo}'";
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
         public bool FunUpdateRemark_MiddleCmd(string sCmdSno, string sRemark, DB db)
         {
             try
@@ -417,7 +446,8 @@ namespace Mirle.Middle.DB_Proc
                                                && equCmd.CompleteCode == clsConstValue.CompleteCode.DoubleStorage
                                              )
                                     {
-
+                                        if (FunUpdEquCmdSts(equCmd, clsConstValue.CmdSts.strCmd_Initial, clsConstValue.CmdMode.Deposit, "", db)) return true;
+                                        else continue;
                                     }
                                     else
                                     {

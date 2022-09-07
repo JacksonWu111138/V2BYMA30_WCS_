@@ -500,6 +500,10 @@ namespace Mirle.ASRS.WCS.View
             try
             {
                 clsDB_Proc.GetDB_Object().GetProc().FunNormalCmd_Proc(sAsrsStockIn_Sql, sAsrsEquNo_Sql, router, middle);
+                if(DB.Proc.clsHost.IsConn)
+                {
+                    clsDB_Proc.GetDB_Object().GetProc().FunAsrsCmd_AbnormalFinish_Proc();
+                }
             }
             catch (Exception ex)
             {

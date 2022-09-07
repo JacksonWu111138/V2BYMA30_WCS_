@@ -333,7 +333,7 @@ namespace Mirle.Middle.DB_Proc
         {
             try
             {
-                string SQL = $"UPDATE {Parameter.clsEquCmd.TableName} SET {Parameter.clsEquCmd.Column.ReNewFlag}='F' WHERE " +
+                string SQL = $"delete from {Parameter.clsEquCmd.TableName} WHERE " +
                     $"{Parameter.clsEquCmd.Column.CmdSno} = '{cmd.CmdSno}' and {Parameter.clsEquCmd.Column.EquNo} = '{cmd.EquNo}'";
                 string strEM = "";
                 int iRet = db.ExecuteSQL(SQL, ref strEM);
@@ -347,6 +347,29 @@ namespace Mirle.Middle.DB_Proc
                     clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{SQL} => {strEM}");
                     return false;
                 }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunInsertEquCmd_His(EquCmdInfo cmd, DB db)
+        {
+            try
+            {
+                string SQL = $"INSERT INTO {Parameter.clsEquCmdHis.TableName} ";
+                SQL += $" SELECT '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")}', * FROM {Parameter.clsEquCmd.TableName} ";
+                SQL += $" WHERE {Parameter.clsEquCmd.Column.CmdSno} = '{cmd.CmdSno}' and {Parameter.clsEquCmd.Column.EquNo} = '{cmd.EquNo}'";
+
+                int iRet = db.ExecuteSQL(SQL);
+                if (iRet == DBResult.Success)
+                {
+                    return true;
+                }
+                else return false;
             }
             catch (Exception ex)
             {
@@ -389,12 +412,20 @@ namespace Mirle.Middle.DB_Proc
                                         if (FunUpdEquCmdSts(equCmd, clsConstValue.CmdSts.strCmd_Initial, "", db)) return true;
                                         else continue;
                                     }
+                                    else if (
+                                               (equCmd.CmdMode == clsConstValue.CmdMode.StockOut || equCmd.CmdMode == clsConstValue.CmdMode.S2S)
+                                               && equCmd.CompleteCode == clsConstValue.CompleteCode.DoubleStorage
+                                             )
+                                    {
+
+                                    }
                                     else
                                     {
                                         string sRemark = "";
                                         if (string.IsNullOrWhiteSpace(middleCmd.BatchID))
                                         {
                                             #region 單板命令
+                                            FunInsertEquCmd_His(equCmd, db);
                                             if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                             {
                                                 sRemark = "Error: Begin失敗！";
@@ -427,7 +458,7 @@ namespace Mirle.Middle.DB_Proc
                                             }
 
                                             db.TransactionCtrl(TransactionTypes.Commit);
-                                            return true; 
+                                            return true;
                                             #endregion 單板命令
                                         }
                                         else
@@ -436,6 +467,7 @@ namespace Mirle.Middle.DB_Proc
                                             MiddleCmd[] middleCmds = new MiddleCmd[2];
                                             if (GetMiddleCmd_byBatchID(middleCmd.BatchID, ref middleCmds, db) == DBResult.Success)
                                             {
+                                                FunInsertEquCmd_His(equCmd, db);
                                                 if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                                 {
                                                     sRemark = "Error: Begin失敗！";
@@ -475,7 +507,7 @@ namespace Mirle.Middle.DB_Proc
                                                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, "NG: 取得MiddleCmd雙板資料失敗 => " +
                                                                           $"<{Parameter.clsMiddleCmd.Column.BatchID}>{middleCmd.BatchID}");
                                                 continue;
-                                            } 
+                                            }
                                             #endregion 雙板命令
                                         }
                                     }

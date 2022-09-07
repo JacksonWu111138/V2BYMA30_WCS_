@@ -563,6 +563,60 @@ namespace Mirle.DB.Proc
                 dtTmp.Dispose();
             }
         }
+        /// <summary>
+        /// 處理空出/二重格的情況
+        /// </summary>
+        /// <returns></returns>
+        public bool FunAsrsCmd_AbnormalFinish_Proc()
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        switch(MiddleCmd.GetAbnormalFinishCommand(ref dtTmp, db))
+                        {
+                            case DBResult.Success:
+                                for (int i = 0; i < dtTmp.Rows.Count; i++)
+                                {
+                                    MiddleCmd middleCmd = tool.GetMiddleCmd(dtTmp.Rows[i]);
+                                    CmdMstInfo cmd = new CmdMstInfo();
+
+
+                                    if(middleCmd.CompleteCode == clsConstValue.CompleteCode.EmptyRetrieval)
+                                    {
+
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
+
+                                return false;
+                            case DBResult.NoDataSelect:
+                                return true;
+                            default:
+                                return false;
+                        }
+                    }
+                    else return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+            finally
+            {
+                dtTmp.Dispose();
+            }
+        }
 
         public bool subCraneWrR2R(DeviceInfo Device, SignalHost CrnSignal)
         {

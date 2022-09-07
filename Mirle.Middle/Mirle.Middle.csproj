@@ -60,6 +60,7 @@
     <Compile Include="DB_Proc\clsMiddleCmd.cs" />
     <Compile Include="DB_Proc\clsTool.cs" />
     <Compile Include="DB_Proc\Parameter\clsEquCmd.cs" />
+    <Compile Include="DB_Proc\Parameter\clsEquCmdHis.cs" />
     <Compile Include="DB_Proc\Parameter\clsMiddleCmd.cs" />
     <Compile Include="MidHost.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -41,6 +41,31 @@ namespace Mirle.DB.Fun
             }
         }
 
+        public int GetAbnormalFinishCommand(ref DataTable dtTmp, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"select * from {Parameter.clsMiddleCmd.TableName} where " +
+                    $"{Parameter.clsMiddleCmd.Column.CmdSts} in ('{clsConstValue.CmdSts.strCmd_Cancel_Wait}','{clsConstValue.CmdSts.strCmd_Finish_Wait}') and " +
+                    $"{Parameter.clsMiddleCmd.Column.CompleteCode} in ('{clsConstValue.CompleteCode.DoubleStorage}','{clsConstValue.CompleteCode.EmptyRetrieval}')";
+                dtTmp = new DataTable();
+                string strEM = "";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                }
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+        }
+
         public bool FunGetMiddleCmd_R2R(CmdMstInfo cmd, ref MiddleCmd middleCmd, DataBase.DB db)
         {
             try

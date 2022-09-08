@@ -567,7 +567,7 @@ namespace Mirle.DB.Proc
         /// 處理空出/二重格的情況
         /// </summary>
         /// <returns></returns>
-        public bool FunAsrsCmd_AbnormalFinish_Proc()
+        public bool FunAsrsCmd_AbnormalFinish_Proc(WMS.Proc.clsHost wms)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -692,12 +692,132 @@ namespace Mirle.DB.Proc
                                         }
                                         else
                                         {
+                                            if(string.IsNullOrWhiteSpace(middleCmd.BatchID))
+                                            {
+                                                string sNewLoc = ""; clsEnum.AsrsType type = clsEnum.AsrsType.None;
+                                                if (tool.CheckWhId_ASRS(middleCmd.DeviceID, ref type))
+                                                {
+                                                    if (type == clsEnum.AsrsType.Box)
+                                                    {
+                                                        sNewLoc = wms.GetLocMst().funSearchEmptyLoc_Abnormal_Proc(middleCmd.DeviceID, middleCmd.Destination);
+                                                        if (string.IsNullOrWhiteSpace(sNewLoc))
+                                                        {
+                                                            sRemark = "Error: 二重格找不到新儲位";
+                                                            if (sRemark != middleCmd.Remark)
+                                                            {
+                                                                MiddleCmd.FunMiddleCmdUpdateRemark(middleCmd.CommandID, sRemark, db, ref strEM);
+                                                            }
 
+                                                            continue;
+                                                        }
+                                                        else
+                                                        {
+
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        EmptyShelfQueryInfo emptyShelfQueryInfo = new EmptyShelfQueryInfo
+                                                        {
+                                                            jobId = cmd.JobID,
+                                                            craneId = middleCmd.DeviceID,
+                                                            lotIdCarrierId = cmd.BoxID
+                                                        };
+
+                                                        EmptyShelfQueryReply emptyShelfQueryResponse = new EmptyShelfQueryReply();
+                                                        if (!api.GetEmptyShelfQuery().FunReport(emptyShelfQueryInfo, ref emptyShelfQueryResponse, _wmsApi.IP))
+                                                        {
+                                                            sRemark = "Error: 發生二重格，向WES取得新儲位失敗！";
+                                                            if (sRemark != cmd.Remark)
+                                                            {
+                                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                            }
+
+                                                            continue;
+                                                        }
+
+                                                        sNewLoc = emptyShelfQueryResponse.shelfId;
+                                                        if (string.IsNullOrWhiteSpace(sNewLoc))
+                                                        {
+                                                            sRemark = "Error: 發生二重格，但找不到新儲位可放！";
+                                                            if (sRemark != cmd.Remark)
+                                                            {
+                                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                            }
+
+                                                            continue;
+                                                        }
+                                                        else
+                                                        {
+                                                            CarrierShelfReportInfo info = new CarrierShelfReportInfo
+                                                            {
+                                                                jobId = cmd.JobID,
+                                                                shelfId = sNewLoc,
+                                                                shelfStatus = clsConstValue.LocSts.IN,
+                                                                carrierId = cmd.BoxID,
+                                                                disableLocation = clsConstValue.YesNo.Yes
+                                                            };
+
+                                                            int EquNo_New = tool.funGetEquNoByLoc(sNewLoc);
+                                                            if (EquNo_New == tool.funGetEquNoByLoc(middleCmd.Destination))
+                                                            {
+                                                                if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                                                {
+                                                                    sRemark = "Error: Begin失敗！";
+                                                                    if (sRemark != cmd.Remark)
+                                                                    {
+                                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                                    }
+
+                                                                    continue;
+                                                                }
+
+                                                                if (cmd.Cmd_Mode == clsConstValue.CmdMode.L2L)
+                                                                {
+                                                                    if (!Cmd_Mst.FunUpdateNewLocForL2L(cmd.Cmd_Sno, sNewLoc, db))
+                                                                    {
+                                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                                        continue;
+                                                                    }
+                                                                }
+                                                                else
+                                                                {
+                                                                    if (!Cmd_Mst.FunUpdateLoc(cmd.Cmd_Sno, sNewLoc, EquNo_New.ToString(), db))
+                                                                    {
+                                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                                        continue;
+                                                                    }
+                                                                }
+
+
+                                                            }
+                                                            else
+                                                            {
+
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    sRemark = $"Error: 二重格找不到倉別 => <{Fun.Parameter.clsMiddleCmd.Column.DeviceID}>{middleCmd.DeviceID}";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+                                            }
+                                            else
+                                            {
+
+                                            }
                                         }
                                     }
                                     else
                                     {
-                                        sRemark = $"Error: 找不到系統命令";
+                                        sRemark = "Error: 找不到系統命令";
                                         if(sRemark != middleCmd.Remark)
                                         {
                                             MiddleCmd.FunMiddleCmdUpdateRemark(middleCmd.CommandID, sRemark, db, ref strEM);

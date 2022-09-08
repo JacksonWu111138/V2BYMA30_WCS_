@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.Controllers.ApiList
 {
     public partial class CtrlRetrieveTransferInfo : Form
     {
         public static WebApiConfig Apiconfig = new WebApiConfig();
-        private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
-        public CtrlRetrieveTransferInfo(WebApiConfig TowerAPIconfig)
+        public CtrlRetrieveTransferInfo()
         {
             InitializeComponent();
-            Apiconfig = TowerAPIconfig;
+            Apiconfig = clsAPI.GetTowerApiConfig();
         }
 
         private void button_RetrieveTransferInfo_Click(object sender, EventArgs e)
@@ -34,7 +34,7 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
                 largest = textBox_largest.Text,
                 priority = textBox_priority.Text
             };
-            if (!api.GetRetrieveTransfer().FunReport(info, Apiconfig.IP))
+            if (!clsAPI.GetAPI().GetRetrieveTransfer().FunReport(info, Apiconfig.IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Retrieve Transfer Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

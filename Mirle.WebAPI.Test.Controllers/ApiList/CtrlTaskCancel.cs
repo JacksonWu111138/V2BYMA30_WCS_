@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.Controllers.ApiList
 {
     public partial class CtrlTaskCancel : Form
     {
         public static WebApiConfig Apiconfig = new WebApiConfig();
-        private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
-        public CtrlTaskCancel(WebApiConfig AGVAPIconfig)
+        public CtrlTaskCancel()
         {
             InitializeComponent();
-            Apiconfig = AGVAPIconfig;
+            Apiconfig = clsAPI.GetAgvcApiConfig();
         }
 
         private void button_TaskCancel_Click(object sender, EventArgs e)
@@ -28,7 +28,7 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
             {
                 jobId = textBox_jobId.Text
             };
-            if (!api.GetTaskCancel().FunReport(info, Apiconfig.IP))
+            if (!clsAPI.GetAPI().GetTaskCancel().FunReport(info, Apiconfig.IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Task Cancel", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

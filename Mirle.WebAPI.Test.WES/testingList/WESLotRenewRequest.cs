@@ -9,17 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESLotRenewRequest : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESLotRenewRequest(WebApiConfig WESAPIconfig)
+        public WESLotRenewRequest()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
         private void button_LotRenewRequest_Click(object sender, EventArgs e)
@@ -32,7 +30,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
             if (textBox_qty.Text != "")
             {
                 info.qty = Convert.ToInt32(textBox_qty.Text);
-                if (!api.GetLotRenewRequest().FunReport(info, wesApiconfig.IP))
+                if (!clsAPI.GetAPI().GetLotRenewRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
                 {
                     MessageBox.Show($"失敗, jobId:{info.jobId}.", "Lot Renew Request", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }

@@ -9,17 +9,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESLotPositionReport : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESLotPositionReport(WebApiConfig WESAPIconfig)
+        public WESLotPositionReport()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
 
@@ -31,7 +29,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 lotId = textBox_lotId.Text,
                 location = textBox_location.Text
             };
-            if (!api.GetLotPositionReport().FunReport(info, wesApiconfig.IP))
+            if (!clsAPI.GetAPI().GetLotPositionReport().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Lot Position Report", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

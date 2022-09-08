@@ -9,17 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESCarrierShelfReport : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESCarrierShelfReport(WebApiConfig WESAPIconfig)
+        public WESCarrierShelfReport()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
         private void button_CarrierShelfReport_Click(object sender, EventArgs e)
@@ -32,7 +30,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 carrierId = textBox_carrierId.Text,
                 disableLocation = textBox_disableLocation.Text
             };
-            if (!api.GetCarrierShelfReport().FunReport(info, wesApiconfig.IP))
+            if (!clsAPI.GetAPI().GetCarrierShelfReport().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Carrier Shelf Report", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

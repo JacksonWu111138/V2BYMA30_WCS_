@@ -12,5 +12,7 @@ namespace Mirle.WebAPI.Event.U2NMMA30.Models
         public string cmdMode { get; set; }
         public string cmdSts { get; set; }
         public string emptyRetrieval { get; set; }
+        public string portId { get; set; }
+        public string carrierId { get; set; }
     }
 }

@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.Controllers.ApiList
 {
     public partial class CtrlPutawayTransferInfo : Form
     {
         public static WebApiConfig Apiconfig = new WebApiConfig();
-        private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
-        public CtrlPutawayTransferInfo(WebApiConfig TowerAPIconfig)
+        public CtrlPutawayTransferInfo()
         {
             InitializeComponent();
-            Apiconfig = TowerAPIconfig;
+            Apiconfig = clsAPI.GetTowerApiConfig();
         }
 
         private void button_PutawayTransferInfo_Click(object sender, EventArgs e)
@@ -31,7 +31,7 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
                 lotSize = textBox_lotSize.Text,
                 toShelfId = textBox_toShelfId.Text,
             };
-            if (!api.GetPutawayTransfer().FunReport(info, Apiconfig.IP))
+            if (!clsAPI.GetAPI().GetPutawayTransfer().FunReport(info, Apiconfig.IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Putaway Transfer Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

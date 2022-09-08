@@ -9,17 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESEmptyCarrierUnload : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESEmptyCarrierUnload(WebApiConfig WESAPIconfig)
+        public WESEmptyCarrierUnload()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
         private void label_carrierId_Click(object sender, EventArgs e)
@@ -41,7 +39,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 location = textBox_location.Text,
                 isEmpty = textBox_isEmpty.Text
             };
-            if (!api.GetEmptyCarrierUnload().FunReport(info, wesApiconfig.IP))
+            if (!clsAPI.GetAPI().GetEmptyCarrierUnload().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Empty Carrier Unload", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

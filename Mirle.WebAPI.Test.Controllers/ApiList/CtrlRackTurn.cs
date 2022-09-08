@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.Controllers.ApiList
 {
     public partial class CtrlRackTurn : Form
     {
         public static WebApiConfig Apiconfig = new WebApiConfig();
-        private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
-        public CtrlRackTurn(WebApiConfig AGVAPIconfig)
+        public CtrlRackTurn()
         {
             InitializeComponent();
-            Apiconfig = AGVAPIconfig;
+            Apiconfig = clsAPI.GetAgvcApiConfig();
         }
 
         private void button_RackTurn_Click(object sender, EventArgs e)
@@ -30,7 +30,7 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
                 location = textBox_location.Text,
                 rackId = textBox_rackId.Text
             };
-            if (!api.GetRackTurn().FunReport(info, Apiconfig.IP))
+            if (!clsAPI.GetAPI().GetRackTurn().FunReport(info, Apiconfig.IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Rack Turn", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

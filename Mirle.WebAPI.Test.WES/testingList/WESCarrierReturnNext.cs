@@ -9,17 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESCarrierReturnNext : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESCarrierReturnNext(WebApiConfig WESAPIconfig)
+        public WESCarrierReturnNext()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
         private void label_carrierId_Click(object sender, EventArgs e)
@@ -35,7 +33,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 carrierId = textBox_carrierId.Text,
                 fromLocation = textBox_formLocation.Text
             };
-            if (!api.GetCarrierReturnNext().FunReport(info, wesApiconfig.IP))
+            if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Carrier Return Next", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

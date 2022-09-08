@@ -233,6 +233,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mirle.DB.Object\Mirle.DB.Object.csproj">
+      <Project>{25dda85b-35be-429d-81b4-025731c0e826}</Project>
+      <Name>Mirle.DB.Object</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.Def.U2NMMA30\Mirle.Def.U2NMMA30.csproj">
       <Project>{e6f732fe-3905-49a7-b2cf-b4fa79c2dc5d}</Project>
       <Name>Mirle.Def.U2NMMA30</Name>

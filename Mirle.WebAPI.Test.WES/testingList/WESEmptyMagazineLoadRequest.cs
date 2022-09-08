@@ -9,17 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESEmptyMagazineLoadRequest : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESEmptyMagazineLoadRequest(WebApiConfig WESAPIconfig)
+        public WESEmptyMagazineLoadRequest()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
         private void button_EmptyMagazineLoadRequest_Click(object sender, EventArgs e)
@@ -29,7 +27,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 jobId = textBox_jobId.Text,
                 location = textBox_location.Text
             };
-            if (!api.GetEmptyMagazineLoadRequest().FunReport(info, wesApiconfig.IP))
+            if (!clsAPI.GetAPI().GetEmptyMagazineLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Empty Magazine Load Request", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

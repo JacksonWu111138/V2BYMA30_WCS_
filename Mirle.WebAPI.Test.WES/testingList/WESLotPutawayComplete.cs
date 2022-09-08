@@ -9,17 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESLotPutawayComplete : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESLotPutawayComplete(WebApiConfig WESAPIconfig)
+        public WESLotPutawayComplete()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
         private void label_lotId_Click(object sender, EventArgs e)
@@ -41,7 +39,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 shelfId = textBox_shelfId.Text,
                 isComplete = textBox_isComplete.Text
             };
-            if (!api.GetLotPutawayComplete().FunReport(info, wesApiconfig.IP))
+            if (!clsAPI.GetAPI().GetLotPutawayComplete().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Lot PutAway Complete", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

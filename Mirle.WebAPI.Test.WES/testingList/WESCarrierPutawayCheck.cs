@@ -9,17 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESCarrierPutawayCheck : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESCarrierPutawayCheck(WebApiConfig WESAPIconfig)
+        public WESCarrierPutawayCheck()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
         private void button_CarrierPutawayCheck_Click(object sender, EventArgs e)
@@ -31,7 +29,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 carrierId = textBox_carrierId.Text,
                 storageType = textBox_storageType.Text
             };
-            if (!api.GetCarrierPutawayCheck().FunReport(info, wesApiconfig.IP))
+            if (!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Carrier Transfer Complete", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

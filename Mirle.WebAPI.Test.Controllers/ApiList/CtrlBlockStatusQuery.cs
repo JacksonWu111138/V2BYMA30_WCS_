@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.Controllers.ApiList
 {
     public partial class CtrlBlockStatusQuery : Form
     {
         private WebApiConfig Apiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public CtrlBlockStatusQuery(WebApiConfig TowerAPIconfig)
+        public CtrlBlockStatusQuery()
         {
             InitializeComponent();
-            Apiconfig = TowerAPIconfig;
+            Apiconfig = clsAPI.GetTowerApiConfig();
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -35,7 +35,7 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
                 chipSTKCId = textBox_chipSTKCId.Text
             };
 
-            if (!api.GetBlockStatusQuery().FunReport(info, Apiconfig.IP))
+            if (!clsAPI.GetAPI().GetBlockStatusQuery().FunReport(info, Apiconfig.IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Block Status Query", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

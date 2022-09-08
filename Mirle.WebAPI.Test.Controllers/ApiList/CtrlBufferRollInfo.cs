@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.Controllers.ApiList
 {
@@ -22,17 +23,15 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
         public static WebApiConfig _OsmtcApi_Config = new WebApiConfig();
         public static WebApiConfig _E04Api_Config = new WebApiConfig();
         public static WebApiConfig _E05Api_Config = new WebApiConfig();
-        private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
-        public CtrlBufferRollInfo(WebApiConfig TowerApi_config, WebApiConfig SmtcApi_config, WebApiConfig E04Api_config,
-            WebApiConfig E05Api_config, WebApiConfig BoxApi_config, WebApiConfig PcbaApi_config, WebApiConfig OsmtcApi_config)
+        public CtrlBufferRollInfo()
         {
-            _TowerApi_Config = TowerApi_config;
-            _BoxApi_Config = BoxApi_config;
-            _PcbaApi_Config = PcbaApi_config;
-            _SmtcApi_Config = SmtcApi_config;
-            _OsmtcApi_Config = OsmtcApi_config;
-            _E04Api_Config = E04Api_config;
-            _E05Api_Config = E05Api_config;
+            _TowerApi_Config = clsAPI.GetTowerApiConfig();
+            _BoxApi_Config = clsAPI.GetBoxApiConfig();
+            _PcbaApi_Config = clsAPI.GetPcbaApiConfig();
+            _SmtcApi_Config = clsAPI.GetStmcApiConfig();
+            _OsmtcApi_Config = clsAPI.GetOsmtcApiConfig();
+            _E04Api_Config = clsAPI.GetE04ApiConfig();
+            _E05Api_Config = clsAPI.GetE05ApiConfig();
             InitializeComponent();
         }
 
@@ -75,7 +74,7 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
                     jobId = textBox_jobId.Text,
                     bufferId = textBox_bufferId.Text
                 };
-                if (!api.GetBufferRoll().FunReport(info, Apiconfig.IP))
+                if (!clsAPI.GetAPI().GetBufferRoll().FunReport(info, Apiconfig.IP))
                 {
                     MessageBox.Show($"失敗, jobId:{info.jobId}.", "Buffer Roll Info", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }

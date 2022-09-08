@@ -9,19 +9,19 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.Controllers.ApiList
 {
     public partial class CtrlLotRetrieveTransfer : Form
     {
         public static WebApiConfig Apiconfig = new WebApiConfig();
-        private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
         private LotRetrieveTransferInfo info = new LotRetrieveTransferInfo { lotList = new List<LotListInfo>() };
 
-        public CtrlLotRetrieveTransfer(WebApiConfig TowerAPIconfig)
+        public CtrlLotRetrieveTransfer()
         {
             InitializeComponent();
-            Apiconfig = TowerAPIconfig;
+            Apiconfig = clsAPI.GetTowerApiConfig();
         }
 
         private void label_jobId_Click(object sender, EventArgs e)
@@ -54,7 +54,7 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
             info.jobId = textBox_jobId.Text;
             info.priority = textBox_priority.Text;
 
-            if (!api.GetLotRetrieveTransfer().FunReport(info, Apiconfig.IP))
+            if (!clsAPI.GetAPI().GetLotRetrieveTransfer().FunReport(info, Apiconfig.IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Lot Retrieve Transfer", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

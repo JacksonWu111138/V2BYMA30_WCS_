@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.Controllers.ApiList
 {
@@ -18,12 +19,11 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
         public static WebApiConfig _BoxApi_Config = new WebApiConfig();
         public static WebApiConfig _E04Api_Config = new WebApiConfig();
         public static WebApiConfig _E05Api_Config = new WebApiConfig();
-        private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
-        public CtrlHealthCheck(WebApiConfig E04Api_config,WebApiConfig E05Api_config, WebApiConfig BoxApi_config)
+        public CtrlHealthCheck()
         {
-            _BoxApi_Config = BoxApi_config;
-            _E04Api_Config = E04Api_config;
-            _E05Api_Config = E05Api_config;
+            _BoxApi_Config = clsAPI.GetBoxApiConfig();
+            _E04Api_Config = clsAPI.GetE04ApiConfig();
+            _E05Api_Config = clsAPI.GetE05ApiConfig();
             InitializeComponent();
         }
 
@@ -53,7 +53,7 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
                 {
                     jobId = textBox_jobId.Text
                 };
-                if (!api.GetHealthCheck().FunReport(info, Apiconfig.IP))
+                if (!clsAPI.GetAPI().GetHealthCheck().FunReport(info, Apiconfig.IP))
                 {
                     MessageBox.Show($"失敗, jobId:{info.jobId}.", "Health Check", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }

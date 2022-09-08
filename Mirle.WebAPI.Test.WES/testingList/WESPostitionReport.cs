@@ -10,18 +10,15 @@ using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.Function;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
-
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESPositionReport : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESPositionReport(WebApiConfig WESAPIconfig)
+        public WESPositionReport()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
         private void label1_Click(object sender, EventArgs e)
@@ -40,7 +37,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 inStock = textBox_inStock.Text
             };
 
-            if (!api.GetPositionReport().FunReport(info, wesApiconfig.IP))
+            if (!clsAPI.GetAPI().GetPositionReport().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Position Report", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

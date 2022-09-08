@@ -9,17 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESLotShelfRequest : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESLotShelfRequest(WebApiConfig WESAPIconfig)
+        public WESLotShelfRequest()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
         private void label_jobId_Click(object sender, EventArgs e)
@@ -45,7 +43,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 fromShelfId = textBox_fromShelfId.Text,
                 toShelfId = textBox_toShelfId.Text
             };
-            if (!api.GetLotShelfRequest().FunReport(info, wesApiconfig.IP))
+            if (!clsAPI.GetAPI().GetLotShelfRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Lot Shelf Request", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

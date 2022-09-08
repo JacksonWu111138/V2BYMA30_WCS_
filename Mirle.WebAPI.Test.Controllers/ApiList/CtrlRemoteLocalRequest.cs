@@ -9,17 +9,17 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.Controllers.ApiList
 {
     public partial class CtrlRemoteLocalRequest : Form
     {
         public static WebApiConfig Apiconfig = new WebApiConfig();
-        private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
-        public CtrlRemoteLocalRequest(WebApiConfig TowerAPIconfig)
+        public CtrlRemoteLocalRequest()
         {
             InitializeComponent();
-            Apiconfig = TowerAPIconfig;
+            Apiconfig = clsAPI.GetTowerApiConfig();
         }
 
         private void button_RemoteLocalRequest_Click(object sender, EventArgs e)
@@ -30,7 +30,7 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
                 chipSTKCId = textBox_chipSTKCId.Text,
                 controlQuery = textBox_controlQuery.Text
             };
-            if (!api.GetRemoteLocalRequest().FunReport(info, Apiconfig.IP))
+            if (!clsAPI.GetAPI().GetRemoteLocalRequest().FunReport(info, Apiconfig.IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Remote Local Request", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

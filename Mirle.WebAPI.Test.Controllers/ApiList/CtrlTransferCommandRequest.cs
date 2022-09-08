@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.Controllers.ApiList
 {
@@ -18,12 +19,11 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
         public static WebApiConfig _TowerApi_Config = new WebApiConfig();
         public static WebApiConfig _E04Api_Config = new WebApiConfig();
         public static WebApiConfig _E05Api_Config = new WebApiConfig();
-        private V2BYMA30.clsHost api = new V2BYMA30.clsHost();
-        public CtrlTransferCommandRequest(WebApiConfig TowerConfig, WebApiConfig E04Config, WebApiConfig E05Config)
+        public CtrlTransferCommandRequest()
         {
-            _TowerApi_Config = TowerConfig;
-            _E04Api_Config = E04Config;
-            _E05Api_Config = E05Config;
+            _TowerApi_Config = clsAPI.GetTowerApiConfig();
+            _E04Api_Config = clsAPI.GetE04ApiConfig();
+            _E05Api_Config = clsAPI.GetE05ApiConfig();
             InitializeComponent();
         }
 
@@ -57,7 +57,7 @@ namespace Mirle.WebAPI.Test.Controllers.ApiList
                     source = textBox_source.Text,
                     destination = textBox_destination.Text
                 };
-                if (!api.GetTransferCommandRequest().FunReport(info, Apiconfig.IP))
+                if (!clsAPI.GetAPI().GetTransferCommandRequest().FunReport(info, Apiconfig.IP))
                 {
                     MessageBox.Show($"失敗, jobId:{info.jobId}.", "Transfer Command Request", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }

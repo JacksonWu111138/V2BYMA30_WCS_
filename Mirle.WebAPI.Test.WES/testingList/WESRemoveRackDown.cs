@@ -9,17 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESRemoveRackDown : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESRemoveRackDown(WebApiConfig WESAPIconfig)
+        public WESRemoveRackDown()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
         private void button_RemoveRackDown_Click(object sender, EventArgs e)
@@ -30,7 +28,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 location = textBox_location.Text,
                 carrierId = textBox_carrierId.Text
             };
-            if (!api.GetRemoveRackDown().FunReport(info, wesApiconfig.IP))
+            if (!clsAPI.GetAPI().GetRemoveRackDown().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Remove Rack Down", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

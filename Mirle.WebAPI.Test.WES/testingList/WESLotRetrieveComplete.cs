@@ -9,17 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESLotRetrieveComplete : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESLotRetrieveComplete(WebApiConfig WESAPIconfig)
+        public WESLotRetrieveComplete()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
         private void label_emptyTransfer_Click(object sender, EventArgs e)
@@ -49,7 +47,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 emptyTransfer = textBox_emptyTransfer.Text,
                 disableLocation = textBox_disableLocation.Text
             };
-            if (!api.GetLotRetrieveComplete().FunReport(info, wesApiconfig.IP))
+            if (!clsAPI.GetAPI().GetLotRetrieveComplete().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Lot Retrieve Complete", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

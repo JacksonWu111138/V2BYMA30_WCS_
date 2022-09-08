@@ -9,17 +9,15 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def;
+using Mirle.DB.Object;
 
 namespace Mirle.WebAPI.Test.WES.testingList
 {
     public partial class WESEQPStatusUpdate : Form
     {
-        private WebApiConfig wesApiconfig = new WebApiConfig();
-        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        public WESEQPStatusUpdate(WebApiConfig WESAPIconfig)
+        public WESEQPStatusUpdate()
         {
             InitializeComponent();
-            wesApiconfig = WESAPIconfig;
         }
 
         private void label_craneStatus_Click(object sender, EventArgs e)
@@ -42,7 +40,7 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 portId = textBox_portId.Text,
                 portStatus = textBox_portStatus.Text
             };
-            if (!api.GetEQPStatusUpdate().FunReport(info, wesApiconfig.IP))
+            if (!clsAPI.GetAPI().GetEQPStatusUpdate().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "EQP Status Update", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

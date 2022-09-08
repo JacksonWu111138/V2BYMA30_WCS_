@@ -1817,8 +1817,8 @@ namespace Mirle.WebAPI.Event
                 ConveyorInfo con = new ConveyorInfo();
                 con = ConveyorDef.GetBuffer(Body.stagePosition);
                 if (Body.stagePosition == ConveyorDef.AGV.E2_35.BufferName ||
-                   Body.stagePosition == ConveyorDef.AGV.E2_36.BufferName ||
-                   Body.stagePosition == ConveyorDef.AGV.E2_37.BufferName)
+                    Body.stagePosition == ConveyorDef.AGV.E2_36.BufferName ||
+                    Body.stagePosition == ConveyorDef.AGV.E2_37.BufferName)
                 {
                     PortStatusUpdateInfo info = new PortStatusUpdateInfo
                     {

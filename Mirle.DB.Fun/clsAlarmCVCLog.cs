@@ -6,6 +6,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Mirle.DB.Fun
 {
@@ -26,12 +27,12 @@ namespace Mirle.DB.Fun
                 if (iRet == DBResult.Success) return true;
                 else if (iRet == DBResult.NoDataSelect)
                 {
-                    strSql = $"insert into {Parameter.clsAlarmCVCLog.TableName}({Parameter.clsAlarmCVCLog.Column.CmdSno}," +
+                    strSql = $"INSERT INTO {Parameter.clsAlarmCVCLog.TableName} ({Parameter.clsAlarmCVCLog.Column.CmdSno}," +
                         $"{Parameter.clsAlarmCVCLog.Column.DeviceID},{Parameter.clsAlarmCVCLog.Column.BufferID}," +
                         $"{Parameter.clsAlarmCVCLog.Column.AlarmCode},{Parameter.clsAlarmCVCLog.Column.AlarmDef}," +
-                        $"{Parameter.clsAlarmCVCLog.Column.AlarmSts},{Parameter.clsAlarmCVCLog.Column.Start_Date}," +
-                        $") values(";
-                    strSql += $"'{sCmdSno}', '{deviceId}', '{bufferId}', '{alarmCode}', '{alarmDef}',"+
+                        $"{Parameter.clsAlarmCVCLog.Column.AlarmSts},{Parameter.clsAlarmCVCLog.Column.Start_Date}" +
+                        $") values (";
+                    strSql += $"'{sCmdSno}', '{deviceId}', '{bufferId}', '{alarmCode}', '{alarmDef}', "+
                         $"'{Parameter.clsAlarmCVCLog.Status.Occur}', '{happenTime}')";
                     if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success) return true;
                     else

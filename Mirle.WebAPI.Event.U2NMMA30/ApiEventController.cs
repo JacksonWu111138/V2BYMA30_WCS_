@@ -23,6 +23,7 @@ using static Mirle.Def.clsEnum;
 using Mirle.DB.Fun;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using static Mirle.Def.clsConstValue;
+using System.Windows.Forms;
 
 namespace Mirle.WebAPI.Event
 {
@@ -835,12 +836,13 @@ namespace Mirle.WebAPI.Event
                         Body.alarmDef, Body.bufferId, Body.happenTime, ref strEM))
                         throw new Exception(strEM);
                 }
-                else
+                else if (Body.status == clsEnum.AlarmSts.Clear.ToString())
                 {
                     if (!clsDB_Proc.GetDB_Object().GetAlarmCVCLog().FunAlarm_Solved(Body.jobId, Body.deviceId, Body.alarmCode,
                         Body.alarmDef, Body.bufferId, Body.happenTime, ref strEM))
                         throw new Exception(strEM);
                 }
+                else throw new Exception($"Error: status格式有錯, jobId = {Body.jobId}. clsEnum.AlarmSts.OnGoing.ToString() = {clsEnum.AlarmSts.OnGoing.ToString()}.");
 
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;

@@ -162,6 +162,10 @@ namespace Mirle.Middle.DB_Proc
                                             {
                                                 switch (cmd.CmdMode)
                                                 {
+                                                    case clsConstValue.CmdMode.Deposit:
+                                                        int.TryParse(cmd.Destination, out var test);
+
+                                                        break;
                                                     case clsConstValue.CmdMode.StockIn:
                                                     case clsConstValue.CmdMode.L2L:
                                                         EquCmdInfo equCmd = new EquCmdInfo

@@ -702,6 +702,35 @@ namespace Mirle.DB.Fun
             }
         }
 
+        public bool FunUpdateNewLocForL2L(string sCmdSno, string sNewLoc, string sCurDeviceID, string sCurLoc, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"update {Parameter.clsCmd_Mst.TableName} set " +
+                    $"{Parameter.clsCmd_Mst.Column.New_Loc} = '{sNewLoc}'" +
+                    $", {Parameter.clsCmd_Mst.Column.CurDeviceID} = '{sCurDeviceID}'" +
+                    $", {Parameter.clsCmd_Mst.Column.CurLoc} = '{sCurLoc}'" +
+                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}' ";
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
         public bool FunUpdateLoc(string sCmdSno, string sLoc, string EquNO, DataBase.DB db)
         {
             try
@@ -709,6 +738,35 @@ namespace Mirle.DB.Fun
                 string strSql = $"update {Parameter.clsCmd_Mst.TableName} set " +
                     $"{Parameter.clsCmd_Mst.Column.Loc} = '{sLoc}', {Parameter.clsCmd_Mst.Column.Equ_No} = '{EquNO}' " +
                     $"where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}' ";
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunUpdateLoc(string sCmdSno, string sLoc, string EquNO, string sCurDeviceID, string sCurLoc, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"update {Parameter.clsCmd_Mst.TableName} set " +
+                    $"{Parameter.clsCmd_Mst.Column.Loc} = '{sLoc}', {Parameter.clsCmd_Mst.Column.Equ_No} = '{EquNO}' " +
+                    $", {Parameter.clsCmd_Mst.Column.CurDeviceID} = '{sCurDeviceID}'" +
+                    $", {Parameter.clsCmd_Mst.Column.CurLoc} = '{sCurLoc}'" +
+                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}' ";
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {

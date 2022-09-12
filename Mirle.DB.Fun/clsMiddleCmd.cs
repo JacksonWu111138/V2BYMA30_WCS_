@@ -126,10 +126,6 @@ namespace Mirle.DB.Fun
                 middleCmd.CommandID = cmd.Cmd_Sno;
                 middleCmd.DeviceID = sLoc_Start.DeviceId;
                 middleCmd.CSTID = cmd.BoxID;
-                string ToLoc = cmd.Cmd_Mode == clsConstValue.CmdMode.L2L ? cmd.New_Loc : cmd.Loc;
-                middleCmd.Source = tool.GetLocation(cmd.Loc, sLoc_Start);
-                middleCmd.Destination = tool.GetLocation(ToLoc, sLoc_End);
-                middleCmd.lotSize = cmd.lotSize;
                 string sCmdMode = "";
                 if (sLoc_Start.LocationTypes == LocationTypes.Shelf)
                 {
@@ -142,6 +138,10 @@ namespace Mirle.DB.Fun
                             sCmdMode = clsConstValue.CmdMode.StockOut;
                             break;
                     }
+                }
+                else if(sLoc_Start.LocationId == Location.LocationID.LeftFork.ToString())
+                {
+                    sCmdMode = clsConstValue.CmdMode.Deposit;
                 }
                 else
                 {
@@ -157,6 +157,13 @@ namespace Mirle.DB.Fun
                 }
 
                 middleCmd.CmdMode = sCmdMode;
+                string ToLoc = cmd.Cmd_Mode == clsConstValue.CmdMode.L2L ? cmd.New_Loc : cmd.Loc;
+
+                if (middleCmd.CmdMode == clsConstValue.CmdMode.Deposit) middleCmd.Source = "";
+                else middleCmd.Source = tool.GetLocation(cmd.Loc, sLoc_Start);
+
+                middleCmd.Destination = tool.GetLocation(ToLoc, sLoc_End);
+                middleCmd.lotSize = cmd.lotSize;
                 middleCmd.Priority = Convert.ToInt32(cmd.Prty);
 
                 string sStnNo = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;

@@ -162,10 +162,6 @@ namespace Mirle.Middle.DB_Proc
                                             {
                                                 switch (cmd.CmdMode)
                                                 {
-                                                    case clsConstValue.CmdMode.Deposit:
-                                                        int.TryParse(cmd.Destination, out var test);
-
-                                                        break;
                                                     case clsConstValue.CmdMode.StockIn:
                                                     case clsConstValue.CmdMode.L2L:
                                                         EquCmdInfo equCmd = new EquCmdInfo
@@ -570,11 +566,34 @@ namespace Mirle.Middle.DB_Proc
                 string sRemark = "";
                 if (cmd.CmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Initial)
                 {
+                    EquCmdInfo equCmd = new EquCmdInfo();
                     switch (cmd.CmdMode)
                     {
+                        case clsConstValue.CmdMode.Deposit:
+                            int.TryParse(cmd.Destination, out var test);
+                            if (test > 0)
+                            {  //置物至儲位
+                                equCmd = new EquCmdInfo
+                                {
+                                    CmdSno = cmd.CommandID,
+                                    CmdMode = cmd.CmdMode,
+                                    CmdSts = clsConstValue.CmdSts.strCmd_Initial,
+                                    CarNo = "1",
+                                    EquNo = cmd.DeviceID,
+                                    LocSize = "",
+                                    Priority = cmd.Priority.ToString(),
+                                    SpeedLevel = "5",
+                                    Source = "",
+                                    Destination = tool.GetEquCmdLoc_BySysCmd(cmd.Destination)
+                                };
+
+                                return FunWriEquCmd_Proc(cmd, equCmd, db);
+                            }
+                            else return FunWriSingleCV_Proc(cmd, db);
+
                         case clsConstValue.CmdMode.StockIn:
                         case clsConstValue.CmdMode.L2L:
-                            EquCmdInfo equCmd = new EquCmdInfo
+                            equCmd = new EquCmdInfo
                             {
                                 CmdSno = cmd.CommandID,
                                 CmdMode = cmd.CmdMode,
@@ -612,48 +631,7 @@ namespace Mirle.Middle.DB_Proc
 
                         case clsConstValue.CmdMode.StockOut:
                         case clsConstValue.CmdMode.S2S:
-                            ConveyorInfo conveyor = GetCV_ByCmdLoc(cmd, cmd.Destination, db);
-                            if (string.IsNullOrWhiteSpace(conveyor.BufferName)) return false;
-
-                            CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
-                            {
-                                bufferId = conveyor.BufferName,
-                                jobId = cmd.CommandID,
-                                carrierType = cmd.carrierType
-                            };
-
-                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
-                            {
-                                sRemark = "Error: Begin失敗！";
-                                if (sRemark != cmd.Remark)
-                                {
-                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
-                                }
-
-                                return false;
-                            }
-
-                            sRemark = $"預約{conveyor.BufferName}";
-                            if (!EquCmd.FunUpdateCmdSts_MiddleCmd(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
-                            {
-                                db.TransactionCtrl(TransactionTypes.Rollback);
-                                return false;
-                            }
-
-                            if (!api.GetCV_ReceiveNewBinCmd().FunReport(info, conveyor.API.IP))
-                            {
-                                db.TransactionCtrl(TransactionTypes.Rollback);
-                                sRemark = $"Error: 預約{conveyor.BufferName}失敗！";
-                                if (sRemark != cmd.Remark)
-                                {
-                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
-                                }
-
-                                return false;
-                            }
-
-                            db.TransactionCtrl(TransactionTypes.Commit);
-                            return true;
+                            return FunWriSingleCV_Proc(cmd, db);
                         default:
                             return false;
                     }
@@ -691,10 +669,69 @@ namespace Mirle.Middle.DB_Proc
                     };
 
                     if (cmd.CmdMode == clsConstValue.CmdMode.S2S) equCmd.Source = conveyor_From.StkPortID.ToString();
+                    else if (cmd.CmdMode == clsConstValue.CmdMode.Deposit) equCmd.Source = "";
                     else equCmd.Source = tool.GetEquCmdLoc_BySysCmd(cmd.Source);
 
                     return FunWriEquCmd_Proc(cmd, equCmd, db);
                 }
+            }
+            catch (Exception ex)
+            {
+                db.TransactionCtrl(TransactionTypes.Rollback);
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunWriSingleCV_Proc(MiddleCmd cmd, DB db)
+        {
+            try
+            {
+                ConveyorInfo conveyor = GetCV_ByCmdLoc(cmd, cmd.Destination, db);
+                if (string.IsNullOrWhiteSpace(conveyor.BufferName)) return false;
+
+                CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
+                {
+                    bufferId = conveyor.BufferName,
+                    jobId = cmd.CommandID,
+                    carrierType = cmd.carrierType
+                };
+
+                string sRemark = "";
+                if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                {
+                    sRemark = "Error: Begin失敗！";
+                    if (sRemark != cmd.Remark)
+                    {
+                        EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
+                    }
+
+                    return false;
+                }
+
+                sRemark = $"預約{conveyor.BufferName}";
+                if (!EquCmd.FunUpdateCmdSts_MiddleCmd(cmd.CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
+                {
+                    db.TransactionCtrl(TransactionTypes.Rollback);
+                    return false;
+                }
+
+                if (!api.GetCV_ReceiveNewBinCmd().FunReport(info, conveyor.API.IP))
+                {
+                    db.TransactionCtrl(TransactionTypes.Rollback);
+                    sRemark = $"Error: 預約{conveyor.BufferName}失敗！";
+                    if (sRemark != cmd.Remark)
+                    {
+                        EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
+                    }
+
+                    return false;
+                }
+
+                db.TransactionCtrl(TransactionTypes.Commit);
+                return true;
             }
             catch (Exception ex)
             {

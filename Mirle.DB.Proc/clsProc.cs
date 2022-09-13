@@ -26,6 +26,7 @@ namespace Mirle.DB.Proc
         private Fun.clsRoutdef Routdef = new Fun.clsRoutdef();
         private Fun.clsMiddleCmd MiddleCmd = new Fun.clsMiddleCmd();
         private Fun.clsEquCmd EquCmd = new Fun.clsEquCmd();
+        private Fun.clsProc proc = new Fun.clsProc();
         private clsDbConfig _config = new clsDbConfig();
         private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
         private WebApiConfig _wmsApi = new WebApiConfig();
@@ -692,8 +693,10 @@ namespace Mirle.DB.Proc
                                         }
                                         else
                                         {
-                                            if(string.IsNullOrWhiteSpace(middleCmd.BatchID))
+                                            #region 二重格流程
+                                            if (string.IsNullOrWhiteSpace(middleCmd.BatchID))
                                             {
+                                                #region 單板
                                                 string sNewLoc = ""; clsEnum.AsrsType type = clsEnum.AsrsType.None;
                                                 if (tool.CheckWhId_ASRS(middleCmd.DeviceID, ref type))
                                                 {
@@ -712,11 +715,13 @@ namespace Mirle.DB.Proc
                                                         }
                                                         else
                                                         {
-
+                                                            if (proc.FunDoubleStorage_SingleProc(cmd, middleCmd, sNewLoc, db)) return true;
+                                                            else continue;
                                                         }
                                                     }
                                                     else
-                                                    {  //PCBA
+                                                    {
+                                                        #region PCBA
                                                         EmptyShelfQueryInfo emptyShelfQueryInfo = new EmptyShelfQueryInfo
                                                         {
                                                             jobId = cmd.JobID,
@@ -749,85 +754,10 @@ namespace Mirle.DB.Proc
                                                         }
                                                         else
                                                         {
-                                                            CarrierShelfReportInfo info = new CarrierShelfReportInfo
-                                                            {
-                                                                jobId = cmd.JobID,
-                                                                shelfId = sNewLoc,
-                                                                shelfStatus = clsConstValue.LocSts.IN,
-                                                                carrierId = cmd.BoxID,
-                                                                disableLocation = clsConstValue.YesNo.Yes
-                                                            };
-
-                                                            int EquNo_New = tool.funGetEquNoByLoc(sNewLoc);
-                                                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
-                                                            {
-                                                                sRemark = "Error: Begin失敗！";
-                                                                if (sRemark != cmd.Remark)
-                                                                {
-                                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                                }
-
-                                                                continue;
-                                                            }
-
-                                                            if (cmd.Cmd_Mode == clsConstValue.CmdMode.L2L)
-                                                            {
-                                                                if (!Cmd_Mst.FunUpdateNewLocForL2L(cmd.Cmd_Sno, sNewLoc, middleCmd.DeviceID,
-                                                                    Location.LocationID.LeftFork.ToString(), db))
-                                                                {
-                                                                    db.TransactionCtrl(TransactionTypes.Rollback);
-                                                                    sRemark = "Error: 二重格更新新儲位失敗";
-                                                                    if (sRemark != cmd.Remark)
-                                                                    {
-                                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                                    }
-
-                                                                    continue;
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                if (!Cmd_Mst.FunUpdateLoc(cmd.Cmd_Sno, sNewLoc, EquNo_New.ToString(),
-                                                                    middleCmd.DeviceID, Location.LocationID.LeftFork.ToString(), db))
-                                                                {
-                                                                    db.TransactionCtrl(TransactionTypes.Rollback);
-                                                                    sRemark = "Error: 二重格更新新儲位失敗";
-                                                                    if (sRemark != cmd.Remark)
-                                                                    {
-                                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                                    }
-
-                                                                    continue;
-                                                                }
-                                                            }
-
-                                                            if (!MiddleCmd.FunInsertHisMiddleCmd(cmd.Cmd_Sno, db))
-                                                            {
-                                                                db.TransactionCtrl(TransactionTypes.Rollback);
-                                                                sRemark = "Error: Insert MiddleCmd_His失敗";
-                                                                if (sRemark != cmd.Remark)
-                                                                {
-                                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                                }
-
-                                                                continue;
-                                                            }
-
-                                                            if (!MiddleCmd.FunDelMiddleCmd(cmd.Cmd_Sno, db))
-                                                            {
-                                                                db.TransactionCtrl(TransactionTypes.Rollback);
-                                                                sRemark = "Error: 刪除MiddleCmd失敗";
-                                                                if (sRemark != cmd.Remark)
-                                                                {
-                                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                                }
-
-                                                                continue;
-                                                            }
-
-                                                            db.TransactionCtrl(TransactionTypes.Commit);
-                                                            return true;
+                                                            if (proc.FunDoubleStorage_SingleProc(cmd, middleCmd, sNewLoc, db)) return true;
+                                                            else continue;
                                                         }
+                                                        #endregion PCBA
                                                     }
                                                 }
                                                 else
@@ -840,11 +770,13 @@ namespace Mirle.DB.Proc
 
                                                     continue;
                                                 }
+                                                #endregion 單板
                                             }
                                             else
                                             {
 
-                                            }
+                                            } 
+                                            #endregion 二重格流程
                                         }
                                     }
                                     else

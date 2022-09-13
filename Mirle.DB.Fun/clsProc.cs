@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using Mirle.Def;
 using System.Text;
 using System.Threading.Tasks;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
 
 namespace Mirle.DB.Fun
 {
@@ -14,6 +15,102 @@ namespace Mirle.DB.Fun
         private clsLocMst LocMst = new clsLocMst();
         private clsLocDtl LocDtl = new clsLocDtl();
         private clsTrnLog TrnLog = new clsTrnLog();
+        private clsTool tool = new clsTool();
+        private clsMiddleCmd MiddleCmd = new clsMiddleCmd();
+        public bool FunDoubleStorage_SingleProc(CmdMstInfo cmd, MiddleCmd middleCmd, string sNewLoc, DataBase.DB db)
+        {
+            try
+            {
+                CarrierShelfReportInfo info = new CarrierShelfReportInfo
+                {
+                    jobId = cmd.JobID,
+                    shelfId = sNewLoc,
+                    shelfStatus = clsConstValue.LocSts.IN,
+                    carrierId = cmd.BoxID,
+                    disableLocation = clsConstValue.YesNo.Yes
+                };
+
+                int EquNo_New = tool.funGetEquNoByLoc(sNewLoc);
+                string sRemark = "";
+                if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                {
+                    sRemark = "Error: Begin失敗！";
+                    if (sRemark != cmd.Remark)
+                    {
+                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                    }
+
+                    return false;
+                }
+
+                if (cmd.Cmd_Mode == clsConstValue.CmdMode.L2L)
+                {
+                    if (!Cmd_Mst.FunUpdateNewLocForL2L(cmd.Cmd_Sno, sNewLoc, middleCmd.DeviceID,
+                        Location.LocationID.LeftFork.ToString(), db))
+                    {
+                        db.TransactionCtrl(TransactionTypes.Rollback);
+                        sRemark = "Error: 二重格更新新儲位失敗";
+                        if (sRemark != cmd.Remark)
+                        {
+                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                        }
+
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (!Cmd_Mst.FunUpdateLoc(cmd.Cmd_Sno, sNewLoc, EquNo_New.ToString(),
+                        middleCmd.DeviceID, Location.LocationID.LeftFork.ToString(), db))
+                    {
+                        db.TransactionCtrl(TransactionTypes.Rollback);
+                        sRemark = "Error: 二重格更新新儲位失敗";
+                        if (sRemark != cmd.Remark)
+                        {
+                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                        }
+
+                        return false;
+                    }
+                }
+
+                if (!MiddleCmd.FunInsertHisMiddleCmd(cmd.Cmd_Sno, db))
+                {
+                    db.TransactionCtrl(TransactionTypes.Rollback);
+                    sRemark = "Error: Insert MiddleCmd_His失敗";
+                    if (sRemark != cmd.Remark)
+                    {
+                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                    }
+
+                    return false;
+                }
+
+                if (!MiddleCmd.FunDelMiddleCmd(cmd.Cmd_Sno, db))
+                {
+                    db.TransactionCtrl(TransactionTypes.Rollback);
+                    sRemark = "Error: 刪除MiddleCmd失敗";
+                    if (sRemark != cmd.Remark)
+                    {
+                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                    }
+
+                    return false;
+                }
+
+                db.TransactionCtrl(TransactionTypes.Commit);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                db.TransactionCtrl(TransactionTypes.Rollback);
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
         public bool FunUpdateCmd_Mode_in(CmdMstInfo cmd, List<LocDtlInfo> locDtls,
            List<TrnLogInfo> trnLogs, List<MoldUseLogInfo> moldUseLogs, DataBase.DB db)
         {

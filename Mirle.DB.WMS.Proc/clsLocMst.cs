@@ -196,6 +196,28 @@ namespace Mirle.DB.WMS.Proc
             }
         }
 
+        public string funSearchEmptyLoc(string Equ_No, clsEnum.LocSts_Double locSts)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        return LocMst.funSearchEmptyLoc(Equ_No, locSts, db);
+                    }
+                    else return string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return string.Empty;
+            }
+        }
+
         public string funSearchEmptyLoc_Abnormal_Proc(string Equ_No, string sSource)
         {
             try

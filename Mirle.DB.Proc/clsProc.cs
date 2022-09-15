@@ -694,10 +694,11 @@ namespace Mirle.DB.Proc
                                         else
                                         {
                                             #region 二重格流程
+                                            string sNewLoc = "";
                                             if (string.IsNullOrWhiteSpace(middleCmd.BatchID))
                                             {
                                                 #region 單板
-                                                string sNewLoc = ""; clsEnum.AsrsType type = clsEnum.AsrsType.None;
+                                                clsEnum.AsrsType type = clsEnum.AsrsType.None;
                                                 if (tool.CheckWhId_ASRS(middleCmd.DeviceID, ref type))
                                                 {
                                                     if (type == clsEnum.AsrsType.Box)
@@ -748,7 +749,42 @@ namespace Mirle.DB.Proc
                                             }
                                             else
                                             {
+                                                DataTable dtMiddleCmd = new DataTable();
+                                                if (MiddleCmd.GetMiddleCmd_ByBatchID(middleCmd.BatchID, ref dtMiddleCmd, db) != DBResult.Success)
+                                                {
+                                                    sRemark = "Error: 取得MiddleCmd的Batch命令失敗";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
 
+                                                    dtMiddleCmd.Dispose();
+                                                    continue;
+                                                }
+                                                else
+                                                {
+                                                    if (dtMiddleCmd.Rows.Count != 2)
+                                                    {
+                                                        sRemark = $"Error: MiddleCmd的Batch命令個數並非兩筆 => {dtMiddleCmd.Rows.Count}";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+
+                                                        dtMiddleCmd.Dispose();
+                                                        continue;
+                                                    }
+                                                    else
+                                                    {
+                                                        MiddleCmd[] BatchCmd = new MiddleCmd[2];
+                                                        for (int iMiddle = 0; iMiddle < dtMiddleCmd.Rows.Count; iMiddle++)
+                                                        {
+
+                                                        }
+
+                                                        sNewLoc = wms.GetLocMst().funSearchEmptyLoc(middleCmd.DeviceID, clsEnum.LocSts_Double.NNNN);
+                                                    }
+                                                }
                                             } 
                                             #endregion 二重格流程
                                         }

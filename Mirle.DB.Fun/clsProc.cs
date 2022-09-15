@@ -21,6 +21,18 @@ namespace Mirle.DB.Fun
         {
             try
             {
+                string sRemark = "";
+                if (string.IsNullOrWhiteSpace(sNewLoc))
+                {
+                    sRemark = "Error: 二重格找不到新儲位";
+                    if (sRemark != cmd.Remark)
+                    {
+                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                    }
+
+                    return false;
+                }
+
                 CarrierShelfReportInfo info = new CarrierShelfReportInfo
                 {
                     jobId = cmd.JobID,
@@ -31,7 +43,6 @@ namespace Mirle.DB.Fun
                 };
 
                 int EquNo_New = tool.funGetEquNoByLoc(sNewLoc);
-                string sRemark = "";
                 if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                 {
                     sRemark = "Error: Begin失敗！";

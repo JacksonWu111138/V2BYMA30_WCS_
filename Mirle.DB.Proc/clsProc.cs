@@ -703,21 +703,8 @@ namespace Mirle.DB.Proc
                                                     if (type == clsEnum.AsrsType.Box)
                                                     {
                                                         sNewLoc = wms.GetLocMst().funSearchEmptyLoc_Abnormal_Proc(middleCmd.DeviceID, middleCmd.Destination);
-                                                        if (string.IsNullOrWhiteSpace(sNewLoc))
-                                                        {
-                                                            sRemark = "Error: 二重格找不到新儲位";
-                                                            if (sRemark != middleCmd.Remark)
-                                                            {
-                                                                MiddleCmd.FunMiddleCmdUpdateRemark(middleCmd.CommandID, sRemark, db, ref strEM);
-                                                            }
-
-                                                            continue;
-                                                        }
-                                                        else
-                                                        {
-                                                            if (proc.FunDoubleStorage_SingleProc(cmd, middleCmd, sNewLoc, db)) return true;
-                                                            else continue;
-                                                        }
+                                                        if (proc.FunDoubleStorage_SingleProc(cmd, middleCmd, sNewLoc, db)) return true;
+                                                        else continue;
                                                     }
                                                     else
                                                     {
@@ -742,21 +729,8 @@ namespace Mirle.DB.Proc
                                                         }
 
                                                         sNewLoc = emptyShelfQueryResponse.shelfId;
-                                                        if (string.IsNullOrWhiteSpace(sNewLoc))
-                                                        {
-                                                            sRemark = "Error: 發生二重格，但找不到新儲位可放！";
-                                                            if (sRemark != cmd.Remark)
-                                                            {
-                                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                            }
-
-                                                            continue;
-                                                        }
-                                                        else
-                                                        {
-                                                            if (proc.FunDoubleStorage_SingleProc(cmd, middleCmd, sNewLoc, db)) return true;
-                                                            else continue;
-                                                        }
+                                                        if (proc.FunDoubleStorage_SingleProc(cmd, middleCmd, sNewLoc, db)) return true;
+                                                        else continue;
                                                         #endregion PCBA
                                                     }
                                                 }

@@ -17,6 +17,83 @@ namespace Mirle.DB.Fun
         private clsTrnLog TrnLog = new clsTrnLog();
         private clsTool tool = new clsTool();
         private clsMiddleCmd MiddleCmd = new clsMiddleCmd();
+        public bool FunDoubleStorage_DoubleProc(CmdMstInfo[] cmds, MiddleCmd[] middleCmds, string sNewLoc, DataBase.DB db)
+        {
+            try
+            {
+                string sRemark = "";
+                if (string.IsNullOrWhiteSpace(sNewLoc))
+                {
+                    sRemark = "Error: 二重格找不到可以直接放兩板的新儲位";
+                    for (int i = 0; i < cmds.Length; i++)
+                    {
+                        if (sRemark != cmds[i].Remark)
+                        {
+                            Cmd_Mst.FunUpdateRemark(cmds[i].Cmd_Sno, sRemark, db);
+                        }
+                    }
+
+                    return false;
+                }
+
+                clsEnum.Shelf_LocationSide side_Before = clsEnum.Shelf_LocationSide.Fail;
+                for (int i = 0; i < middleCmds.Length; i++)
+                {
+                    side_Before = tool.GetSide(middleCmds[i].Destination);
+                    if (side_Before == clsEnum.Shelf_LocationSide.Fail) continue;
+                    else break;
+                }
+
+                if(side_Before == clsEnum.Shelf_LocationSide.Fail)
+                {
+                    sRemark = "Error: 確認原儲位區域失敗";
+                    for (int i = 0; i < cmds.Length; i++)
+                    {
+                        if (sRemark != cmds[i].Remark)
+                        {
+                            Cmd_Mst.FunUpdateRemark(cmds[i].Cmd_Sno, sRemark, db);
+                        }
+                    }
+
+                    return false;
+                }
+
+                clsEnum.Shelf_LocationSide side_New = tool.GetSide(sNewLoc);
+                if (side_New == clsEnum.Shelf_LocationSide.Fail)
+                {
+                    sRemark = $"Error: 確認新儲位區域失敗 => <{Parameter.clsCmd_Mst.Column.New_Loc}>{sNewLoc}";
+                    for (int i = 0; i < cmds.Length; i++)
+                    {
+                        if (sRemark != cmds[i].Remark)
+                        {
+                            Cmd_Mst.FunUpdateRemark(cmds[i].Cmd_Sno, sRemark, db);
+                        }
+                    }
+
+                    return false;
+                }
+
+                if(side_Before == side_New)
+                { //同一側
+
+                }
+                else
+                {
+
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                db.TransactionCtrl(TransactionTypes.Rollback);
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
         public bool FunDoubleStorage_SingleProc(CmdMstInfo cmd, MiddleCmd middleCmd, string sNewLoc, DataBase.DB db)
         {
             try

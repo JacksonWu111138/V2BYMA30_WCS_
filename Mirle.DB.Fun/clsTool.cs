@@ -281,6 +281,28 @@ namespace Mirle.DB.Fun
             }
         }
 
+        public clsEnum.Shelf_LocationSide GetSide(string sLoc)
+        {
+            try
+            {
+                int iRow = Convert.ToInt32(sLoc.Substring(0, 2));
+                if (iRow == 0) return clsEnum.Shelf_LocationSide.Fail;
+
+                switch(iRow % 4)
+                {
+                    case 1:
+                    case 3:
+                        return clsEnum.Shelf_LocationSide.Left;
+                    default:
+                        return clsEnum.Shelf_LocationSide.Right;
+                }
+            }
+            catch
+            {
+                return clsEnum.Shelf_LocationSide.Fail;
+            }
+        }
+
         public MiddleCmd GetMiddleCmd(DataRow drTmp)
         {
             MiddleCmd cmd = new MiddleCmd

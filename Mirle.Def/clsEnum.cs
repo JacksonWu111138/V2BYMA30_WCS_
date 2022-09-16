@@ -21,6 +21,11 @@ namespace Mirle.Def
             InSide
         }
 
+        public enum Shelf_LocationSide
+        {
+            Left, Right, Fail
+        }
+
         public enum AsrsType
         {
            None, Box, PCBA

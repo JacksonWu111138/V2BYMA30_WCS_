@@ -779,10 +779,33 @@ namespace Mirle.DB.Proc
                                                         MiddleCmd[] BatchCmd = new MiddleCmd[2];
                                                         for (int iMiddle = 0; iMiddle < dtMiddleCmd.Rows.Count; iMiddle++)
                                                         {
-
+                                                            BatchCmd[iMiddle] = tool.GetMiddleCmd(dtMiddleCmd.Rows[iMiddle]);
                                                         }
 
-                                                        sNewLoc = wms.GetLocMst().funSearchEmptyLoc(middleCmd.DeviceID, clsEnum.LocSts_Double.NNNN);
+                                                        dtMiddleCmd.Dispose();
+                                                        CmdMstInfo[] cmds_Batch = new CmdMstInfo[2];
+                                                        bool bCheck = true;
+                                                        for (int iCmd = 0; iCmd < 2; iCmd++)
+                                                        {
+                                                            if (!Cmd_Mst.FunGetCommand(BatchCmd[iCmd].CommandID, ref cmds_Batch[iCmd], ref iRet, db))
+                                                            {
+                                                                sRemark = "Error: 找不到系統命令";
+                                                                if (sRemark != BatchCmd[iCmd].Remark)
+                                                                {
+                                                                    MiddleCmd.FunMiddleCmdUpdateRemark(BatchCmd[iCmd].CommandID, sRemark, db, ref strEM);
+                                                                }
+                                                                bCheck = false;
+                                                                break;
+                                                            }
+                                                        }
+
+                                                        if (!bCheck) continue;
+                                                        else
+                                                        {
+                                                            sNewLoc = wms.GetLocMst().funSearchEmptyLoc(middleCmd.DeviceID, clsEnum.LocSts_Double.NNNN);
+                                                            if (proc.FunDoubleStorage_DoubleProc(cmds_Batch, BatchCmd, sNewLoc, db)) return true;
+                                                            else continue;
+                                                        }
                                                     }
                                                 }
                                             } 

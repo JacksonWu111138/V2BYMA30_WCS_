@@ -6,6 +6,7 @@ using Mirle.Def;
 using System.Text;
 using System.Threading.Tasks;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
+using System.Linq;
 
 namespace Mirle.DB.Fun
 {
@@ -17,25 +18,13 @@ namespace Mirle.DB.Fun
         private clsTrnLog TrnLog = new clsTrnLog();
         private clsTool tool = new clsTool();
         private clsMiddleCmd MiddleCmd = new clsMiddleCmd();
-        public bool FunDoubleStorage_DoubleProc(CmdMstInfo[] cmds, MiddleCmd[] middleCmds, string sNewLoc, DataBase.DB db)
+        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
+        public bool FunDoubleStorage_DoubleProc(CmdMstInfo[] cmds, MiddleCmd[] middleCmds, string[] NewLocs, WebApiConfig apiConfig, DataBase.DB db)
         {
             try
             {
                 string sRemark = "";
-                if (string.IsNullOrWhiteSpace(sNewLoc))
-                {
-                    sRemark = "Error: 二重格找不到可以直接放兩板的新儲位";
-                    for (int i = 0; i < cmds.Length; i++)
-                    {
-                        if (sRemark != cmds[i].Remark)
-                        {
-                            Cmd_Mst.FunUpdateRemark(cmds[i].Cmd_Sno, sRemark, db);
-                        }
-                    }
-
-                    return false;
-                }
-
+                
                 clsEnum.Shelf_LocationSide side_Before = clsEnum.Shelf_LocationSide.Fail;
                 for (int i = 0; i < middleCmds.Length; i++)
                 {
@@ -58,10 +47,10 @@ namespace Mirle.DB.Fun
                     return false;
                 }
 
-                clsEnum.Shelf_LocationSide side_New = tool.GetSide(sNewLoc);
+                clsEnum.Shelf_LocationSide side_New = tool.GetSide(NewLocs[0]);
                 if (side_New == clsEnum.Shelf_LocationSide.Fail)
                 {
-                    sRemark = $"Error: 確認新儲位區域失敗 => <{Parameter.clsCmd_Mst.Column.New_Loc}>{sNewLoc}";
+                    sRemark = $"Error: 確認新儲位區域失敗 => <{Parameter.clsCmd_Mst.Column.New_Loc}>{NewLocs[0]}";
                     for (int i = 0; i < cmds.Length; i++)
                     {
                         if (sRemark != cmds[i].Remark)
@@ -73,15 +62,134 @@ namespace Mirle.DB.Fun
                     return false;
                 }
 
-                if(side_Before == side_New)
+                CarrierShelfReportInfo[] infos = new CarrierShelfReportInfo[2];
+                if (side_Before == side_New)
                 { //同一側
-
+                    for (int i = 0; i < infos.Length; i++)
+                    {
+                        infos[i] = new CarrierShelfReportInfo
+                        {
+                            carrierId = cmds[i].BoxID,
+                            disableLocation = clsConstValue.YesNo.Yes,
+                            jobId = cmds[i].JobID,
+                            shelfStatus = clsConstValue.LocSts.IN,
+                            shelfId = tool.GetShelfLocation(middleCmds[i].Destination) == clsEnum.Shelf.OutSide? NewLocs[0]: NewLocs[1]
+                        };
+                    }
                 }
                 else
                 {
-
+                    for (int i = 0; i < infos.Length; i++)
+                    {
+                        infos[i] = new CarrierShelfReportInfo
+                        {
+                            carrierId = cmds[i].BoxID,
+                            disableLocation = clsConstValue.YesNo.Yes,
+                            jobId = cmds[i].JobID,
+                            shelfStatus = clsConstValue.LocSts.IN,
+                            shelfId = tool.GetShelfLocation(middleCmds[i].Destination) == clsEnum.Shelf.InSide ? NewLocs[0] : NewLocs[1]
+                        };
+                    }
                 }
 
+                if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                {
+                    sRemark = "Error: Begin失敗！";
+                    for (int i = 0; i < cmds.Length; i++)
+                    {
+                        if (sRemark != cmds[i].Remark)
+                        {
+                            Cmd_Mst.FunUpdateRemark(cmds[i].Cmd_Sno, sRemark, db);
+                        }
+                    }
+
+                    return false;
+                }
+
+                for (int i = 0; i < infos.Length; i++)
+                {
+                    var cmd = cmds.Where(r => r.JobID == infos[i].jobId);
+                    foreach (var c in cmd)
+                    {
+                        if (c.Cmd_Mode == clsConstValue.CmdMode.L2L)
+                        {
+                            if (!Cmd_Mst.FunUpdateNewLocForL2L(c.Cmd_Sno, infos[i].shelfId, middleCmds[i].DeviceID,
+                                Location.LocationID.LeftFork.ToString(), db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                sRemark = "Error: 二重格更新新儲位失敗";
+                                if (sRemark != c.Remark)
+                                {
+                                    Cmd_Mst.FunUpdateRemark(c.Cmd_Sno, sRemark, db);
+                                }
+
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            if (!Cmd_Mst.FunUpdateLoc(c.Cmd_Sno, infos[i].shelfId, tool.funGetEquNoByLoc(infos[i].shelfId).ToString(),
+                                middleCmds[i].DeviceID, Location.LocationID.LeftFork.ToString(), db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                sRemark = "Error: 二重格更新新儲位失敗";
+                                if (sRemark != c.Remark)
+                                {
+                                    Cmd_Mst.FunUpdateRemark(c.Cmd_Sno, sRemark, db);
+                                }
+
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+                for (int i = 0; i < middleCmds.Length; i++)
+                {
+                    if (!MiddleCmd.FunInsertHisMiddleCmd(middleCmds[i].CommandID, db))
+                    {
+                        db.TransactionCtrl(TransactionTypes.Rollback);
+                        sRemark = "Error: Insert MiddleCmd_His失敗";
+                        if (sRemark != cmds[i].Remark)
+                        {
+                            Cmd_Mst.FunUpdateRemark(cmds[i].Cmd_Sno, sRemark, db);
+                        }
+
+                        return false;
+                    }
+                }
+
+                for (int i = 0; i < middleCmds.Length; i++)
+                {
+                    if (!MiddleCmd.FunDelMiddleCmd(middleCmds[i].CommandID, db))
+                    {
+                        db.TransactionCtrl(TransactionTypes.Rollback);
+                        sRemark = "Error: 刪除MiddleCmd失敗";
+                        if (sRemark != cmds[i].Remark)
+                        {
+                            Cmd_Mst.FunUpdateRemark(cmds[i].Cmd_Sno, sRemark, db);
+                        }
+
+                        return false;
+                    }
+                }
+
+                for (int i = 0; i < infos.Length; i++)
+                {
+                    if (!api.GetCarrierShelfReport().FunReport(infos[i], apiConfig.IP))
+                    {
+                        db.TransactionCtrl(TransactionTypes.Rollback);
+                        sRemark = "Error: 二重格上報WES新儲位失敗";
+                        if (sRemark != cmds[i].Remark)
+                        {
+                            Cmd_Mst.FunUpdateRemark(cmds[i].Cmd_Sno, sRemark, db);
+                        }
+
+                        return false;
+                    }
+                }
+
+                db.TransactionCtrl(TransactionTypes.Commit);
                 return true;
             }
             catch (Exception ex)
@@ -94,7 +202,7 @@ namespace Mirle.DB.Fun
             }
         }
 
-        public bool FunDoubleStorage_SingleProc(CmdMstInfo cmd, MiddleCmd middleCmd, string sNewLoc, DataBase.DB db)
+        public bool FunDoubleStorage_SingleProc(CmdMstInfo cmd, MiddleCmd middleCmd, string sNewLoc, WebApiConfig apiConfig, DataBase.DB db)
         {
             try
             {
@@ -178,6 +286,18 @@ namespace Mirle.DB.Fun
                 {
                     db.TransactionCtrl(TransactionTypes.Rollback);
                     sRemark = "Error: 刪除MiddleCmd失敗";
+                    if (sRemark != cmd.Remark)
+                    {
+                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                    }
+
+                    return false;
+                }
+
+                if (!api.GetCarrierShelfReport().FunReport(info, apiConfig.IP))
+                {
+                    db.TransactionCtrl(TransactionTypes.Rollback);
+                    sRemark = "Error: 二重格上報WES新儲位失敗";
                     if (sRemark != cmd.Remark)
                     {
                         Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);

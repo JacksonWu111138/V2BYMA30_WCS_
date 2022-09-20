@@ -704,7 +704,7 @@ namespace Mirle.DB.Proc
                                                     if (type == clsEnum.AsrsType.Box)
                                                     {
                                                         sNewLoc = wms.GetLocMst().funSearchEmptyLoc_Abnormal_Proc(middleCmd.DeviceID, middleCmd.Destination);
-                                                        if (proc.FunDoubleStorage_SingleProc(cmd, middleCmd, sNewLoc, db)) return true;
+                                                        if (proc.FunDoubleStorage_SingleProc(cmd, middleCmd, sNewLoc, _wmsApi, db)) return true;
                                                         else continue;
                                                     }
                                                     else
@@ -730,7 +730,7 @@ namespace Mirle.DB.Proc
                                                         }
 
                                                         sNewLoc = emptyShelfQueryResponse.shelfId;
-                                                        if (proc.FunDoubleStorage_SingleProc(cmd, middleCmd, sNewLoc, db)) return true;
+                                                        if (proc.FunDoubleStorage_SingleProc(cmd, middleCmd, sNewLoc, _wmsApi, db)) return true;
                                                         else continue;
                                                         #endregion PCBA
                                                     }
@@ -749,6 +749,7 @@ namespace Mirle.DB.Proc
                                             }
                                             else
                                             {
+                                                #region 雙板
                                                 DataTable dtMiddleCmd = new DataTable();
                                                 if (MiddleCmd.GetMiddleCmd_ByBatchID(middleCmd.BatchID, ref dtMiddleCmd, db) != DBResult.Success)
                                                 {
@@ -802,12 +803,27 @@ namespace Mirle.DB.Proc
                                                         if (!bCheck) continue;
                                                         else
                                                         {
-                                                            sNewLoc = wms.GetLocMst().funSearchEmptyLoc(middleCmd.DeviceID, clsEnum.LocSts_Double.NNNN);
-                                                            if (proc.FunDoubleStorage_DoubleProc(cmds_Batch, BatchCmd, sNewLoc, db)) return true;
+                                                            string[] sNewLocs = new string[2];
+                                                            if (wms.GetLocMst().CheckHasNNNN(middleCmd.DeviceID, ref sNewLocs) != DBResult.Success)
+                                                            {
+                                                                sRemark = "Error: 二重格找不到可以直接放兩板的新儲位";
+                                                                for (int iBatch = 0; iBatch < cmds_Batch.Length; iBatch++)
+                                                                {
+                                                                    if (sRemark != cmds_Batch[iBatch].Remark)
+                                                                    {
+                                                                        Cmd_Mst.FunUpdateRemark(cmds_Batch[iBatch].Cmd_Sno, sRemark, db);
+                                                                    }
+                                                                }
+
+                                                                continue;
+                                                            }
+
+                                                            if (proc.FunDoubleStorage_DoubleProc(cmds_Batch, BatchCmd, sNewLocs, _wmsApi, db)) return true;
                                                             else continue;
                                                         }
                                                     }
-                                                }
+                                                } 
+                                                #endregion 雙板
                                             } 
                                             #endregion 二重格流程
                                         }

@@ -160,15 +160,47 @@ namespace Mirle.Middle.DB_Proc
 
                                             if (cmd.CmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Initial)
                                             {
+                                                EquCmdInfo equCmd = new EquCmdInfo();
                                                 switch (cmd.CmdMode)
                                                 {
                                                     case clsConstValue.CmdMode.Deposit:
+                                                        int.TryParse(cmd.Destination, out var test);
+                                                        if (test > 0)
+                                                        {  //置物至儲位
+                                                            equCmd = new EquCmdInfo
+                                                            {
+                                                                CmdSno = cmd.CommandID,
+                                                                CmdMode = cmd.CmdMode,
+                                                                CmdSts = clsConstValue.CmdSts.strCmd_Initial,
+                                                                CarNo = "1",
+                                                                EquNo = cmd.DeviceID,
+                                                                LocSize = "",
+                                                                Priority = cmd.Priority.ToString(),
+                                                                SpeedLevel = "5",
+                                                                Source = ""
+                                                            };
 
-                                                        break;
+                                                            for (int con = 0; con < BatchCmd.Length; con++)
+                                                            {
+                                                                if (tool.GetShelfLocation(BatchCmd[con].Destination) == clsEnum.Shelf.OutSide)
+                                                                {
+                                                                    equCmd.Destination = tool.GetEquCmdLoc_BySysCmd(BatchCmd[con].Destination);
+                                                                    break;
+                                                                }
+                                                            }
+
+                                                            if (FunWriEquCmd_DoubleProc(BatchCmd, equCmd, db)) return true;
+                                                            else continue;
+                                                        }
+                                                        else
+                                                        {
+                                                            if (FunWriDoubleCV_Proc(BatchCmd, db)) return true;
+                                                            else continue;
+                                                        }
 
                                                     case clsConstValue.CmdMode.StockIn:
                                                     case clsConstValue.CmdMode.L2L:
-                                                        EquCmdInfo equCmd = new EquCmdInfo
+                                                        equCmd = new EquCmdInfo
                                                         {
                                                             CmdSno = cmd.CommandID,
                                                             CmdMode = cmd.CmdMode,
@@ -220,72 +252,8 @@ namespace Mirle.Middle.DB_Proc
 
                                                     case clsConstValue.CmdMode.StockOut:
                                                     case clsConstValue.CmdMode.S2S:
-                                                        ConveyorInfo[] conveyors_To = new ConveyorInfo[2];
-                                                        CVReceiveNewBinCmdInfo[] infos = new CVReceiveNewBinCmdInfo[2];
-                                                        for (int con = 0; con < BatchCmd.Length; con++)
-                                                        {
-                                                            conveyors_To[con] = GetCV_ByCmdLoc(BatchCmd[con], BatchCmd[con].Destination, db);
-                                                            if (string.IsNullOrWhiteSpace(conveyors_To[con].BufferName)) return false;
-
-                                                            infos[con] = new CVReceiveNewBinCmdInfo
-                                                            {
-                                                                bufferId = conveyors_To[con].BufferName,
-                                                                jobId = BatchCmd[con].CommandID,
-                                                                carrierType = BatchCmd[con].carrierType
-                                                            };
-                                                        }
-
-                                                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
-                                                        {
-                                                            sRemark = "Error: Begin失敗！";
-                                                            for (int count = 0; count < BatchCmd.Length; count++)
-                                                            {
-                                                                if (sRemark != BatchCmd[count].Remark)
-                                                                {
-                                                                    EquCmd.FunUpdateRemark_MiddleCmd(BatchCmd[count].CommandID, sRemark, db);
-                                                                }
-                                                            }
-
-                                                            continue;
-                                                        }
-
-                                                        bool bCheck = true;
-                                                        for (int count = 0; count < BatchCmd.Length; count++)
-                                                        {
-                                                            sRemark = $"預約{conveyors_To[count].BufferName}";
-                                                            if (!EquCmd.FunUpdateCmdSts_MiddleCmd(BatchCmd[count].CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
-                                                            {
-                                                                db.TransactionCtrl(TransactionTypes.Rollback);
-                                                                bCheck = false;
-                                                            }
-
-                                                            if (!bCheck) break;
-                                                        }
-
-                                                        if (!bCheck) continue;
-
-                                                        bCheck = true;
-                                                        for (int count = 0; count < BatchCmd.Length; count++)
-                                                        {
-                                                            if (!api.GetCV_ReceiveNewBinCmd().FunReport(infos[count], conveyors_To[count].API.IP))
-                                                            {
-                                                                db.TransactionCtrl(TransactionTypes.Rollback);
-                                                                sRemark = $"Error: 預約{conveyors_To[count].BufferName}失敗！";
-                                                                if (sRemark != cmd.Remark)
-                                                                {
-                                                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
-                                                                }
-
-                                                                bCheck = false;
-                                                            }
-
-                                                            if (!bCheck) break;
-                                                        }
-
-                                                        if (!bCheck) continue;
-
-                                                        db.TransactionCtrl(TransactionTypes.Commit);
-                                                        return true;
+                                                        if (FunWriDoubleCV_Proc(BatchCmd, db)) return true;
+                                                        else continue;
                                                     default:
                                                         continue;
                                                 }
@@ -733,6 +701,88 @@ namespace Mirle.Middle.DB_Proc
 
                     return false;
                 }
+
+                db.TransactionCtrl(TransactionTypes.Commit);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                db.TransactionCtrl(TransactionTypes.Rollback);
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunWriDoubleCV_Proc(MiddleCmd[] BatchCmd, DB db)
+        {
+            try
+            {
+                ConveyorInfo[] conveyors_To = new ConveyorInfo[2];
+                CVReceiveNewBinCmdInfo[] infos = new CVReceiveNewBinCmdInfo[2];
+                for (int con = 0; con < BatchCmd.Length; con++)
+                {
+                    conveyors_To[con] = GetCV_ByCmdLoc(BatchCmd[con], BatchCmd[con].Destination, db);
+                    if (string.IsNullOrWhiteSpace(conveyors_To[con].BufferName)) return false;
+
+                    infos[con] = new CVReceiveNewBinCmdInfo
+                    {
+                        bufferId = conveyors_To[con].BufferName,
+                        jobId = BatchCmd[con].CommandID,
+                        carrierType = BatchCmd[con].carrierType
+                    };
+                }
+
+                string sRemark = "";
+                if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                {
+                    sRemark = "Error: Begin失敗！";
+                    for (int count = 0; count < BatchCmd.Length; count++)
+                    {
+                        if (sRemark != BatchCmd[count].Remark)
+                        {
+                            EquCmd.FunUpdateRemark_MiddleCmd(BatchCmd[count].CommandID, sRemark, db);
+                        }
+                    }
+
+                    return false;
+                }
+
+                bool bCheck = true;
+                for (int count = 0; count < BatchCmd.Length; count++)
+                {
+                    sRemark = $"預約{conveyors_To[count].BufferName}";
+                    if (!EquCmd.FunUpdateCmdSts_MiddleCmd(BatchCmd[count].CommandID, clsConstValue.CmdSts_MiddleCmd.strCmd_WriteCV, sRemark, db))
+                    {
+                        db.TransactionCtrl(TransactionTypes.Rollback);
+                        bCheck = false;
+                    }
+
+                    if (!bCheck) break;
+                }
+
+                if (!bCheck) return false;
+
+                bCheck = true;
+                for (int count = 0; count < BatchCmd.Length; count++)
+                {
+                    if (!api.GetCV_ReceiveNewBinCmd().FunReport(infos[count], conveyors_To[count].API.IP))
+                    {
+                        db.TransactionCtrl(TransactionTypes.Rollback);
+                        sRemark = $"Error: 預約{conveyors_To[count].BufferName}失敗！";
+                        if (sRemark != BatchCmd[count].Remark)
+                        {
+                            EquCmd.FunUpdateRemark_MiddleCmd(BatchCmd[count].CommandID, sRemark, db);
+                        }
+
+                        bCheck = false;
+                    }
+
+                    if (!bCheck) break;
+                }
+
+                if (!bCheck) return false;
 
                 db.TransactionCtrl(TransactionTypes.Commit);
                 return true;

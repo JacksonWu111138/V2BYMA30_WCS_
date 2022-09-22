@@ -42,6 +42,7 @@ namespace Mirle.ASRS.WCS.View
         //public static DeviceInfo[] AGV = new DeviceInfo[4];
         private ASRSProcess[] AsrsCommand = new ASRSProcess[5];
         private SignalHost[] CraneSignals = new SignalHost[5];
+        private EccsSignal_2.View.ucCrane_Sts[] craneSts_View = new EccsSignal_2.View.ucCrane_Sts[5];
         private MidHost middle;
         private string sAsrsStockIn_Sql = "";
         private string sAsrsEquNo_Sql = "";
@@ -914,6 +915,11 @@ namespace Mirle.ASRS.WCS.View
                     plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Double;
                     AsrsCommand[i] = new ASRSProcess(clInitSys.DbConfig, clInitSys.DbConfig_WMS, plcConfig, Box[i - 2], router, middle, CraneSignals[i]);
                 }
+
+                craneSts_View[i] = new EccsSignal_2.View.ucCrane_Sts(CraneSignals[i])
+                {
+                    Parent = pnlCraneSts
+                };
             }
         }
 

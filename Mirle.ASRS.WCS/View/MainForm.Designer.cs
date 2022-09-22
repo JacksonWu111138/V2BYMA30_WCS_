@@ -44,7 +44,6 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.chkIgnoreTkt = new System.Windows.Forms.CheckBox();
             this.btnCrandSpeedMaintain = new System.Windows.Forms.Button();
-            this.btnCmdMaintain = new System.Windows.Forms.Button();
             this.btnStockerModeMaintain = new System.Windows.Forms.Button();
             this.btnTeachMaintain = new System.Windows.Forms.Button();
             this.btnTransferToTeachLoc = new System.Windows.Forms.Button();
@@ -65,6 +64,7 @@
             this.mnuMiddleComplete = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMiddleCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuInsertMiddleCmd = new System.Windows.Forms.ToolStripMenuItem();
+            this.pnlCraneSts = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -123,6 +123,7 @@
             this.tlpMainSts.Controls.Add(this.lblTimer, 0, 0);
             this.tlpMainSts.Controls.Add(this.picMirle, 0, 0);
             this.tlpMainSts.Controls.Add(this.tableLayoutPanel2, 3, 0);
+            this.tlpMainSts.Controls.Add(this.pnlCraneSts, 2, 0);
             this.tlpMainSts.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tlpMainSts.Location = new System.Drawing.Point(0, 0);
             this.tlpMainSts.Margin = new System.Windows.Forms.Padding(4);
@@ -260,21 +261,19 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.chkIgnoreTkt, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.btnCrandSpeedMaintain, 0, 4);
-            this.tableLayoutPanel1.Controls.Add(this.btnCmdMaintain, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.chkIgnoreTkt, 0, 6);
+            this.tableLayoutPanel1.Controls.Add(this.btnCrandSpeedMaintain, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.btnStockerModeMaintain, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnTeachMaintain, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.btnTransferToTeachLoc, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.chkCycleRun, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.btnOEEParameterMaintain, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.AGVTaskCancelButten, 0, 8);
+            this.tableLayoutPanel1.Controls.Add(this.btnTeachMaintain, 0, 1);
+            this.tableLayoutPanel1.Controls.Add(this.btnTransferToTeachLoc, 0, 2);
+            this.tableLayoutPanel1.Controls.Add(this.chkCycleRun, 0, 5);
+            this.tableLayoutPanel1.Controls.Add(this.btnOEEParameterMaintain, 0, 4);
+            this.tableLayoutPanel1.Controls.Add(this.AGVTaskCancelButten, 0, 7);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 9;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowCount = 8;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -292,7 +291,7 @@
             this.chkIgnoreTkt.AutoSize = true;
             this.chkIgnoreTkt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkIgnoreTkt.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.chkIgnoreTkt.Location = new System.Drawing.Point(4, 442);
+            this.chkIgnoreTkt.Location = new System.Drawing.Point(4, 376);
             this.chkIgnoreTkt.Margin = new System.Windows.Forms.Padding(4);
             this.chkIgnoreTkt.Name = "chkIgnoreTkt";
             this.chkIgnoreTkt.Size = new System.Drawing.Size(169, 36);
@@ -305,24 +304,13 @@
             // btnCrandSpeedMaintain
             // 
             this.btnCrandSpeedMaintain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCrandSpeedMaintain.Location = new System.Drawing.Point(4, 268);
+            this.btnCrandSpeedMaintain.Location = new System.Drawing.Point(4, 202);
             this.btnCrandSpeedMaintain.Margin = new System.Windows.Forms.Padding(4);
             this.btnCrandSpeedMaintain.Name = "btnCrandSpeedMaintain";
             this.btnCrandSpeedMaintain.Size = new System.Drawing.Size(169, 58);
             this.btnCrandSpeedMaintain.TabIndex = 6;
             this.btnCrandSpeedMaintain.Text = "Stocker Speed Maintain";
             this.btnCrandSpeedMaintain.UseVisualStyleBackColor = true;
-            // 
-            // btnCmdMaintain
-            // 
-            this.btnCmdMaintain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCmdMaintain.Location = new System.Drawing.Point(4, 70);
-            this.btnCmdMaintain.Margin = new System.Windows.Forms.Padding(4);
-            this.btnCmdMaintain.Name = "btnCmdMaintain";
-            this.btnCmdMaintain.Size = new System.Drawing.Size(169, 58);
-            this.btnCmdMaintain.TabIndex = 4;
-            this.btnCmdMaintain.Text = "Command Maintain";
-            this.btnCmdMaintain.UseVisualStyleBackColor = true;
             // 
             // btnStockerModeMaintain
             // 
@@ -338,7 +326,7 @@
             // btnTeachMaintain
             // 
             this.btnTeachMaintain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnTeachMaintain.Location = new System.Drawing.Point(4, 136);
+            this.btnTeachMaintain.Location = new System.Drawing.Point(4, 70);
             this.btnTeachMaintain.Margin = new System.Windows.Forms.Padding(4);
             this.btnTeachMaintain.Name = "btnTeachMaintain";
             this.btnTeachMaintain.Size = new System.Drawing.Size(169, 58);
@@ -350,7 +338,7 @@
             // btnTransferToTeachLoc
             // 
             this.btnTransferToTeachLoc.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnTransferToTeachLoc.Location = new System.Drawing.Point(3, 202);
+            this.btnTransferToTeachLoc.Location = new System.Drawing.Point(3, 136);
             this.btnTransferToTeachLoc.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.btnTransferToTeachLoc.Name = "btnTransferToTeachLoc";
             this.btnTransferToTeachLoc.Size = new System.Drawing.Size(171, 58);
@@ -363,7 +351,7 @@
             this.chkCycleRun.AutoSize = true;
             this.chkCycleRun.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkCycleRun.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.chkCycleRun.Location = new System.Drawing.Point(4, 388);
+            this.chkCycleRun.Location = new System.Drawing.Point(4, 322);
             this.chkCycleRun.Margin = new System.Windows.Forms.Padding(4);
             this.chkCycleRun.Name = "chkCycleRun";
             this.chkCycleRun.Size = new System.Drawing.Size(169, 46);
@@ -377,7 +365,7 @@
             // 
             this.btnOEEParameterMaintain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOEEParameterMaintain.Location = new System.Drawing.Point(4, 335);
+            this.btnOEEParameterMaintain.Location = new System.Drawing.Point(4, 269);
             this.btnOEEParameterMaintain.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.btnOEEParameterMaintain.Name = "btnOEEParameterMaintain";
             this.btnOEEParameterMaintain.Size = new System.Drawing.Size(169, 44);
@@ -389,7 +377,7 @@
             // 
             this.AGVTaskCancelButten.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.AGVTaskCancelButten.Location = new System.Drawing.Point(4, 487);
+            this.AGVTaskCancelButten.Location = new System.Drawing.Point(4, 421);
             this.AGVTaskCancelButten.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.AGVTaskCancelButten.Name = "AGVTaskCancelButten";
             this.AGVTaskCancelButten.Size = new System.Drawing.Size(169, 44);
@@ -504,12 +492,12 @@
             this.mnuMiddleCancel,
             this.mnuInsertMiddleCmd});
             this.mnuMiddleCmd.Name = "mnuFun";
-            this.mnuMiddleCmd.Size = new System.Drawing.Size(249, 133);
+            this.mnuMiddleCmd.Size = new System.Drawing.Size(172, 100);
             // 
             // mnuMiddleComplete
             // 
             this.mnuMiddleComplete.Name = "mnuMiddleComplete";
-            this.mnuMiddleComplete.Size = new System.Drawing.Size(248, 32);
+            this.mnuMiddleComplete.Size = new System.Drawing.Size(171, 32);
             this.mnuMiddleComplete.Text = "Complete";
             this.mnuMiddleComplete.Click += new System.EventHandler(this.mnuMiddleComplete_Click);
             // 
@@ -517,16 +505,24 @@
             // 
             this.mnuMiddleCancel.Image = ((System.Drawing.Image)(resources.GetObject("mnuMiddleCancel.Image")));
             this.mnuMiddleCancel.Name = "mnuMiddleCancel";
-            this.mnuMiddleCancel.Size = new System.Drawing.Size(248, 32);
+            this.mnuMiddleCancel.Size = new System.Drawing.Size(171, 32);
             this.mnuMiddleCancel.Text = "Cancel";
             this.mnuMiddleCancel.Click += new System.EventHandler(this.mnuMiddleCancel_Click);
             // 
             // mnuInsertMiddleCmd
             // 
             this.mnuInsertMiddleCmd.Name = "mnuInsertMiddleCmd";
-            this.mnuInsertMiddleCmd.Size = new System.Drawing.Size(248, 32);
+            this.mnuInsertMiddleCmd.Size = new System.Drawing.Size(171, 32);
             this.mnuInsertMiddleCmd.Text = "Insert";
             this.mnuInsertMiddleCmd.Click += new System.EventHandler(this.mnuInsertMiddleCmd_Click);
+            // 
+            // pnlCraneSts
+            // 
+            this.pnlCraneSts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCraneSts.Location = new System.Drawing.Point(493, 3);
+            this.pnlCraneSts.Name = "pnlCraneSts";
+            this.pnlCraneSts.Size = new System.Drawing.Size(1012, 112);
+            this.pnlCraneSts.TabIndex = 269;
             // 
             // MainForm
             // 
@@ -583,7 +579,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.PictureBox picMirle;
         private System.Windows.Forms.Label lblTimer;
-        private System.Windows.Forms.Button btnCmdMaintain;
         private System.Windows.Forms.Button btnTeachMaintain;
         private System.Windows.Forms.Button btnCrandSpeedMaintain;
         private System.Windows.Forms.CheckBox chkCycleRun;
@@ -606,6 +601,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuMiddleCancel;
         private System.Windows.Forms.ToolStripMenuItem mnuInsertMiddleCmd;
         private System.Windows.Forms.DataGridView Grid_MiddleCmd;
+        private System.Windows.Forms.Panel pnlCraneSts;
     }
 }
 

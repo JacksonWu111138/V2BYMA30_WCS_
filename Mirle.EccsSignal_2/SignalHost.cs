@@ -49,6 +49,8 @@ namespace Mirle.EccsSignal
             get { return sts; }
         }
 
+        public string GetEquNo() => sEquNo;
+
         private bool ArrayTransfer_S2I(string[] strInput, ref int[] intOutput)
         {
             try

@@ -39,6 +39,7 @@
             this.lblDBConn_WMS = new System.Windows.Forms.Label();
             this.chkOnline = new System.Windows.Forms.CheckBox();
             this.lblDBConn_WCS = new System.Windows.Forms.Label();
+            this.pnlCraneSts = new System.Windows.Forms.Panel();
             this.spcView = new System.Windows.Forms.SplitContainer();
             this.spcMainView = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
@@ -64,7 +65,6 @@
             this.mnuMiddleComplete = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMiddleCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuInsertMiddleCmd = new System.Windows.Forms.ToolStripMenuItem();
-            this.pnlCraneSts = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -188,7 +188,7 @@
             this.lblDBConn_WMS.Name = "lblDBConn_WMS";
             this.lblDBConn_WMS.Size = new System.Drawing.Size(232, 35);
             this.lblDBConn_WMS.TabIndex = 3;
-            this.lblDBConn_WMS.Text = "WMS DB Sts";
+            this.lblDBConn_WMS.Text = "WES DB Sts";
             this.lblDBConn_WMS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // chkOnline
@@ -220,6 +220,14 @@
             this.lblDBConn_WCS.TabIndex = 1;
             this.lblDBConn_WCS.Text = "WCS DB Sts";
             this.lblDBConn_WCS.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // pnlCraneSts
+            // 
+            this.pnlCraneSts.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pnlCraneSts.Location = new System.Drawing.Point(493, 3);
+            this.pnlCraneSts.Name = "pnlCraneSts";
+            this.pnlCraneSts.Size = new System.Drawing.Size(1012, 112);
+            this.pnlCraneSts.TabIndex = 269;
             // 
             // spcView
             // 
@@ -515,14 +523,6 @@
             this.mnuInsertMiddleCmd.Size = new System.Drawing.Size(171, 32);
             this.mnuInsertMiddleCmd.Text = "Insert";
             this.mnuInsertMiddleCmd.Click += new System.EventHandler(this.mnuInsertMiddleCmd_Click);
-            // 
-            // pnlCraneSts
-            // 
-            this.pnlCraneSts.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pnlCraneSts.Location = new System.Drawing.Point(493, 3);
-            this.pnlCraneSts.Name = "pnlCraneSts";
-            this.pnlCraneSts.Size = new System.Drawing.Size(1012, 112);
-            this.pnlCraneSts.TabIndex = 269;
             // 
             // MainForm
             // 

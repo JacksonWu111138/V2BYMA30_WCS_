@@ -522,6 +522,7 @@ namespace Mirle.ASRS.WCS.View
             try
             {
                 lblDBConn_WCS.BackColor = clsDB_Proc.DBConn ? Color.Blue : Color.Red;
+                lblDBConn_WMS.BackColor = clsDB_Proc.DBConn_WMS ? Color.Blue : Color.Red;
                 lblTimer.Text = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                 if (tbcCmdInfo.SelectedTab == tbpCmdMst)

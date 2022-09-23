@@ -31,9 +31,9 @@ namespace Mirle.EccsSignal_2.View
         {
             this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.lblEquNo = new System.Windows.Forms.Label();
-            this.lblCrnMode = new System.Windows.Forms.Label();
             this.lblCrnStatus = new System.Windows.Forms.Label();
+            this.lblCrnMode = new System.Windows.Forms.Label();
+            this.lblEquNo = new System.Windows.Forms.Label();
             this.timMainProc = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -55,19 +55,20 @@ namespace Mirle.EccsSignal_2.View
             this.tableLayoutPanel1.Size = new System.Drawing.Size(151, 139);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // lblEquNo
+            // lblCrnStatus
             // 
-            this.lblEquNo.AutoSize = true;
-            this.lblEquNo.BackColor = System.Drawing.Color.Yellow;
-            this.lblEquNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lblEquNo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblEquNo.Font = new System.Drawing.Font("Verdana", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblEquNo.Location = new System.Drawing.Point(3, 0);
-            this.lblEquNo.Name = "lblEquNo";
-            this.lblEquNo.Size = new System.Drawing.Size(145, 46);
-            this.lblEquNo.TabIndex = 0;
-            this.lblEquNo.Text = "label1";
-            this.lblEquNo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblCrnStatus.BackColor = System.Drawing.Color.Lime;
+            this.lblCrnStatus.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.lblCrnStatus.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblCrnStatus.Font = new System.Drawing.Font("Verdana", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblCrnStatus.ForeColor = System.Drawing.Color.Black;
+            this.lblCrnStatus.Location = new System.Drawing.Point(4, 92);
+            this.lblCrnStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblCrnStatus.Name = "lblCrnStatus";
+            this.lblCrnStatus.Size = new System.Drawing.Size(143, 47);
+            this.lblCrnStatus.TabIndex = 230;
+            this.lblCrnStatus.Text = "X";
+            this.lblCrnStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // lblCrnMode
             // 
@@ -84,20 +85,19 @@ namespace Mirle.EccsSignal_2.View
             this.lblCrnMode.Text = "R:地上盤模式";
             this.lblCrnMode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // lblCrnStatus
+            // lblEquNo
             // 
-            this.lblCrnStatus.BackColor = System.Drawing.Color.Lime;
-            this.lblCrnStatus.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblCrnStatus.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblCrnStatus.Font = new System.Drawing.Font("Verdana", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblCrnStatus.ForeColor = System.Drawing.Color.Black;
-            this.lblCrnStatus.Location = new System.Drawing.Point(4, 92);
-            this.lblCrnStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.lblCrnStatus.Name = "lblCrnStatus";
-            this.lblCrnStatus.Size = new System.Drawing.Size(143, 47);
-            this.lblCrnStatus.TabIndex = 230;
-            this.lblCrnStatus.Text = "X";
-            this.lblCrnStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.lblEquNo.AutoSize = true;
+            this.lblEquNo.BackColor = System.Drawing.Color.Yellow;
+            this.lblEquNo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblEquNo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblEquNo.Font = new System.Drawing.Font("Verdana", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblEquNo.Location = new System.Drawing.Point(3, 0);
+            this.lblEquNo.Name = "lblEquNo";
+            this.lblEquNo.Size = new System.Drawing.Size(145, 46);
+            this.lblEquNo.TabIndex = 0;
+            this.lblEquNo.Text = "label1";
+            this.lblEquNo.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // timMainProc
             // 

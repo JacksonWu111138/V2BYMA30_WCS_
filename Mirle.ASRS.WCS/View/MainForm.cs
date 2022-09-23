@@ -918,8 +918,13 @@ namespace Mirle.ASRS.WCS.View
 
                 craneSts_View[i] = new EccsSignal_2.View.ucCrane_Sts(CraneSignals[i])
                 {
-                    Parent = pnlCraneSts
+                    Parent = pnlCraneSts,
+                    Height = pnlCraneSts.Height,
+                    //Left = 90 * i,
+                    Dock = DockStyle.Right
                 };
+
+                craneSts_View[i].Show();
             }
         }
 

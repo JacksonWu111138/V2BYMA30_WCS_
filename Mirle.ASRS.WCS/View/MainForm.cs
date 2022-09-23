@@ -880,7 +880,7 @@ namespace Mirle.ASRS.WCS.View
             _unityContainer = new UnityContainer();
             _unityContainer.RegisterInstance(new WCSController());
             _webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
-            //clearCmd = new DB.ClearCmd.Proc.clsHost();
+            clearCmd = new DB.ClearCmd.Proc.clsHost();
         }
 
         private void FunEventInit()

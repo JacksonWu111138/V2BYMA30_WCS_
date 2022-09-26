@@ -294,8 +294,36 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsCmd_Mst.Column.NeedShelfToShelf},{Parameter.clsCmd_Mst.Column.Create_Date}," +
                     $"{Parameter.clsCmd_Mst.Column.Expose_Date},{Parameter.clsCmd_Mst.Column.backupPortId} from " +
                     $"{Parameter.clsCmd_Mst.TableName}" +
-                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} in ('{clsConstValue.CmdSts.strCmd_Initial}'," +
-                    $" '{clsConstValue.CmdSts.strCmd_Running}')";
+                     //$" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} in ('{clsConstValue.CmdSts.strCmd_Initial}'," +
+                     //$" '{clsConstValue.CmdSts.strCmd_Running}')";
+                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} < '{clsConstValue.CmdSts.strCmd_Finish_Wait}' ";
+                strSql += $" ORDER BY {Parameter.clsCmd_Mst.Column.Prty}," +
+                    $" {Parameter.clsCmd_Mst.Column.Create_Date}, {Parameter.clsCmd_Mst.Column.Cmd_Sno}";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                }
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+        }
+
+        public int FunGetCmdMst_NotFinish(ref DataTable dtTmp, DataBase.DB db)
+        {
+            try
+            {
+                string strEM = "";
+                string strSql = $"select * from {Parameter.clsCmd_Mst.TableName} " +
+                    //$" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} in ('{clsConstValue.CmdSts.strCmd_Initial}'," +
+                    //$" '{clsConstValue.CmdSts.strCmd_Running}')";
+                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} < '{clsConstValue.CmdSts.strCmd_Finish_Wait}' ";
                 strSql += $" ORDER BY {Parameter.clsCmd_Mst.Column.Prty}," +
                     $" {Parameter.clsCmd_Mst.Column.Create_Date}, {Parameter.clsCmd_Mst.Column.Cmd_Sno}";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);

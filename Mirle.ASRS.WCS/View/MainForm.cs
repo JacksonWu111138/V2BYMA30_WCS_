@@ -498,10 +498,15 @@ namespace Mirle.ASRS.WCS.View
             timRead.Enabled = false;
             try
             {
-                clsDB_Proc.GetDB_Object().GetProc().FunNormalCmd_Proc(sAsrsStockIn_Sql, sAsrsEquNo_Sql, router, middle);
-                if(DB.Proc.clsHost.IsConn)
+                if (chkOnline.Checked)
                 {
+                    clsDB_Proc.GetDB_Object().GetProc().FunNormalCmd_Proc(sAsrsStockIn_Sql, sAsrsEquNo_Sql, router, middle);
+
+                    if (!DB.Proc.clsHost.IsConn) return;
                     clsDB_Proc.GetDB_Object().GetProc().FunAsrsCmd_AbnormalFinish_Proc(clsDB_Proc.GetWmsDB_Object());
+
+                    if (!DB.Proc.clsHost.IsConn) return;
+                    clsDB_Proc.GetDB_Object().GetProc().FunCheckCmdFinish_Proc(router);
                 }
             }
             catch (Exception ex)

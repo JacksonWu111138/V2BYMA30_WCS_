@@ -58,6 +58,8 @@
     <Compile Include="ModelsForControllers\AlarmInfo.cs" />
     <Compile Include="ModelsForControllers\AGVPosReportInfo.cs" />
     <Compile Include="ModelsForControllers\ControlChangeInfo.cs" />
+    <Compile Include="ModelsForControllers\LotNGReportInfo.cs" />
+    <Compile Include="ModelsForControllers\ModeChangeInfo.cs" />
     <Compile Include="ModelsForControllers\WrongEquStockInInfo.cs" />
     <Compile Include="ModelsForControllers\UnknownBinLeaveInfo.cs" />
     <Compile Include="ModelsForControllers\TransferCommandDoneInfo.cs" />

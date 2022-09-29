@@ -208,5 +208,11 @@ namespace Mirle.WebAPI.Test.WES
             WESRemoveRackDown form = new WESRemoveRackDown();
             form.Show();
         }
+
+        private void button_GetBufferName_Click(object sender, EventArgs e)
+        {
+            WESGetBufferNameaAndStnNo form = new WESGetBufferNameaAndStnNo();
+            form.Show();
+        }
     }
 }

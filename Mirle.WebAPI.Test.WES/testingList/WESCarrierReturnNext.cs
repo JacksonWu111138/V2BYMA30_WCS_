@@ -31,7 +31,9 @@ namespace Mirle.WebAPI.Test.WES.testingList
             {
                 jobId = textBox_jobId.Text,
                 carrierId = textBox_carrierId.Text,
-                fromLocation = textBox_formLocation.Text
+                fromLocation = textBox_formLocation.Text,
+                isEmpty = textBox_isEmpty.Text,
+                carrierType = textBox_carrierType.Text
             };
             if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
             {

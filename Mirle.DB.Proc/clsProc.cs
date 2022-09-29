@@ -40,6 +40,169 @@ namespace Mirle.DB.Proc
 
         public Fun.clsRoutdef GetFun_Routdef() => Routdef;
 
+        public bool FunCheckCmdFinish_Proc(MapHost Router)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        iRet = Cmd_Mst.FunGetCmdMst_NotFinish(ref dtTmp, db);
+                        if (iRet == DBResult.Success)
+                        {
+                            for (int i = 0; i < dtTmp.Rows.Count; i++)
+                            {
+                                CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
+                                if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial ||
+                                    string.IsNullOrWhiteSpace(cmd.CurLoc))
+                                    continue;
+
+                                string sRemark = "";
+                                Location Start = null; Location End = null;
+                                if (!Routdef.FunGetLocation(cmd, Router, ref Start, ref End, db)) continue;
+                                if (Start == End && Start != null && End != null)
+                                {
+                                    CarrierPutawayCompleteInfo putawayCompleteInfo = new CarrierPutawayCompleteInfo();
+                                    CarrierRetrieveCompleteInfo retrieveCompleteInfo = new CarrierRetrieveCompleteInfo();
+                                    CarrierShelfCompleteInfo shelfCompleteInfo = new CarrierShelfCompleteInfo();
+                                    CarrierTransferCompleteInfo transferCompleteInfo = new CarrierTransferCompleteInfo();
+
+                                    if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                    {
+                                        sRemark = "Error: Begin失敗！";
+                                        if (sRemark != cmd.Remark)
+                                        {
+                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                        }
+
+                                        continue;
+                                    }
+
+                                    sRemark = "命令完成";
+                                    if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Finish_Wait, sRemark, db))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        continue;
+                                    }
+
+                                    sRemark = "Error: 上報WES命令完成失敗";
+                                    switch (cmd.Cmd_Mode)
+                                    {
+                                        case clsConstValue.CmdMode.L2L:
+                                            shelfCompleteInfo = new CarrierShelfCompleteInfo
+                                            {
+                                                carrierId = cmd.BoxID,
+                                                emptyTransfer = clsConstValue.YesNo.No,
+                                                jobId = cmd.JobID,
+                                                shelfId = cmd.New_Loc
+                                            };
+
+                                            if (!api.GetCarrierShelfComplete().FunReport(shelfCompleteInfo, _wmsApi.IP))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            break;
+                                        case clsConstValue.CmdMode.S2S:
+                                            transferCompleteInfo = new CarrierTransferCompleteInfo
+                                            {
+                                                carrierId = cmd.BoxID,
+                                                jobId = cmd.JobID,
+                                                location = cmd.New_Loc
+                                            };
+
+                                            if (!api.GetCarrierTransferComplete().FunReport(transferCompleteInfo, _wmsApi.IP))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            break;
+                                        case clsConstValue.CmdMode.StockIn:
+                                            putawayCompleteInfo = new CarrierPutawayCompleteInfo
+                                            {
+                                                carrierId = cmd.BoxID,
+                                                isComplete = clsConstValue.YesNo.Yes,
+                                                jobId = cmd.JobID,
+                                                shelfId = cmd.Loc
+                                            };
+
+                                            if (!api.GetCarrierPutawayComplete().FunReport(putawayCompleteInfo, _wmsApi.IP))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            break;
+                                        default:
+                                            retrieveCompleteInfo = new CarrierRetrieveCompleteInfo
+                                            {
+                                                carrierId = cmd.BoxID,
+                                                emptyTransfer = clsConstValue.YesNo.No,
+                                                isComplete = clsConstValue.YesNo.Yes,
+                                                jobId = cmd.JobID,
+                                                location = cmd.Stn_No,
+                                                portId = cmd.Stn_No
+                                            };
+
+                                            if (!api.GetCarrierRetrieveComplete().FunReport(retrieveCompleteInfo, _wmsApi.IP))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            break;
+                                    }
+
+                                    db.TransactionCtrl(TransactionTypes.Commit);
+                                    return true;
+                                }
+                                else continue;
+                            }
+
+                            return false;
+                        }
+                        else return false;
+                    }
+                    else return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+            finally
+            {
+                dtTmp.Dispose();
+            }
+        }
+
         public bool FunNormalCmd_Proc(string sAsrsStockInLocation_Sql, string sAsrsEquNo_Sql, MapHost Router, MidHost middle)
         {
             DataTable dtTmp = new DataTable();

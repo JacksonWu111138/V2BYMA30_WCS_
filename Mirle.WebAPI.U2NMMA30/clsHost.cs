@@ -57,6 +57,7 @@ namespace Mirle.WebAPI.V2BYMA30
         private RackTurn RackTurn = new RackTurn();
         private RemoteLocalRequest RemoteLocalRequest = new RemoteLocalRequest();
         private TransferCommandRequest TransferCommandRequest = new TransferCommandRequest();
+        private BufferInitial BufferInitial = new BufferInitial();
 
         public CVReceiveNewBinCmd GetCV_ReceiveNewBinCmd() => RECEIVE_NEW_BIN_CMD;
         public BufferStatusQuery GetBufferStatusQuery() => BufferStatusQuery;
@@ -105,6 +106,8 @@ namespace Mirle.WebAPI.V2BYMA30
         public RackTurn GetRackTurn() => RackTurn;
         public RemoteLocalRequest GetRemoteLocalRequest() => RemoteLocalRequest;
         public TransferCommandRequest GetTransferCommandRequest() => TransferCommandRequest;
+        public BufferInitial GetBufferInitial() => BufferInitial;
+        
 
     }
 }

@@ -124,5 +124,11 @@ namespace Mirle.WebAPI.Test.Controllers
             CtrlTransferCommandRequest form = new CtrlTransferCommandRequest();
             form.Show();
         }
+
+        private void CtrlBufferInitial_Click(object sender, EventArgs e)
+        {
+            CtrlBufferInitialInfo form = new CtrlBufferInitialInfo();
+            form.Show();
+        }
     }
 }

@@ -348,7 +348,6 @@ Remark          NVarchar(MAX) Not Null  Default '',
 NeedShelfToShelf Varchar(1)   Not Null  Default 'N',
 backupPortId    NVarchar(MAX) NOT NULL  Default '',
 ticketId        Varchar(MAX) Not Null default '',
-manualStockIn	Varchar(1)   Not Null  Default 'N',
 rackLocation  NVarchar(MAX) NOT NULL  Default '',
 largest          NVarchar(MAX) NOT NULL  Default 'N',
 carrierType  NVarchar(MAX) NOT NULL  Default '',
@@ -386,7 +385,6 @@ ticketId        Varchar(MAX) Not Null default '',
 rackLocation  NVarchar(MAX) NOT NULL  Default '',
 carrierType  NVarchar(MAX) NOT NULL  Default '',
 largest          NVarchar(MAX) NOT NULL  Default 'N',
-manualStockIn	Varchar(1)   Not Null  Default 'N',
 lotSize          Varchar(3)  Not Null        Default ''
 );
 

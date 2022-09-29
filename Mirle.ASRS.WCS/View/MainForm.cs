@@ -217,9 +217,10 @@ namespace Mirle.ASRS.WCS.View
         private void button1_Click(object sender, EventArgs e)
         {
             //APITestAGVTaskCancel form = new APITestAGVTaskCancel(clInitSys.AgvApi_Config);
-            //WESAPITest form = new WESAPITest();
-            ControllersAPITest form = new ControllersAPITest();
-            form.Show();
+            WESAPITest form_1 = new WESAPITest();
+            //ControllersAPITest form_2 = new ControllersAPITest();
+            form_1.Show();
+            //form_2.Show();
         }
 
         private DataGridViewRow dgrTransferCmdLastSelect = null;
@@ -498,10 +499,15 @@ namespace Mirle.ASRS.WCS.View
             timRead.Enabled = false;
             try
             {
-                clsDB_Proc.GetDB_Object().GetProc().FunNormalCmd_Proc(sAsrsStockIn_Sql, sAsrsEquNo_Sql, router, middle);
-                if(DB.Proc.clsHost.IsConn)
+                if (chkOnline.Checked)
                 {
+                    clsDB_Proc.GetDB_Object().GetProc().FunNormalCmd_Proc(sAsrsStockIn_Sql, sAsrsEquNo_Sql, router, middle);
+
+                    if (!DB.Proc.clsHost.IsConn) return;
                     clsDB_Proc.GetDB_Object().GetProc().FunAsrsCmd_AbnormalFinish_Proc(clsDB_Proc.GetWmsDB_Object());
+
+                    if (!DB.Proc.clsHost.IsConn) return;
+                    clsDB_Proc.GetDB_Object().GetProc().FunCheckCmdFinish_Proc(router);
                 }
             }
             catch (Exception ex)

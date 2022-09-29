@@ -294,8 +294,36 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsCmd_Mst.Column.NeedShelfToShelf},{Parameter.clsCmd_Mst.Column.Create_Date}," +
                     $"{Parameter.clsCmd_Mst.Column.Expose_Date},{Parameter.clsCmd_Mst.Column.backupPortId} from " +
                     $"{Parameter.clsCmd_Mst.TableName}" +
-                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} in ('{clsConstValue.CmdSts.strCmd_Initial}'," +
-                    $" '{clsConstValue.CmdSts.strCmd_Running}')";
+                    //$" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} in ('{clsConstValue.CmdSts.strCmd_Initial}'," +
+                    //$" '{clsConstValue.CmdSts.strCmd_Running}')";
+                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} < '{clsConstValue.CmdSts.strCmd_Finish_Wait}' ";
+                strSql += $" ORDER BY {Parameter.clsCmd_Mst.Column.Prty}," +
+                    $" {Parameter.clsCmd_Mst.Column.Create_Date}, {Parameter.clsCmd_Mst.Column.Cmd_Sno}";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                }
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+        }
+
+        public int FunGetCmdMst_NotFinish(ref DataTable dtTmp, DataBase.DB db)
+        {
+            try
+            {
+                string strEM = "";
+                string strSql = $"select * from {Parameter.clsCmd_Mst.TableName} " +
+                    //$" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} in ('{clsConstValue.CmdSts.strCmd_Initial}'," +
+                    //$" '{clsConstValue.CmdSts.strCmd_Running}')";
+                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} < '{clsConstValue.CmdSts.strCmd_Finish_Wait}' ";
                 strSql += $" ORDER BY {Parameter.clsCmd_Mst.Column.Prty}," +
                     $" {Parameter.clsCmd_Mst.Column.Create_Date}, {Parameter.clsCmd_Mst.Column.Cmd_Sno}";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
@@ -319,7 +347,7 @@ namespace Mirle.DB.Fun
             try
             {
                 string strSql = $"select * from {Parameter.clsCmd_Mst.TableName}" +
-                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} in ('{clsConstValue.CmdSts.strCmd_Finished}', '{clsConstValue.CmdSts.strCmd_Cancelled}')";
+                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} in ('{clsConstValue.CmdSts.strCmd_Finish_Wait}', '{clsConstValue.CmdSts.strCmd_Cancel_Wait}')";
                 string strEM = "";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
@@ -336,14 +364,15 @@ namespace Mirle.DB.Fun
             }
         }
 
-        public int FunCheckHasCommand_ByBoxID(string BoxId, ref CmdMstInfo cmd, DataBase.DB db)
+        public bool FunCheckHasCommand_ByBoxID(string BoxId, ref CmdMstInfo cmd, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
             try
             {
                 string strEM = "";
                 string strSql = $"select * from {Parameter.clsCmd_Mst.TableName}" +
-                    $" where {Parameter.clsCmd_Mst.Column.BoxID} = '{BoxId}'";
+                    $" where {Parameter.clsCmd_Mst.Column.BoxID} = '{BoxId}' " +
+                    $"and {Parameter.clsCmd_Mst.Column.Cmd_Sts} not in ('{clsConstValue.CmdSts.strCmd_Cancel_Wait}', '{clsConstValue.CmdSts.strCmd_Finish_Wait}') ";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Success)
                 {
@@ -351,19 +380,17 @@ namespace Mirle.DB.Fun
                 }
                 else
                 {
-                    if (iRet != DBResult.NoDataSelect)
-                    {
-                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
-                    }
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                    return false;
                 }
 
-                return iRet;
+                return true;
             }
             catch (Exception ex)
             {
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                return DBResult.Exception;
+                return false;
             }
             finally
             {
@@ -786,7 +813,32 @@ namespace Mirle.DB.Fun
                 return false;
             }
         }
-
+        public bool FunUpdateLoc(string sCmdSno, string sLoc, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"update {Parameter.clsCmd_Mst.TableName} set " +
+                    $"{Parameter.clsCmd_Mst.Column.Loc} = '{sLoc}'" +
+                    $"where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}' ";
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
         public bool FunUpdateCurLoc(string sCmdSno, string sCurDeviceID, string sCurLoc, DataBase.DB db)
         {
             try

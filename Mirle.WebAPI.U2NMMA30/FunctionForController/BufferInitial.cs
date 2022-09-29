@@ -9,20 +9,20 @@ using System.Threading.Tasks;
 
 namespace Mirle.WebAPI.V2BYMA30.Function
 {
-    public class BufferStatusQuery
+    public class BufferInitial
     {
-        public bool FunReport(BufferStatusQueryInfo info, string IP, ref BufferStatusReply reply)
+        public bool FunReport(BufferInitialInfo info, string IP)
         {
             try
             {
                 string strJson = JsonConvert.SerializeObject(info);
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strJson);
-                string sLink = $"http://{IP}/BUFFER_STATUS_QUERY";
+                string sLink = $"http://{IP}/BUFFER_INITIAL";
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"URL: {sLink}");
                 string re = clsTool.HttpPost(sLink, strJson);
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, re);
-                reply = (BufferStatusReply)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(BufferStatusReply));
-                if (reply.returnCode == clsConstValue.ApiReturnCode.Success) return true;
+                var info_controller = (ReturnMsgInfo)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(ReturnMsgInfo));
+                if (info_controller.returnCode == clsConstValue.ApiReturnCode.Success) return true;
                 else return false;
             }
             catch (Exception ex)

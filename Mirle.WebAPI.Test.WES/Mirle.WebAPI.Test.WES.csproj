@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="testingList\WESGetBufferNameaAndStnNo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="testingList\WESGetBufferNameaAndStnNo.Designer.cs">
+      <DependentUpon>WESGetBufferNameaAndStnNo.cs</DependentUpon>
+    </Compile>
     <Compile Include="testingList\WESRemoveRackDown.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -288,6 +294,9 @@
     <EmbeddedResource Include="testingList\WESEQPStatusUpdate.resx">
       <DependentUpon>WESEQPStatusUpdate.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="testingList\WESGetBufferNameaAndStnNo.resx">
+      <DependentUpon>WESGetBufferNameaAndStnNo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="testingList\WESLotPositionReport.resx">
       <DependentUpon>WESLotPositionReport.cs</DependentUpon>
     </EmbeddedResource>
@@ -374,6 +383,10 @@
       <Project>{553bd8cf-f4c1-4b39-97ab-42cc2f7c8187}</Project>
       <Name>Mirle.DB.WMS.Proc</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mirle.Def.U2NMMA30\Mirle.Def.U2NMMA30.csproj">
+      <Project>{e6f732fe-3905-49a7-b2cf-b4fa79c2dc5d}</Project>
+      <Name>Mirle.Def.U2NMMA30</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.Def\Mirle.Def_2.csproj">
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def_2</Name>
@@ -381,6 +394,10 @@
     <ProjectReference Include="..\Mirle.Middle\Mirle.Middle.csproj">
       <Project>{312ed336-0211-4e88-9f3f-6b15a133f864}</Project>
       <Name>Mirle.Middle</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mirle.Structure\Mirle.Structure.csproj">
+      <Project>{cc7b0aac-3935-44cf-b363-55c0445358d0}</Project>
+      <Name>Mirle.Structure</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.WebAPI.Event.U2NMMA30\Mirle.WebAPI.Event.csproj">
       <Project>{2e09050b-3bb2-482a-b27b-cf23db03e342}</Project>

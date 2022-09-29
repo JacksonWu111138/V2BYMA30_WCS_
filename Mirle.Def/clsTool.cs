@@ -46,5 +46,28 @@ namespace Mirle.Def
             else
                 control.Visible = true;
         }
+
+        public static string FunSwitchCarrierType(string carrierType)
+        {
+            switch(carrierType)
+            {
+                case clsConstValue.WesApi.CarrierType.Rack:
+                    return clsConstValue.ControllerApi.CarrierType.Rack;
+                case clsConstValue.WesApi.CarrierType.Mag:
+                    return clsConstValue.ControllerApi.CarrierType.Mag;
+                case clsConstValue.WesApi.CarrierType.Bin:
+                    return clsConstValue.ControllerApi.CarrierType.Bin;
+                case clsConstValue.ControllerApi.CarrierType.Lot:
+                    return "Lot";
+                case clsConstValue.ControllerApi.CarrierType.Rack:
+                    return clsConstValue.WesApi.CarrierType.Rack;
+                case clsConstValue.ControllerApi.CarrierType.Mag:
+                    return clsConstValue.WesApi.CarrierType.Mag;
+                case clsConstValue.ControllerApi.CarrierType.Bin:
+                    return clsConstValue.WesApi.CarrierType.Bin;
+                default:
+                    return "";
+            }
+        }
     }
 }

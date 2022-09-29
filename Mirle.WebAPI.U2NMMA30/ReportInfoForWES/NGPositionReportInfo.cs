@@ -8,7 +8,7 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
 {
     public class NGPositionReportInfo
     {
-        public string jobId { get; set; }
+        public string jobId { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         public string transactionId { get; set; } = "NG_POSITION_REPORT";
         public string lotId { get; set; }
         public string ngLocation { get; set; }

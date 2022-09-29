@@ -67,14 +67,14 @@ namespace Mirle.DB.Proc
                                 WCSCancelInfo info = new WCSCancelInfo
                                 {
                                     lotIdCarrierId = slotId,
-                                    cancelType = "Lot RETRIEVE"
+                                    cancelType = clsConstValue.WesApi.CancelType.Lot_Retrieve
                                 };
 
                                 if(!api.GetWCSCancel().FunReport(info, wesApiConfig.IP))
                                 {
                                     var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                                    clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, 
-                                        $"Error: WCS Cancel Fail, lotId = {slotId}.");
+                                    clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name,
+                                        $"Error: WCS Cancel Fail, lotId = {slotId}, CancelType = {info.cancelType}.");
                                     continue;
                                 }
 

@@ -8,7 +8,7 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
 {
     public class LotShelfReportInfo
     {
-        public string jobId { get; set; }
+        public string jobId { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         public string transactionId { get; set; } = "LOT_SHELF_REPORT";
         public string shelfId { get; set; }
         public string shelfStatus { get; set; }

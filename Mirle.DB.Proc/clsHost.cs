@@ -35,7 +35,7 @@ namespace Mirle.DB.Proc
 
         public clsHost(clsDbConfig config, WebApiConfig wmsApi, WebApiConfig TowerApi_Config)
         {
-            CMD_MST = new clsCmd_Mst(config, TowerApi_Config);
+            CMD_MST = new clsCmd_Mst(config, wmsApi);
             cmd_Dtl = new clsCmd_Dtl(config);
             SNO = new clsSno(config);
             LocMst = new clsLocMst(config);

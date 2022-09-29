@@ -353,6 +353,28 @@ namespace Mirle.Def
             /// </summary>
             public const string NotFull = "NOTFULL";
         }
+        public class ControllerApi
+        {
+            public class CarrierType
+            {
+                /// <summary>
+                /// 電子料捲
+                /// </summary>
+                public const string Lot = "Reel";
+                /// <summary>
+                /// 料架
+                /// </summary>
+                public const string Rack = "Rack";
+                /// <summary>
+                /// 靜電箱
+                /// </summary>
+                public const string Bin = "Bin";
+                /// <summary>
+                /// Magazine
+                /// </summary>
+                public const string Mag = "Mag";
+            }
+        }
         public class WesApi
         {
             public class EmptyRetrieval
@@ -374,20 +396,43 @@ namespace Mirle.Def
             public class CarrierType
             {
                 /// <summary>
-                /// 電子料捲
-                /// </summary>
-                public const string Lot = "Reel";
-                /// <summary>
                 /// 料架
                 /// </summary>
-                public const string Rack = "Rack";
+                public const string Rack = "RACK";
                 /// <summary>
                 /// 靜電箱
                 /// </summary>
-                public const string Bin = "Bin";
-                public const string Mag = "Mag";
+                public const string Bin = "ESD";
+                public const string Mag = "MAG";
             }
 
+            public class CancelType
+            {
+                public const string Lot_Retrieve = "Lot RETRIEVE";
+                public const string Lot_Putaway = "Lot PUTAWAY";
+                public const string Lot_Shelf = "Lot SHELF";
+                public const string Carrier_Retrieve = "Carrier RETRIEVE";
+                public const string Carrier_Putaway = "Carrier PUTAWAY";
+                public const string Carrier_Shelf = "Carrier SHELF";
+                public const string Carrier_Transfer = "Carrier Transfer";
+            }
+
+            public class PCBAMode
+            {
+                /// <summary>
+                /// 正常模式
+                /// </summary>
+                public const string Normal = "1";
+                /// <summary>
+                /// 故障模式
+                /// </summary>
+                public const string Malfuction = "2";
+                /// <summary>
+                /// 盤點模式
+                /// </summary>
+                public const string Cycle = "3";
+
+            }
         }
         
 

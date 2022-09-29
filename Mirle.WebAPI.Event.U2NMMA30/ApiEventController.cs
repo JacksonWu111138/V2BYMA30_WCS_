@@ -24,6 +24,7 @@ using Mirle.DB.Fun;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using static Mirle.Def.clsConstValue;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace Mirle.WebAPI.Event
 {
@@ -203,7 +204,7 @@ namespace Mirle.WebAPI.Event
                     cmd.Prty = Body.priority;
                     cmd.Remark = "";
 
-                    if (Body.fromPortId == ConveyorDef.WES_B800CV)
+                    if (Body.fromPortId == "B800CV")
                     {
                         int count = 0; bool check = false;
                         ConveyorInfo B800CV = new ConveyorInfo();
@@ -496,7 +497,7 @@ namespace Mirle.WebAPI.Event
                     cmd.End_Date = "";
 
                     cmd.Loc = Body.toShelfId;
-                    cmd.Equ_No = tool.funGetEquNoByLoc(cmd.Loc).ToString();
+                    cmd.Equ_No = "7";
 
                     cmd.EXP_Date = "";
                     cmd.JobID = Body.jobId;
@@ -589,7 +590,7 @@ namespace Mirle.WebAPI.Event
                 string strEM = "";
                 if (Body.priority == "1")
                 {   //更新優先級
-                    foreach(var lot in Body.lotList)
+                    foreach (var lot in Body.lotList)
                     {
                         if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdatePry(lot.lotId, Body.priority, ref strEM))
                         {
@@ -600,10 +601,11 @@ namespace Mirle.WebAPI.Event
                 else
                 {
                     V2BYMA30.ReportInfo.LotRetrieveTransferInfo info = new V2BYMA30.ReportInfo.LotRetrieveTransferInfo();
+                    info.lotList = new List<LotListInfo>();
                     LotListInfo oklot = new LotListInfo();
                     foreach (var lot in Body.lotList)
                     {
-                        cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSNO);
+                        cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
                         if (string.IsNullOrWhiteSpace(cmd.Cmd_Sno))
                         {
                             throw new Exception($"<{Body.jobId}>取得序號失敗！");
@@ -616,7 +618,7 @@ namespace Mirle.WebAPI.Event
                         cmd.End_Date = "";
 
                         cmd.Loc = lot.fromShelfId;
-                        cmd.Equ_No = tool.funGetEquNoByLoc(cmd.Loc).ToString();
+                        cmd.Equ_No = "7";
 
                         cmd.EXP_Date = "";
                         cmd.JobID = Body.jobId;
@@ -877,23 +879,27 @@ namespace Mirle.WebAPI.Event
             try
             {
                 CmdMstInfo cmd = new CmdMstInfo();
-                int iRet = clsDB_Proc.GetDB_Object().GetCmd_Mst().FunCheckHasCommand_ByBoxID(Body.barcode, ref cmd);
+                bool check = false;
+                check = clsDB_Proc.GetDB_Object().GetCmd_Mst().FunCheckHasCommand_ByBoxID(Body.barcode, ref cmd);
                 ConveyorInfo con = new ConveyorInfo();
                 con = ConveyorDef.GetBuffer(Body.location);
+                string deviceId = tool.GetDeviceId(Body.location);
 
-                if (iRet == DBResult.Success)
+                if (check)
                 {
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, con.bufferLocation.DeviceId, Body.location))
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{cmd.Cmd_Sno}>This BCRCheck exist.");
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, Body.location))
                         throw new Exception($"Error: UpdateCurLoc Fail. jobId = {Body.jobId}");
                 }
-                else if (iRet == DBResult.NoDataSelect)
+                else if (!check)
                 {
-                    if (Body.location == ConveyorDef.Box.B1_062.BufferName ||
-                        Body.location == ConveyorDef.Box.B1_067.BufferName ||
-                        Body.location == ConveyorDef.Box.B1_142.BufferName ||
-                        Body.location == ConveyorDef.Box.B1_147.BufferName)
+                    if (Body.location == ConveyorDef.Box.B1_037.BufferName || Body.location == ConveyorDef.Box.B1_041.BufferName ||
+                        Body.location == ConveyorDef.Box.B1_045.BufferName || Body.location == ConveyorDef.Box.B1_054.BufferName ||
+                        Body.location == ConveyorDef.Box.B1_117.BufferName || Body.location == ConveyorDef.Box.B1_121.BufferName ||
+                        Body.location == ConveyorDef.Box.B1_125.BufferName || Body.location == ConveyorDef.Box.B1_134.BufferName ||
+                        Body.location == ConveyorDef.AGV.B1_070.BufferName || Body.location == ConveyorDef.AGV.B1_074.BufferName ||
+                        Body.location == ConveyorDef.AGV.B1_078.BufferName)
                     {
-                        //來自箱式倉減料口
                         CarrierPutawayCheckInfo info = new CarrierPutawayCheckInfo
                         {
                             portId = con.StnNo,
@@ -903,12 +909,25 @@ namespace Mirle.WebAPI.Event
                         if (!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
                             throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}.");
                     }
+                    else if (Body.location == ConveyorDef.AGV.M1_10.BufferName || Body.location == ConveyorDef.AGV.M1_20.BufferName)
+                    {
+                        CarrierPutawayCheckInfo info = new CarrierPutawayCheckInfo
+                        {
+                            portId = con.StnNo,
+                            carrierId = Body.barcode,
+                            storageType = "M800"
+                        };
+                        if (!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                            throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}.");
+                    }
                     else
                     {
                         CarrierReturnNextInfo info = new CarrierReturnNextInfo
                         {
                             carrierId = Body.barcode,
-                            fromLocation = con.StnNo
+                            isEmpty = "N",
+                            fromLocation = con.StnNo,
+                            carrierType = Def.clsTool.FunSwitchCarrierType(Body.carrierType)
                         };
                         if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
                             throw new Exception($"Error: Sending CarrierReturnNext to WES fail, jobId = {Body.jobId}");
@@ -951,11 +970,12 @@ namespace Mirle.WebAPI.Event
                 string strEM = "";
                 ConveyorInfo con = new ConveyorInfo();
                 con = ConveyorDef.GetBuffer(Body.position);
+                string deviceId = tool.GetDeviceId(Body.position);
 
                 CmdMstInfo cmd = new CmdMstInfo();
                 if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
                 {
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, con.bufferLocation.DeviceId, Body.position))
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, deviceId, Body.position))
                     {
                         strEM = $"Error: Update CmdMst curLoc fail, jobId = {Body.jobId}.";
                         throw new Exception(strEM);
@@ -963,14 +983,14 @@ namespace Mirle.WebAPI.Event
                 }
                 else
                 {
-                    CarrierReturnNextInfo info = new CarrierReturnNextInfo
+                    EmptyCarrierUnloadInfo info = new EmptyCarrierUnloadInfo
                     {
                         carrierId = Body.binId,
-                        fromLocation = con.StnNo
+                        location = con.StnNo
                     };
-                    if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    if (!clsAPI.GetAPI().GetEmptyCarrierUnload().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     {
-                        strEM = $"Error: CarrierRetrurnNext fail, jobid = {Body.jobId}.";
+                        strEM = $"Error: EmptyCarrierUnload to WES fail, jobid = {Body.jobId}.";
                         throw new Exception(strEM);
                     }
                 }
@@ -1110,6 +1130,18 @@ namespace Mirle.WebAPI.Event
                 if (!clsAPI.GetAPI().GetEmptyShelfQuery().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
                     throw new Exception($"Error: EmptyShelfQuery to WES fail, jobId = {Body.jobId}.");
 
+                LotShelfReportInfo info_2 = new LotShelfReportInfo
+                {
+                    shelfId = reply.shelfId,
+                    shelfStatus = "IN",
+                    lotId = reply.lotIdCarrierId,
+                    disableLocation = Body.doubleStorage == "Y" ? "Y" : "N"
+                };
+
+                string strEM = "";
+                if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunShelfReportToWes(Body.jobId, info_2, ref strEM))
+                    throw new Exception(strEM);
+
                 rMsg.newLoc = reply.shelfId;
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -1154,8 +1186,8 @@ namespace Mirle.WebAPI.Event
 
                     LotPutawayCompleteInfo info = new LotPutawayCompleteInfo
                     {
-                        jobId = Body.jobId,
-                        lotId = Body.reelId,
+                        jobId = cmd.JobID,
+                        lotId = cmd.BoxID,
                         shelfId = cmd.Loc,
                         isComplete = clsConstValue.YesNo.Yes
                     };
@@ -1171,10 +1203,11 @@ namespace Mirle.WebAPI.Event
                     LotRetrieveCompleteInfo info = new LotRetrieveCompleteInfo
                     {
                         jobId = cmd.JobID,
-                        lotId = Body.reelId,
+                        lotId = cmd.BoxID,
                         portId = Body.portId,
                         carrierId = Body.carrierId
                     };
+
                     if (Body.emptyRetrieval == clsConstValue.WesApi.EmptyRetrieval.Normal)
                     {
                         if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Finish_Wait, ""))
@@ -1330,6 +1363,120 @@ namespace Mirle.WebAPI.Event
             }
         }
 
+        [Route("WCS/LOT_NG_REPORT")]
+        [HttpPost]
+        public IHttpActionResult LOT_NG_REPORT([FromBody] LotNGReportInfo Body)
+        {
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_NG_REPORT> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+
+            ReplyCode rMsg = new ReplyCode
+            {
+                jobId = Body.jobId,
+                transactionId = Body.transactionId
+            };
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_NG_REPORT start!");
+            try
+            {
+                NGPositionReportInfo info = new NGPositionReportInfo
+                {
+                    lotId = Body.reelId,
+                    ngLocation = Body.locationId
+                };
+
+                if (clsAPI.GetAPI().GetNGPositionReport().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    throw new Exception($"Error: 傳送WES NGPositionReport 失敗, lotId = {info.lotId}.");
+
+
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
+                rMsg.returnComment = "";
+
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_NG_REPORT record end!");
+                return Json(rMsg);
+            }
+            catch (Exception ex)
+            {
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Fail;
+                rMsg.returnComment = ex.Message;
+
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return Json(rMsg);
+            }
+        }
+        
+        [Route("WCS/LOT_RETRIEVE_CANCEL")]
+        [HttpPost]
+        public IHttpActionResult LOT_RETRIEVE_CANCEL([FromBody] ReelIdInfo Body)
+        {
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_RETRIEVE_CANCEL> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+
+            ReplyCode rMsg = new ReplyCode
+            {
+                jobId = Body.jobId,
+                transactionId = Body.transactionId
+            };
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_RETRIEVE_CANCEL start!");
+            try
+            {
+                string strEM = "";
+                CmdMstInfo cmd = new CmdMstInfo();
+                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand_byBoxID(Body.reelId, ref cmd) != DBResult.Success)
+                    throw new Exception($"Error: E800 LotRetrieveCancel 取得cmdmst命令失敗! lotId = {Body.reelId}.");
+                if (!clsDB_Proc.GetDB_Object().GetLotRetrieveNG().FunRetrieveNG_Occur(cmd.Cmd_Sno, cmd.JobID, Body.reelId, ref strEM))
+                    throw new Exception(strEM);
+
+
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
+                rMsg.returnComment = "";
+
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_RETRIEVE_CANCEL record end!");
+                return Json(rMsg);
+            }
+            catch (Exception ex)
+            {
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Fail;
+                rMsg.returnComment = ex.Message;
+
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return Json(rMsg);
+            }
+        }
+
+        [Route("WCS/MODE_CHANGE")]
+        [HttpPost]
+        public IHttpActionResult MODE_CHANGE([FromBody] ModeChangeInfo Body)
+        {
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<MODE_CHANGE> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+
+            ReplyCode rMsg = new ReplyCode
+            {
+                jobId = Body.jobId,
+                transactionId = Body.transactionId
+            };
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>MODE_CHANGE start!");
+            try
+            {
+
+
+
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
+                rMsg.returnComment = "";
+
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>MODE_CHANGE record end!");
+                return Json(rMsg);
+            }
+            catch (Exception ex)
+            {
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Fail;
+                rMsg.returnComment = ex.Message;
+
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return Json(rMsg);
+            }
+        }
+
         [Route("WCS/POSITION_REPORT")]
         [HttpPost]
         public IHttpActionResult POSITION_REPORT([FromBody] U2NMMA30.Models.PositionReportInfo Body)
@@ -1350,31 +1497,33 @@ namespace Mirle.WebAPI.Event
 
                 ConveyorInfo con = new ConveyorInfo();
                 con = ConveyorDef.GetBuffer(Body.position);
+                string deviceId = tool.GetDeviceId(Body.position);
+                
 
-                if (Body.carrierType == clsConstValue.WesApi.CarrierType.Lot)
+                if (Body.carrierType == clsConstValue.ControllerApi.CarrierType.Lot)
                 {
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, con.bufferLocation.DeviceId, Body.position))
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, ConveyorDef.DeviceID_Tower, Body.position))
                         throw new Exception($"Error: Update CmdMst fail, jobId = {Body.jobId}.");
-
+                    
                     LotPositionReportInfo info = new LotPositionReportInfo
                     {
                         jobId = cmd.JobID,
                         lotId = Body.id,
-                        location = Body.position
+                        location = con.StnNo != null ? con.StnNo : con.BufferName
                     };
 
                     if (!clsAPI.GetAPI().GetLotPositionReport().FunReport(info, clsAPI.GetWesApiConfig().IP))
                         throw new Exception($"Error: LotPositionReport to WES fail, jobId = {Body.jobId}.");
                 }
-                else if (Body.carrierType == clsConstValue.WesApi.CarrierType.Rack ||
-                        Body.carrierType == clsConstValue.WesApi.CarrierType.Bin ||
-                        Body.carrierType == clsConstValue.WesApi.CarrierType.Mag)
+                else if (Body.carrierType == clsConstValue.ControllerApi.CarrierType.Rack ||
+                        Body.carrierType == clsConstValue.ControllerApi.CarrierType.Bin ||
+                        Body.carrierType == clsConstValue.ControllerApi.CarrierType.Mag)
                 {
                     V2BYMA30.ReportInfo.PositionReportInfo info = new V2BYMA30.ReportInfo.PositionReportInfo
                     {
                         jobId = cmd.JobID,
                         carrierId = Body.id,
-                        location = con.StnNo,
+                        location = con.StnNo == null ? con.BufferName : con.StnNo,
                         //判斷是不是儲位 來決定inStock
                     };
 
@@ -1458,7 +1607,7 @@ namespace Mirle.WebAPI.Event
                             cmd.End_Date = "";
 
                             cmd.Loc = "";
-                            cmd.Equ_No = tool.funGetEquNoByLoc(cmd.Loc).ToString();
+                            cmd.Equ_No = "";
 
                             cmd.EXP_Date = "";
                             cmd.JobID = Body.jobId;
@@ -1481,6 +1630,7 @@ namespace Mirle.WebAPI.Event
                     {
                         ConveyorInfo con = new ConveyorInfo();
                         con = ConveyorDef.GetBuffer(Body.stagePosition);
+                        string deviceId = tool.GetDeviceId(Body.stagePosition);
 
                         CmdMstInfo cmd = new CmdMstInfo();
                         if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
@@ -1496,7 +1646,7 @@ namespace Mirle.WebAPI.Event
                             }
                             else
                             {
-                                if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, con.bufferLocation.DeviceId, Body.stagePosition))
+                                if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, deviceId, Body.stagePosition))
                                 {
                                     strEM = $"Error: Update CmdMst curLoc fail, jobId = {Body.jobId}.";
                                     throw new Exception(strEM);
@@ -1508,7 +1658,8 @@ namespace Mirle.WebAPI.Event
                             CarrierReturnNextInfo info = new CarrierReturnNextInfo
                             {
                                 carrierId = Body.rackId,
-                                fromLocation = con.StnNo
+                                fromLocation = con.StnNo,
+                                carrierType = clsConstValue.WesApi.CarrierType.Rack
                             };
                             if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
                             {
@@ -1568,7 +1719,8 @@ namespace Mirle.WebAPI.Event
                     CarrierReturnNextInfo info = new CarrierReturnNextInfo
                     {
                         carrierId = Body.rackId,
-                        fromLocation = con.StnNo
+                        fromLocation = con.StnNo,
+                        carrierType = clsConstValue.WesApi.CarrierType.Rack
                     };
                     if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     {
@@ -1611,11 +1763,12 @@ namespace Mirle.WebAPI.Event
                 string strEM = "";
                 ConveyorInfo con = new ConveyorInfo();
                 con = ConveyorDef.GetBuffer(Body.rackLoc);
+                string deviceId = tool.GetDeviceId(Body.rackLoc);
 
                 CmdMstInfo cmd = new CmdMstInfo();
                 if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
                 {
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, con.bufferLocation.DeviceId, con.BufferName))
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, deviceId, con.BufferName))
                     {
                         strEM = $"Error: Update CurLoc fail, jobId = {Body.jobId}.";
                         throw new Exception(strEM);
@@ -1627,7 +1780,9 @@ namespace Mirle.WebAPI.Event
                     CarrierReturnNextInfo info = new CarrierReturnNextInfo
                     {
                         carrierId = Body.rackId,
-                        fromLocation = con.StnNo
+                        fromLocation = con.StnNo,
+                        isEmpty = "N",  
+                        carrierType = clsConstValue.WesApi.CarrierType.Rack
                     };
                     if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     {
@@ -1770,13 +1925,10 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>REEL_STOCK_IN start!");
             try
             {
-                CmdMstInfo cmd = new CmdMstInfo();
-                if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
-                    throw new Exception($"Error: Get Cmd form CmdMst fail, jobId = {Body.jobId}.");
 
                 LotPutawayCheckInfo info = new LotPutawayCheckInfo
                 {
-                    jobId = cmd.JobID,
+                    jobId = Body.jobId,
                     lotId = Body.reelId,
                     portId = Body.portId
                 };
@@ -1837,7 +1989,7 @@ namespace Mirle.WebAPI.Event
                         location = con.StnNo,
                         reqQty = 1
                     };
-                    if (clsAPI.GetAPI().GetEmptyESDCarrierLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    if (!clsAPI.GetAPI().GetEmptyESDCarrierLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
                         throw new Exception($"Error: EmptyESDCarrierLoadRequest to WES fail, jobId = {Body.jobId}.");
                 }
 

@@ -12,14 +12,14 @@ namespace Mirle.DB.Proc
         private Fun.clsCmd_Mst CMD_MST = new Fun.clsCmd_Mst();
         private Fun.clsCMD_DTL CMD_DTL = new Fun.clsCMD_DTL();
         private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
-        private WebApiConfig _towerApi = new WebApiConfig();
         private clsSno sno;
         private clsDbConfig _config = new clsDbConfig();
-        public clsCmd_Mst(clsDbConfig config, WebApiConfig TowerApi_Config)
+        private WebApiConfig WesAPIConfig = new WebApiConfig();
+        public clsCmd_Mst(clsDbConfig config, WebApiConfig wesApi)
         {
             _config = config;
             sno = new clsSno(_config);
-            _towerApi = TowerApi_Config;
+            WesAPIConfig = wesApi;
         }
 
         public bool FunGetCommand(string sCmdSno, ref CmdMstInfo cmd)
@@ -157,7 +157,7 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public int FunCheckHasCommand_ByBoxID(string BoxId, ref CmdMstInfo cmd)
+        public bool FunCheckHasCommand_ByBoxID(string BoxId, ref CmdMstInfo cmd)
         {
             try
             {
@@ -168,14 +168,14 @@ namespace Mirle.DB.Proc
                     {
                         return CMD_MST.FunCheckHasCommand_ByBoxID(BoxId, ref cmd, db);
                     }
-                    else return iRet;
+                    else return false;
                 }
             }
             catch (Exception ex)
             {
                 var cmet = System.Reflection.MethodBase.GetCurrentMethod();
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
-                return DBResult.Exception;
+                return false;
             }
         }
 
@@ -329,6 +329,63 @@ namespace Mirle.DB.Proc
             }
         }
 
+        public bool FunShelfReportToWes(string sCmdSno, LotShelfReportInfo info, ref string strEM)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        CmdMstInfo cmd = new CmdMstInfo();
+                        string sRemark = "";
+                        if (CMD_MST.FunGetCommand(sCmdSno, ref cmd, ref iRet, db))
+                        {
+                            string sRemark_Pre = cmd.Remark;
+                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                            {
+                                sRemark = "Error: Begin失敗！";
+                                if (sRemark != sRemark_Pre)
+                                {
+                                    CMD_MST.FunUpdateRemark(sCmdSno, sRemark, db);
+                                }
+                            }
+
+                            if (!CMD_MST.FunUpdateLoc(sCmdSno, info.shelfId, db))
+                            {
+                                strEM = $"Error: 更新updateLoc失敗, jobId = {cmd.Cmd_Sno}.";
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                throw new Exception(strEM);
+                            }
+
+                            if (!api.GetLotShelfReport().FunReport(info, WesAPIConfig.IP))
+                            {
+                                strEM = $"Error: 向WES預約shelf失敗, jobId = {cmd.Cmd_Sno}.";
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                throw new Exception(strEM);
+                            }
+
+
+                            db.TransactionCtrl(TransactionTypes.Commit);
+                            return true;
+
+                        }
+                        strEM = $"Error: 取得命令失敗, jobId = {sCmdSno}.";
+                        throw new Exception(strEM);
+
+                    }
+                    else return false;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
 
 
         public bool FunMoveFinishCmdToHistory_Proc()
@@ -345,10 +402,10 @@ namespace Mirle.DB.Proc
                         {
                             for (int i = 0; i < dtTmp.Rows.Count; i++)
                             {
-                                string sCmdSno = Convert.ToString(dtTmp.Rows[i]["Cmd_Sno"]);
+                                string sCmdSno = Convert.ToString(dtTmp.Rows[i]["CmdSno"]);
                                 string sRemark_Pre = Convert.ToString(dtTmp.Rows[i]["Remark"]);
                                 string sRemark = "";
-                                iRet = CMD_DTL.FunGetCmdDtl(sCmdSno, db);
+                                /*iRet = CMD_DTL.FunGetCmdDtl(sCmdSno, db);
                                 if(iRet == DBResult.Exception)
                                 {
                                     sRemark = "Error: 取得命令明細資料失敗";
@@ -358,7 +415,7 @@ namespace Mirle.DB.Proc
                                     }
 
                                     continue;
-                                }
+                                }*/
 
                                 if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                 {
@@ -383,7 +440,7 @@ namespace Mirle.DB.Proc
                                     continue;
                                 }
 
-                                if (iRet == DBResult.Success)
+                                /*if (iRet == DBResult.Success)
                                 {
                                     if (!CMD_DTL.FunInsertCmd_Dtl_His(sCmdSno, db))
                                     {
@@ -396,7 +453,7 @@ namespace Mirle.DB.Proc
                                         db.TransactionCtrl(TransactionTypes.Rollback);
                                         continue;
                                     }
-                                }
+                                }*/
 
                                 db.TransactionCtrl(TransactionTypes.Commit);
                                 return true;

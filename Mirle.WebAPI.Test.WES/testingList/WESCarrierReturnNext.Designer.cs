@@ -35,11 +35,15 @@
             this.textBox_carrierId = new System.Windows.Forms.TextBox();
             this.label_fromLocation = new System.Windows.Forms.Label();
             this.textBox_formLocation = new System.Windows.Forms.TextBox();
+            this.label_isEmpty = new System.Windows.Forms.Label();
+            this.textBox_isEmpty = new System.Windows.Forms.TextBox();
+            this.label_carrierType = new System.Windows.Forms.Label();
+            this.textBox_carrierType = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // button_CarrierReturnNext
             // 
-            this.button_CarrierReturnNext.Location = new System.Drawing.Point(253, 100);
+            this.button_CarrierReturnNext.Location = new System.Drawing.Point(257, 120);
             this.button_CarrierReturnNext.Name = "button_CarrierReturnNext";
             this.button_CarrierReturnNext.Size = new System.Drawing.Size(75, 56);
             this.button_CarrierReturnNext.TabIndex = 0;
@@ -97,11 +101,49 @@
             this.textBox_formLocation.Size = new System.Drawing.Size(100, 29);
             this.textBox_formLocation.TabIndex = 2;
             // 
+            // label_isEmpty
+            // 
+            this.label_isEmpty.AutoSize = true;
+            this.label_isEmpty.Location = new System.Drawing.Point(46, 174);
+            this.label_isEmpty.Name = "label_isEmpty";
+            this.label_isEmpty.Size = new System.Drawing.Size(64, 18);
+            this.label_isEmpty.TabIndex = 1;
+            this.label_isEmpty.Text = "isEmpty";
+            this.label_isEmpty.Click += new System.EventHandler(this.label_carrierId_Click);
+            // 
+            // textBox_isEmpty
+            // 
+            this.textBox_isEmpty.Location = new System.Drawing.Point(121, 171);
+            this.textBox_isEmpty.Name = "textBox_isEmpty";
+            this.textBox_isEmpty.Size = new System.Drawing.Size(100, 29);
+            this.textBox_isEmpty.TabIndex = 2;
+            // 
+            // label_carrierType
+            // 
+            this.label_carrierType.AutoSize = true;
+            this.label_carrierType.Location = new System.Drawing.Point(21, 209);
+            this.label_carrierType.Name = "label_carrierType";
+            this.label_carrierType.Size = new System.Drawing.Size(89, 18);
+            this.label_carrierType.TabIndex = 1;
+            this.label_carrierType.Text = "carrierType";
+            this.label_carrierType.Click += new System.EventHandler(this.label_carrierId_Click);
+            // 
+            // textBox_carrierType
+            // 
+            this.textBox_carrierType.Location = new System.Drawing.Point(121, 206);
+            this.textBox_carrierType.Name = "textBox_carrierType";
+            this.textBox_carrierType.Size = new System.Drawing.Size(100, 29);
+            this.textBox_carrierType.TabIndex = 2;
+            // 
             // WESCarrierReturnNext
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(382, 254);
+            this.Controls.Add(this.textBox_carrierType);
+            this.Controls.Add(this.label_carrierType);
+            this.Controls.Add(this.textBox_isEmpty);
+            this.Controls.Add(this.label_isEmpty);
             this.Controls.Add(this.textBox_formLocation);
             this.Controls.Add(this.label_fromLocation);
             this.Controls.Add(this.textBox_carrierId);
@@ -125,5 +167,9 @@
         private System.Windows.Forms.TextBox textBox_carrierId;
         private System.Windows.Forms.Label label_fromLocation;
         private System.Windows.Forms.TextBox textBox_formLocation;
+        private System.Windows.Forms.Label label_isEmpty;
+        private System.Windows.Forms.TextBox textBox_isEmpty;
+        private System.Windows.Forms.Label label_carrierType;
+        private System.Windows.Forms.TextBox textBox_carrierType;
     }
 }

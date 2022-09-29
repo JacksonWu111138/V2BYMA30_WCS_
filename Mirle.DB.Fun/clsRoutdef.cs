@@ -165,8 +165,8 @@ namespace Mirle.DB.Fun
                         break;
                     case clsConstValue.CmdMode.S2S:
                     case clsConstValue.CmdMode.StockOut:
-                        string stn = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;
-                        var s = ConveyorDef.GetBuffer_ByStnNo(stn);
+                        string sBuffername = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;
+                        var s = ConveyorDef.GetBuffer(sBuffername);
                         End = Router.GetLocation(s.ControllerID, s.BufferName);
                         if (End == null)
                         {
@@ -212,7 +212,7 @@ namespace Mirle.DB.Fun
 
         public Location GetCurLoc_Inital_ByStnNo(CmdMstInfo cmd, MapHost Router)
         {
-            var s = ConveyorDef.GetBuffer_ByStnNo(cmd.Stn_No);
+            var s = ConveyorDef.GetBuffer(cmd.Stn_No);
             string sDeviceID;
             if (s.BufferName == "E1-04") sDeviceID = ConveyorDef.DeviceID_Tower;
             else sDeviceID = s.ControllerID;

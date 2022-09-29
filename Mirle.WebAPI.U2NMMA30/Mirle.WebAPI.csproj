@@ -49,6 +49,7 @@
     <Compile Include="clsHost.cs" />
     <Compile Include="clsTool.cs" />
     <Compile Include="clsWriLog.cs" />
+    <Compile Include="FunctionForController\BufferInitial.cs" />
     <Compile Include="FunctionForController\BufferStatusQuery.cs" />
     <Compile Include="FunctionForController\MoveTask.cs" />
     <Compile Include="FunctionForController\TransferCommandRequest.cs" />
@@ -111,6 +112,7 @@
     <Compile Include="ReplyForWES\LotReply.cs" />
     <Compile Include="ReplyForWES\LotPutawayCheckReply.cs" />
     <Compile Include="ReplyForWES\CarrierPutawayCheckReply.cs" />
+    <Compile Include="ReportInfoForController\BufferInitialInfo.cs" />
     <Compile Include="ReportInfoForController\MoveTaskInfo.cs" />
     <Compile Include="ReportInfoForController\TransferCommandRequestInfo.cs" />
     <Compile Include="ReportInfoForController\TaskCancelInfo.cs" />

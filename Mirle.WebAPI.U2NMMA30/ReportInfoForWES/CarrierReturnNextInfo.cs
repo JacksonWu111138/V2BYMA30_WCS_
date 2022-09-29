@@ -12,5 +12,7 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         public string transactionId { get; set; } = "CARRIER_RETURN_NEXT";
         public string carrierId { get; set; }
         public string fromLocation { get; set; }
+        public string isEmpty { get; set; } = "N";
+        public string carrierType { get; set; }
     }
 }

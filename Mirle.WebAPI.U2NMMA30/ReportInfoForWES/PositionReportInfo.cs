@@ -12,6 +12,6 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         public string transactionId { get; set; } = "POSITION_REPORT";
         public string carrierId { get; set; }
         public string location { get; set; }
-        public string inStock { get; set; }
+        public string inStock { get; set; } = "N";
     }
 }

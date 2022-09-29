@@ -16,7 +16,7 @@ namespace Mirle.WebAPI.Event
 
         public WebApiHost(Startup startup, string sIP)
         {
-            sIP = "127.0.0.1:9000";
+            //sIP = "127.0.0.1:9000";
             //sIP = "127.0.0.1";
             _baseAddress = $"http://{sIP}/";
             _webService = WebApp.Start(url: _baseAddress, startup: startup.Configuration);

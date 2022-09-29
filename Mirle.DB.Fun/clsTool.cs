@@ -5,6 +5,7 @@ using System.Linq;
 using System.Data;
 using System.Collections.Generic;
 using Mirle.Def.U2NMMA30;
+using static Mirle.Def.U2NMMA30.ConveyorDef;
 
 namespace Mirle.DB.Fun
 {
@@ -255,6 +256,35 @@ namespace Mirle.DB.Fun
                 return true;
             }
             else return false;
+        }
+        public string GetDeviceId(string bufferName)
+        {
+            //PCBA
+            if (bufferName == PCBA.M1_01.BufferName || bufferName == PCBA.M1_06.BufferName)
+                return "1";
+            else if (bufferName == PCBA.M1_11.BufferName || bufferName == PCBA.M1_16.BufferName)
+                return "2";
+            //BOX
+            else if (bufferName == Box.B1_001.BufferName || bufferName == Box.B1_004.BufferName ||
+                    bufferName == Box.B1_007.BufferName || bufferName == Box.B1_010.BufferName ||
+                    bufferName == Box.B1_081.BufferName || bufferName == Box.B1_084.BufferName ||
+                    bufferName == Box.B1_087.BufferName || bufferName == Box.B1_090.BufferName)
+                return "3";
+            else if (bufferName == Box.B1_013.BufferName || bufferName == Box.B1_016.BufferName ||
+                    bufferName == Box.B1_019.BufferName || bufferName == Box.B1_022.BufferName ||
+                    bufferName == Box.B1_093.BufferName || bufferName == Box.B1_096.BufferName ||
+                    bufferName == Box.B1_099.BufferName || bufferName == Box.B1_102.BufferName)
+                return "4";
+            else if (bufferName == Box.B1_025.BufferName || bufferName == Box.B1_028.BufferName ||
+                    bufferName == Box.B1_031.BufferName || bufferName == Box.B1_034.BufferName ||
+                    bufferName == Box.B1_105.BufferName || bufferName == Box.B1_108.BufferName ||
+                    bufferName == Box.B1_111.BufferName || bufferName == Box.B1_114.BufferName)
+                return "5";
+            //Tower
+            else if (bufferName == Tower.E1_04.BufferName || bufferName == AGV.E2_38.BufferName || bufferName == AGV.E2_39.BufferName)
+                return "7";
+            else
+                return "O";
         }
 
         public bool CheckWhId_ASRS(string sDeviceID, ref clsEnum.AsrsType type)

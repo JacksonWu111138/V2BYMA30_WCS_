@@ -148,6 +148,12 @@
     <Compile Include="ApiList\CtrlTransferCommandRequest.Designer.cs">
       <DependentUpon>CtrlTransferCommandRequest.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApiList\CtrlBufferInitialInfo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiList\CtrlBufferInitialInfo.Designer.cs">
+      <DependentUpon>CtrlBufferInitialInfo.cs</DependentUpon>
+    </Compile>
     <Compile Include="ControllersAPITest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -158,6 +164,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="ApiList\CtrlBlockStatusQuery.resx">
       <DependentUpon>CtrlBlockStatusQuery.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiList\CtrlBufferInitialInfo.resx">
+      <DependentUpon>CtrlBufferInitialInfo.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApiList\CtrlBufferRollInfo.resx">
       <DependentUpon>CtrlBufferRollInfo.cs</DependentUpon>

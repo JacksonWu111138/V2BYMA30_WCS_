@@ -59,6 +59,7 @@
             this.WESRemoveRackShow = new System.Windows.Forms.Button();
             this.WESRemoveRackDown = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.button_GetBufferName = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -266,7 +267,7 @@
             this.WESPortStatusUpdate.Name = "WESPortStatusUpdate";
             this.WESPortStatusUpdate.Size = new System.Drawing.Size(242, 47);
             this.WESPortStatusUpdate.TabIndex = 19;
-            this.WESPortStatusUpdate.Text = "PortStatusUpdate";
+            this.WESPortStatusUpdate.Text = "GetBufferName";
             this.WESPortStatusUpdate.UseVisualStyleBackColor = true;
             this.WESPortStatusUpdate.Click += new System.EventHandler(this.WESPortStatusUpload_Click);
             // 
@@ -443,11 +444,22 @@
             this.tableLayoutPanel1.Size = new System.Drawing.Size(989, 483);
             this.tableLayoutPanel1.TabIndex = 31;
             // 
+            // button_GetBufferName
+            // 
+            this.button_GetBufferName.Location = new System.Drawing.Point(500, 516);
+            this.button_GetBufferName.Name = "button_GetBufferName";
+            this.button_GetBufferName.Size = new System.Drawing.Size(184, 46);
+            this.button_GetBufferName.TabIndex = 32;
+            this.button_GetBufferName.Text = "GetBufferName";
+            this.button_GetBufferName.UseVisualStyleBackColor = true;
+            this.button_GetBufferName.Click += new System.EventHandler(this.button_GetBufferName_Click);
+            // 
             // WESAPITest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1198, 578);
+            this.Controls.Add(this.button_GetBufferName);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "WESAPITest";
             this.Text = "WES API Testing";
@@ -489,6 +501,7 @@
         private System.Windows.Forms.Button WESRemoveRackShow;
         private System.Windows.Forms.Button WESRemoveRackDown;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.Button button_GetBufferName;
     }
 }
 

@@ -12,6 +12,6 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         public string transactionId { get; set; } = "EMPTY_CARRIER_UNLOAD";
         public string carrierId { get; set; }
         public string location { get; set; }
-        public string isEmpty { get; set; }
+        public string isEmpty { get; set; } = "Y";
     }
 }

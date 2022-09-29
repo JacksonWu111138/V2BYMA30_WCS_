@@ -29,6 +29,16 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.CtrlTransferCommandRequest = new System.Windows.Forms.Button();
+            this.CtrlTaskCancel = new System.Windows.Forms.Button();
+            this.CtrlRetrieveTransferInfo = new System.Windows.Forms.Button();
+            this.CtrlRemoteLocalRequest = new System.Windows.Forms.Button();
+            this.CtrlRackTurn = new System.Windows.Forms.Button();
+            this.CtrlRackRequest = new System.Windows.Forms.Button();
+            this.CtrlMoveTask = new System.Windows.Forms.Button();
+            this.CtrlPutawayTransferInfo = new System.Windows.Forms.Button();
+            this.CtrlNewCarrierToStage = new System.Windows.Forms.Button();
+            this.button_LotTransferCancel = new System.Windows.Forms.Button();
             this.CtrlLotRetrieveTransfer = new System.Windows.Forms.Button();
             this.CtrlHealthCheck = new System.Windows.Forms.Button();
             this.CtrlCVReceiveNewBinCmd = new System.Windows.Forms.Button();
@@ -36,16 +46,7 @@
             this.CtrlBufferStatusQuery = new System.Windows.Forms.Button();
             this.CtrlBlockStatusQuery = new System.Windows.Forms.Button();
             this.CtrlBufferRollInfo = new System.Windows.Forms.Button();
-            this.button_LotTransferCancel = new System.Windows.Forms.Button();
-            this.CtrlNewCarrierToStage = new System.Windows.Forms.Button();
-            this.CtrlPutawayTransferInfo = new System.Windows.Forms.Button();
-            this.CtrlMoveTask = new System.Windows.Forms.Button();
-            this.CtrlRackRequest = new System.Windows.Forms.Button();
-            this.CtrlRackTurn = new System.Windows.Forms.Button();
-            this.CtrlRemoteLocalRequest = new System.Windows.Forms.Button();
-            this.CtrlRetrieveTransferInfo = new System.Windows.Forms.Button();
-            this.CtrlTaskCancel = new System.Windows.Forms.Button();
-            this.CtrlTransferCommandRequest = new System.Windows.Forms.Button();
+            this.CtrlBufferInitial = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -56,6 +57,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Controls.Add(this.CtrlBufferInitial, 3, 2);
             this.tableLayoutPanel1.Controls.Add(this.CtrlTransferCommandRequest, 3, 1);
             this.tableLayoutPanel1.Controls.Add(this.CtrlTaskCancel, 3, 0);
             this.tableLayoutPanel1.Controls.Add(this.CtrlRetrieveTransferInfo, 2, 4);
@@ -83,6 +85,116 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(864, 354);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // CtrlTransferCommandRequest
+            // 
+            this.CtrlTransferCommandRequest.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlTransferCommandRequest.Location = new System.Drawing.Point(651, 73);
+            this.CtrlTransferCommandRequest.Name = "CtrlTransferCommandRequest";
+            this.CtrlTransferCommandRequest.Size = new System.Drawing.Size(210, 64);
+            this.CtrlTransferCommandRequest.TabIndex = 1;
+            this.CtrlTransferCommandRequest.Text = "TransferCommandRequest";
+            this.CtrlTransferCommandRequest.UseVisualStyleBackColor = true;
+            this.CtrlTransferCommandRequest.Click += new System.EventHandler(this.CtrlTransferCommandRequest_Click);
+            // 
+            // CtrlTaskCancel
+            // 
+            this.CtrlTaskCancel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlTaskCancel.Location = new System.Drawing.Point(651, 3);
+            this.CtrlTaskCancel.Name = "CtrlTaskCancel";
+            this.CtrlTaskCancel.Size = new System.Drawing.Size(210, 64);
+            this.CtrlTaskCancel.TabIndex = 1;
+            this.CtrlTaskCancel.Text = "TaskCancel";
+            this.CtrlTaskCancel.UseVisualStyleBackColor = true;
+            this.CtrlTaskCancel.Click += new System.EventHandler(this.CtrlTaskCancel_Click);
+            // 
+            // CtrlRetrieveTransferInfo
+            // 
+            this.CtrlRetrieveTransferInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlRetrieveTransferInfo.Location = new System.Drawing.Point(435, 283);
+            this.CtrlRetrieveTransferInfo.Name = "CtrlRetrieveTransferInfo";
+            this.CtrlRetrieveTransferInfo.Size = new System.Drawing.Size(210, 68);
+            this.CtrlRetrieveTransferInfo.TabIndex = 1;
+            this.CtrlRetrieveTransferInfo.Text = "RetrieveTransferInfo";
+            this.CtrlRetrieveTransferInfo.UseVisualStyleBackColor = true;
+            this.CtrlRetrieveTransferInfo.Click += new System.EventHandler(this.CtrlRetrieveTransferInfo_Click);
+            // 
+            // CtrlRemoteLocalRequest
+            // 
+            this.CtrlRemoteLocalRequest.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlRemoteLocalRequest.Location = new System.Drawing.Point(435, 213);
+            this.CtrlRemoteLocalRequest.Name = "CtrlRemoteLocalRequest";
+            this.CtrlRemoteLocalRequest.Size = new System.Drawing.Size(210, 64);
+            this.CtrlRemoteLocalRequest.TabIndex = 1;
+            this.CtrlRemoteLocalRequest.Text = "RemoteLocalRequest";
+            this.CtrlRemoteLocalRequest.UseVisualStyleBackColor = true;
+            this.CtrlRemoteLocalRequest.Click += new System.EventHandler(this.CtrlRemoteLocalRequest_Click);
+            // 
+            // CtrlRackTurn
+            // 
+            this.CtrlRackTurn.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlRackTurn.Location = new System.Drawing.Point(435, 143);
+            this.CtrlRackTurn.Name = "CtrlRackTurn";
+            this.CtrlRackTurn.Size = new System.Drawing.Size(210, 64);
+            this.CtrlRackTurn.TabIndex = 1;
+            this.CtrlRackTurn.Text = "RackTurn";
+            this.CtrlRackTurn.UseVisualStyleBackColor = true;
+            this.CtrlRackTurn.Click += new System.EventHandler(this.CtrlRackTurn_Click);
+            // 
+            // CtrlRackRequest
+            // 
+            this.CtrlRackRequest.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlRackRequest.Location = new System.Drawing.Point(435, 73);
+            this.CtrlRackRequest.Name = "CtrlRackRequest";
+            this.CtrlRackRequest.Size = new System.Drawing.Size(210, 64);
+            this.CtrlRackRequest.TabIndex = 1;
+            this.CtrlRackRequest.Text = "RackRequest";
+            this.CtrlRackRequest.UseVisualStyleBackColor = true;
+            this.CtrlRackRequest.Click += new System.EventHandler(this.CtrlRackRequest_Click);
+            // 
+            // CtrlMoveTask
+            // 
+            this.CtrlMoveTask.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlMoveTask.Location = new System.Drawing.Point(435, 3);
+            this.CtrlMoveTask.Name = "CtrlMoveTask";
+            this.CtrlMoveTask.Size = new System.Drawing.Size(210, 64);
+            this.CtrlMoveTask.TabIndex = 1;
+            this.CtrlMoveTask.Text = "MoveTask";
+            this.CtrlMoveTask.UseVisualStyleBackColor = true;
+            this.CtrlMoveTask.Click += new System.EventHandler(this.CtrlMoveTask_Click);
+            // 
+            // CtrlPutawayTransferInfo
+            // 
+            this.CtrlPutawayTransferInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlPutawayTransferInfo.Location = new System.Drawing.Point(219, 283);
+            this.CtrlPutawayTransferInfo.Name = "CtrlPutawayTransferInfo";
+            this.CtrlPutawayTransferInfo.Size = new System.Drawing.Size(210, 68);
+            this.CtrlPutawayTransferInfo.TabIndex = 1;
+            this.CtrlPutawayTransferInfo.Text = "PutawayTransferInfo";
+            this.CtrlPutawayTransferInfo.UseVisualStyleBackColor = true;
+            this.CtrlPutawayTransferInfo.Click += new System.EventHandler(this.CtrlPutawayTransferInfo_Click);
+            // 
+            // CtrlNewCarrierToStage
+            // 
+            this.CtrlNewCarrierToStage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlNewCarrierToStage.Location = new System.Drawing.Point(219, 213);
+            this.CtrlNewCarrierToStage.Name = "CtrlNewCarrierToStage";
+            this.CtrlNewCarrierToStage.Size = new System.Drawing.Size(210, 64);
+            this.CtrlNewCarrierToStage.TabIndex = 1;
+            this.CtrlNewCarrierToStage.Text = "NewCarrierToStage";
+            this.CtrlNewCarrierToStage.UseVisualStyleBackColor = true;
+            this.CtrlNewCarrierToStage.Click += new System.EventHandler(this.CtrlNewCarrierToStage_Click);
+            // 
+            // button_LotTransferCancel
+            // 
+            this.button_LotTransferCancel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button_LotTransferCancel.Location = new System.Drawing.Point(219, 143);
+            this.button_LotTransferCancel.Name = "button_LotTransferCancel";
+            this.button_LotTransferCancel.Size = new System.Drawing.Size(210, 64);
+            this.button_LotTransferCancel.TabIndex = 1;
+            this.button_LotTransferCancel.Text = "LotTransferCancel";
+            this.button_LotTransferCancel.UseVisualStyleBackColor = true;
+            this.button_LotTransferCancel.Click += new System.EventHandler(this.button_LotTransferCancel_Click);
             // 
             // CtrlLotRetrieveTransfer
             // 
@@ -161,121 +273,22 @@
             this.CtrlBufferRollInfo.UseVisualStyleBackColor = true;
             this.CtrlBufferRollInfo.Click += new System.EventHandler(this.CtrlBufferRollInfo_Click);
             // 
-            // button_LotTransferCancel
+            // CtrlBufferInitial
             // 
-            this.button_LotTransferCancel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button_LotTransferCancel.Location = new System.Drawing.Point(219, 143);
-            this.button_LotTransferCancel.Name = "button_LotTransferCancel";
-            this.button_LotTransferCancel.Size = new System.Drawing.Size(210, 64);
-            this.button_LotTransferCancel.TabIndex = 1;
-            this.button_LotTransferCancel.Text = "LotTransferCancel";
-            this.button_LotTransferCancel.UseVisualStyleBackColor = true;
-            this.button_LotTransferCancel.Click += new System.EventHandler(this.button_LotTransferCancel_Click);
-            // 
-            // CtrlNewCarrierToStage
-            // 
-            this.CtrlNewCarrierToStage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CtrlNewCarrierToStage.Location = new System.Drawing.Point(219, 213);
-            this.CtrlNewCarrierToStage.Name = "CtrlNewCarrierToStage";
-            this.CtrlNewCarrierToStage.Size = new System.Drawing.Size(210, 64);
-            this.CtrlNewCarrierToStage.TabIndex = 1;
-            this.CtrlNewCarrierToStage.Text = "NewCarrierToStage";
-            this.CtrlNewCarrierToStage.UseVisualStyleBackColor = true;
-            this.CtrlNewCarrierToStage.Click += new System.EventHandler(this.CtrlNewCarrierToStage_Click);
-            // 
-            // CtrlPutawayTransferInfo
-            // 
-            this.CtrlPutawayTransferInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CtrlPutawayTransferInfo.Location = new System.Drawing.Point(219, 283);
-            this.CtrlPutawayTransferInfo.Name = "CtrlPutawayTransferInfo";
-            this.CtrlPutawayTransferInfo.Size = new System.Drawing.Size(210, 68);
-            this.CtrlPutawayTransferInfo.TabIndex = 1;
-            this.CtrlPutawayTransferInfo.Text = "PutawayTransferInfo";
-            this.CtrlPutawayTransferInfo.UseVisualStyleBackColor = true;
-            this.CtrlPutawayTransferInfo.Click += new System.EventHandler(this.CtrlPutawayTransferInfo_Click);
-            // 
-            // CtrlMoveTask
-            // 
-            this.CtrlMoveTask.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CtrlMoveTask.Location = new System.Drawing.Point(435, 3);
-            this.CtrlMoveTask.Name = "CtrlMoveTask";
-            this.CtrlMoveTask.Size = new System.Drawing.Size(210, 64);
-            this.CtrlMoveTask.TabIndex = 1;
-            this.CtrlMoveTask.Text = "MoveTask";
-            this.CtrlMoveTask.UseVisualStyleBackColor = true;
-            this.CtrlMoveTask.Click += new System.EventHandler(this.CtrlMoveTask_Click);
-            // 
-            // CtrlRackRequest
-            // 
-            this.CtrlRackRequest.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CtrlRackRequest.Location = new System.Drawing.Point(435, 73);
-            this.CtrlRackRequest.Name = "CtrlRackRequest";
-            this.CtrlRackRequest.Size = new System.Drawing.Size(210, 64);
-            this.CtrlRackRequest.TabIndex = 1;
-            this.CtrlRackRequest.Text = "RackRequest";
-            this.CtrlRackRequest.UseVisualStyleBackColor = true;
-            this.CtrlRackRequest.Click += new System.EventHandler(this.CtrlRackRequest_Click);
-            // 
-            // CtrlRackTurn
-            // 
-            this.CtrlRackTurn.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CtrlRackTurn.Location = new System.Drawing.Point(435, 143);
-            this.CtrlRackTurn.Name = "CtrlRackTurn";
-            this.CtrlRackTurn.Size = new System.Drawing.Size(210, 64);
-            this.CtrlRackTurn.TabIndex = 1;
-            this.CtrlRackTurn.Text = "RackTurn";
-            this.CtrlRackTurn.UseVisualStyleBackColor = true;
-            this.CtrlRackTurn.Click += new System.EventHandler(this.CtrlRackTurn_Click);
-            // 
-            // CtrlRemoteLocalRequest
-            // 
-            this.CtrlRemoteLocalRequest.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CtrlRemoteLocalRequest.Location = new System.Drawing.Point(435, 213);
-            this.CtrlRemoteLocalRequest.Name = "CtrlRemoteLocalRequest";
-            this.CtrlRemoteLocalRequest.Size = new System.Drawing.Size(210, 64);
-            this.CtrlRemoteLocalRequest.TabIndex = 1;
-            this.CtrlRemoteLocalRequest.Text = "RemoteLocalRequest";
-            this.CtrlRemoteLocalRequest.UseVisualStyleBackColor = true;
-            this.CtrlRemoteLocalRequest.Click += new System.EventHandler(this.CtrlRemoteLocalRequest_Click);
-            // 
-            // CtrlRetrieveTransferInfo
-            // 
-            this.CtrlRetrieveTransferInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CtrlRetrieveTransferInfo.Location = new System.Drawing.Point(435, 283);
-            this.CtrlRetrieveTransferInfo.Name = "CtrlRetrieveTransferInfo";
-            this.CtrlRetrieveTransferInfo.Size = new System.Drawing.Size(210, 68);
-            this.CtrlRetrieveTransferInfo.TabIndex = 1;
-            this.CtrlRetrieveTransferInfo.Text = "RetrieveTransferInfo";
-            this.CtrlRetrieveTransferInfo.UseVisualStyleBackColor = true;
-            this.CtrlRetrieveTransferInfo.Click += new System.EventHandler(this.CtrlRetrieveTransferInfo_Click);
-            // 
-            // CtrlTaskCancel
-            // 
-            this.CtrlTaskCancel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CtrlTaskCancel.Location = new System.Drawing.Point(651, 3);
-            this.CtrlTaskCancel.Name = "CtrlTaskCancel";
-            this.CtrlTaskCancel.Size = new System.Drawing.Size(210, 64);
-            this.CtrlTaskCancel.TabIndex = 1;
-            this.CtrlTaskCancel.Text = "TaskCancel";
-            this.CtrlTaskCancel.UseVisualStyleBackColor = true;
-            this.CtrlTaskCancel.Click += new System.EventHandler(this.CtrlTaskCancel_Click);
-            // 
-            // CtrlTransferCommandRequest
-            // 
-            this.CtrlTransferCommandRequest.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CtrlTransferCommandRequest.Location = new System.Drawing.Point(651, 73);
-            this.CtrlTransferCommandRequest.Name = "CtrlTransferCommandRequest";
-            this.CtrlTransferCommandRequest.Size = new System.Drawing.Size(210, 64);
-            this.CtrlTransferCommandRequest.TabIndex = 1;
-            this.CtrlTransferCommandRequest.Text = "TransferCommandRequest";
-            this.CtrlTransferCommandRequest.UseVisualStyleBackColor = true;
-            this.CtrlTransferCommandRequest.Click += new System.EventHandler(this.CtrlTransferCommandRequest_Click);
+            this.CtrlBufferInitial.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlBufferInitial.Location = new System.Drawing.Point(651, 143);
+            this.CtrlBufferInitial.Name = "CtrlBufferInitial";
+            this.CtrlBufferInitial.Size = new System.Drawing.Size(210, 64);
+            this.CtrlBufferInitial.TabIndex = 1;
+            this.CtrlBufferInitial.Text = "BufferInitial";
+            this.CtrlBufferInitial.UseVisualStyleBackColor = true;
+            this.CtrlBufferInitial.Click += new System.EventHandler(this.CtrlBufferInitial_Click);
             // 
             // ControllersAPITest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1050, 540);
+            this.ClientSize = new System.Drawing.Size(1050, 592);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "ControllersAPITest";
             this.Text = "Controllers API Test";
@@ -304,6 +317,7 @@
         private System.Windows.Forms.Button CtrlRetrieveTransferInfo;
         private System.Windows.Forms.Button CtrlTaskCancel;
         private System.Windows.Forms.Button CtrlTransferCommandRequest;
+        private System.Windows.Forms.Button CtrlBufferInitial;
     }
 }
 

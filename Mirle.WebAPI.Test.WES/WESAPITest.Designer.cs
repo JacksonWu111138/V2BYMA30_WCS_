@@ -60,6 +60,7 @@
             this.WESRemoveRackDown = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.button_GetBufferName = new System.Windows.Forms.Button();
+            this.WESDBTest = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -454,11 +455,22 @@
             this.button_GetBufferName.UseVisualStyleBackColor = true;
             this.button_GetBufferName.Click += new System.EventHandler(this.button_GetBufferName_Click);
             // 
+            // WESDBTest
+            // 
+            this.WESDBTest.Location = new System.Drawing.Point(278, 531);
+            this.WESDBTest.Name = "WESDBTest";
+            this.WESDBTest.Size = new System.Drawing.Size(160, 30);
+            this.WESDBTest.TabIndex = 33;
+            this.WESDBTest.Text = "WESDBTest";
+            this.WESDBTest.UseVisualStyleBackColor = true;
+            this.WESDBTest.Click += new System.EventHandler(this.WESDBTest_Click);
+            // 
             // WESAPITest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1198, 578);
+            this.Controls.Add(this.WESDBTest);
             this.Controls.Add(this.button_GetBufferName);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "WESAPITest";
@@ -502,6 +514,7 @@
         private System.Windows.Forms.Button WESRemoveRackDown;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Button button_GetBufferName;
+        private System.Windows.Forms.Button WESDBTest;
     }
 }
 

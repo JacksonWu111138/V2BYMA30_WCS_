@@ -15,6 +15,28 @@ namespace Mirle.DB.WMS.Proc
             _config = config;
         }
 
+        public bool FunTestConnection()
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        return LocMst.FunTestConnection(db);
+                    }
+                    else
+                        return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
         public string GetLocDD(string sLoc)
         {
             try

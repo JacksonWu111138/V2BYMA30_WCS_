@@ -154,14 +154,17 @@ namespace Mirle.DB.Proc
 
                                             break;
                                         default:
+                                            //B800減料雙port口
+                                            ConveyorInfo con = new ConveyorInfo();
+                                            con = ConveyorDef.GetBuffer_ByStnNo(cmd.Stn_No);
                                             retrieveCompleteInfo = new CarrierRetrieveCompleteInfo
                                             {
                                                 carrierId = cmd.BoxID,
                                                 emptyTransfer = clsConstValue.YesNo.No,
                                                 isComplete = clsConstValue.YesNo.Yes,
                                                 jobId = cmd.JobID,
-                                                location = cmd.Stn_No,
-                                                portId = cmd.Stn_No
+                                                location = con.BufferName,
+                                                portId = con.BufferName
                                             };
 
                                             if (!api.GetCarrierRetrieveComplete().FunReport(retrieveCompleteInfo, _wmsApi.IP))

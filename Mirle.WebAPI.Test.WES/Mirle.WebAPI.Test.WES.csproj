@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="testingList\WESDBTEST.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="testingList\WESDBTEST.Designer.cs">
+      <DependentUpon>WESDBTEST.cs</DependentUpon>
+    </Compile>
     <Compile Include="testingList\WESGetBufferNameaAndStnNo.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -272,6 +278,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="testingList\WESCarrierTransferComplete.resx">
       <DependentUpon>WESCarrierTransferComplete.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="testingList\WESDBTEST.resx">
+      <DependentUpon>WESDBTEST.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="testingList\WESEmptyCarrierUnload.resx">
       <DependentUpon>WESEmptyCarrierUnload.cs</DependentUpon>

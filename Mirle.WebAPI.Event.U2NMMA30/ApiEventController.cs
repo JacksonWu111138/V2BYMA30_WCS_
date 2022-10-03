@@ -1061,7 +1061,11 @@ namespace Mirle.WebAPI.Event
             try
             {
                 if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCmdSno(Body.jobId))
-                    throw new Exception($"Error: MiddleCmd table has no this jobId: {Body.jobId}");
+                {
+                    CmdMstInfo cmd = new CmdMstInfo();
+                    if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
+                        throw new Exception($"Error: CMDMST與middle都沒有此命令, jobId = {Body.jobId}.");
+                }
                 else
                 {
                     MiddleCmd middle = new MiddleCmd();

@@ -214,5 +214,11 @@ namespace Mirle.WebAPI.Test.WES
             WESGetBufferNameaAndStnNo form = new WESGetBufferNameaAndStnNo();
             form.Show();
         }
+
+        private void WESDBTest_Click(object sender, EventArgs e)
+        {
+            WESDBTEST form = new WESDBTEST();
+            form.Show();
+        }
     }
 }

@@ -300,6 +300,8 @@ namespace Mirle.WebAPI.Event
                     cmd.Prty = Body.priority;
                     cmd.Remark = "";
 
+                    
+
                     if (Body.toLocation == ConveyorDef.WES_B800CV)
                     {
                         int count = 0; bool check = false;
@@ -1527,14 +1529,15 @@ namespace Mirle.WebAPI.Event
                     {
                         jobId = cmd.JobID,
                         carrierId = Body.id,
-                        location = con.StnNo == null ? con.BufferName : con.StnNo,
-                        //判斷是不是儲位 來決定inStock
+                        location = con.StnNo == null ? con.BufferName : con.StnNo
                     };
 
                     if (!clsAPI.GetAPI().GetPositionReport().FunReport(info, clsAPI.GetWesApiConfig().IP))
                         throw new Exception($"Error: PositionReport to WES fail, jobId = {Body.jobId}.");
-                }
 
+                }
+                if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, Body.position))
+                    throw new Exception($"Error: Update CurLoc fail, jobId = {Body.jobId}.");
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";

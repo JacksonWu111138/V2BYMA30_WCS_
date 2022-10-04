@@ -1201,5 +1201,11 @@ namespace Mirle.ASRS.WCS.View
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
             }
         }
+
+        private void button_Controller_API_TEST_Click(object sender, EventArgs e)
+        {
+            ControllersAPITest form_2 = new ControllersAPITest();
+            form_2.Show();
+        }
     }
 }

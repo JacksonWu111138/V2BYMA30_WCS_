@@ -65,6 +65,7 @@
             this.mnuMiddleComplete = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMiddleCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuInsertMiddleCmd = new System.Windows.Forms.ToolStripMenuItem();
+            this.button_Controller_API_TEST = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -269,6 +270,7 @@
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.button_Controller_API_TEST, 0, 8);
             this.tableLayoutPanel1.Controls.Add(this.chkIgnoreTkt, 0, 6);
             this.tableLayoutPanel1.Controls.Add(this.btnCrandSpeedMaintain, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.btnStockerModeMaintain, 0, 0);
@@ -281,16 +283,17 @@
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 8;
+            this.tableLayoutPanel1.RowCount = 10;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 44F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.Size = new System.Drawing.Size(177, 565);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
@@ -299,10 +302,10 @@
             this.chkIgnoreTkt.AutoSize = true;
             this.chkIgnoreTkt.Dock = System.Windows.Forms.DockStyle.Fill;
             this.chkIgnoreTkt.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.chkIgnoreTkt.Location = new System.Drawing.Point(4, 376);
+            this.chkIgnoreTkt.Location = new System.Drawing.Point(4, 358);
             this.chkIgnoreTkt.Margin = new System.Windows.Forms.Padding(4);
             this.chkIgnoreTkt.Name = "chkIgnoreTkt";
-            this.chkIgnoreTkt.Size = new System.Drawing.Size(169, 36);
+            this.chkIgnoreTkt.Size = new System.Drawing.Size(169, 28);
             this.chkIgnoreTkt.TabIndex = 10;
             this.chkIgnoreTkt.Text = "Ignore Ticket";
             this.chkIgnoreTkt.UseVisualStyleBackColor = true;
@@ -362,7 +365,7 @@
             this.chkCycleRun.Location = new System.Drawing.Point(4, 322);
             this.chkCycleRun.Margin = new System.Windows.Forms.Padding(4);
             this.chkCycleRun.Name = "chkCycleRun";
-            this.chkCycleRun.Size = new System.Drawing.Size(169, 46);
+            this.chkCycleRun.Size = new System.Drawing.Size(169, 28);
             this.chkCycleRun.TabIndex = 7;
             this.chkCycleRun.Text = "Cycle Run";
             this.chkCycleRun.UseVisualStyleBackColor = true;
@@ -385,7 +388,7 @@
             // 
             this.AGVTaskCancelButten.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.AGVTaskCancelButten.Location = new System.Drawing.Point(4, 421);
+            this.AGVTaskCancelButten.Location = new System.Drawing.Point(4, 395);
             this.AGVTaskCancelButten.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.AGVTaskCancelButten.Name = "AGVTaskCancelButten";
             this.AGVTaskCancelButten.Size = new System.Drawing.Size(169, 44);
@@ -524,6 +527,17 @@
             this.mnuInsertMiddleCmd.Text = "Insert";
             this.mnuInsertMiddleCmd.Click += new System.EventHandler(this.mnuInsertMiddleCmd_Click);
             // 
+            // button_Controller_API_TEST
+            // 
+            this.button_Controller_API_TEST.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button_Controller_API_TEST.Location = new System.Drawing.Point(3, 447);
+            this.button_Controller_API_TEST.Name = "button_Controller_API_TEST";
+            this.button_Controller_API_TEST.Size = new System.Drawing.Size(171, 34);
+            this.button_Controller_API_TEST.TabIndex = 0;
+            this.button_Controller_API_TEST.Text = "Controller API test";
+            this.button_Controller_API_TEST.UseVisualStyleBackColor = true;
+            this.button_Controller_API_TEST.Click += new System.EventHandler(this.button_Controller_API_TEST_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -602,6 +616,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuInsertMiddleCmd;
         private System.Windows.Forms.DataGridView Grid_MiddleCmd;
         private System.Windows.Forms.Panel pnlCraneSts;
+        private System.Windows.Forms.Button button_Controller_API_TEST;
     }
 }
 

@@ -537,11 +537,15 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.S3_37.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.SMTC.S3_38.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.SMTC.S3_39.API.IP = lcsini.Client_API.SMTC;
+            ConveyorDef.AGV.S3_40.API.IP = lcsini.Client_API.SMTC;
+            ConveyorDef.AGV.S3_41.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.SMTC.S3_42.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.SMTC.S3_43.API.IP = lcsini.Client_API.SMTC;
+            ConveyorDef.AGV.S3_44.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.AGV.S3_45.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.SMTC.S3_46.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.SMTC.S3_47.API.IP = lcsini.Client_API.SMTC;
+            ConveyorDef.AGV.S3_48.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.AGV.S3_49.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.AGV.S4_01.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.AGV.S4_07.API.IP = lcsini.Client_API.SMTC;

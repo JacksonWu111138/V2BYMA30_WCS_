@@ -265,6 +265,7 @@ namespace Mirle.DB.Proc
                                             if (!Routdef.CheckSourceIsOK_NonASRS(cmd, sLoc_Start, middle, conveyor, db)) continue;
                                             if (!Routdef.CheckDestinationIsOK_NonASRS(cmd, sLoc_End, middle, conveyor_To, db)) continue;
                                             MiddleCmd middleCmd = new MiddleCmd();
+                                            if (MiddleCmd.CheckHasMiddleCmdByCmdSno(cmd.Cmd_Sno, db) == DBResult.Success) continue;
                                             if (!MiddleCmd.FunGetMiddleCmd_NonASRS(cmd, sLoc_Start, sLoc_End, ref middleCmd, sDeviceID, db)) continue;
 
                                             if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
@@ -316,7 +317,7 @@ namespace Mirle.DB.Proc
 
                                                     continue;
                                                 }
-                                                else if (!string.IsNullOrWhiteSpace(sCmdSno_CV) && sCmdSno_CV != cmd.Cmd_Sno)
+                                                else if (sCmdSno_CV != "00000" && sCmdSno_CV != cmd.Cmd_Sno)
                                                 {
                                                     sRemark = $"Error: {con.BufferName}已被其他任務預約 => {sCmdSno_CV}";
                                                     if (sRemark != cmd.Remark)

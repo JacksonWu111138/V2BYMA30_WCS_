@@ -284,7 +284,7 @@ namespace Mirle.DB.Fun
             else if (bufferName == Tower.E1_04.BufferName || bufferName == AGV.E2_38.BufferName || bufferName == AGV.E2_39.BufferName)
                 return "7";
             else
-                return "O";
+                return "";
         }
 
         public bool CheckWhId_ASRS(string sDeviceID, ref clsEnum.AsrsType type)

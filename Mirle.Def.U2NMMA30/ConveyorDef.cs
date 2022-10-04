@@ -194,6 +194,7 @@ namespace Mirle.Def.U2NMMA30
             public static ConveyorInfo S3_31 = new ConveyorInfo { Index = 31, BufferName = "S3-31" };
             public static ConveyorInfo S3_37 = new ConveyorInfo { Index = 37, BufferName = "S3-37" };
             public static ConveyorInfo S3_40 = new ConveyorInfo { Index = 40, BufferName = "S3-40" };
+            public static ConveyorInfo S3_41 = new ConveyorInfo { Index = 41, BufferName = "S3-41" };
             public static ConveyorInfo S3_44 = new ConveyorInfo { Index = 44, BufferName = "S3-44" };
             public static ConveyorInfo S3_45 = new ConveyorInfo { Index = 45, BufferName = "S3-45" };
             public static ConveyorInfo S3_48 = new ConveyorInfo { Index = 48, BufferName = "S3-48" };
@@ -501,6 +502,7 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(SMTC.S3_38);
             Node_All.Add(SMTC.S3_39);
             Node_All.Add(AGV.S3_40);
+            Node_All.Add(AGV.S3_41);
             Node_All.Add(SMTC.S3_42);
             Node_All.Add(SMTC.S3_43);
             Node_All.Add(AGV.S3_44);

@@ -241,6 +241,9 @@ namespace Mirle.Def.U2NMMA30
         string A3_15 { get; }
         string A3_18 { get; }
         string A3_19 { get; }
+        string S0_02 { get; }
+        string S0_03 { get; }
+        string S0_05 { get; }
         string S1_01 { get; }
         string S1_07 { get; }
         string S1_13 { get; }
@@ -281,7 +284,7 @@ namespace Mirle.Def.U2NMMA30
         string S4_49 { get; }
         string S4_50 { get; }
         string S5_38 { get; }
-        string S5_39 { get;}
+        string S5_39 { get; }
         string A4_02 { get; }
         string A4_03 { get; }
         string A4_06 { get; }

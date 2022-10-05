@@ -4,6 +4,8 @@ using System.Data;
 using Mirle.Structure;
 using Mirle.DataBase;
 using Mirle.EccsSignal;
+using static Mirle.Def.clsConstValue;
+using static Mirle.Structure.Info.VIDEnums;
 
 namespace Mirle.DB.Fun
 {
@@ -397,6 +399,47 @@ namespace Mirle.DB.Fun
             }
         }
 
+        public bool FunCheckWriteToMiddle(string sCmdSno, DataBase.DB db)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                CmdMstInfo cmd = new CmdMstInfo();
+                string strEM = "";
+                string strSql = $"select * from {Parameter.clsCmd_Mst.TableName}" +
+                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}'";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet == DBResult.Success)
+                {
+                    cmd = tool.GetCommand(dtTmp.Rows[0]);
+
+                    if (cmd.writeToMiddle == clsConstValue.YesNo.Yes)
+                        return true;
+                    else
+                        return false;
+                }
+                else
+                {
+                    if (iRet != DBResult.NoDataSelect)
+                    {
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                    }
+                }
+
+                return false;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+            finally
+            {
+                dtTmp = null;
+            }
+        }
+
         public int FunCheckHasCommand(string sLoc, ref CmdMstInfo cmd, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
@@ -548,6 +591,34 @@ namespace Mirle.DB.Fun
                 string strSql = $"update {Parameter.clsCmd_Mst.TableName} set {Parameter.clsCmd_Mst.Column.Prty} = '" + Pry + "' ";
                 strSql += $" where {Parameter.clsCmd_Mst.Column.BoxID} = '{sBoxID}' ";
 
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunUpdateWriteToMiddle(string sCmdSno, string yesNo, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"update {Parameter.clsCmd_Mst.TableName} set" +
+                    $" {Parameter.clsCmd_Mst.Column.writeToMiddle} = '{yesNo}'";
+                strSql += $" where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}' ";
+
+                string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {
                     clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
@@ -889,7 +960,7 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsCmd_Mst.Column.Equ_No}, {Parameter.clsCmd_Mst.Column.CurLoc}, " +
                     $"{Parameter.clsCmd_Mst.Column.CurDeviceID}, {Parameter.clsCmd_Mst.Column.Zone}, {Parameter.clsCmd_Mst.Column.Remark}," +
                     $"{Parameter.clsCmd_Mst.Column.rackLocation}, {Parameter.clsCmd_Mst.Column.largest}, {Parameter.clsCmd_Mst.Column.carrierType}," +
-                    $"{Parameter.clsCmd_Mst.Column.lotSize}) values(";
+                    $"{Parameter.clsCmd_Mst.Column.lotSize}, {Parameter.clsCmd_Mst.Column.writeToMiddle}) values(";
                 sSQL += "'" + stuCmdMst.Cmd_Sno + "', ";
                 sSQL += "'" + clsConstValue.CmdSts.strCmd_Initial + "', ";
                 sSQL += "" + stuCmdMst.Prty + ", 'NA', ";
@@ -908,7 +979,8 @@ namespace Mirle.DB.Fun
                 sSQL += $"'{stuCmdMst.CurLoc}', ";
                 sSQL += "'" + stuCmdMst.CurDeviceID + "',";
                 sSQL += "'" + stuCmdMst.Zone_ID + "'," +
-                    $"'{stuCmdMst.Remark}','{stuCmdMst.rackLocation}','{stuCmdMst.largest}','{stuCmdMst.carrierType}','{stuCmdMst.lotSize}')";
+                    $"'{stuCmdMst.Remark}','{stuCmdMst.rackLocation}','{stuCmdMst.largest}','{stuCmdMst.carrierType}','{stuCmdMst.lotSize}'" +
+                    $", '{stuCmdMst.writeToMiddle}')";
 
                 if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                 {

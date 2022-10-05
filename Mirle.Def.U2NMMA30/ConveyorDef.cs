@@ -216,6 +216,10 @@ namespace Mirle.Def.U2NMMA30
 
             public static ConveyorInfo S6_01 = new ConveyorInfo { Index = 1, BufferName = "S6-01" };
             public static ConveyorInfo S6_07 = new ConveyorInfo { Index = 7, BufferName = "S6-07" };
+
+            public static ConveyorInfo S0_01 = new ConveyorInfo { Index = 1, BufferName = "S0-01" };
+            public static ConveyorInfo S0_04 = new ConveyorInfo { Index = 4, BufferName = "S0-04" };
+            public static ConveyorInfo S0_05 = new ConveyorInfo { Index = 5, BufferName = "S0-05" };
         }
         /// <summary>
         /// 3F產線
@@ -280,6 +284,8 @@ namespace Mirle.Def.U2NMMA30
             public static ConveyorInfo S3_47 = new ConveyorInfo { Index = 47, BufferName = "S3-47" };
             public static ConveyorInfo S5_38 = new ConveyorInfo { Index = 38, BufferName = "S5-38" };
             public static ConveyorInfo S5_39 = new ConveyorInfo { Index = 39, BufferName = "S5-39" };
+            public static ConveyorInfo S0_02 = new ConveyorInfo { Index = 2, BufferName = "S0-02" };
+            public static ConveyorInfo S0_03 = new ConveyorInfo { Index = 2, BufferName = "S0-03" };
         }
         /// <summary>
         /// 線邊倉
@@ -527,6 +533,11 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(AGV.S5_49);
             Node_All.Add(AGV.S6_01);
             Node_All.Add(AGV.S6_07);
+            Node_All.Add(AGV.S0_01);
+            Node_All.Add(SMTC.S0_02);
+            Node_All.Add(SMTC.S0_03);
+            Node_All.Add(AGV.S0_04);
+            Node_All.Add(AGV.S0_05);
         }
 
 
@@ -612,6 +623,9 @@ namespace Mirle.Def.U2NMMA30
             Stations.Add(SMT6C.A3_15);
             Stations.Add(SMT6C.A3_18);
             Stations.Add(SMT6C.A3_19);
+            Stations.Add(AGV.S0_05);
+            Stations.Add(SMTC.S0_02);
+            Stations.Add(SMTC.S0_03);
             Stations.Add(AGV.S1_01);
             Stations.Add(AGV.S1_07);
             Stations.Add(AGV.S1_13);

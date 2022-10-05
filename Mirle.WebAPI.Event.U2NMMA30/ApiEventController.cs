@@ -793,14 +793,17 @@ namespace Mirle.WebAPI.Event
             try
             {
                 string strEM = "";
-                //執行BufferRoll
-                ConveyorInfo conveyor = new ConveyorInfo();
-                conveyor = ConveyorDef.GetBuffer(Body.currentLoc);
+                if(Body.currentLoc != ConveyorDef.AGV.E2_35.BufferName && Body.currentLoc != ConveyorDef.AGV.E2_36.BufferName && Body.currentLoc != ConveyorDef.AGV.E2_37.BufferName)
+                {
+                    //執行BufferRoll
+                    ConveyorInfo conveyor = new ConveyorInfo();
+                    conveyor = ConveyorDef.GetBuffer(Body.currentLoc);
 
-                BufferRollInfo info = new BufferRollInfo { jobId = Body.jobId, bufferId = conveyor.BufferName };
+                    BufferRollInfo info = new BufferRollInfo { jobId = Body.jobId, bufferId = conveyor.BufferName };
 
-                if (!clsAPI.GetAPI().GetBufferRoll().FunReport(info, conveyor.API.IP))
-                    throw new Exception(strEM);
+                    if (!clsAPI.GetAPI().GetBufferRoll().FunReport(info, conveyor.API.IP))
+                        throw new Exception(strEM);
+                }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -834,13 +837,13 @@ namespace Mirle.WebAPI.Event
             try
             {
                 string strEM = "";
-                if (Body.status == clsEnum.AlarmSts.OnGoing.ToString())
+                if (Body.status == ((int)clsEnum.AlarmSts.OnGoing).ToString())
                 {
                     if (!clsDB_Proc.GetDB_Object().GetAlarmCVCLog().FunAlarm_Occur(Body.jobId, Body.deviceId, Body.alarmCode,
                         Body.alarmDef, Body.bufferId, Body.happenTime, ref strEM))
                         throw new Exception(strEM);
                 }
-                else if (Body.status == clsEnum.AlarmSts.Clear.ToString())
+                else if (Body.status == ((int)clsEnum.AlarmSts.Clear).ToString())
                 {
                     if (!clsDB_Proc.GetDB_Object().GetAlarmCVCLog().FunAlarm_Solved(Body.jobId, Body.deviceId, Body.alarmCode,
                         Body.alarmDef, Body.bufferId, Body.happenTime, ref strEM))
@@ -880,6 +883,15 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST start!");
             try
             {
+                //以下為測試CV時使用
+                rMsg.transactionId = "AUTO_" + rMsg.transactionId;
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
+                rMsg.returnComment = "";
+
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
+                return Json(rMsg);
+                //以上為測試CV時使用
+
                 CmdMstInfo cmd = new CmdMstInfo();
                 bool check = false;
                 check = clsDB_Proc.GetDB_Object().GetCmd_Mst().FunCheckHasCommand_ByBoxID(Body.barcode, ref cmd);
@@ -1062,7 +1074,7 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CMD_DESTINATION_CHECK start!");
             try
             {
-                if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCmdSno(Body.jobId))
+                if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCSTID(Body.location))
                 {
                     CmdMstInfo cmd = new CmdMstInfo();
                     if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
@@ -1897,6 +1909,20 @@ namespace Mirle.WebAPI.Event
                     location = Body.stagePosition,
                     rackId = Body.rackId
                 };
+
+                MiddleCmd middlecmd = new MiddleCmd();
+                middlecmd.CommandID = Body.jobId;
+                middlecmd.TaskNo = "RackTurnRequest";
+                middlecmd.CSTID = Body.rackId;
+                middlecmd.CmdSts = CmdSts_MiddleCmd.strCmd_WriteDeviceCmd;
+                middlecmd.CmdMode = CmdMode.S2S;
+                middlecmd.CrtDate = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                middlecmd.carrierType = clsConstValue.ControllerApi.CarrierType.Rack;
+
+                if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunInsMiddleCmd(middlecmd))
+                    throw new Exception($"Error: fail to write RackTurn, jobId = {Body.jobId}.");
+
+
                 if (!clsAPI.GetAPI().GetRackTurn().FunReport(info, clsAPI.GetAgvcApiConfig().IP))
                     throw new Exception($"Error: RackTurn fail, jobId = {Body.jobId}.");
 

@@ -53,5 +53,6 @@ namespace Mirle.Structure
         public string largest { get; set; } = "N";
         public string carrierType { get; set; } = "";
         public string lotSize { get; set; } = "";
+        public string writeToMiddle { get; set; } = "N";
     }
 }

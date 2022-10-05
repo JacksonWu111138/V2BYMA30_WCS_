@@ -276,7 +276,7 @@ namespace Mirle.ASRS.WCS.View
             this.txtStnNo.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtStnNo.Location = new System.Drawing.Point(221, 4);
             this.txtStnNo.Margin = new System.Windows.Forms.Padding(4);
-            this.txtStnNo.MaxLength = 5;
+            this.txtStnNo.MaxLength = 6;
             this.txtStnNo.Name = "txtStnNo";
             this.txtStnNo.Size = new System.Drawing.Size(355, 39);
             this.txtStnNo.TabIndex = 56;

@@ -11,7 +11,7 @@ DROP TABLE SnoCtrlDef;
 DROP TABLE Task;
 DROP TABLE HisTask;
 DROP TABLE SNO_CTL;
-DROP TABLE SNO_MAX
+DROP TABLE SNO_MAX;
 DROP TABLE CMD_MST;
 Drop Table CMD_MST_His;
 Drop Table Teach_Loc;
@@ -340,7 +340,7 @@ UserID			Varchar(20),
 BoxId			NVarchar(350) Not Null,
 EquNO			Varchar(2)  NOT NULL,		
 CurLoc			Varchar(60) Not Null     Default '',	
-CurDeviceID     Varchar(2)  Not Null     Default '',
+CurDeviceID     Varchar(6)  Not Null     Default '',
 JobID           NVarchar(MAX) NOT NULL  Default '',
 BatchID         NVarchar(MAX) NOT NULL  Default '',
 ZoneID          NVarchar(MAX) NOT NULL  Default '',
@@ -352,6 +352,7 @@ rackLocation  NVarchar(MAX) NOT NULL  Default '',
 largest          NVarchar(MAX) NOT NULL  Default 'N',
 carrierType  NVarchar(MAX) NOT NULL  Default '',
 lotSize          Varchar(3)  Not Null        Default '',
+writeToMiddle	Varchar(1) Not Null Default 'N',
 Primary Key(CmdMode, BoxId)
 );
 
@@ -374,7 +375,7 @@ UserID			Varchar(20),
 BoxId			NVarchar(350) Not Null,
 EquNO			Varchar(2)  NOT NULL,		
 CurLoc			Varchar(60) Not Null     Default '',	
-CurDeviceID     Varchar(2)  Not Null     Default '',
+CurDeviceID     Varchar(6)  Not Null     Default '',
 JobID           NVarchar(MAX) NOT NULL  Default '',
 BatchID         NVarchar(MAX) NOT NULL  Default '',
 ZoneID          NVarchar(MAX) NOT NULL  Default '',
@@ -385,7 +386,8 @@ ticketId        Varchar(MAX) Not Null default '',
 rackLocation  NVarchar(MAX) NOT NULL  Default '',
 carrierType  NVarchar(MAX) NOT NULL  Default '',
 largest          NVarchar(MAX) NOT NULL  Default 'N',
-lotSize          Varchar(3)  Not Null        Default ''
+lotSize          Varchar(3)  Not Null        Default '',
+writeToMiddle	Varchar(1) Not Null Default 'N',
 );
 
 Create Table Teach_Loc

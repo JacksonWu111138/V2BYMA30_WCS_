@@ -211,6 +211,11 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.S5_49.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S6_01.ControllerID = lcsini.ControllerID.SMTC;
             ConveyorDef.AGV.S6_07.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.AGV.S0_01.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.SMTC.S0_02.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.SMTC.S0_03.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.AGV.S0_04.ControllerID = lcsini.ControllerID.SMTC;
+            ConveyorDef.AGV.S0_05.ControllerID = lcsini.ControllerID.SMTC;
 
             ConveyorDef.AGV.A4_01.ControllerID = lcsini.ControllerID.Line;
             ConveyorDef.Line.A4_02.ControllerID = lcsini.ControllerID.Line;
@@ -317,6 +322,9 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.B1_079.StnNo = lcsini.StnNo.B1_079;
             ConveyorDef.Box.B1_142.StnNo = lcsini.StnNo.B1_142;
             ConveyorDef.Box.B1_147.StnNo = lcsini.StnNo.B1_147;
+            ConveyorDef.AGV.S0_05.StnNo = lcsini.StnNo.S0_05;
+            ConveyorDef.SMTC.S0_02.StnNo = lcsini.StnNo.S0_02;
+            ConveyorDef.SMTC.S0_03.StnNo = lcsini.StnNo.S0_03;
             ConveyorDef.SMT3C.A1_02.StnNo = lcsini.StnNo.A1_02;
             ConveyorDef.SMT3C.A1_03.StnNo = lcsini.StnNo.A1_03;
             ConveyorDef.SMT3C.A1_06.StnNo = lcsini.StnNo.A1_06;
@@ -503,6 +511,9 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.M1_15.API.IP = lcsini.Client_API.PCBA;
             ConveyorDef.AGV.M1_20.API.IP = lcsini.Client_API.PCBA;
 
+            ConveyorDef.AGV.S0_01.API.IP = lcsini.Client_API.SMTC;
+            ConveyorDef.AGV.S0_04.API.IP = lcsini.Client_API.SMTC;
+            ConveyorDef.AGV.S0_05.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.AGV.S1_01.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.AGV.S1_07.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.AGV.S1_13.API.IP = lcsini.Client_API.SMTC;

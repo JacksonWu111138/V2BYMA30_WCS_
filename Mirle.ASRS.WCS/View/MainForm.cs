@@ -888,6 +888,12 @@ namespace Mirle.ASRS.WCS.View
             _unityContainer.RegisterInstance(new WCSController());
             _webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
             clearCmd = new DB.ClearCmd.Proc.clsHost();
+            FunWESDBConnectionInit();
+        }
+        private void FunWESDBConnectionInit()
+        {
+            if (!clsDB_Proc.GetWmsDB_Object().GetLocMst().FunTestConnection())
+                MessageBox.Show($"失敗.", "WES DB Connection Test", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void FunEventInit()

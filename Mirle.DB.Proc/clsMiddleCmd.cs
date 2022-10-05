@@ -106,6 +106,12 @@ namespace Mirle.DB.Proc
                                         continue;
                                     }
 
+                                    if(!cmd_Mst.FunUpdateWriteToMiddle(sCmdSno, clsConstValue.YesNo.No, db))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        continue;
+                                    }
+
                                     if (!MiddleCmd.FunInsertHisMiddleCmd(sCmdSno, db))
                                     {
                                         db.TransactionCtrl(TransactionTypes.Rollback);

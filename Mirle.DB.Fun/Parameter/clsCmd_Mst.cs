@@ -137,6 +137,10 @@ namespace Mirle.DB.Fun.Parameter
             public const string largest = "largest";
             public const string carrierType = "carrierType";
             public const string lotSize = "lotSize";
+            /// <summary>
+            /// 此段命令是否寫進middle
+            /// </summary>
+            public const string writeToMiddle = "writeToMiddle";
         }
     }
 }

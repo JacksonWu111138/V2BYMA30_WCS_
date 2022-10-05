@@ -113,7 +113,7 @@ namespace Mirle.ASRS.WCS.View
             this.txtCurLoc.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtCurLoc.Location = new System.Drawing.Point(208, 132);
             this.txtCurLoc.Margin = new System.Windows.Forms.Padding(4);
-            this.txtCurLoc.MaxLength = 5;
+            this.txtCurLoc.MaxLength = 6;
             this.txtCurLoc.Name = "txtCurLoc";
             this.txtCurLoc.Size = new System.Drawing.Size(206, 39);
             this.txtCurLoc.TabIndex = 61;

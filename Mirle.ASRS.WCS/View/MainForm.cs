@@ -351,7 +351,7 @@ namespace Mirle.ASRS.WCS.View
             if (insertCmd_MiddleCmd == null)
             {
                 insertCmd_MiddleCmd = new frmInsertCmd_MiddleCmd();
-                insertCmd_MiddleCmd.TopMost = true;
+                insertCmd_MiddleCmd.TopMost = false;
                 insertCmd_MiddleCmd.FormClosed += new FormClosedEventHandler(funMiddleCmdMaintain_FormClosed);
                 insertCmd_MiddleCmd.Show();
             }
@@ -447,7 +447,7 @@ namespace Mirle.ASRS.WCS.View
             if (insertCmd_CmdMst == null)
             {
                 insertCmd_CmdMst = new frmInsertCmd_CmdMst();
-                insertCmd_CmdMst.TopMost = true;
+                insertCmd_CmdMst.TopMost = false;
                 insertCmd_CmdMst.FormClosed += new FormClosedEventHandler(funCmdMaintain_FormClosed);
                 insertCmd_CmdMst.Show();
             }
@@ -474,7 +474,7 @@ namespace Mirle.ASRS.WCS.View
             if (updCurLoc == null)
             {
                 updCurLoc = new frmUpdCurLoc(sCmdSno, sCurDeviceID, sCurLoc);
-                updCurLoc.TopMost = true;
+                updCurLoc.TopMost = false;
                 updCurLoc.FormClosed += new FormClosedEventHandler(funCmdMaintain_CurLoc_FormClosed);
                 updCurLoc.Show();
             }
@@ -877,14 +877,15 @@ namespace Mirle.ASRS.WCS.View
             CVLocation = new clsGetCVLocation(router);
             ConveyorDef.FunNodeListAddInit();
             ConveyorDef.FunStnListAddInit();
-            FunAsrsCmdInit();
             tool = new DB.Fun.clsTool(PCBA, Box);
             middle = new MidHost(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box, 
                 ConveyorDef.DeviceID_AGV, ConveyorDef.DeviceID_Tower, clInitSys.DbConfig, clInitSys.AgvApi_Config, clInitSys.TowerApi_Config);
+            FunAsrsCmdInit();
             _unityContainer = new UnityContainer();
             _unityContainer.RegisterInstance(new WCSController());
             _webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
             clearCmd = new DB.ClearCmd.Proc.clsHost();
+
             FunWESDBConnectionInit();
         }
         private void FunWESDBConnectionInit()

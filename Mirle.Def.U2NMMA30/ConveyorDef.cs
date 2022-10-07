@@ -285,7 +285,8 @@ namespace Mirle.Def.U2NMMA30
             public static ConveyorInfo S5_38 = new ConveyorInfo { Index = 38, BufferName = "S5-38" };
             public static ConveyorInfo S5_39 = new ConveyorInfo { Index = 39, BufferName = "S5-39" };
             public static ConveyorInfo S0_02 = new ConveyorInfo { Index = 2, BufferName = "S0-02" };
-            public static ConveyorInfo S0_03 = new ConveyorInfo { Index = 2, BufferName = "S0-03" };
+            public static ConveyorInfo S0_03 = new ConveyorInfo { Index = 3, BufferName = "S0-03" };
+            public static ConveyorInfo S3_14 = new ConveyorInfo { Index = 14, BufferName = "S3-14" };
         }
         /// <summary>
         /// 線邊倉
@@ -667,6 +668,7 @@ namespace Mirle.Def.U2NMMA30
             Stations.Add(AGV.S0_05);
             Stations.Add(SMTC.S0_02);
             Stations.Add(SMTC.S0_03);
+            Stations.Add(SMTC.S3_14);
             Stations.Add(AGV.S1_01);
             Stations.Add(AGV.S1_07);
             Stations.Add(AGV.S1_13);

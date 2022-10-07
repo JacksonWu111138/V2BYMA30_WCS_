@@ -439,6 +439,7 @@ namespace Mirle.DB.Proc
                             for (int i = 0; i < dtTmp.Rows.Count; i++)
                             {
                                 CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
+                                
                                 if (!Cmd_Mst.CheckCraneStatus(cmd, Device, CrnSignal, db)) continue;
 
                                 string sRemark = "";

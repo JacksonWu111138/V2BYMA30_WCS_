@@ -373,6 +373,7 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.S3_01.StnNo = lcsini.StnNo.S3_01;
             ConveyorDef.AGV.S3_07.StnNo = lcsini.StnNo.S3_07;
             ConveyorDef.AGV.S3_13.StnNo = lcsini.StnNo.S3_13;
+            ConveyorDef.SMTC.S3_14.StnNo = lcsini.StnNo.S3_14;
             ConveyorDef.AGV.S3_19.StnNo = lcsini.StnNo.S3_19;
             ConveyorDef.AGV.S3_25.StnNo = lcsini.StnNo.S3_25;
             ConveyorDef.AGV.S3_31.StnNo = lcsini.StnNo.S3_31;

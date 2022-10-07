@@ -266,6 +266,7 @@ namespace Mirle.Def.U2NMMA30
         string S3_01 { get; }
         string S3_07 { get; }
         string S3_13 { get; }
+        string S3_14 { get; }
         string S3_19 { get; }
         string S3_25 { get; }
         string S3_31 { get; }

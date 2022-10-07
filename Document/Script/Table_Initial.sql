@@ -412,6 +412,8 @@ insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, T
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('SMTC', 'S5-39', 3, 14, 39, ' ',1);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('SMTC', 'S0-02', 3, 15, 2, ' ',1);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('SMTC', 'S0-03', 3, 16, 3, ' ',1);
+insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('SMTC', 'S3-14', 3, 17, 14, ' ',1);
+
 
 insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('68', 'S1-37', 'SMTC', 'S1-38', ' ');
 insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('68', 'S1-41', 'SMTC', 'S1-42', ' ');
@@ -429,6 +431,7 @@ insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) 
 insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('SMTC', 'S3-47', '68', 'S3-48', ' ');
 insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('SMTC', 'S5-39', '68', 'S5-40', ' ');
 insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('SMTC', 'S0-03', '68', 'S0-04', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('SMTC', 'S3-14', '68', 'S3-13', ' ');
 
 
 --線邊倉

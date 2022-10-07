@@ -512,6 +512,8 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.M1_20.API.IP = lcsini.Client_API.PCBA;
 
             ConveyorDef.AGV.S0_01.API.IP = lcsini.Client_API.SMTC;
+            ConveyorDef.SMTC.S0_02.API.IP = lcsini.Client_API.SMTC;
+            ConveyorDef.SMTC.S0_03.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.AGV.S0_04.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.AGV.S0_05.API.IP = lcsini.Client_API.SMTC;
             ConveyorDef.AGV.S1_01.API.IP = lcsini.Client_API.SMTC;

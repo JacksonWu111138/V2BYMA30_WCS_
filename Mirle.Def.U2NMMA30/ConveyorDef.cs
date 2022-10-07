@@ -547,6 +547,47 @@ namespace Mirle.Def.U2NMMA30
             AGV_All.Add(AGV.A4_08);
         }
 
+        private static List<ConveyorInfo> AGV_SendToCVend = new List<ConveyorInfo>();
+        public static void FunAGVSendToCVend()
+        {
+            //八樓線邊倉
+            AGV_SendToCVend.Add(AGV.A4_01);
+            AGV_SendToCVend.Add(AGV.A4_05);
+            AGV_SendToCVend.Add(AGV.A4_09);
+            AGV_SendToCVend.Add(AGV.A4_13);
+            AGV_SendToCVend.Add(AGV.A4_17);
+
+            //八樓SMTC產線
+            AGV_SendToCVend.Add(AGV.S1_37);
+            AGV_SendToCVend.Add(AGV.S1_41);
+            AGV_SendToCVend.Add(AGV.S1_45);
+            AGV_SendToCVend.Add(AGV.S3_37);
+            AGV_SendToCVend.Add(AGV.S3_41);
+            AGV_SendToCVend.Add(AGV.S3_45);
+            AGV_SendToCVend.Add(AGV.S5_37);
+            AGV_SendToCVend.Add(AGV.S0_01);
+
+            //六樓SMT6C
+            AGV_SendToCVend.Add(AGV.A3_01);
+            AGV_SendToCVend.Add(AGV.A3_05);
+            AGV_SendToCVend.Add(AGV.A3_09);
+            AGV_SendToCVend.Add(AGV.A3_13);
+            AGV_SendToCVend.Add(AGV.A3_17);
+
+            //五樓SMT5C
+            AGV_SendToCVend.Add(AGV.A2_01);
+            AGV_SendToCVend.Add(AGV.A2_05);
+            AGV_SendToCVend.Add(AGV.A2_09);
+            AGV_SendToCVend.Add(AGV.A2_13);
+            AGV_SendToCVend.Add(AGV.A2_17);
+
+            //三樓SMT3C
+            AGV_SendToCVend.Add(AGV.A1_01);
+            AGV_SendToCVend.Add(AGV.A1_05);
+            AGV_SendToCVend.Add(AGV.A1_09);
+
+        }
+
         private static List<ConveyorInfo> B800CV = new List<ConveyorInfo>();
         public static List<ConveyorInfo> GetB800CV_List() => B800CV;
         private static int Current = 1;

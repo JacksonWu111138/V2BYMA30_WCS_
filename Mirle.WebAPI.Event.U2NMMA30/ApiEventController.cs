@@ -1597,7 +1597,7 @@ namespace Mirle.WebAPI.Event
                 {
                     if (Body.rackId == "UNKNOWN")
                     {
-                        if (Body.stagePosition == "S0-05") //新站口，尚未有站號更新至程式
+                        if (Body.stagePosition == ConveyorDef.AGV.S0_05.BufferName)
                         {
                             RackRequestInfo info = new RackRequestInfo
                             {
@@ -1632,7 +1632,7 @@ namespace Mirle.WebAPI.Event
                             cmd.JobID = Body.jobId;
                             cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
 
-                            cmd.New_Loc = "S0-05";//新站口，尚未有站號更新至程式
+                            cmd.New_Loc = ConveyorDef.AGV.S0_05.BufferName;//新站口，尚未有站號更新至程式
 
                             cmd.Prty = "5";
                             cmd.Remark = "";
@@ -1974,6 +1974,123 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>REEL_STOCK_IN record end!");
+                return Json(rMsg);
+            }
+            catch (Exception ex)
+            {
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Fail;
+                rMsg.returnComment = ex.Message;
+
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return Json(rMsg);
+            }
+        }
+
+        [Route("WCS/SMTC_EMPTY_MAGAZINE_LOAD_REQUEST")]
+        [HttpPost]
+        public IHttpActionResult SMTC_EMPTY_MAGAZINE_LOAD_REQUEST([FromBody] SMTCEmptyMagazineLoadRequestInfo Body)
+        {
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<SMTC_EMPTY_MAGAZINE_LOAD_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+
+            ReplyCode rMsg = new ReplyCode
+            {
+                jobId = Body.jobId,
+                transactionId = Body.transactionId
+            };
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_EMPTY_MAGAZINE_LOAD_REQUEST start!");
+            try
+            {
+                EmptyMagazineLoadRequestInfo info = new EmptyMagazineLoadRequestInfo
+                {
+                    location = Body.location
+                };
+                if (!clsAPI.GetAPI().GetEmptyMagazineLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    throw new Exception($"Error: 傳送EmptyMagazineLoadRequest 至 WES 失敗, jobId = {info.jobId}");
+
+
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
+                rMsg.returnComment = "";
+
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_EMPTY_MAGAZINE_LOAD_REQUEST record end!");
+                return Json(rMsg);
+            }
+            catch (Exception ex)
+            {
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Fail;
+                rMsg.returnComment = ex.Message;
+
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return Json(rMsg);
+            }
+        }
+
+        [Route("WCS/SMTC_EMPTY_MAGAZINE_UNLOAD")]
+        [HttpPost]
+        public IHttpActionResult SMTC_EMPTY_MAGAZINE_UNLOAD([FromBody] SMTCEmptyMagazineUnloadInfo Body)
+        {
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<SMTC_EMPTY_MAGAZINE_UNLOAD> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+
+            ReplyCode rMsg = new ReplyCode
+            {
+                jobId = Body.jobId,
+                transactionId = Body.transactionId
+            };
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_EMPTY_MAGAZINE_UNLOAD start!");
+            try
+            {
+                EmptyMagazineUnloadInfo info = new EmptyMagazineUnloadInfo
+                {
+                    carrierId = Body.carrierId,
+                    location = Body.location
+                };
+                if (!clsAPI.GetAPI().GetEmptyMagazineUnload().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    throw new Exception($"Error: 傳送EmptyMagazineUnload 至 WES 失敗, jobId = {info.jobId}");
+
+
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
+                rMsg.returnComment = "";
+
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_EMPTY_MAGAZINE_UNLOAD record end!");
+                return Json(rMsg);
+            }
+            catch (Exception ex)
+            {
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Fail;
+                rMsg.returnComment = ex.Message;
+
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return Json(rMsg);
+            }
+        }
+
+        [Route("WCS/SMTC_MAGAZINE_LOAD_REQUEST")]
+        [HttpPost]
+        public IHttpActionResult SMTC_MAGAZINE_LOAD_REQUEST([FromBody] SMTCMagazineLoadRequestInfo Body)
+        {
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<SMTC_MAGAZINE_LOAD_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+
+            ReplyCode rMsg = new ReplyCode
+            {
+                jobId = Body.jobId,
+                transactionId = Body.transactionId
+            };
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_MAGAZINE_LOAD_REQUEST start!");
+            try
+            {
+                MagazineLoadRequestInfo info = new MagazineLoadRequestInfo();
+                info.location = Body.location;
+                
+                if (!clsAPI.GetAPI().GetMagazineLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    throw new Exception($"Error: 傳送MagazineLoadRequest 至 WES 失敗, jobId = {info.jobId}");
+
+
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
+                rMsg.returnComment = "";
+
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_MAGAZINE_LOAD_REQUEST record end!");
                 return Json(rMsg);
             }
             catch (Exception ex)

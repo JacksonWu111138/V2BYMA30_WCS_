@@ -21,6 +21,10 @@ namespace Mirle.EccsSignal
         {
             db = new clsHost(config); sEquNo = EquNo;
             Crn.sStnSts = new sceStnSts[gintMaxStn];
+            for(int i = 0; i < gintMaxStn; i ++)
+            {
+                Crn.sStnSts[i] = new sceStnSts();
+            }
 
             timRead.Elapsed += new System.Timers.ElapsedEventHandler(timRead_Elapsed);
             timRead.Enabled = true; timRead.Interval = 500;

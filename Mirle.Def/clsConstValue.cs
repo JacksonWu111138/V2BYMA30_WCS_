@@ -360,19 +360,19 @@ namespace Mirle.Def
                 /// <summary>
                 /// 電子料捲
                 /// </summary>
-                public const string Lot = "Reel";
+                public const string Lot = "REEL";
                 /// <summary>
                 /// 料架
                 /// </summary>
-                public const string Rack = "Rack";
+                public const string Rack = "RACK";
                 /// <summary>
                 /// 靜電箱
                 /// </summary>
-                public const string Bin = "Bin";
+                public const string Bin = "BIN";
                 /// <summary>
                 /// Magazine
                 /// </summary>
-                public const string Mag = "Mag";
+                public const string Mag = "MAG";
             }
         }
         public class WesApi
@@ -404,6 +404,7 @@ namespace Mirle.Def
                 /// </summary>
                 public const string Bin = "ESD";
                 public const string Mag = "MAG";
+                public const string Lot = "Lot";
             }
 
             public class CancelType

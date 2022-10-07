@@ -59,10 +59,6 @@ namespace Mirle.Def
                     return clsConstValue.ControllerApi.CarrierType.Bin;
                 case clsConstValue.ControllerApi.CarrierType.Lot:
                     return "Lot";
-                case clsConstValue.ControllerApi.CarrierType.Rack:
-                    return clsConstValue.WesApi.CarrierType.Rack;
-                case clsConstValue.ControllerApi.CarrierType.Mag:
-                    return clsConstValue.WesApi.CarrierType.Mag;
                 case clsConstValue.ControllerApi.CarrierType.Bin:
                     return clsConstValue.WesApi.CarrierType.Bin;
                 default:

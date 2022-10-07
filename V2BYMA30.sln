@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32002.261
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DLL", "DLL", "{58EC0D04-15AD-46AB-BE9C-1B871F4BCD1A}"
 	ProjectSection(SolutionItems) = preProject
@@ -62,7 +62,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Filelayout", "Filelayout", 
 		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.1.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.1.doc
 		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.10.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.10.doc
 		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.11.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.11.doc
-		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.14.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.14.doc
+		..\資料\V2BYMA30_ASRS_FileLayOut_v1.14.doc = ..\資料\V2BYMA30_ASRS_FileLayOut_v1.14.doc
 		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.2.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.2.doc
 		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.5.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.5.doc
 		Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.6.doc = Document\Filelayout\V2BYMA30_ASRS_FileLayOut_v1.6.doc

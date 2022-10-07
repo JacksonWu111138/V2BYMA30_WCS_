@@ -216,11 +216,8 @@ namespace Mirle.ASRS.WCS.View
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //APITestAGVTaskCancel form = new APITestAGVTaskCancel(clInitSys.AgvApi_Config);
             WESAPITest form_1 = new WESAPITest();
-            //ControllersAPITest form_2 = new ControllersAPITest();
             form_1.Show();
-            //form_2.Show();
         }
 
         private DataGridViewRow dgrTransferCmdLastSelect = null;

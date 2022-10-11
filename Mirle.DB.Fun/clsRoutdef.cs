@@ -167,7 +167,11 @@ namespace Mirle.DB.Fun
                     case clsConstValue.CmdMode.StockOut:
                         string sBuffername = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;
                         var s = ConveyorDef.GetBuffer(sBuffername);
-                        End = Router.GetLocation(s.ControllerID, s.BufferName);
+                        string sDeviceId = tool.GetDeviceId(s.BufferName);
+                        if (sDeviceId == "") 
+                            End = Router.GetLocation(s.ControllerID, s.BufferName);
+                        else
+                            End = Router.GetLocation(sDeviceId, s.BufferName);
                         if (End == null)
                         {
                             for (int i = 0; i < ConveyorDef.DeviceID_AGV_Router.Length; i++)
@@ -242,7 +246,7 @@ namespace Mirle.DB.Fun
 
                             return false;
                         }
-                        else if(cmd.Cmd_Sno != sCmdSno_CV)
+                        else if(sCmdSno_CV != "00000" && cmd.Cmd_Sno != sCmdSno_CV)
                         {
                             sRemark = $"Error: {sLoc_Start.LocationId}上的任務號不一致 => {sCmdSno_CV}";
 
@@ -379,7 +383,7 @@ namespace Mirle.DB.Fun
 
                             return false;
                         }
-                        else if (cmd.Cmd_Sno != sCmdSno_CV)
+                        else if (sCmdSno_CV != "00000" && cmd.Cmd_Sno != sCmdSno_CV)
                         {
                             sRemark = $"Error: {sLoc_Start.LocationId}上的任務號不一致 => {sCmdSno_CV}";
 

@@ -284,6 +284,8 @@ namespace Mirle.DB.Fun
             else if (bufferName == Tower.E1_04.BufferName || bufferName == AGV.E2_38.BufferName || bufferName == AGV.E2_39.BufferName)
                 return "7";
             //AGV
+
+
             else
                 return "";
         }

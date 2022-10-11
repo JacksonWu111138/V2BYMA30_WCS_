@@ -12,7 +12,7 @@ namespace Mirle.DB.WMS.Fun.Parameter
         public class Column
         {
             public const string Loc = "LOCATION_CODE";
-            public const string LocDD = "BORTHER_LOCATION_CODE";
+            public const string LocDD = "BROTHER_LOCATION_CODE";
             public const string BoxID = "PRODUCT_CODE";
             public const string EquNo = "CRANE_CODE";
             public const string BAY = "BAY";

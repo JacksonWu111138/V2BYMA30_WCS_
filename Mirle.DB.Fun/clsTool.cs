@@ -50,7 +50,8 @@ namespace Mirle.DB.Fun
                 rackLocation = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.rackLocation]),
                 largest = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.largest]),
                 Cmd_Abnormal = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Cmd_Abnormal]),
-                carrierType= Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.carrierType])
+                carrierType= Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.carrierType]),
+                writeToMiddle = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.writeToMiddle])
             };
 
             return cmd;

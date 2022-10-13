@@ -692,6 +692,13 @@ namespace Mirle.Def.U2NMMA30
             AGV_8FPort.Add(AGV.B1_075);
             AGV_8FPort.Add(AGV.B1_079);
 
+            //PCBA
+            AGV_8FPort.Add(AGV.M1_05);
+            AGV_8FPort.Add(AGV.M1_10);
+            AGV_8FPort.Add(AGV.M1_15);
+            AGV_8FPort.Add(AGV.M1_20);
+
+
             //電子料塔
             AGV_8FPort.Add(AGV.E1_01);
             AGV_8FPort.Add(AGV.E1_08);

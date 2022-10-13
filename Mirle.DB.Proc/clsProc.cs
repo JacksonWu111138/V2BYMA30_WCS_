@@ -447,6 +447,8 @@ namespace Mirle.DB.Proc
                                 if (!Routdef.FunGetLocation(cmd, Router, ref Start, ref End, db)) continue;
                                 if (Start != End)
                                 {
+                                    if (Cmd_Mst.FunCheckWriteToMiddle(cmd.Cmd_Sno, db)) continue;
+
                                     Location sLoc_Start = null; Location sLoc_End = null;
                                     bool bCheck = Router.GetPath(Start, End, ref sLoc_Start, ref sLoc_End);
                                     if (bCheck == false)
@@ -504,6 +506,12 @@ namespace Mirle.DB.Proc
 
                                         sRemark = $"下達Middle層命令 => <{Fun.Parameter.clsMiddleCmd.Column.DeviceID}>{sLoc_Start.DeviceId}";
                                         if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
+                                        {
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            continue;
+                                        }
+
+                                        if (!Cmd_Mst.FunUpdateWriteToMiddle(cmd.Cmd_Sno, clsConstValue.YesNo.Yes, db))
                                         {
                                             db.TransactionCtrl(TransactionTypes.Rollback);
                                             continue;
@@ -571,6 +579,8 @@ namespace Mirle.DB.Proc
                                 if (!Routdef.FunGetLocation(cmd, Router, ref Start, ref End, db)) continue;
                                 if (Start != End)
                                 {
+                                    if (Cmd_Mst.FunCheckWriteToMiddle(cmd.Cmd_Sno, db)) continue;
+
                                     Location sLoc_Start = null; Location sLoc_End = null;
                                     bool bCheck = Router.GetPath(Start, End, ref sLoc_Start, ref sLoc_End);
                                     if (bCheck == false)
@@ -686,6 +696,12 @@ namespace Mirle.DB.Proc
                                                 db.TransactionCtrl(TransactionTypes.Rollback);
                                                 continue;
                                             }
+                                        }
+
+                                        if (!Cmd_Mst.FunUpdateWriteToMiddle(cmd.Cmd_Sno, clsConstValue.YesNo.Yes, db))
+                                        {
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            continue;
                                         }
 
                                         if (!MiddleCmd.FunInsMiddleCmd(middleCmd, db))

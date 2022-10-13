@@ -543,9 +543,28 @@ namespace Mirle.Def.U2NMMA30
 
 
         private static List<ConveyorInfo> AGV_All = new List<ConveyorInfo>();
-        public static void FunAGVListAddInit()
+        public static void FunAGVListInit()
         {
-            AGV_All.Add(AGV.A4_08);
+            FunAGV_8FPort();
+            FunAGV_6Fport();
+            FunAGV_5Fport();
+            FunAGV_3Fport();
+            foreach(var s in AGV_3FPort)
+            {
+                s.DeviceId = "63";
+            }
+            foreach (var s in AGV_5FPort)
+            {
+                s.DeviceId = "65";
+            }
+            foreach (var s in AGV_6FPort)
+            {
+                s.DeviceId = "66";
+            }
+            foreach (var s in AGV_8FPort)
+            {
+                s.DeviceId = "68";
+            }
         }
 
         private static List<ConveyorInfo> AGV_SendToCVend = new List<ConveyorInfo>();
@@ -586,6 +605,170 @@ namespace Mirle.Def.U2NMMA30
             AGV_SendToCVend.Add(AGV.A1_01);
             AGV_SendToCVend.Add(AGV.A1_05);
             AGV_SendToCVend.Add(AGV.A1_09);
+
+        }
+
+        public static List<ConveyorInfo> GetAGV_SendToCVend() => AGV_SendToCVend;
+
+        private static List<ConveyorInfo> AGV_8FPort = new List<ConveyorInfo>();
+        public static List<ConveyorInfo> GetAGV_8FPort() => AGV_8FPort;
+        public static void FunAGV_8FPort()
+        {
+            //八樓線邊倉
+            AGV_8FPort.Add(AGV.A4_01);
+            AGV_8FPort.Add(AGV.A4_04);
+            AGV_8FPort.Add(AGV.A4_05);
+            AGV_8FPort.Add(AGV.A4_08);
+            AGV_8FPort.Add(AGV.A4_09);
+            AGV_8FPort.Add(AGV.A4_12);
+            AGV_8FPort.Add(AGV.A4_13);
+            AGV_8FPort.Add(AGV.A4_16);
+            AGV_8FPort.Add(AGV.A4_17);
+            AGV_8FPort.Add(AGV.A4_20);
+
+            //八樓SMTC產線
+            AGV_8FPort.Add(AGV.S1_01);
+            AGV_8FPort.Add(AGV.S1_07);
+            AGV_8FPort.Add(AGV.S1_13);
+            AGV_8FPort.Add(AGV.S1_25);
+            AGV_8FPort.Add(AGV.S1_31);
+            AGV_8FPort.Add(AGV.S1_37);
+            AGV_8FPort.Add(AGV.S1_40);
+            AGV_8FPort.Add(AGV.S1_41);
+            AGV_8FPort.Add(AGV.S1_44);
+            AGV_8FPort.Add(AGV.S1_45);
+            AGV_8FPort.Add(AGV.S1_48);
+            AGV_8FPort.Add(AGV.S1_49);
+            AGV_8FPort.Add(AGV.S1_50);
+
+            AGV_8FPort.Add(AGV.S2_01);
+            AGV_8FPort.Add(AGV.S2_07);
+            AGV_8FPort.Add(AGV.S2_13);
+            AGV_8FPort.Add(AGV.S2_25);
+            AGV_8FPort.Add(AGV.S2_31);
+            AGV_8FPort.Add(AGV.S2_49);
+
+            AGV_8FPort.Add(AGV.S3_01);
+            AGV_8FPort.Add(AGV.S3_07);
+            AGV_8FPort.Add(AGV.S3_13);
+            AGV_8FPort.Add(AGV.S3_19);
+            AGV_8FPort.Add(AGV.S3_25);
+            AGV_8FPort.Add(AGV.S3_31);
+            AGV_8FPort.Add(AGV.S3_37);
+            AGV_8FPort.Add(AGV.S3_40);
+            AGV_8FPort.Add(AGV.S3_41);
+            AGV_8FPort.Add(AGV.S3_44);
+            AGV_8FPort.Add(AGV.S3_45);
+            AGV_8FPort.Add(AGV.S3_48);
+            AGV_8FPort.Add(AGV.S3_49);
+
+            AGV_8FPort.Add(AGV.S4_01);
+            AGV_8FPort.Add(AGV.S4_07);
+            AGV_8FPort.Add(AGV.S4_13);
+            AGV_8FPort.Add(AGV.S4_19);
+            AGV_8FPort.Add(AGV.S4_25);
+            AGV_8FPort.Add(AGV.S4_49);
+            AGV_8FPort.Add(AGV.S4_50);
+
+
+            AGV_8FPort.Add(AGV.S5_01);
+            AGV_8FPort.Add(AGV.S5_07);
+            AGV_8FPort.Add(AGV.S5_37);
+            AGV_8FPort.Add(AGV.S5_40);
+            AGV_8FPort.Add(AGV.S5_49);
+
+            AGV_8FPort.Add(AGV.S6_01);
+            AGV_8FPort.Add(AGV.S6_07);
+
+            AGV_8FPort.Add(AGV.S0_01);
+            AGV_8FPort.Add(AGV.S0_04);
+            AGV_8FPort.Add(AGV.S0_05);
+
+            //箱式倉
+            AGV_8FPort.Add(AGV.B1_070);
+            AGV_8FPort.Add(AGV.B1_074);
+            AGV_8FPort.Add(AGV.B1_078);
+            AGV_8FPort.Add(AGV.B1_071);
+            AGV_8FPort.Add(AGV.B1_075);
+            AGV_8FPort.Add(AGV.B1_079);
+
+            //電子料塔
+            AGV_8FPort.Add(AGV.E1_01);
+            AGV_8FPort.Add(AGV.E1_08);
+            AGV_8FPort.Add(AGV.E2_35);
+            AGV_8FPort.Add(AGV.E2_36);
+            AGV_8FPort.Add(AGV.E2_37);
+            AGV_8FPort.Add(AGV.E2_38);
+            AGV_8FPort.Add(AGV.E2_39);
+
+            //4號電梯
+            AGV_8FPort.Add(AGV.LO2_01);
+            AGV_8FPort.Add(AGV.LO2_04);
+
+            //5號電梯
+            AGV_8FPort.Add(AGV.LO3_01);
+            AGV_8FPort.Add(AGV.LO3_04);
+        }
+
+        private static List<ConveyorInfo> AGV_6FPort = new List<ConveyorInfo>();
+        public static List<ConveyorInfo> GetAGV_6FPort() => AGV_6FPort;
+        public static void FunAGV_6Fport()
+        {
+            //線邊倉
+            AGV_6FPort.Add(AGV.A3_01);
+            AGV_6FPort.Add(AGV.A3_04);
+            AGV_6FPort.Add(AGV.A3_05);
+            AGV_6FPort.Add(AGV.A3_08);
+            AGV_6FPort.Add(AGV.A3_09);
+            AGV_6FPort.Add(AGV.A3_12);
+            AGV_6FPort.Add(AGV.A3_13);
+            AGV_6FPort.Add(AGV.A3_16);
+            AGV_6FPort.Add(AGV.A3_17);
+            AGV_6FPort.Add(AGV.A3_20);
+
+            //5號電梯
+            AGV_6FPort.Add(AGV.LO6_01);
+            AGV_6FPort.Add(AGV.LO6_04);
+
+        }
+
+        private static List<ConveyorInfo> AGV_5FPort = new List<ConveyorInfo>();
+        public static List<ConveyorInfo> GetAGV_5FPort() => AGV_5FPort;
+        public static void FunAGV_5Fport()
+        {
+            //線邊倉
+            AGV_5FPort.Add(AGV.A2_01);
+            AGV_5FPort.Add(AGV.A2_04);
+            AGV_5FPort.Add(AGV.A2_05);
+            AGV_5FPort.Add(AGV.A2_08);
+            AGV_5FPort.Add(AGV.A2_09);
+            AGV_5FPort.Add(AGV.A2_12);
+            AGV_5FPort.Add(AGV.A2_13);
+            AGV_5FPort.Add(AGV.A2_16);
+            AGV_5FPort.Add(AGV.A2_17);
+            AGV_5FPort.Add(AGV.A2_20);
+
+            //5號電梯
+            AGV_5FPort.Add(AGV.LO5_01);
+            AGV_5FPort.Add(AGV.LO5_04);
+
+        }
+
+        private static List<ConveyorInfo> AGV_3FPort = new List<ConveyorInfo>();
+        public static List<ConveyorInfo> GetAGV_3FPort() => AGV_3FPort;
+        public static void FunAGV_3Fport()
+        {
+            //線邊倉
+            AGV_3FPort.Add(AGV.A1_01);
+            AGV_3FPort.Add(AGV.A1_04);
+            AGV_3FPort.Add(AGV.A1_05);
+            AGV_3FPort.Add(AGV.A1_08);
+            AGV_3FPort.Add(AGV.A1_09);
+            AGV_3FPort.Add(AGV.A1_12);
+            
+            //5號電梯
+            AGV_3FPort.Add(AGV.LO4_01);
+            AGV_3FPort.Add(AGV.LO4_04);
 
         }
 

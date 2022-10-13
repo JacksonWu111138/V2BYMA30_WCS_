@@ -23,6 +23,12 @@ insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, T
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('1', 'Shelf', 0, 1, 1, ' ', 0);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('1', 'Teach', 0, 2, 2, ' ', 0);
 
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('1', 'Shelf', '1', 'LeftFork', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('1', 'LeftFork', '1', 'M1-01', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('1', 'Shelf', '1', 'M1-01', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('1', 'M1-01', '68', 'M1-05', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('68', 'M1-10', '1', 'M1-06', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('1', 'M1-06', '1', 'Shelf', ' ');
 
 --STK 2 (PCBA)
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('2', 'M1-11', 3, 1, 11, ' ', 2);
@@ -31,6 +37,12 @@ insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, T
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('2', 'Shelf', 0, 1, 1, ' ', 0);
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('2', 'Teach', 0, 2, 2, ' ', 0);
 
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('2', 'Shelf', '2', 'LeftFork', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('2', 'LeftFork', '2', 'M1-11', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('2', 'Shelf', '2', 'M1-11', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('2', 'M1-11', '68', 'M1-15', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('68', 'M1-20', '2', 'M1-16', ' ');
+insert INTO Routdef (DeviceID, HostPortID, NextDeviceID, NextHostPortID, TrnDT) VALUES('2', 'M1-16', '2', 'Shelf', ' ');
 
 --STK 3 (箱式倉1)
 insert into PortDef (DeviceID, HostPortID, PortType, PortTypeIndex, PLCPortID, TrnDT, Direction) values('3', 'B1-001', 3, 1, 1, ' ',2);

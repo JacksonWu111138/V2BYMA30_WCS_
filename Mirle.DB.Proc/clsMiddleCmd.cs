@@ -1,6 +1,7 @@
 ﻿using Mirle.DataBase;
 using Mirle.DB.Proc.Events;
 using Mirle.Def;
+using Mirle.Def.U2NMMA30;
 using Mirle.Structure;
 using System;
 using System.Collections.Generic;
@@ -100,7 +101,9 @@ namespace Mirle.DB.Proc
                                         continue;
                                     }
 
-                                    if (!cmd_Mst.FunUpdateCurLoc(sCmdSno, DeviceID, sCurLoc, db))
+                                    string deviceId = ConveyorDef.GetBuffer(sLocation).DeviceId;
+
+                                    if (!cmd_Mst.FunUpdateCurLoc(sCmdSno, deviceId, sCurLoc, db))
                                     {
                                         db.TransactionCtrl(TransactionTypes.Rollback);
                                         continue;

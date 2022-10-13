@@ -1512,10 +1512,12 @@ namespace Mirle.WebAPI.Event
                 CmdMstInfo cmd = new CmdMstInfo();
                 if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
                     throw new Exception($"Error: Get CmdMst fail, jobId = {Body.jobId}.");
-
+                
+                //補充箱式倉減料口來回設定
+                
                 ConveyorInfo con = new ConveyorInfo();
                 con = ConveyorDef.GetBuffer(Body.position);
-                string deviceId = tool.GetDeviceId(Body.position);
+                string deviceId = con.DeviceId != "" ? con.DeviceId : con.ControllerID;
                 
 
                 if (Body.carrierType == clsConstValue.ControllerApi.CarrierType.Lot)

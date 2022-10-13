@@ -18,6 +18,7 @@ namespace Mirle.Structure
         public DoubleType DoubleType { get; set; } = DoubleType.None;
         public string ControllerID { get; set; } = "";
         public WebApiConfig API { get; set; } = new WebApiConfig();
+        public string DeviceId { get; set; } = "";
     }
 
     public enum DoubleType

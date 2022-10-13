@@ -876,6 +876,7 @@ namespace Mirle.ASRS.WCS.View
             router = new MapHost(clInitSys.DbConfig);
             CVLocation = new clsGetCVLocation(router);
             ConveyorDef.FunNodeListAddInit();
+            ConveyorDef.FunAGVListInit();
             ConveyorDef.FunStnListAddInit();
             tool = new DB.Fun.clsTool(PCBA, Box);
             middle = new MidHost(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box, 

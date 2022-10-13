@@ -68,7 +68,8 @@ namespace Mirle.Def.U2NMMA30
     public interface ControllerID_Config
     {
         string Tower { get; }
-        string Box { get; }
+        string Box1 { get; }
+        string Box2 { get; }
         string PCBA { get; }
         /// <summary>
         /// 產線

@@ -1512,11 +1512,29 @@ namespace Mirle.WebAPI.Event
                 CmdMstInfo cmd = new CmdMstInfo();
                 if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
                     throw new Exception($"Error: Get CmdMst fail, jobId = {Body.jobId}.");
-                
-                //補充箱式倉減料口來回設定
-                
+
                 ConveyorInfo con = new ConveyorInfo();
-                con = ConveyorDef.GetBuffer(Body.position);
+                
+                //箱式倉減料口定位設定
+                switch (Body.position)
+                {
+                    case "B1-061":
+                        con = ConveyorDef.Box.B1_062;
+                        break;
+                    case "B1-066":
+                        con = ConveyorDef.Box.B1_067;
+                        break;
+                    case "B1-141":
+                        con = ConveyorDef.Box.B1_142;
+                        break;
+                    case "B1-146":
+                        con = ConveyorDef.Box.B1_147;
+                        break;
+                    default:
+                        con = ConveyorDef.GetBuffer(Body.position);
+                        break;
+                }
+
                 string deviceId = con.DeviceId != "" ? con.DeviceId : con.ControllerID;
                 
 
@@ -1550,7 +1568,7 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"Error: PositionReport to WES fail, jobId = {Body.jobId}.");
 
                 }
-                if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, Body.position))
+                if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, con.BufferName))
                     throw new Exception($"Error: Update CurLoc fail, jobId = {Body.jobId}.");
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;

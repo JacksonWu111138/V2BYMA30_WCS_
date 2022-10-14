@@ -650,6 +650,10 @@ namespace Mirle.WebAPI.Event
                                 throw new Exception("Error: B800CV 無OutReady儲位");
                             }
                         }
+                        else if (lot.toPortId == "E800-8")
+                        {
+                            cmd.Stn_No = lot.toPortId;
+                        }    
                         else
                         {
                             var cv_to = ConveyorDef.GetBuffer_ByStnNo(lot.toPortId);

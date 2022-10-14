@@ -89,6 +89,8 @@ namespace Mirle.DB.Proc
                                     }
 
                                     string sCurLoc = routdef.GetLocaionByCmdMode(sCmdMode, sCmdSts, DeviceID, sLocation, db);
+                                    if (ConveyorDef.FunCheckInAGVSendToCVEnd(sCurLoc))
+                                        sCurLoc = routdef.FunGetNextPortID(sCurLoc, db);
                                     string sRemark = "";
                                     if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                     {
@@ -102,7 +104,8 @@ namespace Mirle.DB.Proc
                                     }
 
                                     string deviceId;
-                                    if (DeviceID == ConveyorDef.DeviceID_AGV) deviceId = ConveyorDef.GetBuffer(sLocation).DeviceId;
+                                    if (DeviceID == ConveyorDef.DeviceID_AGV) 
+                                        deviceId = ConveyorDef.GetBuffer(sCurLoc).DeviceId != "" ? ConveyorDef.GetBuffer(sCurLoc).DeviceId : ConveyorDef.GetBuffer(sCurLoc).ControllerID;
                                     else deviceId = DeviceID;
 
                                     if (!cmd_Mst.FunUpdateCurLoc(sCmdSno, deviceId, sCurLoc, db))

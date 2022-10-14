@@ -974,5 +974,39 @@ namespace Mirle.DB.Fun
                 return false;
             }
         }
+
+        public string FunGetNextPortID(string sLoc, DataBase.DB db)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                string NextPort = sLoc ;
+                string strEM = "";
+                string strSql = $"select * from {Parameter.clsRoutdef.TableName} where " +
+                    $"{Parameter.clsRoutdef.Column.HostPortID} = '{sLoc}'";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet == DBResult.Success) 
+                    NextPort = Convert.ToString(dtTmp.Rows[0][Parameter.clsRoutdef.Column.NextHostPortID]);
+                else
+                {
+                    NextPort += "_GetNextPortFail.";
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                }
+
+                return NextPort;
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return "";
+            }
+            finally
+            {
+                dtTmp = null;
+            }
+
+        }
     }
 }

@@ -545,6 +545,7 @@ namespace Mirle.Def.U2NMMA30
         private static List<ConveyorInfo> AGV_All = new List<ConveyorInfo>();
         public static void FunAGVListInit()
         {
+            FunAGVSendToCVend();
             FunAGV_8FPort();
             FunAGV_6Fport();
             FunAGV_5Fport();
@@ -933,6 +934,15 @@ namespace Mirle.Def.U2NMMA30
             }
 
             return new ConveyorInfo();
+        }
+
+        public static bool FunCheckInAGVSendToCVEnd(string sBufferName)
+        {
+            if(AGV_SendToCVend.Where(r => r.BufferName == sBufferName).Any())
+            {
+                return true;
+            }
+            return false;
         }
 
         public static ConveyorInfo GetBuffer(string BufferName)

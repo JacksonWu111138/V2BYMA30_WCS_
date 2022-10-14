@@ -101,7 +101,9 @@ namespace Mirle.DB.Proc
                                         continue;
                                     }
 
-                                    string deviceId = ConveyorDef.GetBuffer(sLocation).DeviceId;
+                                    string deviceId;
+                                    if (DeviceID == ConveyorDef.DeviceID_AGV) deviceId = ConveyorDef.GetBuffer(sLocation).DeviceId;
+                                    else deviceId = DeviceID;
 
                                     if (!cmd_Mst.FunUpdateCurLoc(sCmdSno, deviceId, sCurLoc, db))
                                     {

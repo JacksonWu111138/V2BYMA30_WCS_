@@ -637,6 +637,33 @@ namespace Mirle.DB.Fun
                 return false;
             }
         }
+        public bool FunUpdateboxStockOutAgv(string sCmdSno, string Agvport, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"update {Parameter.clsCmd_Mst.TableName} set" +
+                    $" {Parameter.clsCmd_Mst.Column.boxStockOutAgv} = '{Agvport}'";
+                strSql += $" where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}' ";
+
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
 
         public bool FunUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark, DataBase.DB db)
         {
@@ -960,7 +987,7 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsCmd_Mst.Column.Equ_No}, {Parameter.clsCmd_Mst.Column.CurLoc}, " +
                     $"{Parameter.clsCmd_Mst.Column.CurDeviceID}, {Parameter.clsCmd_Mst.Column.Zone}, {Parameter.clsCmd_Mst.Column.Remark}," +
                     $"{Parameter.clsCmd_Mst.Column.rackLocation}, {Parameter.clsCmd_Mst.Column.largest}, {Parameter.clsCmd_Mst.Column.carrierType}," +
-                    $"{Parameter.clsCmd_Mst.Column.lotSize}, {Parameter.clsCmd_Mst.Column.writeToMiddle}) values(";
+                    $"{Parameter.clsCmd_Mst.Column.lotSize}, {Parameter.clsCmd_Mst.Column.writeToMiddle}, {Parameter.clsCmd_Mst.Column.boxStockOutAgv}) values(";
                 sSQL += "'" + stuCmdMst.Cmd_Sno + "', ";
                 sSQL += "'" + clsConstValue.CmdSts.strCmd_Initial + "', ";
                 sSQL += "" + stuCmdMst.Prty + ", 'NA', ";
@@ -980,7 +1007,7 @@ namespace Mirle.DB.Fun
                 sSQL += "'" + stuCmdMst.CurDeviceID + "',";
                 sSQL += "'" + stuCmdMst.Zone_ID + "'," +
                     $"'{stuCmdMst.Remark}','{stuCmdMst.rackLocation}','{stuCmdMst.largest}','{stuCmdMst.carrierType}','{stuCmdMst.lotSize}'" +
-                    $", '{stuCmdMst.writeToMiddle}')";
+                    $", '{stuCmdMst.writeToMiddle}', '{stuCmdMst.boxStockOutAgv}')";
 
                 if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                 {

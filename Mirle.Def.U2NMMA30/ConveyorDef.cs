@@ -808,7 +808,51 @@ namespace Mirle.Def.U2NMMA30
             B800CV.Add(AGV.B1_074);
             B800CV.Add(AGV.B1_078);
         }
+        private static List<ConveyorInfo> B800CVOut = new List<ConveyorInfo>();
+        public static List<ConveyorInfo> GetB800CVOut_List() => B800CVOut;
+        private static int Current_Out = 1;
+        public static ConveyorInfo GetB800CVOut()
+        {
+            int count = 1;
+            foreach (var s in B800CVOut)
+            {
+                if (count == Current_Out)
+                {
+                    Current_Out++;
+                    if (Current_Out > B800CVOut.Count()) Current_Out = 1;
 
+                    return s;
+                }
+
+                count++;
+            }
+
+            return new ConveyorInfo();
+        }
+
+        private static void FunB800CVOutAddInit()
+        {
+            B800CVOut.Add(AGV.B1_071);
+            B800CVOut.Add(AGV.B1_075);
+            B800CVOut.Add(AGV.B1_079);
+        }
+        public static List<ConveyorInfo> Node_Lift = new List<ConveyorInfo>();
+        public static List<ConveyorInfo> GetLifetNode_List() => Node_Lift;
+        public static void FunLiftNodeInit()
+        {
+            Node_Lift.Add(E04.LO1_02);
+            Node_Lift.Add(E04.LO1_07);
+            Node_Lift.Add(AGV.LO2_01);
+            Node_Lift.Add(AGV.LO2_04);
+            Node_Lift.Add(AGV.LO3_01);
+            Node_Lift.Add(AGV.LO3_04);
+            Node_Lift.Add(AGV.LO4_01);
+            Node_Lift.Add(AGV.LO4_04);
+            Node_Lift.Add(AGV.LO5_01);
+            Node_Lift.Add(AGV.LO5_04);
+            Node_Lift.Add(AGV.LO6_01);
+            Node_Lift.Add(AGV.LO6_04);
+        }
         private static List<ConveyorInfo> Stations = new List<ConveyorInfo>();
         /// <summary>
         /// 人員工作站List
@@ -818,6 +862,8 @@ namespace Mirle.Def.U2NMMA30
         public static void FunStnListAddInit()
         {
             FunB800CVAddInit();
+            FunB800CVOutAddInit();
+            FunLiftNodeInit();
 
             Stations.Add(E04.LO1_02);
             Stations.Add(E04.LO1_07);

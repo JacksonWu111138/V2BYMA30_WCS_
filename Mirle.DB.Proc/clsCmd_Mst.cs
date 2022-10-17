@@ -221,7 +221,29 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
-
+        public bool FunUpdateboxStockOutAgv(string sCmdSno, string AgvPort)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                        return CMD_MST.FunUpdateboxStockOutAgv(sCmdSno, AgvPort, db);
+                    else
+                    {
+                        throw new Exception("開啟資料庫失敗！");
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+        
         public bool FunUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark)
         {
             try

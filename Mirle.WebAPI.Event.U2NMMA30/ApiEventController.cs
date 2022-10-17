@@ -1081,8 +1081,29 @@ namespace Mirle.WebAPI.Event
                 if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCSTID(Body.location))
                 {
                     CmdMstInfo cmd = new CmdMstInfo();
-                    if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
                         throw new Exception($"Error: CMDMST與middle都沒有此命令, jobId = {Body.jobId}.");
+                    else if (cmd.Cmd_Mode == CmdMode.StockOut &&
+                            (cmd.Stn_No != ConveyorDef.Box.B1_062.BufferName && cmd.Stn_No != ConveyorDef.Box.B1_067.BufferName &&
+                            cmd.Stn_No != ConveyorDef.Box.B1_142.BufferName && cmd.Stn_No != ConveyorDef.Box.B1_147.BufferName) &&
+                            !ConveyorDef.GetLifetNode_List().Where(r => r.BufferName == Body.location).Any())
+                    {
+                        if (cmd.boxStockOutAgv == "")
+                        {
+                            cmd.boxStockOutAgv = ConveyorDef.GetB800CVOut().BufferName;
+                            if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateboxStockOutAgv(Body.jobId, cmd.boxStockOutAgv))
+                                rMsg.toLocation = cmd.boxStockOutAgv;
+                            else
+                                throw new Exception($"Error: 更新boxStockOutAgv失敗, jobId = {Body.jobId}.");
+                        }
+                        else
+                        {
+                            rMsg.toLocation = cmd.boxStockOutAgv;
+                        }
+                    }
+                    else if (cmd.Cmd_Mode == CmdMode.StockOut)
+                        rMsg.toLocation = cmd.Stn_No;
+
                 }
                 else
                 {

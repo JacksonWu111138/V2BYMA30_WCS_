@@ -25,7 +25,8 @@ namespace Mirle.WebAPI.Test.WES.testingList
             EmptyESDCarrierLoadRequestInfo info = new EmptyESDCarrierLoadRequestInfo
             {
                 jobId = textBox_jobId.Text,
-                location = textBox_location.Text
+                location = textBox_location.Text,
+                withClapBoard = textBox_withClapBoard.Text
             };
             if (textBox_reqQty.Text != "")
             {

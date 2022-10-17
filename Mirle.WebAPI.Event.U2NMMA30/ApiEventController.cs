@@ -1101,9 +1101,10 @@ namespace Mirle.WebAPI.Event
                             rMsg.toLocation = cmd.boxStockOutAgv;
                         }
                     }
-                    else if (cmd.Cmd_Mode == CmdMode.StockOut)
+                    else if (cmd.Cmd_Mode == CmdMode.StockOut && 
+                            (cmd.Stn_No == ConveyorDef.Box.B1_062.BufferName || cmd.Stn_No == ConveyorDef.Box.B1_067.BufferName ||
+                            cmd.Stn_No == ConveyorDef.Box.B1_142.BufferName || cmd.Stn_No == ConveyorDef.Box.B1_147.BufferName))
                         rMsg.toLocation = cmd.Stn_No;
-
                 }
                 else
                 {

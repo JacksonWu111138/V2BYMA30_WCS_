@@ -219,7 +219,7 @@ namespace Mirle.DB.Fun
             var s = ConveyorDef.GetBuffer(cmd.Stn_No);
             string sDeviceID;
             if (s.BufferName == "E1-04") sDeviceID = ConveyorDef.DeviceID_Tower;
-            else sDeviceID = s.ControllerID;
+            else sDeviceID = s.DeviceId == "" ? s.ControllerID : s.DeviceId;
 
             return Router.GetLocation(sDeviceID, s.BufferName);
         }

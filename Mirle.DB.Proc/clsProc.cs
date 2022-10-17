@@ -271,6 +271,30 @@ namespace Mirle.DB.Proc
                                             if (MiddleCmd.CheckHasMiddleCmdByCmdSno(cmd.Cmd_Sno, db) == DBResult.Success) continue;
                                             if (!MiddleCmd.FunGetMiddleCmd_NonASRS(cmd, sLoc_Start, sLoc_End, ref middleCmd, sDeviceID, db)) continue;
 
+                                            if( middleCmd.Destination == ConveyorDef.AGV.E2_35.BufferName ||
+                                                middleCmd.Destination == ConveyorDef.AGV.E2_36.BufferName ||
+                                                middleCmd.Destination == ConveyorDef.AGV.E2_37.BufferName )
+                                            {
+                                                NewCarrierToStageInfo info = new NewCarrierToStageInfo
+                                                {
+                                                    jobId = middleCmd.CommandID,
+                                                    carrierId = middleCmd.CSTID,
+                                                    stagePosition = middleCmd.Destination
+                                                };
+                                                ConveyorInfo con = ConveyorDef.GetBuffer(middleCmd.Destination);
+                                                if(!api.GetNewCarrierToStage().FunReport(info, con.API.IP))
+                                                {
+                                                    sRemark = $"Error: NewCarrierToStage fail, jobId = {cmd.Cmd_Sno}, Destination = {middleCmd.Destination}.";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
+                                            }
+
                                             if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                             {
                                                 sRemark = "Error: Begin失敗！";

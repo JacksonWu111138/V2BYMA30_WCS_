@@ -12,5 +12,6 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         public string transactionId { get; set; } = "EMPTY_ESDCARRIER_LOAD_REQUEST";
         public string location { get; set; }
         public int reqQty { get; set; }
+        public string withClapBoard { get; set; } = "N";
     }
 }

@@ -54,5 +54,6 @@ namespace Mirle.Structure
         public string carrierType { get; set; } = "";
         public string lotSize { get; set; } = "";
         public string writeToMiddle { get; set; } = "N";
+        public string boxStockOutAgv { get; set; } = "";
     }
 }

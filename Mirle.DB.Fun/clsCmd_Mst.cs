@@ -129,7 +129,32 @@ namespace Mirle.DB.Fun
                 return DBResult.Exception;
             }
         }
+        public int FunGetB800StockInOrL2LCommand(ref DataTable dtTmp, DataBase.DB db)
+        {
+            try
+            {
+                string strEM = "";
+                string strSql = $"select * from {Parameter.clsCmd_Mst.TableName} where ";
+                strSql += $"{Parameter.clsCmd_Mst.Column.carrierType} in ('{clsConstValue.ControllerApi.CarrierType.Bin}') ";
+                //strSql += $"or ({Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{clsConstValue.CmdSts.strCmd_Running}' and " +
+                //    $"{Parameter.clsCmd_Mst.Column.CurDeviceID} = '{EquNo}' and " +
+                //    $"{Parameter.clsCmd_Mst.Column.CurLoc} in ({StockInLoc_Sql}))";
+                strSql += $" ORDER BY {Parameter.clsCmd_Mst.Column.Prty}," +
+                   $" {Parameter.clsCmd_Mst.Column.Create_Date}, {Parameter.clsCmd_Mst.Column.Cmd_Sno}";
+                dtTmp = new DataTable();
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet == DBResult.Exception) clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
 
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return DBResult.Exception;
+            }
+        }
         public bool FunGetCommand(string sCmdSno, ref CmdMstInfo cmd, ref int iRet, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
@@ -197,7 +222,39 @@ namespace Mirle.DB.Fun
                 dtTmp = null;
             }
         }
-
+        public bool FunGetCommandByCmdSno(string sCmdSno, ref CmdMstInfo cmd, DataBase.DB db)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                string strEM = "";
+                string strSql = $"select * from {Parameter.clsCmd_Mst.TableName} " +
+                    $"where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '" + sCmdSno + "' ";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet == DBResult.Success)
+                {
+                    cmd = new CmdMstInfo();
+                    cmd = tool.GetCommand(dtTmp.Rows[0]);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+            finally
+            {
+                dtTmp = null;
+            }
+        }
         public int FunGetCommand_byBoxID(string sBoxID, ref CmdMstInfo cmd, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
@@ -637,6 +694,33 @@ namespace Mirle.DB.Fun
                 return false;
             }
         }
+        public bool FunUpdateboxStockOutAgv(string sCmdSno, string Agvport, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"update {Parameter.clsCmd_Mst.TableName} set" +
+                    $" {Parameter.clsCmd_Mst.Column.boxStockOutAgv} = '{Agvport}'";
+                strSql += $" where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}' ";
+
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
 
         public bool FunUpdateCmdSts(string sCmdSno, string sCmdSts, string sRemark, DataBase.DB db)
         {
@@ -960,7 +1044,7 @@ namespace Mirle.DB.Fun
                     $"{Parameter.clsCmd_Mst.Column.Equ_No}, {Parameter.clsCmd_Mst.Column.CurLoc}, " +
                     $"{Parameter.clsCmd_Mst.Column.CurDeviceID}, {Parameter.clsCmd_Mst.Column.Zone}, {Parameter.clsCmd_Mst.Column.Remark}," +
                     $"{Parameter.clsCmd_Mst.Column.rackLocation}, {Parameter.clsCmd_Mst.Column.largest}, {Parameter.clsCmd_Mst.Column.carrierType}," +
-                    $"{Parameter.clsCmd_Mst.Column.lotSize}, {Parameter.clsCmd_Mst.Column.writeToMiddle}) values(";
+                    $"{Parameter.clsCmd_Mst.Column.lotSize}, {Parameter.clsCmd_Mst.Column.writeToMiddle}, {Parameter.clsCmd_Mst.Column.boxStockOutAgv}) values(";
                 sSQL += "'" + stuCmdMst.Cmd_Sno + "', ";
                 sSQL += "'" + clsConstValue.CmdSts.strCmd_Initial + "', ";
                 sSQL += "" + stuCmdMst.Prty + ", 'NA', ";
@@ -980,7 +1064,7 @@ namespace Mirle.DB.Fun
                 sSQL += "'" + stuCmdMst.CurDeviceID + "',";
                 sSQL += "'" + stuCmdMst.Zone_ID + "'," +
                     $"'{stuCmdMst.Remark}','{stuCmdMst.rackLocation}','{stuCmdMst.largest}','{stuCmdMst.carrierType}','{stuCmdMst.lotSize}'" +
-                    $", '{stuCmdMst.writeToMiddle}')";
+                    $", '{stuCmdMst.writeToMiddle}', '{stuCmdMst.boxStockOutAgv}')";
 
                 if (db.ExecuteSQL(sSQL, ref strErrMsg) == DBResult.Success)
                 {

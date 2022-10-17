@@ -59,7 +59,28 @@ namespace Mirle.DB.WMS.Proc
                 return string.Empty;
             }
         }
-
+        public string GetLocDDandStatus(string sLoc, ref bool IsEmpty)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        return LocMst.GetLocDDandStatus(sLoc, ref IsEmpty, db);
+                    }
+                    else
+                        return string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return string.Empty;
+            }
+        }
         public int CheckLocIsEmpty(string sLoc, ref bool IsEmpty)
         {
             try
@@ -218,7 +239,7 @@ namespace Mirle.DB.WMS.Proc
             }
         }
 
-        public string funSearchEmptyLoc(string Equ_No, clsEnum.LocSts_Double locSts)
+        public string funSearchEmptyLoc(string Equ_No)
         {
             try
             {
@@ -227,7 +248,19 @@ namespace Mirle.DB.WMS.Proc
                     int iRet = clsGetDB.FunDbOpen(db);
                     if (iRet == DBResult.Success)
                     {
-                        return LocMst.funSearchEmptyLoc(Equ_No, locSts, db);
+                        string sLoc = LocMst.funSearchEmptyLoc(Equ_No, clsEnum.LocSts_Double.NNNN, db);
+                        if (!string.IsNullOrWhiteSpace(sLoc)) return sLoc;
+
+                        sLoc = LocMst.funSearchEmptyLoc(Equ_No, clsEnum.LocSts_Double.SNNS, db);
+                        if (!string.IsNullOrWhiteSpace(sLoc)) return sLoc;
+
+                        sLoc = LocMst.funSearchEmptyLoc(Equ_No, clsEnum.LocSts_Double.ENNE, db);
+                        if (!string.IsNullOrWhiteSpace(sLoc)) return sLoc;
+
+                        sLoc = LocMst.funSearchEmptyLoc(Equ_No, clsEnum.LocSts_Double.XNNX, db);
+                        if (!string.IsNullOrWhiteSpace(sLoc)) return sLoc;
+
+                        return string.Empty;
                     }
                     else return string.Empty;
                 }

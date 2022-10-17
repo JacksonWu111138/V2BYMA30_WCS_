@@ -134,14 +134,45 @@ namespace Mirle.DB.WMS.Fun
                 dtTmp = null;
             }
         }
-
+        public string GetLocDDandStatus(string sLoc, ref bool IsEmpty, DataBase.DB db)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                string strEM = "";
+                string strSql = $"select {Parameter.clsLocMst.Column.LocDD}, STORAGE_STATUS from {Parameter.clsLocMst.TableName} where " +
+                    $"{Parameter.clsLocMst.Column.Loc} = '{sLoc}' ";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet == DBResult.Success)
+                {
+                    IsEmpty = Convert.ToString(dtTmp.Rows[0]["STORAGE_STATUS"]).Trim().ToUpper() ==
+                        clsConstValue.LocSts.Empty;
+                    return Convert.ToString(dtTmp.Rows[0][Parameter.clsLocMst.Column.LocDD]);
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                    return string.Empty;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return string.Empty;
+            }
+            finally
+            {
+                dtTmp = null;
+            }
+        }
         public int CheckLocIsEmpty(string sLoc, ref bool IsEmpty, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
             try
             {
                 string strEM = "";
-                string strSql = $"select STORAGE_STATUS,from {Parameter.clsLocMst.TableName} where {Parameter.clsLocMst.Column.Loc} = '{sLoc}' ";
+                string strSql = $"select STORAGE_STATUS from {Parameter.clsLocMst.TableName} where {Parameter.clsLocMst.Column.Loc} = '{sLoc}' ";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Success)
                 {

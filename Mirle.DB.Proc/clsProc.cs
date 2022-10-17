@@ -9,6 +9,7 @@ using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -736,6 +737,275 @@ namespace Mirle.DB.Proc
                                     }
                                 }
                                 else continue;
+                            }
+
+                            return false;
+                        }
+                        else return false;
+                    }
+                    else return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+            finally
+            {
+                dtTmp.Dispose();
+            }
+        }
+        public bool FunAsrsCmd_DoubleCV_StockIn_Proc(DeviceInfo Device, string StockInLoc_Sql, MapHost Router,
+            WMS.Proc.clsHost wms, MidHost middle, SignalHost CrnSignal)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        iRet = Cmd_Mst.FunGetB800StockInOrL2LCommand(ref dtTmp, db);
+                        if (iRet == DBResult.Success)
+                        {
+                            for (int i = 0; i < dtTmp.Rows.Count; i++)
+                            {
+                                CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
+                                string sRemark = "";
+                                //if (!Cmd_Mst.CheckCraneStatus(cmd, Device, CrnSignal, db)) continue;
+                                if (cmd.Cmd_Mode == clsConstValue.CmdMode.StockIn)
+                                {
+                                    if ((cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName && cmd.Equ_No == "3") ||
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_041.BufferName && cmd.Equ_No == "4") ||
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_045.BufferName && cmd.Equ_No == "5") ||
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_117.BufferName && cmd.Equ_No == "3") ||
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_121.BufferName && cmd.Equ_No == "4") ||
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_125.BufferName && cmd.Equ_No == "5"))
+                                    {
+                                        if (cmd.Loc == "Shelf")
+                                        {
+                                            string CustomBuffer1 = "";
+                                            string CustomBuffer2 = "";
+                                            if (cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName)
+                                            {
+                                                CustomBuffer1 = "B1-033";
+                                                CustomBuffer2 = "B1-036";
+                                            }
+                                            else if (cmd.CurLoc == ConveyorDef.Box.B1_041.BufferName)
+                                            {
+                                                CustomBuffer1 = "B1-021";
+                                                CustomBuffer2 = "B1-024";
+                                            }
+                                            else if (cmd.CurLoc == ConveyorDef.Box.B1_045.BufferName)
+                                            {
+                                                CustomBuffer1 = "B1-009";
+                                                CustomBuffer2 = "B1-012";
+                                            }
+                                            else if (cmd.CurLoc == ConveyorDef.Box.B1_117.BufferName)
+                                            {
+                                                CustomBuffer1 = "B1-113";
+                                                CustomBuffer2 = "B1-116";
+                                            }
+                                            else if (cmd.CurLoc == ConveyorDef.Box.B1_121.BufferName)
+                                            {
+                                                CustomBuffer1 = "B1-101";
+                                                CustomBuffer2 = "B1-104";
+                                            }
+                                            else
+                                            {
+                                                CustomBuffer1 = "B1-089";
+                                                CustomBuffer2 = "B1-092";
+                                            }
+
+                                            var CusBuff1 = ConveyorDef.GetBuffer(CustomBuffer1);
+                                            var CusBuff2 = ConveyorDef.GetBuffer(CustomBuffer2);
+                                            string[] CmdCheck = new string[2];
+                                            for (int checkBuff = 0; checkBuff < 2; checkBuff++)
+                                            {
+                                                CmdCheck[checkBuff] = "";
+                                                var BuffCheck = checkBuff == 0 ? CusBuff1 : CusBuff2;
+                                                BufferStatusQueryInfo checkInfo = new BufferStatusQueryInfo
+                                                {
+                                                    bufferId = CusBuff1.BufferName
+                                                };
+                                                BufferStatusReply checkReply = new BufferStatusReply();
+                                                if (api.GetBufferStatusQuery().FunReport(checkInfo, BuffCheck.API.IP, ref checkReply))
+                                                {
+                                                    CmdCheck[checkBuff] = checkReply.jobId;
+                                                }
+                                            }
+
+                                            if (string.IsNullOrWhiteSpace(CmdCheck[0]) && string.IsNullOrWhiteSpace(CmdCheck[1]))
+                                            {
+                                                string sStockInLoc = wms.GetLocMst().funSearchEmptyLoc(cmd.Equ_No);
+                                                if (string.IsNullOrWhiteSpace(sStockInLoc))
+                                                {
+                                                    sRemark = $"Error: <EquNo> {cmd.Equ_No} 找不到新儲位。";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
+                                                if (!Cmd_Mst.FunUpdateLoc(cmd.Cmd_Sno, sStockInLoc, db))
+                                                {
+                                                    sRemark = $"Error: <CmdSno> {cmd.Cmd_Sno} 無法更新入庫新儲位。";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+                                            }
+                                            else if (!string.IsNullOrWhiteSpace(CmdCheck[0]) && !string.IsNullOrWhiteSpace(CmdCheck[1]))
+                                            {
+                                                sRemark = $"Error: <EquNo> {cmd.Equ_No} 前方等待搬運中。";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+                                            else
+                                            {
+                                                string CmdSnoDD = !string.IsNullOrWhiteSpace(CmdCheck[0]) ? CmdCheck[0] : CmdCheck[1];
+                                                CmdMstInfo cmd_DD = new CmdMstInfo();
+                                                if (!Cmd_Mst.FunGetCommandByCmdSno(CmdSnoDD,ref cmd_DD, db))
+                                                {
+                                                    sRemark = $"Error: <EquNo> {cmd.Equ_No} <CmdSno> {CmdSnoDD} 前方命令序號不存在。";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
+                                                bool IsEmpty = false;
+                                                string targetLoc = wms.GetLocMst().GetLocDDandStatus(cmd_DD.Loc, ref IsEmpty);
+                                                if (!string.IsNullOrWhiteSpace(targetLoc) && IsEmpty)
+                                                {
+                                                    if (!Cmd_Mst.FunUpdateLoc(cmd.Cmd_Sno, targetLoc, db))
+                                                    {
+                                                        sRemark = $"Error: <CmdSno> {cmd.Cmd_Sno} 無法更新入庫新儲位(with 兄弟)。";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+                                                }
+
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                            {
+                                                sRemark = "Error: Begin失敗！";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            if (!Cmd_Mst.FunUpdateCurLoc(cmd.Cmd_Sno, "", "CV", db))
+                                            {
+                                                sRemark = $"Error: <CmdSno> {cmd.Cmd_Sno} 更新位置CV失敗！";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
+                                            CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
+                                            {
+                                                jobId = cmd.Cmd_Sno,
+                                                carrierType = clsConstValue.ControllerApi.CarrierType.Bin,
+                                                bufferId = cmd.CurLoc
+                                            };
+
+                                            var con = ConveyorDef.GetBuffer(cmd.CurLoc);
+
+                                            if (!api.GetCV_ReceiveNewBinCmd().FunReport(info, con.API.IP))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                sRemark = $"Error: 下達新CmdSno<{cmd.Cmd_Sno}>命令序號失敗";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+                                        }
+                                    }
+                                    
+                                    if ((cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName && cmd.Equ_No != "3") ||
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_041.BufferName && cmd.Equ_No != "4") ||
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_045.BufferName && cmd.Equ_No != "5") ||
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_117.BufferName && cmd.Equ_No == "3") ||
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_121.BufferName && cmd.Equ_No == "4") ||
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_125.BufferName && cmd.Equ_No == "5"))
+                                    {
+                                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                        {
+                                            sRemark = "Error: Begin失敗！";
+                                            if (sRemark != cmd.Remark)
+                                            {
+                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                            }
+
+                                            continue;
+                                        }
+
+                                        if (!Cmd_Mst.FunUpdateCurLoc(cmd.Cmd_Sno, "", "CV", db))
+                                        {
+                                            sRemark = $"Error: <CmdSno> {cmd.Cmd_Sno} 更新位置CV失敗！";
+                                            if (sRemark != cmd.Remark)
+                                            {
+                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                            }
+
+                                            continue;
+                                        }
+
+                                        CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
+                                        {
+                                            jobId = cmd.Cmd_Sno,
+                                            carrierType = clsConstValue.ControllerApi.CarrierType.Bin,
+                                            bufferId = cmd.CurLoc
+                                        };
+
+                                        var con = ConveyorDef.GetBuffer(cmd.CurLoc);
+
+                                        if (!api.GetCV_ReceiveNewBinCmd().FunReport(info, con.API.IP))
+                                        {
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            sRemark = $"Error: 下達新CmdSno<{cmd.Cmd_Sno}>命令序號失敗";
+                                            if (sRemark != cmd.Remark)
+                                            {
+                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                            }
+
+                                            continue;
+                                        }
+                                    }
+                                }
+                                
                             }
 
                             return false;

@@ -60,6 +60,19 @@ namespace Mirle.Def.U2NMMA30
             public static ConveyorInfo B1_121 = new ConveyorInfo { Index = 121, BufferName = "B1-121" };
             public static ConveyorInfo B1_125 = new ConveyorInfo { Index = 125, BufferName = "B1-125" };
             public static ConveyorInfo B1_134 = new ConveyorInfo { Index = 134, BufferName = "B1-134" };
+
+            public static ConveyorInfo B1_009 = new ConveyorInfo { Index = 9, BufferName = "B1-009" };
+            public static ConveyorInfo B1_012 = new ConveyorInfo { Index = 12, BufferName = "B1-012" };
+            public static ConveyorInfo B1_021 = new ConveyorInfo { Index = 21, BufferName = "B1-021" };
+            public static ConveyorInfo B1_024 = new ConveyorInfo { Index = 24, BufferName = "B1-024" };
+            public static ConveyorInfo B1_033 = new ConveyorInfo { Index = 33, BufferName = "B1-033" };
+            public static ConveyorInfo B1_036 = new ConveyorInfo { Index = 36, BufferName = "B1-036" };
+            public static ConveyorInfo B1_089 = new ConveyorInfo { Index = 89, BufferName = "B1-089" };
+            public static ConveyorInfo B1_092 = new ConveyorInfo { Index = 92, BufferName = "B1-092" };
+            public static ConveyorInfo B1_101 = new ConveyorInfo { Index = 101, BufferName = "B1-101" };
+            public static ConveyorInfo B1_104 = new ConveyorInfo { Index = 104, BufferName = "B1-104" };
+            public static ConveyorInfo B1_113 = new ConveyorInfo { Index = 113, BufferName = "B1-113" };
+            public static ConveyorInfo B1_116 = new ConveyorInfo { Index = 116, BufferName = "B1-116" };
             /// <summary>
             /// 站口
             /// </summary>
@@ -808,7 +821,51 @@ namespace Mirle.Def.U2NMMA30
             B800CV.Add(AGV.B1_074);
             B800CV.Add(AGV.B1_078);
         }
+        private static List<ConveyorInfo> B800CVOut = new List<ConveyorInfo>();
+        public static List<ConveyorInfo> GetB800CVOut_List() => B800CVOut;
+        private static int Current_Out = 1;
+        public static ConveyorInfo GetB800CVOut()
+        {
+            int count = 1;
+            foreach (var s in B800CVOut)
+            {
+                if (count == Current_Out)
+                {
+                    Current_Out++;
+                    if (Current_Out > B800CVOut.Count()) Current_Out = 1;
 
+                    return s;
+                }
+
+                count++;
+            }
+
+            return new ConveyorInfo();
+        }
+
+        private static void FunB800CVOutAddInit()
+        {
+            B800CVOut.Add(AGV.B1_071);
+            B800CVOut.Add(AGV.B1_075);
+            B800CVOut.Add(AGV.B1_079);
+        }
+        public static List<ConveyorInfo> Node_Lift = new List<ConveyorInfo>();
+        public static List<ConveyorInfo> GetLifetNode_List() => Node_Lift;
+        public static void FunLiftNodeInit()
+        {
+            Node_Lift.Add(E04.LO1_02);
+            Node_Lift.Add(E04.LO1_07);
+            Node_Lift.Add(AGV.LO2_01);
+            Node_Lift.Add(AGV.LO2_04);
+            Node_Lift.Add(AGV.LO3_01);
+            Node_Lift.Add(AGV.LO3_04);
+            Node_Lift.Add(AGV.LO4_01);
+            Node_Lift.Add(AGV.LO4_04);
+            Node_Lift.Add(AGV.LO5_01);
+            Node_Lift.Add(AGV.LO5_04);
+            Node_Lift.Add(AGV.LO6_01);
+            Node_Lift.Add(AGV.LO6_04);
+        }
         private static List<ConveyorInfo> Stations = new List<ConveyorInfo>();
         /// <summary>
         /// 人員工作站List
@@ -818,6 +875,8 @@ namespace Mirle.Def.U2NMMA30
         public static void FunStnListAddInit()
         {
             FunB800CVAddInit();
+            FunB800CVOutAddInit();
+            FunLiftNodeInit();
 
             Stations.Add(E04.LO1_02);
             Stations.Add(E04.LO1_07);

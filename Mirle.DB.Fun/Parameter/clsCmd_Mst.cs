@@ -141,6 +141,10 @@ namespace Mirle.DB.Fun.Parameter
             /// 此段命令是否寫進middle
             /// </summary>
             public const string writeToMiddle = "writeToMiddle";
+            /// <summary>
+            /// 箱式倉出庫所使用的AGVport口
+            /// </summary>
+            public const string boxStockOutAgv = "boxStockOutAgv";
         }
     }
 }

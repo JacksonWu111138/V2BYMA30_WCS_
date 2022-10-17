@@ -51,7 +51,8 @@ namespace Mirle.DB.Fun
                 largest = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.largest]),
                 Cmd_Abnormal = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.Cmd_Abnormal]),
                 carrierType= Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.carrierType]),
-                writeToMiddle = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.writeToMiddle])
+                writeToMiddle = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.writeToMiddle]),
+                boxStockOutAgv = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.boxStockOutAgv]),
             };
 
             return cmd;

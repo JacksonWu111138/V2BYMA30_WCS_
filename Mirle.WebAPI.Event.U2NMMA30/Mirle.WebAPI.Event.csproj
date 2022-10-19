@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ApiEventController.cs" />
     <Compile Include="clsWriLog.cs" />
+    <Compile Include="ModelsForControllers\EmptyBinLoadRequestInfo.cs" />
     <Compile Include="ModelsForControllers\SMTCMagazineLoadRequestInfo.cs" />
     <Compile Include="ModelsForControllers\SMTCEmptyMagazineUnloadInfo.cs" />
     <Compile Include="ModelsForControllers\SMTCEmptyMagazineLoadRequestInfo.cs" />

@@ -179,6 +179,27 @@ namespace Mirle.DB.Proc
                                                 continue;
                                             }
 
+                                            if (cmd.JobID.StartsWith("EBR")) //判斷條件待修正
+                                            {
+                                                EmptyBinLoadDoneInfo emptyBinLoadDoneInfo = new EmptyBinLoadDoneInfo
+                                                {
+                                                    jobId = cmd.Cmd_Sno,
+                                                    location = cmd.Stn_No
+                                                };
+                                                ConveyorInfo con_1 = new ConveyorInfo();
+                                                con_1 = ConveyorDef.GetBuffer(cmd.Stn_No);
+                                                if (!api.GetEmptyBinLoadDone().FunReport(emptyBinLoadDoneInfo, con_1.API.IP))
+                                                {
+                                                    sRemark = $"Error: 傳送EmptyBinLoadDone給 {con_1.BufferName} 失敗, jobId = {cmd.Cmd_Sno}.";
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+                                            }
                                             break;
                                     }
 

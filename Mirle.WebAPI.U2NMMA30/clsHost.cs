@@ -5,6 +5,7 @@ using System.ServiceModel.Channels;
 using System.Text;
 using Mirle.Def;
 using Mirle.WebAPI.V2BYMA30.Function;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
 
 namespace Mirle.WebAPI.V2BYMA30
 {
@@ -58,6 +59,7 @@ namespace Mirle.WebAPI.V2BYMA30
         private RemoteLocalRequest RemoteLocalRequest = new RemoteLocalRequest();
         private TransferCommandRequest TransferCommandRequest = new TransferCommandRequest();
         private BufferInitial BufferInitial = new BufferInitial();
+        private EmptyBinLoadDone EmptyBinLoadDone = new EmptyBinLoadDone();
 
         public CVReceiveNewBinCmd GetCV_ReceiveNewBinCmd() => RECEIVE_NEW_BIN_CMD;
         public BufferStatusQuery GetBufferStatusQuery() => BufferStatusQuery;
@@ -107,7 +109,7 @@ namespace Mirle.WebAPI.V2BYMA30
         public RemoteLocalRequest GetRemoteLocalRequest() => RemoteLocalRequest;
         public TransferCommandRequest GetTransferCommandRequest() => TransferCommandRequest;
         public BufferInitial GetBufferInitial() => BufferInitial;
-        
+        public EmptyBinLoadDone GetEmptyBinLoadDone() => EmptyBinLoadDone;
 
     }
 }

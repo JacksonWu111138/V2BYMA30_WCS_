@@ -353,7 +353,7 @@ largest          NVarchar(MAX) NOT NULL  Default 'N',
 carrierType  NVarchar(MAX) NOT NULL  Default '',
 lotSize          Varchar(3)  Not Null        Default '',
 writeToMiddle	Varchar(1) Not Null Default 'N',
-boxStockOutAgv Varchar(6) Not Null Default ''
+boxStockOutAgv Varchar(6) Not Null Default '',
 Primary Key(CmdMode, BoxId)
 );
 
@@ -389,7 +389,7 @@ carrierType  NVarchar(MAX) NOT NULL  Default '',
 largest          NVarchar(MAX) NOT NULL  Default 'N',
 lotSize          Varchar(3)  Not Null        Default '',
 writeToMiddle	Varchar(1) Not Null Default 'N',
-boxStockOutAgv Varchar(6) Not Null Default ''
+boxStockOutAgv Varchar(6) Not Null Default '',
 );
 
 Create Table Teach_Loc

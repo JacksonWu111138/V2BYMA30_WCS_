@@ -1339,6 +1339,47 @@ namespace Mirle.WebAPI.Event
             }
         }
 
+        [Route("WCS/EMPTY_BIN_LOAD_REQUEST")]
+        [HttpPost]
+        public IHttpActionResult EMPTY_BIN_LOAD_REQUEST([FromBody] EmptyBinLoadRequestInfo Body)
+        {
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<EMPTY_BIN_LOAD_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+
+            ReplyCode rMsg = new ReplyCode
+            {
+                jobId = Body.jobId,
+                transactionId = Body.transactionId
+            };
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>EMPTY_BIN_LOAD_REQUEST start!");
+            try
+            {
+                EmptyESDCarrierLoadRequestInfo info = new EmptyESDCarrierLoadRequestInfo
+                {
+                    location = Body.location,
+                    reqQty = Body.reqQty,
+                    withClapBoard = clsConstValue.YesNo.No
+                };
+
+                if (!clsAPI.GetAPI().GetEmptyESDCarrierLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    throw new Exception($"Error: Send Empty ESDCarrier Load Request to WES fail, location = {Body.location}.");
+
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
+                rMsg.returnComment = "";
+
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>EMPTY_BIN_LOAD_REQUEST record end!");
+                return Json(rMsg);
+            }
+            catch (Exception ex)
+            {
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Fail;
+                rMsg.returnComment = ex.Message;
+
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return Json(rMsg);
+            }
+        }
+
         [Route("WCS/FORK_STATUS_REPORT")]
         [HttpPost]
         public IHttpActionResult FORK_STATUS_REPORT([FromBody] ForkStatusReportInfo Body)
@@ -2183,7 +2224,8 @@ namespace Mirle.WebAPI.Event
                     EmptyESDCarrierLoadRequestInfo info = new EmptyESDCarrierLoadRequestInfo
                     {
                         location = con.StnNo,
-                        reqQty = 1
+                        reqQty = 1,
+                        withClapBoard = clsConstValue.YesNo.Yes
                     };
                     if (!clsAPI.GetAPI().GetEmptyESDCarrierLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
                         throw new Exception($"Error: EmptyESDCarrierLoadRequest to WES fail, jobId = {Body.jobId}.");

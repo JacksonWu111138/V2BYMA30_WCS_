@@ -1115,10 +1115,29 @@ namespace Mirle.WebAPI.Event
                             rMsg.toLocation = cmd.boxStockOutAgv;
                         }
                     }
-                    else if (cmd.Cmd_Mode == CmdMode.StockOut && 
-                            (cmd.Stn_No == ConveyorDef.Box.B1_062.BufferName || cmd.Stn_No == ConveyorDef.Box.B1_067.BufferName ||
-                            cmd.Stn_No == ConveyorDef.Box.B1_142.BufferName || cmd.Stn_No == ConveyorDef.Box.B1_147.BufferName))
-                        rMsg.toLocation = cmd.Stn_No;
+                    else if (cmd.Cmd_Mode == CmdMode.StockOut)
+                    {
+                        if (cmd.Stn_No == ConveyorDef.Box.B1_062.BufferName || cmd.Stn_No == ConveyorDef.Box.B1_067.BufferName ||
+                            cmd.Stn_No == ConveyorDef.Box.B1_142.BufferName || cmd.Stn_No == ConveyorDef.Box.B1_147.BufferName)
+                            rMsg.toLocation = cmd.Stn_No;
+
+                        if (cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName || cmd.CurLoc == ConveyorDef.Box.B1_041.BufferName ||
+                            cmd.CurLoc == ConveyorDef.Box.B1_045.BufferName || cmd.CurLoc == ConveyorDef.Box.B1_117.BufferName ||
+                            cmd.CurLoc == ConveyorDef.Box.B1_121.BufferName || cmd.CurLoc == ConveyorDef.Box.B1_125.BufferName)
+                        {
+                            if (cmd.Loc != "Shelf")
+                            {
+                                int temp = Convert.ToInt32(cmd.Loc.Substring(0, 2));
+                                if (temp % 4 == 2 || temp % 4 == 3)
+                                {
+                                    if (cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName) { }
+                                       // rMsg.toLocation;
+                                }
+                            }
+                        }
+                    }
+
+
                 }
                 else
                 {

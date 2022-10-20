@@ -29,14 +29,16 @@ namespace Mirle.DB.Proc
         private Fun.clsEquCmd EquCmd = new Fun.clsEquCmd();
         private Fun.clsProc proc = new Fun.clsProc();
         private clsDbConfig _config = new clsDbConfig();
+        private clsDbConfig _config_WMS = new clsDbConfig();
         private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
         private WebApiConfig _wmsApi = new WebApiConfig();
         private WebApiConfig _towerApi = new WebApiConfig();
-        public clsProc(clsDbConfig config, WebApiConfig WmsApi_Config, WebApiConfig TowerApi_Config)
+        public clsProc(clsDbConfig config, WebApiConfig WmsApi_Config, WebApiConfig TowerApi_Config, clsDbConfig config_WMS)
         {
             _config = config;
             _wmsApi = WmsApi_Config;
             _towerApi = TowerApi_Config;
+            _config_WMS = config_WMS;
         }
 
         public Fun.clsRoutdef GetFun_Routdef() => Routdef;
@@ -868,6 +870,7 @@ namespace Mirle.DB.Proc
                                             var CusBuff1 = ConveyorDef.GetBuffer(CustomBuffer1);
                                             var CusBuff2 = ConveyorDef.GetBuffer(CustomBuffer2);
                                             string[] CmdCheck = new string[2];
+                                            //檢查前方Buffer的CmdSno
                                             for (int checkBuff = 0; checkBuff < 2; checkBuff++)
                                             {
                                                 CmdCheck[checkBuff] = "";
@@ -882,7 +885,7 @@ namespace Mirle.DB.Proc
                                                     CmdCheck[checkBuff] = checkReply.jobId;
                                                 }
                                             }
-
+                                            //前方空板
                                             if (string.IsNullOrWhiteSpace(CmdCheck[0]) && string.IsNullOrWhiteSpace(CmdCheck[1]))
                                             {
                                                 string sStockInLoc = wms.GetLocMst().funSearchEmptyLoc(cmd.Equ_No);
@@ -897,8 +900,20 @@ namespace Mirle.DB.Proc
                                                     continue;
                                                 }
 
+                                                if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                                {
+                                                    sRemark = "Error: Begin失敗！";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
                                                 if (!Cmd_Mst.FunUpdateLoc(cmd.Cmd_Sno, sStockInLoc, db))
                                                 {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
                                                     sRemark = $"Error: <CmdSno> {cmd.Cmd_Sno} 無法更新入庫新儲位。";
                                                     if (sRemark != cmd.Remark)
                                                     {
@@ -907,7 +922,29 @@ namespace Mirle.DB.Proc
 
                                                     continue;
                                                 }
+
+                                                var ShelfBuff = ConveyorDef.GetBuffer(cmd.CurLoc);
+                                                CarrierShelfReportInfo info = new CarrierShelfReportInfo
+                                                {
+                                                    carrierId = cmd.BoxID,
+                                                    shelfId = sStockInLoc,
+                                                    shelfStatus = "IN",
+                                                    disableLocation = "N"
+                                                };
+
+                                                if (!api.GetCarrierShelfReport().FunReport(info, _wmsApi.IP))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    sRemark = $"Error: 下達新CmdSno<{cmd.Cmd_Sno}>命令序號失敗";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
                                             }
+                                            //前方滿板
                                             else if (!string.IsNullOrWhiteSpace(CmdCheck[0]) && !string.IsNullOrWhiteSpace(CmdCheck[1]))
                                             {
                                                 sRemark = $"Error: <EquNo> {cmd.Equ_No} 前方等待搬運中。";
@@ -918,11 +955,12 @@ namespace Mirle.DB.Proc
 
                                                 continue;
                                             }
+                                            //選擇前方靜電箱的兄弟
                                             else
                                             {
                                                 string CmdSnoDD = !string.IsNullOrWhiteSpace(CmdCheck[0]) ? CmdCheck[0] : CmdCheck[1];
                                                 CmdMstInfo cmd_DD = new CmdMstInfo();
-                                                if (!Cmd_Mst.FunGetCommandByCmdSno(CmdSnoDD,ref cmd_DD, db))
+                                                if (!Cmd_Mst.FunGetCommandByCmdSno(CmdSnoDD, ref cmd_DD, db))
                                                 {
                                                     sRemark = $"Error: <EquNo> {cmd.Equ_No} <CmdSno> {CmdSnoDD} 前方命令序號不存在。";
                                                     if (sRemark != cmd.Remark)
@@ -937,9 +975,42 @@ namespace Mirle.DB.Proc
                                                 string targetLoc = wms.GetLocMst().GetLocDDandStatus(cmd_DD.Loc, ref IsEmpty);
                                                 if (!string.IsNullOrWhiteSpace(targetLoc) && IsEmpty)
                                                 {
+                                                    if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                                    {
+                                                        sRemark = "Error: Begin失敗！";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+
                                                     if (!Cmd_Mst.FunUpdateLoc(cmd.Cmd_Sno, targetLoc, db))
                                                     {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
                                                         sRemark = $"Error: <CmdSno> {cmd.Cmd_Sno} 無法更新入庫新儲位(with 兄弟)。";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+
+                                                    var ShelfBuff = ConveyorDef.GetBuffer(cmd.CurLoc);
+                                                    CarrierShelfReportInfo info = new CarrierShelfReportInfo
+                                                    {
+                                                        carrierId = cmd.BoxID,
+                                                        shelfId = targetLoc,
+                                                        shelfStatus = "IN",
+                                                        disableLocation = "N"
+                                                    };
+
+                                                    if (!api.GetCarrierShelfReport().FunReport(info, _wmsApi.IP))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        sRemark = $"Error: 下達新CmdSno<{cmd.Cmd_Sno}>命令序號失敗";
                                                         if (sRemark != cmd.Remark)
                                                         {
                                                             Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
@@ -967,6 +1038,7 @@ namespace Mirle.DB.Proc
 
                                             if (!Cmd_Mst.FunUpdateCurLoc(cmd.Cmd_Sno, "", "CV", db))
                                             {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
                                                 sRemark = $"Error: <CmdSno> {cmd.Cmd_Sno} 更新位置CV失敗！";
                                                 if (sRemark != cmd.Remark)
                                                 {
@@ -998,7 +1070,7 @@ namespace Mirle.DB.Proc
                                             }
                                         }
                                     }
-                                    
+
                                     if ((cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName && cmd.Equ_No != "3") ||
                                         (cmd.CurLoc == ConveyorDef.Box.B1_041.BufferName && cmd.Equ_No != "4") ||
                                         (cmd.CurLoc == ConveyorDef.Box.B1_045.BufferName && cmd.Equ_No != "5") ||
@@ -1050,7 +1122,7 @@ namespace Mirle.DB.Proc
                                         }
                                     }
                                 }
-                                
+
                             }
 
                             return false;
@@ -1682,6 +1754,23 @@ namespace Mirle.DB.Proc
                         clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strEM);
                         return false;
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunGetStockInLocation(string sCmdSno, ref string sLoc, ref string strEM)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    return true;
                 }
             }
             catch (Exception ex)

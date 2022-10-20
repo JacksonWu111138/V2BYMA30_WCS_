@@ -47,7 +47,7 @@ namespace Mirle.ASRS.DBCommand
 
        private void Initial(clsDbConfig dbConfig, clsDbConfig dbConfig_WMS)
         {
-            wcs = new clsHost(dbConfig, new WebApiConfig(), new WebApiConfig());
+            wcs = new clsHost(dbConfig, new WebApiConfig(), new WebApiConfig(), dbConfig_WMS);
             wms = new DB.WMS.Proc.clsHost(dbConfig_WMS);
         }
     }

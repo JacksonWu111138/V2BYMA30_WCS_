@@ -33,7 +33,7 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public clsHost(clsDbConfig config, WebApiConfig wmsApi, WebApiConfig TowerApi_Config)
+        public clsHost(clsDbConfig config, WebApiConfig wmsApi, WebApiConfig TowerApi_Config, clsDbConfig config_WMS)
         {
             CMD_MST = new clsCmd_Mst(config, wmsApi);
             cmd_Dtl = new clsCmd_Dtl(config);
@@ -46,7 +46,7 @@ namespace Mirle.DB.Proc
             EQ_Alarm = new clsEQ_Alarm(config);
             L2LCount = new clsL2LCount(config);
             LOTRETRIEVENG = new clsLotRetrieveNG(config, wmsApi);
-            proc = new clsProc(config, wmsApi, TowerApi_Config);
+            proc = new clsProc(config, wmsApi, TowerApi_Config, config_WMS);
             middleCmd = new clsMiddleCmd(config);
         }
 

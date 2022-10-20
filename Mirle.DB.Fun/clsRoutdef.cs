@@ -11,6 +11,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Mirle.WebAPI;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
 
 namespace Mirle.DB.Fun
 {
@@ -166,6 +168,26 @@ namespace Mirle.DB.Fun
                     case clsConstValue.CmdMode.S2S:
                     case clsConstValue.CmdMode.StockOut:
                         string sBuffername = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;
+                        //Case: double destination
+                        if(cmd.Stn_No.Contains(','))
+                        {
+                            string[] multi_destination = cmd.Stn_No.Split(',');
+                            for(int i = 0; i < multi_destination.Length; i++)
+                            {
+
+                                BufferStatusQueryInfo info = new BufferStatusQueryInfo
+                                {
+                                    bufferId = multi_destination[i],
+                                };
+                                BufferStatusReply reply = new BufferStatusReply();
+                                
+                                //if(WebAPI.V2BYMA30.Function.BufferStatusQuery.FunReport(info, ))
+                            }
+                        }
+                        else
+                        {
+                            
+                        }
                         var s = ConveyorDef.GetBuffer(sBuffername);
                         string sDeviceId = tool.GetDeviceId(s.BufferName);
                         if (sDeviceId == "") 

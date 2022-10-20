@@ -373,6 +373,19 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(Box.B1_125);
             Node_All.Add(Box.B1_134);
 
+            Node_All.Add(Box.B1_009);
+            Node_All.Add(Box.B1_012);
+            Node_All.Add(Box.B1_021);
+            Node_All.Add(Box.B1_024);
+            Node_All.Add(Box.B1_033);
+            Node_All.Add(Box.B1_036);
+            Node_All.Add(Box.B1_089);
+            Node_All.Add(Box.B1_092);
+            Node_All.Add(Box.B1_101);
+            Node_All.Add(Box.B1_104);
+            Node_All.Add(Box.B1_113);
+            Node_All.Add(Box.B1_116);
+
             Node_All.Add(Box.B1_062);
             Node_All.Add(Box.B1_067);
             Node_All.Add(Box.B1_142);

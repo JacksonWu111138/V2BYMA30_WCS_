@@ -135,6 +135,19 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.Box.B1_125.ControllerID = lcsini.ControllerID.Box2;
             ConveyorDef.Box.B1_134.ControllerID = lcsini.ControllerID.Box2;
 
+            ConveyorDef.Box.B1_009.ControllerID = lcsini.ControllerID.Box1;
+            ConveyorDef.Box.B1_012.ControllerID = lcsini.ControllerID.Box1;
+            ConveyorDef.Box.B1_021.ControllerID = lcsini.ControllerID.Box1;
+            ConveyorDef.Box.B1_024.ControllerID = lcsini.ControllerID.Box1;
+            ConveyorDef.Box.B1_033.ControllerID = lcsini.ControllerID.Box1;
+            ConveyorDef.Box.B1_036.ControllerID = lcsini.ControllerID.Box1;
+            ConveyorDef.Box.B1_089.ControllerID = lcsini.ControllerID.Box2;
+            ConveyorDef.Box.B1_092.ControllerID = lcsini.ControllerID.Box2;
+            ConveyorDef.Box.B1_101.ControllerID = lcsini.ControllerID.Box2;
+            ConveyorDef.Box.B1_104.ControllerID = lcsini.ControllerID.Box2;
+            ConveyorDef.Box.B1_113.ControllerID = lcsini.ControllerID.Box2;
+            ConveyorDef.Box.B1_116.ControllerID = lcsini.ControllerID.Box2;
+
             ConveyorDef.Box.B1_062.ControllerID = lcsini.ControllerID.Box1;
             ConveyorDef.Box.B1_067.ControllerID = lcsini.ControllerID.Box1;
             ConveyorDef.Box.B1_142.ControllerID = lcsini.ControllerID.Box2;
@@ -527,6 +540,19 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.Box.B1_121.API.IP = lcsini.Client_API.Box;
             ConveyorDef.Box.B1_125.API.IP = lcsini.Client_API.Box;
             ConveyorDef.Box.B1_134.API.IP = lcsini.Client_API.Box;
+
+            ConveyorDef.Box.B1_009.API.IP = lcsini.Client_API.Box;
+            ConveyorDef.Box.B1_012.API.IP = lcsini.Client_API.Box;
+            ConveyorDef.Box.B1_021.API.IP = lcsini.Client_API.Box;
+            ConveyorDef.Box.B1_024.API.IP = lcsini.Client_API.Box;
+            ConveyorDef.Box.B1_033.API.IP = lcsini.Client_API.Box;
+            ConveyorDef.Box.B1_036.API.IP = lcsini.Client_API.Box;
+            ConveyorDef.Box.B1_089.API.IP = lcsini.Client_API.Box;
+            ConveyorDef.Box.B1_092.API.IP = lcsini.Client_API.Box;
+            ConveyorDef.Box.B1_101.API.IP = lcsini.Client_API.Box;
+            ConveyorDef.Box.B1_104.API.IP = lcsini.Client_API.Box;
+            ConveyorDef.Box.B1_113.API.IP = lcsini.Client_API.Box;
+            ConveyorDef.Box.B1_116.API.IP = lcsini.Client_API.Box;
 
             ConveyorDef.Box.B1_062.API.IP = lcsini.Client_API.Box;
             ConveyorDef.Box.B1_067.API.IP = lcsini.Client_API.Box;

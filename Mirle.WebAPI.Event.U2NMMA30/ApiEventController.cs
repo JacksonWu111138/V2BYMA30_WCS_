@@ -300,33 +300,47 @@ namespace Mirle.WebAPI.Event
                     cmd.Prty = Body.priority;
                     cmd.Remark = "";
 
-                    
-
-                    if (Body.toLocation == ConveyorDef.WES_B800CV)
+                    if (Body.toLocation.Contains(','))
                     {
-                        int count = 0; bool check = false;
-                        ConveyorInfo B800CV = new ConveyorInfo();
-                        while (count < ConveyorDef.GetB800CV_List().Count())
+                        string[] destination = Body.toLocation.Split(',');
+
+                        var cv_to = ConveyorDef.GetBuffer_ByStnNo(destination[0]);
+                        cmd.Stn_No = cv_to.BufferName;
+                        for (int i = 1; i < destination.Length; i++)
                         {
-                            B800CV = ConveyorDef.GetB800CV();
-                            if (clsMiddle.GetMiddle().CheckIsInReady(B800CV))
-                            {
-                                cmd.Stn_No = B800CV.BufferName;
-                                check = true;
-                                break;
-                            }
-                            count++;
-                        }
-                        if (!check)
-                        {
-                            throw new Exception("Error: B800CV 無InReady儲位");
+                            cv_to = ConveyorDef.GetBuffer_ByStnNo(destination[i]);
+                            cmd.Stn_No += "," + cv_to.BufferName;
                         }
                     }
                     else
                     {
-                        var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.toLocation);
-                        cmd.Stn_No = cv_to.BufferName;
+                        if (Body.toLocation == ConveyorDef.WES_B800CV)
+                        {
+                            int count = 0; bool check = false;
+                            ConveyorInfo B800CV = new ConveyorInfo();
+                            while (count < ConveyorDef.GetB800CV_List().Count())
+                            {
+                                B800CV = ConveyorDef.GetB800CV();
+                                if (clsMiddle.GetMiddle().CheckIsInReady(B800CV))
+                                {
+                                    cmd.Stn_No = B800CV.BufferName;
+                                    check = true;
+                                    break;
+                                }
+                                count++;
+                            }
+                            if (!check)
+                            {
+                                throw new Exception("Error: B800CV 無InReady儲位");
+                            }
+                        }
+                        else
+                        {
+                            var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.toLocation);
+                            cmd.Stn_No = cv_to.BufferName;
+                        }
                     }
+
 
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
@@ -1684,7 +1698,8 @@ namespace Mirle.WebAPI.Event
                 {
                     if (Body.rackId == "UNKNOWN")
                     {
-                        if (Body.stagePosition == ConveyorDef.AGV.S0_05.BufferName)
+                        //待修改線邊倉的料價站(S0-05)點
+                        if (Body.stagePosition == ConveyorDef.AGV.S3_49.BufferName)
                         {
                             RackRequestInfo info = new RackRequestInfo
                             {
@@ -1719,7 +1734,7 @@ namespace Mirle.WebAPI.Event
                             cmd.JobID = Body.jobId;
                             cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
 
-                            cmd.New_Loc = ConveyorDef.AGV.S0_05.BufferName;//新站口，尚未有站號更新至程式
+                            cmd.New_Loc = ConveyorDef.AGV.S3_49.BufferName;//新站口，尚未有站號更新至程式
 
                             cmd.Prty = "5";
                             cmd.Remark = "";

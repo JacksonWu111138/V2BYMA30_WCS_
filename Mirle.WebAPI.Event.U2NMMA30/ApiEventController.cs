@@ -195,7 +195,7 @@ namespace Mirle.WebAPI.Event
                     cmd.End_Date = "";
 
                     cmd.Loc = Body.toShelfId;
-                    cmd.Equ_No = tool.funGetEquNoByLoc(cmd.Loc).ToString();
+                    cmd.Equ_No = cmd.Loc == "Shelf" ? "" : tool.funGetEquNoByLoc(cmd.Loc).ToString();
 
                     cmd.EXP_Date = "";
                     cmd.JobID = Body.jobId;

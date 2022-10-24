@@ -993,6 +993,32 @@ namespace Mirle.DB.Fun
                 return false;
             }
         }
+        public bool FunUpdateEquNo(string sCmdSno, string sEquNo, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"update {Parameter.clsCmd_Mst.TableName} set " +
+                    $"{Parameter.clsCmd_Mst.Column.Equ_No} = '{sEquNo}', {Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{clsConstValue.CmdSts.strCmd_Running}' " +
+                    $"where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}' ";
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
         public bool FunUpdateCurLoc(string sCmdSno, string sCurDeviceID, string sCurLoc, DataBase.DB db)
         {
             try

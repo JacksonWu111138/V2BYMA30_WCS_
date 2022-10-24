@@ -421,5 +421,37 @@ namespace Mirle.DB.WMS.Fun
                 dtTmp = null;
             }
         }
+
+        public int funCheckCountForEmptyLoc(ref DataTable dtTmp, DataBase.DB db)
+        {
+            try
+            {
+                string strEM = "";
+                string strSql = $"select {clsConstValue.LineName.Line3} = (SELECT COUNT(STORAGE_STATUS) from {Parameter.clsLocMst.TableName} WHERE (STORAGE_STATUS = '{clsConstValue.LocSts.Empty}' AND CRANE = '{clsConstValue.CraneName.Line3}')), " +
+                    $"{clsConstValue.LineName.Line4} = (SELECT COUNT(STORAGE_STATUS) from {Parameter.clsLocMst.TableName} WHERE (STORAGE_STATUS = '{clsConstValue.LocSts.Empty}' AND CRANE = '{clsConstValue.CraneName.Line4}')), " +
+                    $"{clsConstValue.LineName.Line5} = (SELECT COUNT(STORAGE_STATUS) from {Parameter.clsLocMst.TableName} WHERE (STORAGE_STATUS = '{clsConstValue.LocSts.Empty}' AND CRANE = '{clsConstValue.CraneName.Line5}'))";
+                int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet == DBResult.Success)
+                {
+                    
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, $"{strSql} => {strEM}");
+                }
+
+                return iRet;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return DBResult.Exception;
+            }
+            finally
+            {
+                dtTmp = null;
+            }
+        }
     }
 }

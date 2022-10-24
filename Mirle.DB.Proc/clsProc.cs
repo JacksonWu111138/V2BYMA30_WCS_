@@ -805,8 +805,7 @@ namespace Mirle.DB.Proc
                 dtTmp.Dispose();
             }
         }
-        public bool FunAsrsCmd_DoubleCV_StockIn_Proc(DeviceInfo Device, string StockInLoc_Sql, MapHost Router,
-            WMS.Proc.clsHost wms, MidHost middle, SignalHost CrnSignal, ref int CurStockInEquNo)
+        public bool FunAsrsCmd_DoubleCV_StockIn_Proc(WMS.Proc.clsHost wms)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -823,7 +822,6 @@ namespace Mirle.DB.Proc
                             {
                                 CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
                                 string sRemark = "";
-                                //if (!Cmd_Mst.CheckCraneStatus(cmd, Device, CrnSignal, db)) continue;
                                 if (cmd.Cmd_Mode == clsConstValue.CmdMode.StockIn)
                                 {
                                     if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
@@ -959,7 +957,7 @@ namespace Mirle.DB.Proc
                                                 if (!api.GetCarrierShelfReport().FunReport(info, _wmsApi.IP))
                                                 {
                                                     db.TransactionCtrl(TransactionTypes.Rollback);
-                                                    sRemark = $"Error: 下達新CmdSno<{cmd.Cmd_Sno}>命令序號失敗";
+                                                    sRemark = $"Error: 上報預約儲位<{sStockInLoc}>命令序號失敗";
                                                     if (sRemark != cmd.Remark)
                                                     {
                                                         Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
@@ -1043,7 +1041,14 @@ namespace Mirle.DB.Proc
                                                         continue;
                                                     }
                                                 }
-
+                                                else
+                                                {
+                                                    sRemark = $"Error: <Loc> {cmd_DD.Loc} 此儲位的兄弟無法接收新入庫搬運。";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+                                                }
                                             }
 
                                         }

@@ -33,6 +33,7 @@ namespace Mirle.DB.Proc
         private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
         private WebApiConfig _wmsApi = new WebApiConfig();
         private WebApiConfig _towerApi = new WebApiConfig();
+        private int CurrentStockInLoc = 0;
         public clsProc(clsDbConfig config, WebApiConfig WmsApi_Config, WebApiConfig TowerApi_Config, clsDbConfig config_WMS)
         {
             _config = config;
@@ -813,8 +814,7 @@ namespace Mirle.DB.Proc
                 dtTmp.Dispose();
             }
         }
-        public bool FunAsrsCmd_DoubleCV_StockIn_Proc(DeviceInfo Device, string StockInLoc_Sql, MapHost Router,
-            WMS.Proc.clsHost wms, MidHost middle, SignalHost CrnSignal)
+        public bool FunAsrsCmd_DoubleCV_StockIn_Proc(WMS.Proc.clsHost wms)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -831,9 +831,31 @@ namespace Mirle.DB.Proc
                             {
                                 CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
                                 string sRemark = "";
-                                //if (!Cmd_Mst.CheckCraneStatus(cmd, Device, CrnSignal, db)) continue;
                                 if (cmd.Cmd_Mode == clsConstValue.CmdMode.StockIn)
                                 {
+                                    if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
+                                    {
+                                        DataTable emptyLocDTTmp = new DataTable();
+                                        int emptyIRet = wms.GetLocMst().funCheckCountForEmptyLoc(ref emptyLocDTTmp);
+                                        if (emptyIRet == DBResult.Success)
+                                        {
+                                            int[] emptyNo = new int[3];
+                                            for (int j = 0; j < 3; j++)
+                                                emptyNo[j] = Convert.ToInt32(emptyLocDTTmp.Rows[0][j].ToString());
+                                            if (string.IsNullOrWhiteSpace(cmd.Equ_No))
+                                            {
+                                                if (emptyNo[CurrentStockInLoc] > 0)
+                                                {
+                                                    if(Cmd_Mst.FunUpdateEquNo(cmd.Cmd_Sno, (CurrentStockInLoc + 3).ToString(), db))
+                                                    {
+                                                        CurrentStockInLoc++;
+                                                        if (CurrentStockInLoc > 2)
+                                                            CurrentStockInLoc = 0;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                     if ((cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName && cmd.Equ_No == "3") ||
                                         (cmd.CurLoc == ConveyorDef.Box.B1_041.BufferName && cmd.Equ_No == "4") ||
                                         (cmd.CurLoc == ConveyorDef.Box.B1_045.BufferName && cmd.Equ_No == "5") ||
@@ -944,7 +966,7 @@ namespace Mirle.DB.Proc
                                                 if (!api.GetCarrierShelfReport().FunReport(info, _wmsApi.IP))
                                                 {
                                                     db.TransactionCtrl(TransactionTypes.Rollback);
-                                                    sRemark = $"Error: 下達新CmdSno<{cmd.Cmd_Sno}>命令序號失敗";
+                                                    sRemark = $"Error: 上報預約儲位<{sStockInLoc}>命令序號失敗";
                                                     if (sRemark != cmd.Remark)
                                                     {
                                                         Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
@@ -1028,12 +1050,27 @@ namespace Mirle.DB.Proc
                                                         continue;
                                                     }
                                                 }
-
+                                                else
+                                                {
+                                                    sRemark = $"Error: <Loc> {cmd_DD.Loc} 此儲位的兄弟無法接收新入庫搬運。";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+                                                }
                                             }
 
                                         }
                                         else
                                         {
+                                            int sRow = Convert.ToInt32(cmd.Loc.Substring(0,2));
+                                            bool isEmptyDD = false;
+                                            string sLocDD = wms.GetLocMst().GetLocDDandStatus(cmd.Loc, ref isEmptyDD);
+                                            string newCurLoc = "";
+                                            if (!isEmptyDD)
+                                                newCurLoc = "CVIN";
+                                            else
+                                                newCurLoc = "CVWT";
                                             if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                             {
                                                 sRemark = "Error: Begin失敗！";
@@ -1045,7 +1082,7 @@ namespace Mirle.DB.Proc
                                                 continue;
                                             }
 
-                                            if (!Cmd_Mst.FunUpdateCurLoc(cmd.Cmd_Sno, "", "CV", db))
+                                            if (!Cmd_Mst.FunUpdateCurLoc(cmd.Cmd_Sno, "", newCurLoc, db))
                                             {
                                                 db.TransactionCtrl(TransactionTypes.Rollback);
                                                 sRemark = $"Error: <CmdSno> {cmd.Cmd_Sno} 更新位置CV失敗！";

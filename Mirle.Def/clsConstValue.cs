@@ -435,8 +435,18 @@ namespace Mirle.Def
 
             }
         }
-        
-
+        public class LineName
+        {
+            public const string Line3 = "Line3";
+            public const string Line4 = "Line4";
+            public const string Line5 = "Line5";
+        }
+        public class CraneName
+        {
+            public const string Line3 = "B801";
+            public const string Line4 = "B802";
+            public const string Line5 = "B803";
+        }
         public class CompleteCode
         {
             public const string PickProc_T2TimeOut = "C0";             //取物 T2 time out

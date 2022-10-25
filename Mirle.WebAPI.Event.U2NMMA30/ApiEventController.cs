@@ -196,7 +196,7 @@ namespace Mirle.WebAPI.Event
                     cmd.End_Date = "";
 
                     cmd.Loc = Body.toShelfId;
-                    cmd.Equ_No = tool.funGetEquNoByLoc(cmd.Loc).ToString();
+                    cmd.Equ_No = cmd.Loc == "Shelf" ? "" : tool.funGetEquNoByLoc(cmd.Loc).ToString();
 
                     cmd.EXP_Date = "";
                     cmd.JobID = Body.jobId;
@@ -1165,18 +1165,83 @@ namespace Mirle.WebAPI.Event
                         if (cmd.Stn_No == ConveyorDef.Box.B1_062.BufferName || cmd.Stn_No == ConveyorDef.Box.B1_067.BufferName ||
                             cmd.Stn_No == ConveyorDef.Box.B1_142.BufferName || cmd.Stn_No == ConveyorDef.Box.B1_147.BufferName)
                             rMsg.toLocation = cmd.Stn_No;
-
-                        if (cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName || cmd.CurLoc == ConveyorDef.Box.B1_041.BufferName ||
-                            cmd.CurLoc == ConveyorDef.Box.B1_045.BufferName || cmd.CurLoc == ConveyorDef.Box.B1_117.BufferName ||
-                            cmd.CurLoc == ConveyorDef.Box.B1_121.BufferName || cmd.CurLoc == ConveyorDef.Box.B1_125.BufferName)
+                    }
+                    else if (cmd.Cmd_Mode == CmdMode.StockIn)
+                    { 
+                        if (cmd.CurLoc == "CVIN")
                         {
                             if (cmd.Loc != "Shelf")
                             {
                                 int temp = Convert.ToInt32(cmd.Loc.Substring(0, 2));
-                                if (temp % 4 == 2 || temp % 4 == 3)
+                                if (temp > 8 && temp <= 12)
                                 {
-                                    if (cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName) { }
-                                       // rMsg.toLocation;
+                                    if (Body.location == ConveyorDef.Box.B1_037.BufferName)
+                                        rMsg.toLocation = ConveyorDef.Box.B1_031.BufferName;
+                                    else
+                                        rMsg.toLocation = ConveyorDef.Box.B1_111.BufferName;
+                                }
+                                else if (temp > 12 && temp <= 16)
+                                {
+                                    if (Body.location == ConveyorDef.Box.B1_041.BufferName)
+                                        rMsg.toLocation = ConveyorDef.Box.B1_019.BufferName;
+                                    else
+                                        rMsg.toLocation = ConveyorDef.Box.B1_099.BufferName;
+                                }
+                                else if (temp > 16 && temp <= 20)
+                                {
+                                    if (Body.location == ConveyorDef.Box.B1_045.BufferName)
+                                        rMsg.toLocation = ConveyorDef.Box.B1_007.BufferName;
+                                    else
+                                        rMsg.toLocation = ConveyorDef.Box.B1_087.BufferName;
+                                }
+                            }
+                        }
+                        else if (cmd.CurLoc == "CVWT")
+                        {
+                            if (cmd.Loc != "Shelf")
+                            {
+                                int temp = Convert.ToInt32(cmd.Loc.Substring(0, 2));
+                                if (temp == 10 || temp == 11)
+                                {
+                                    if (Body.location == ConveyorDef.Box.B1_037.BufferName)
+                                        rMsg.toLocation = ConveyorDef.Box.B1_033.BufferName;
+                                    else
+                                        rMsg.toLocation = ConveyorDef.Box.B1_113.BufferName;
+                                }
+                                else if (temp == 9 || temp == 12)
+                                {
+                                    if (Body.location == ConveyorDef.Box.B1_037.BufferName)
+                                        rMsg.toLocation = ConveyorDef.Box.B1_036.BufferName;
+                                    else
+                                        rMsg.toLocation = ConveyorDef.Box.B1_116.BufferName;
+                                }
+                                else if (temp == 14 || temp == 15)
+                                {
+                                    if (Body.location == ConveyorDef.Box.B1_041.BufferName)
+                                        rMsg.toLocation = ConveyorDef.Box.B1_021.BufferName;
+                                    else
+                                        rMsg.toLocation = ConveyorDef.Box.B1_101.BufferName;
+                                }
+                                else if (temp == 13 || temp == 16)
+                                {
+                                    if (Body.location == ConveyorDef.Box.B1_041.BufferName)
+                                        rMsg.toLocation = ConveyorDef.Box.B1_024.BufferName;
+                                    else
+                                        rMsg.toLocation = ConveyorDef.Box.B1_104.BufferName;
+                                }
+                                else if (temp == 18 || temp == 19)
+                                {
+                                    if (Body.location == ConveyorDef.Box.B1_045.BufferName)
+                                        rMsg.toLocation = ConveyorDef.Box.B1_009.BufferName;
+                                    else
+                                        rMsg.toLocation = ConveyorDef.Box.B1_089.BufferName;
+                                }
+                                else if (temp == 17 || temp == 20)
+                                {
+                                    if (Body.location == ConveyorDef.Box.B1_041.BufferName)
+                                        rMsg.toLocation = ConveyorDef.Box.B1_012.BufferName;
+                                    else
+                                        rMsg.toLocation = ConveyorDef.Box.B1_092.BufferName;
                                 }
                             }
                         }

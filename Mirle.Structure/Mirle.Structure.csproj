@@ -49,6 +49,7 @@
     <Compile Include="CraneInfo.cs" />
     <Compile Include="CstInfo.cs" />
     <Compile Include="DeviceInfo.cs" />
+    <Compile Include="TwoNodeOneStnnoInfo.cs" />
     <Compile Include="DisabledLoc.cs" />
     <Compile Include="EnhancedCarrierInfo.cs" />
     <Compile Include="EnhancedDisabledLoc.cs" />

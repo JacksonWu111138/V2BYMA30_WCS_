@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mirle.Structure;
+using Mirle.Structure.Info;
 
 namespace Mirle.Def.U2NMMA30
 {
@@ -350,6 +351,17 @@ namespace Mirle.Def.U2NMMA30
             public static ConveyorInfo E1_10 = new ConveyorInfo { Index = 10, BufferName = "E1-10" };
         }
 
+        public class SharingNode
+        {
+            public static TwoNodeOneStnnoInfo S800_10 = new TwoNodeOneStnnoInfo { Stn_No = "S800-10", end = Line.A4_18, start = Line.A4_19 };
+            public static TwoNodeOneStnnoInfo S800_12 = new TwoNodeOneStnnoInfo { Stn_No = "S800-12", end = SMTC.S0_02, start = SMTC.S0_03 };
+            public static TwoNodeOneStnnoInfo S800_M1 = new TwoNodeOneStnnoInfo { Stn_No = "S800-M1", end = Line.A4_10, start = Line.A4_11 };
+            public static TwoNodeOneStnnoInfo S800_M2 = new TwoNodeOneStnnoInfo { Stn_No = "S800-M2", end = Line.A4_14, start = Line.A4_15 };
+            public static TwoNodeOneStnnoInfo S800_B1 = new TwoNodeOneStnnoInfo { Stn_No = "S800-B1", end = Line.A4_02, start = Line.A4_03 };
+            public static TwoNodeOneStnnoInfo S800_B2 = new TwoNodeOneStnnoInfo { Stn_No = "S800-B2", end = Line.A4_06, start = Line.A4_07 };
+            public static TwoNodeOneStnnoInfo S811_4 = new TwoNodeOneStnnoInfo { Stn_No = "S811-4", end = SMTC.S1_38, start = SMTC.S };
+        }
+
         public static string DeviceID_AGV = "";
         public static string[] DeviceID_AGV_Router = new string[] { "63", "65", "66", "68" };
         public static string DeviceID_Tower = "";
@@ -613,6 +625,8 @@ namespace Mirle.Def.U2NMMA30
         }
 
         private static List<ConveyorInfo> AGV_All = new List<ConveyorInfo>();
+
+        private static List<TwoNodeOneStnnoInfo> Sharing_StnNo = new List<TwoNodeOneStnnoInfo>();
         public static void FunAGVListInit()
         {
             FunAGVSendToCVend();

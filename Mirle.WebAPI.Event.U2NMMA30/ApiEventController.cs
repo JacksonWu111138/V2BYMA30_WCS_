@@ -1774,9 +1774,11 @@ namespace Mirle.WebAPI.Event
                         location = con.StnNo == null ? con.BufferName : con.StnNo
                     };
 
-                    if (!clsAPI.GetAPI().GetPositionReport().FunReport(info, clsAPI.GetWesApiConfig().IP))
-                        throw new Exception($"Error: PositionReport to WES fail, jobId = {Body.jobId}.");
-
+                    if(clsAPI.GetAPI().GetPositionReport().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    {
+                        //測試線不論
+                        //throw new Exception($"Error: PositionReport to WES fail, jobId = {Body.jobId}.");
+                    }
                 }
                 if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, con.BufferName))
                     throw new Exception($"Error: Update CurLoc fail, jobId = {Body.jobId}.");

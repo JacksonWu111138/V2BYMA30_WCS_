@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using Mirle.Structure;
 using Mirle.Structure.Info;
@@ -359,7 +360,57 @@ namespace Mirle.Def.U2NMMA30
             public static TwoNodeOneStnnoInfo S800_M2 = new TwoNodeOneStnnoInfo { Stn_No = "S800-M2", end = Line.A4_14, start = Line.A4_15 };
             public static TwoNodeOneStnnoInfo S800_B1 = new TwoNodeOneStnnoInfo { Stn_No = "S800-B1", end = Line.A4_02, start = Line.A4_03 };
             public static TwoNodeOneStnnoInfo S800_B2 = new TwoNodeOneStnnoInfo { Stn_No = "S800-B2", end = Line.A4_06, start = Line.A4_07 };
+            
             public static TwoNodeOneStnnoInfo S811_4 = new TwoNodeOneStnnoInfo { Stn_No = "S811-4", end = SMTC.S1_38, start = SMTC.S1_39 };
+            public static TwoNodeOneStnnoInfo S811_1 = new TwoNodeOneStnnoInfo { Stn_No = "S811-1", end = AGV.S1_01, start = SMTC.S1_02 };
+            public static TwoNodeOneStnnoInfo S811_2 = new TwoNodeOneStnnoInfo { Stn_No = "S811-2", end = AGV.S1_07, start = SMTC.S1_08 };
+            public static TwoNodeOneStnnoInfo S811_6 = new TwoNodeOneStnnoInfo { Stn_No = "S811-6", end = AGV.S2_07, start = SMTC.S2_12 };
+            public static TwoNodeOneStnnoInfo S811_5 = new TwoNodeOneStnnoInfo { Stn_No = "S811-5", end = AGV.S2_01, start = SMTC.S2_06 };
+
+            public static TwoNodeOneStnnoInfo S812_4 = new TwoNodeOneStnnoInfo { Stn_No = "S812-4", end = SMTC.S1_42, start = SMTC.S1_43 };
+            public static TwoNodeOneStnnoInfo S812_1 = new TwoNodeOneStnnoInfo { Stn_No = "S812-1", end = AGV.S1_13, start = SMTC.S1_14 };
+            public static TwoNodeOneStnnoInfo S812_5 = new TwoNodeOneStnnoInfo { Stn_No = "S812-5", end = AGV.S2_13, start = SMTC.S2_18 };
+
+            public static TwoNodeOneStnnoInfo S813_4 = new TwoNodeOneStnnoInfo { Stn_No = "S813-4", end = SMTC.S1_46, start = SMTC.S1_47 };
+            public static TwoNodeOneStnnoInfo S813_1 = new TwoNodeOneStnnoInfo { Stn_No = "S813-1", end = AGV.S1_25, start = SMTC.S1_26 };
+            public static TwoNodeOneStnnoInfo S813_2 = new TwoNodeOneStnnoInfo { Stn_No = "S813-2", end = AGV.S1_31, start = SMTC.S1_32 };
+            public static TwoNodeOneStnnoInfo S813_6 = new TwoNodeOneStnnoInfo { Stn_No = "S813-6", end = AGV.S2_31, start = SMTC.S2_36 };
+            public static TwoNodeOneStnnoInfo S813_5 = new TwoNodeOneStnnoInfo { Stn_No = "S813-5", end = AGV.S2_25, start = SMTC.S2_30 };
+
+            public static TwoNodeOneStnnoInfo S814_4 = new TwoNodeOneStnnoInfo { Stn_No = "S814-4", end = SMTC.S3_38, start = SMTC.S3_39 };
+            public static TwoNodeOneStnnoInfo S814_1 = new TwoNodeOneStnnoInfo { Stn_No = "S814-1", end = AGV.S3_01, start = SMTC.S3_02 };
+            public static TwoNodeOneStnnoInfo S814_2 = new TwoNodeOneStnnoInfo { Stn_No = "S814-2", end = AGV.S3_07, start = SMTC.S3_08 };
+            public static TwoNodeOneStnnoInfo S814_6 = new TwoNodeOneStnnoInfo { Stn_No = "S814-6", end = AGV.S4_07, start = SMTC.S4_12 };
+            public static TwoNodeOneStnnoInfo S814_5 = new TwoNodeOneStnnoInfo { Stn_No = "S814-5", end = AGV.S4_01, start = SMTC.S4_06 };
+
+            public static TwoNodeOneStnnoInfo S815_4 = new TwoNodeOneStnnoInfo { Stn_No = "S815-4", end = SMTC.S3_42, start = SMTC.S3_43 };
+            public static TwoNodeOneStnnoInfo S815_1 = new TwoNodeOneStnnoInfo { Stn_No = "S815-1", end = AGV.S3_13, start = SMTC.S3_14 };
+            public static TwoNodeOneStnnoInfo S815_2 = new TwoNodeOneStnnoInfo { Stn_No = "S815-2", end = AGV.S3_19, start = SMTC.S3_20 };
+            public static TwoNodeOneStnnoInfo S815_6 = new TwoNodeOneStnnoInfo { Stn_No = "S815-6", end = AGV.S4_19, start = SMTC.S4_24 };
+            public static TwoNodeOneStnnoInfo S815_5 = new TwoNodeOneStnnoInfo { Stn_No = "S815-5", end = AGV.S4_13, start = SMTC.S4_18 };
+
+            public static TwoNodeOneStnnoInfo S816_4 = new TwoNodeOneStnnoInfo { Stn_No = "S816-4", end = SMTC.S3_46, start = SMTC.S3_47 };
+            public static TwoNodeOneStnnoInfo S816_1 = new TwoNodeOneStnnoInfo { Stn_No = "S816-1", end = AGV.S3_25, start = SMTC.S3_26 };
+            public static TwoNodeOneStnnoInfo S816_2 = new TwoNodeOneStnnoInfo { Stn_No = "S816-2", end = AGV.S3_31, start = SMTC.S3_32 };
+            public static TwoNodeOneStnnoInfo S816_5 = new TwoNodeOneStnnoInfo { Stn_No = "S816-5", end = AGV.S4_25, start = SMTC.S4_30 };
+
+            public static TwoNodeOneStnnoInfo SF301 = new TwoNodeOneStnnoInfo { Stn_No = "SF301", end = SMT3C.A1_02, start = SMT3C.A1_03 };
+            public static TwoNodeOneStnnoInfo SF302 = new TwoNodeOneStnnoInfo { Stn_No = "SF302", end = SMT3C.A1_06, start = SMT3C.A1_07 };
+            public static TwoNodeOneStnnoInfo SF303 = new TwoNodeOneStnnoInfo { Stn_No = "SF303", end = SMT3C.A1_10, start = SMT3C.A1_11 };
+
+            public static TwoNodeOneStnnoInfo SF501 = new TwoNodeOneStnnoInfo { Stn_No = "SF501", end = SMT5C.A2_02, start = SMT5C.A2_03 };
+            public static TwoNodeOneStnnoInfo SF502 = new TwoNodeOneStnnoInfo { Stn_No = "SF502", end = SMT5C.A2_06, start = SMT5C.A2_07 };
+            public static TwoNodeOneStnnoInfo SF503 = new TwoNodeOneStnnoInfo { Stn_No = "SF503", end = SMT5C.A2_10, start = SMT5C.A2_11 };
+            public static TwoNodeOneStnnoInfo SF504 = new TwoNodeOneStnnoInfo { Stn_No = "SF504", end = SMT5C.A2_14, start = SMT5C.A2_15 };
+            public static TwoNodeOneStnnoInfo SF505 = new TwoNodeOneStnnoInfo { Stn_No = "SF505", end = SMT5C.A2_18, start = SMT5C.A2_19 };
+
+            public static TwoNodeOneStnnoInfo SF601 = new TwoNodeOneStnnoInfo { Stn_No = "SF601", end = SMT6C.A3_02, start = SMT6C.A3_03 };
+            public static TwoNodeOneStnnoInfo SF602 = new TwoNodeOneStnnoInfo { Stn_No = "SF602", end = SMT6C.A3_06, start = SMT6C.A3_07 };
+            public static TwoNodeOneStnnoInfo SF603 = new TwoNodeOneStnnoInfo { Stn_No = "SF603", end = SMT6C.A3_10, start = SMT6C.A3_11 };
+            public static TwoNodeOneStnnoInfo SF604 = new TwoNodeOneStnnoInfo { Stn_No = "SF604", end = SMT6C.A3_14, start = SMT6C.A3_15 };
+            public static TwoNodeOneStnnoInfo SF605 = new TwoNodeOneStnnoInfo { Stn_No = "SF605", end = SMT6C.A3_18, start = SMT6C.A3_19 };
+
+
         }
 
         public static string DeviceID_AGV = "";
@@ -626,7 +677,71 @@ namespace Mirle.Def.U2NMMA30
 
         private static List<ConveyorInfo> AGV_All = new List<ConveyorInfo>();
 
-        private static List<TwoNodeOneStnnoInfo> Sharing_StnNo = new List<TwoNodeOneStnnoInfo>();
+        private static List<TwoNodeOneStnnoInfo> Sharing_Node = new List<TwoNodeOneStnnoInfo>();
+        public static List<TwoNodeOneStnnoInfo> GetSharingNode() => Sharing_Node;
+        public static void FunSharingNode_ListInit()
+        {
+            Sharing_Node.Add(SharingNode.S800_10);
+            Sharing_Node.Add(SharingNode.S800_12);
+            Sharing_Node.Add(SharingNode.S800_M1);
+            Sharing_Node.Add(SharingNode.S800_M2);
+            Sharing_Node.Add(SharingNode.S800_B1);
+            Sharing_Node.Add(SharingNode.S800_B2);
+
+            Sharing_Node.Add(SharingNode.S811_4);
+            Sharing_Node.Add(SharingNode.S811_1);
+            Sharing_Node.Add(SharingNode.S811_2);
+            Sharing_Node.Add(SharingNode.S811_6);
+            Sharing_Node.Add(SharingNode.S811_5);
+
+            Sharing_Node.Add(SharingNode.S812_4);
+            Sharing_Node.Add(SharingNode.S812_1);
+            Sharing_Node.Add(SharingNode.S812_5);
+
+            Sharing_Node.Add(SharingNode.S813_4);
+            Sharing_Node.Add(SharingNode.S813_1);
+            Sharing_Node.Add(SharingNode.S813_2);
+            Sharing_Node.Add(SharingNode.S813_6);
+            Sharing_Node.Add(SharingNode.S813_5);
+
+            Sharing_Node.Add(SharingNode.S814_4);
+            Sharing_Node.Add(SharingNode.S814_1);
+            Sharing_Node.Add(SharingNode.S814_2);
+            Sharing_Node.Add(SharingNode.S814_6);
+            Sharing_Node.Add(SharingNode.S814_5);
+
+            Sharing_Node.Add(SharingNode.S815_4);
+            Sharing_Node.Add(SharingNode.S815_1);
+            Sharing_Node.Add(SharingNode.S815_2);
+            Sharing_Node.Add(SharingNode.S815_6);
+            Sharing_Node.Add(SharingNode.S815_5);
+
+            Sharing_Node.Add(SharingNode.S816_4);
+            Sharing_Node.Add(SharingNode.S816_1);
+            Sharing_Node.Add(SharingNode.S816_2);
+            Sharing_Node.Add(SharingNode.S816_5);
+
+            Sharing_Node.Add(SharingNode.SF301);
+            Sharing_Node.Add(SharingNode.SF302);
+            Sharing_Node.Add(SharingNode.SF303);
+
+            Sharing_Node.Add(SharingNode.SF501);
+            Sharing_Node.Add(SharingNode.SF502);
+            Sharing_Node.Add(SharingNode.SF503);
+            Sharing_Node.Add(SharingNode.SF504);
+            Sharing_Node.Add(SharingNode.SF505);
+
+            Sharing_Node.Add(SharingNode.SF601);
+            Sharing_Node.Add(SharingNode.SF602);
+            Sharing_Node.Add(SharingNode.SF603);
+            Sharing_Node.Add(SharingNode.SF604);
+            Sharing_Node.Add(SharingNode.SF605);
+
+            foreach(var c in Sharing_Node)
+            {
+                c.Stn_No = c.end.StnNo == "" ? c.Stn_No : c.end.StnNo;
+            }
+        }
         public static void FunAGVListInit()
         {
             FunAGVSendToCVend();

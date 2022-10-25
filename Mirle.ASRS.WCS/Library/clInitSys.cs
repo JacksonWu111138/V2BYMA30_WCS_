@@ -452,6 +452,7 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.M1_05.StnNo = lcsini.StnNo.M1_05;
             ConveyorDef.AGV.M1_15.StnNo = lcsini.StnNo.M1_15;
             ConveyorDef.WES_B800CV = lcsini.StnNo.WES_B800CV;
+            
         }
 
         private static void FunDeviceConfig(ASRSINI lcsini)

@@ -25,6 +25,7 @@ namespace Mirle.DB.Fun
         private clsTool tool = new clsTool();
         private clsLocMst LocMst = new clsLocMst();
         private clsCmd_Mst Cmd_Mst = new clsCmd_Mst();
+        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
 
         public string GetLocaionByCmdMode(string sCmdMode, string sCmdSts, string sDeviceID, string sLocation, DataBase.DB db)
         {
@@ -168,9 +169,12 @@ namespace Mirle.DB.Fun
                     case clsConstValue.CmdMode.S2S:
                     case clsConstValue.CmdMode.StockOut:
                         string sBuffername = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;
+
+                        ConveyorInfo s = new ConveyorInfo();
                         //Case: double destination
                         if(cmd.Stn_No.Contains(','))
                         {
+                            bool isFindLocation = false;
                             string[] multi_destination = cmd.Stn_No.Split(',');
                             for(int i = 0; i < multi_destination.Length; i++)
                             {
@@ -181,14 +185,29 @@ namespace Mirle.DB.Fun
                                 };
                                 BufferStatusReply reply = new BufferStatusReply();
                                 
-                                //if(WebAPI.V2BYMA30.Function.BufferStatusQuery.FunReport(info, ))
+                                s = ConveyorDef.GetBuffer(multi_destination[i]);
+
+                                if (api.GetBufferStatusQuery().FunReport(info, s.API.IP, ref reply))
+                                {
+                                    int.TryParse(reply.ready, out var ready);
+                                    if (ready == (int)clsEnum.ControllerApi.Ready.OutReady)
+                                    {
+                                        sBuffername = s.BufferName;
+                                        isFindLocation = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if(!isFindLocation)
+                            {
+                                throw new Exception($"暫時無空撿料口使用！ jobId = {cmd.Cmd_Sno}.");
                             }
                         }
                         else
                         {
-                            
+                            s = ConveyorDef.GetBuffer(sBuffername);
                         }
-                        var s = ConveyorDef.GetBuffer(sBuffername);
+                        
                         string sDeviceId = tool.GetDeviceId(s.BufferName);
                         if (sDeviceId == "") 
                             End = Router.GetLocation(s.ControllerID, s.BufferName);

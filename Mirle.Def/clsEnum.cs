@@ -198,11 +198,11 @@ namespace Mirle.Def
             {
                 None = 0,
                 /// <summary>
-                /// 入庫Ready
+                /// 離開Ready
                 /// </summary>
                 InReady = 1,
                 /// <summary>
-                /// 出庫Ready
+                /// 接收Ready
                 /// </summary>
                 OutReady = 2
             }

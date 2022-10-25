@@ -66,7 +66,14 @@ namespace Mirle.DB.Proc
                                 string sRemark = "";
                                 Location Start = null; Location End = null;
                                 if (!Routdef.FunGetLocation(cmd, Router, ref Start, ref End, db)) continue;
-                                if (Start == End && Start != null && End != null)
+                                if(cmd.Stn_No.Contains(',') && Start == End && Start != null && End != null)
+                                {
+                                    if (cmd.Stn_No.Contains("," + Start))
+                                        cmd.Stn_No = cmd.Stn_No.Replace("," + Start, "");
+                                    else
+                                        cmd.Stn_No = cmd.Stn_No.Replace(Start + ",", "");
+                                }
+                                else if (Start == End && Start != null && End != null)
                                 {
                                     CarrierPutawayCompleteInfo putawayCompleteInfo = new CarrierPutawayCompleteInfo();
                                     CarrierRetrieveCompleteInfo retrieveCompleteInfo = new CarrierRetrieveCompleteInfo();
@@ -92,6 +99,7 @@ namespace Mirle.DB.Proc
                                     }
 
                                     sRemark = "Error: 上報WES命令完成失敗";
+                                    ConveyorInfo con = new ConveyorInfo();
                                     switch (cmd.Cmd_Mode)
                                     {
                                         case clsConstValue.CmdMode.L2L:
@@ -116,11 +124,12 @@ namespace Mirle.DB.Proc
 
                                             break;
                                         case clsConstValue.CmdMode.S2S:
+                                            con = ConveyorDef.GetBuffer(cmd.New_Loc);
                                             transferCompleteInfo = new CarrierTransferCompleteInfo
                                             {
                                                 carrierId = cmd.BoxID,
                                                 jobId = cmd.JobID,
-                                                location = cmd.New_Loc
+                                                location = con.StnNo
                                             };
 
                                             if (!api.GetCarrierTransferComplete().FunReport(transferCompleteInfo, _wmsApi.IP))
@@ -158,16 +167,16 @@ namespace Mirle.DB.Proc
                                             break;
                                         default:
                                             //B800減料雙port口
-                                            ConveyorInfo con = new ConveyorInfo();
-                                            con = ConveyorDef.GetBuffer_ByStnNo(cmd.Stn_No);
+                                            
+                                            con = ConveyorDef.GetBuffer(cmd.Stn_No);
                                             retrieveCompleteInfo = new CarrierRetrieveCompleteInfo
                                             {
                                                 carrierId = cmd.BoxID,
                                                 emptyTransfer = clsConstValue.YesNo.No,
                                                 isComplete = clsConstValue.YesNo.Yes,
                                                 jobId = cmd.JobID,
-                                                location = con.BufferName,
-                                                portId = con.BufferName
+                                                location = con.StnNo,
+                                                portId = con.StnNo
                                             };
 
                                             if (!api.GetCarrierRetrieveComplete().FunReport(retrieveCompleteInfo, _wmsApi.IP))

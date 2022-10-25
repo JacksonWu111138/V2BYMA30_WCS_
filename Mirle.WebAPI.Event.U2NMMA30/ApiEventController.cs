@@ -25,6 +25,7 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.ProgressBar;
 using static Mirle.Def.clsConstValue;
 using System.Windows.Forms;
 using System.Collections.Generic;
+using static Mirle.Def.clsEnum.ControllerApi;
 
 namespace Mirle.WebAPI.Event
 {
@@ -902,12 +903,14 @@ namespace Mirle.WebAPI.Event
             try
             {
                 //以下為測試CV時使用
+                /*
                 rMsg.transactionId = "AUTO_" + rMsg.transactionId;
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
                 return Json(rMsg);
+                */
                 //以上為測試CV時使用
 
                 CmdMstInfo cmd = new CmdMstInfo();
@@ -941,7 +944,9 @@ namespace Mirle.WebAPI.Event
                         if (!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
                             throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}.");
                     }
-                    else if (Body.location == ConveyorDef.AGV.M1_10.BufferName || Body.location == ConveyorDef.AGV.M1_20.BufferName)
+                    else if (Body.location == ConveyorDef.AGV.M1_10.BufferName || Body.location == ConveyorDef.AGV.M1_20.BufferName ||
+                            Body.location == ConveyorDef.AGV.M1_05.BufferName || Body.location == ConveyorDef.AGV.M1_15.BufferName)
+                            //M1_05, M1_15為故障模式可能會使用之入庫點
                     {
                         CarrierPutawayCheckInfo info = new CarrierPutawayCheckInfo
                         {
@@ -954,6 +959,15 @@ namespace Mirle.WebAPI.Event
                     }
                     else
                     {
+                        //以下為無MES測試時使用
+                        rMsg.transactionId = "AUTO_" + rMsg.transactionId + "_ignore_CarrierReturnNext";
+                        rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
+                        rMsg.returnComment = "";
+
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
+                        return Json(rMsg);
+                        //以上為無MES測試時使用
+
                         CarrierReturnNextInfo info = new CarrierReturnNextInfo
                         {
                             carrierId = Body.barcode,
@@ -1097,7 +1111,7 @@ namespace Mirle.WebAPI.Event
                     CmdMstInfo cmd = new CmdMstInfo();
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
                         throw new Exception($"Error: CMDMST與middle都沒有此命令, jobId = {Body.jobId}.");
-                    else if (cmd.Cmd_Mode == CmdMode.StockOut &&
+                    else if (cmd.Cmd_Mode == CmdMode.StockOut && !cmd.Stn_No.Contains(",") &&
                             (cmd.Stn_No != ConveyorDef.Box.B1_062.BufferName && cmd.Stn_No != ConveyorDef.Box.B1_067.BufferName &&
                             cmd.Stn_No != ConveyorDef.Box.B1_142.BufferName && cmd.Stn_No != ConveyorDef.Box.B1_147.BufferName) &&
                             !ConveyorDef.GetLifetNode_List().Where(r => r.BufferName == Body.location).Any())
@@ -1117,6 +1131,37 @@ namespace Mirle.WebAPI.Event
                     }
                     else if (cmd.Cmd_Mode == CmdMode.StockOut)
                     {
+                        if (cmd.Stn_No.Contains(",")) 
+                        {
+                            string[] locations = cmd.Stn_No.Split(',');
+
+                            //找到當下閒置的撿料口
+                            BufferStatusQueryInfo info = new BufferStatusQueryInfo
+                            {
+                                jobId = cmd.Cmd_Sno
+                            };
+                            BufferStatusReply bufferStatusReply = new BufferStatusReply();
+
+                            bool isFindLocation = false;
+                            for (int i = 0; i < locations.Length; i++)
+                            {
+                                info.bufferId = locations[i];
+                                if (!clsAPI.GetAPI().GetBufferStatusQuery().FunReport(info, clsAPI.GetBoxApiConfig().IP, ref bufferStatusReply))
+                                    throw new Exception($"Error: 詢問箱式倉撿料口失敗, jobId = {cmd.Cmd_Sno}.");
+                                int.TryParse(bufferStatusReply.ready, out var ready);
+                                if (ready == (int)clsEnum.ControllerApi.Ready.OutReady)
+                                {
+                                    rMsg.toLocation = locations[i];
+                                    isFindLocation = true;
+                                    break;
+                                }
+                            }
+
+                            if (!isFindLocation)
+                            {
+                                throw new Exception($"Error: 現在無可放入之撿料口, jobId = {cmd.Cmd_Sno}.");
+                            }
+                        }  
                         if (cmd.Stn_No == ConveyorDef.Box.B1_062.BufferName || cmd.Stn_No == ConveyorDef.Box.B1_067.BufferName ||
                             cmd.Stn_No == ConveyorDef.Box.B1_142.BufferName || cmd.Stn_No == ConveyorDef.Box.B1_147.BufferName)
                             rMsg.toLocation = cmd.Stn_No;
@@ -1251,7 +1296,6 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>COMMAND_COMPLETE start!");
             try
             {
-                //須更新enum & LotRetrieve收E800 API之內容
                 if (Body.cmdMode == clsConstValue.CmdMode.StockIn)
                 {
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Finish_Wait, ""))
@@ -1575,7 +1619,8 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>MODE_CHANGE start!");
             try
             {
-
+                //mode == 1正常，mode ==2異常
+                //PCBA以M1-05, M1-10, M1-15, M1-20分別代表四條線
 
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
@@ -1660,7 +1705,7 @@ namespace Mirle.WebAPI.Event
                     V2BYMA30.ReportInfo.PositionReportInfo info = new V2BYMA30.ReportInfo.PositionReportInfo
                     {
                         jobId = cmd.JobID,
-                        carrierId = Body.id,
+                        carrierId = cmd.BoxID,
                         location = con.StnNo == null ? con.BufferName : con.StnNo
                     };
 
@@ -1718,7 +1763,7 @@ namespace Mirle.WebAPI.Event
                     if (Body.rackId == "UNKNOWN")
                     {
                         //待修改線邊倉的料價站(S0-05)點
-                        if (Body.stagePosition == ConveyorDef.AGV.S3_49.BufferName)
+                        if (Body.stagePosition == ConveyorDef.AGV.S4_49.BufferName)
                         {
                             RackRequestInfo info = new RackRequestInfo
                             {
@@ -1753,7 +1798,7 @@ namespace Mirle.WebAPI.Event
                             cmd.JobID = Body.jobId;
                             cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
 
-                            cmd.New_Loc = ConveyorDef.AGV.S3_49.BufferName;//新站口，尚未有站號更新至程式
+                            cmd.New_Loc = ConveyorDef.AGV.S4_49.BufferName;//新站口，尚未有站號更新至程式
 
                             cmd.Prty = "5";
                             cmd.Remark = "";

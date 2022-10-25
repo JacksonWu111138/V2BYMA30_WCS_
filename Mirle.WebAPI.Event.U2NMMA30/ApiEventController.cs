@@ -26,6 +26,8 @@ using static Mirle.Def.clsConstValue;
 using System.Windows.Forms;
 using System.Collections.Generic;
 using static Mirle.Def.clsEnum.ControllerApi;
+using Mirle.Structure.Info;
+using System.Diagnostics;
 
 namespace Mirle.WebAPI.Event
 {
@@ -97,8 +99,14 @@ namespace Mirle.WebAPI.Event
                         }
                         if (!check)
                         {
-                            throw new Exception("Error: B800CV 無InReady儲位");
+                            throw new Exception("Error: B800CV 無InReady站口");
                         }
+                    }
+                    else if(ConveyorDef.GetSharingNode().Where(r => r.Stn_No == Body.toLocation).Any())
+                    {
+                        TwoNodeOneStnnoInfo Cv_to = new TwoNodeOneStnnoInfo();
+                        Cv_to = ConveyorDef.GetTwoNodeOneStnnoByStnNo(Body.toLocation);
+                        cmd.New_Loc = Cv_to.end.BufferName;
                     }
                     else
                     {
@@ -126,8 +134,14 @@ namespace Mirle.WebAPI.Event
                         }
                         if (!check)
                         {
-                            throw new Exception("Error: B800CV 無InReady儲位");
+                            throw new Exception("Error: B800CV 無InReady站口");
                         }
+                    }
+                    else if (ConveyorDef.GetSharingNode().Where(r => r.Stn_No == Body.fromLocation).Any())
+                    {
+                        TwoNodeOneStnnoInfo Cv_to = new TwoNodeOneStnnoInfo();
+                        Cv_to = ConveyorDef.GetTwoNodeOneStnnoByStnNo(Body.fromLocation);
+                        cmd.Stn_No = Cv_to.start.BufferName;
                     }
                     else
                     {
@@ -212,6 +226,7 @@ namespace Mirle.WebAPI.Event
                         while (count < ConveyorDef.GetB800CV_List().Count())
                         {
                             B800CV = ConveyorDef.GetB800CV();
+                            //應該可以移除
                             if (clsMiddle.GetMiddle().CheckIsInReady(B800CV))
                             {
                                 cmd.Stn_No = B800CV.BufferName;
@@ -222,8 +237,14 @@ namespace Mirle.WebAPI.Event
                         }
                         if (!check)
                         {
-                            throw new Exception("Error: B800CV 無InReady儲位");
+                            throw new Exception("Error: B800CV 無接收Ready站口");
                         }
+                    }
+                    else if (ConveyorDef.GetSharingNode().Where(r => r.Stn_No == Body.fromPortId).Any())
+                    {
+                        TwoNodeOneStnnoInfo Cv_to = new TwoNodeOneStnnoInfo();
+                        Cv_to = ConveyorDef.GetTwoNodeOneStnnoByStnNo(Body.fromPortId);
+                        cmd.New_Loc = Cv_to.start.BufferName;
                     }
                     else
                     {
@@ -313,34 +334,38 @@ namespace Mirle.WebAPI.Event
                             cmd.Stn_No += "," + cv_to.BufferName;
                         }
                     }
-                    else
+                    else if (Body.toLocation == ConveyorDef.WES_B800CV)
                     {
-                        if (Body.toLocation == ConveyorDef.WES_B800CV)
+                        int count = 0; bool check = false;
+                        ConveyorInfo B800CV = new ConveyorInfo();
+                        while (count < ConveyorDef.GetB800CV_List().Count())
                         {
-                            int count = 0; bool check = false;
-                            ConveyorInfo B800CV = new ConveyorInfo();
-                            while (count < ConveyorDef.GetB800CV_List().Count())
+                            B800CV = ConveyorDef.GetB800CV();
+                            if (clsMiddle.GetMiddle().CheckIsInReady(B800CV))
                             {
-                                B800CV = ConveyorDef.GetB800CV();
-                                if (clsMiddle.GetMiddle().CheckIsInReady(B800CV))
-                                {
-                                    cmd.Stn_No = B800CV.BufferName;
-                                    check = true;
-                                    break;
-                                }
-                                count++;
+                                cmd.Stn_No = B800CV.BufferName;
+                                check = true;
+                                break;
                             }
-                            if (!check)
-                            {
-                                throw new Exception("Error: B800CV 無InReady儲位");
-                            }
+                            count++;
                         }
-                        else
+                        if (!check)
                         {
-                            var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.toLocation);
-                            cmd.Stn_No = cv_to.BufferName;
+                            throw new Exception("Error: B800CV 無InReady儲位");
                         }
                     }
+                    else if (ConveyorDef.GetSharingNode().Where(r => r.Stn_No == Body.toLocation).Any())
+                    {
+                        TwoNodeOneStnnoInfo Cv_to = new TwoNodeOneStnnoInfo();
+                        Cv_to = ConveyorDef.GetTwoNodeOneStnnoByStnNo(Body.toLocation);
+                        cmd.Stn_No = Cv_to.start.BufferName;
+                    }
+                    else
+                    {
+                        var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.toLocation);
+                        cmd.Stn_No = cv_to.BufferName;
+                    }
+                    
 
 
                     cmd.Host_Name = "WES";
@@ -540,8 +565,14 @@ namespace Mirle.WebAPI.Event
                         }
                         if (!check)
                         {
-                            throw new Exception("Error: B800CV 無InReady儲位");
+                            throw new Exception("Error: B800CV 無InReady站口");
                         }
+                    }
+                    else if (ConveyorDef.GetSharingNode().Where(r => r.Stn_No == Body.fromPortId).Any())
+                    {
+                        TwoNodeOneStnnoInfo Cv_to = new TwoNodeOneStnnoInfo();
+                        Cv_to = ConveyorDef.GetTwoNodeOneStnnoByStnNo(Body.fromPortId);
+                        cmd.Stn_No = Cv_to.start.BufferName;
                     }
                     else
                     {
@@ -619,9 +650,9 @@ namespace Mirle.WebAPI.Event
                 {
                     V2BYMA30.ReportInfo.LotRetrieveTransferInfo info = new V2BYMA30.ReportInfo.LotRetrieveTransferInfo();
                     info.lotList = new List<LotListInfo>();
-                    LotListInfo oklot = new LotListInfo();
                     foreach (var lot in Body.lotList)
                     {
+                        LotListInfo oklot = new LotListInfo();
                         cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
                         if (string.IsNullOrWhiteSpace(cmd.Cmd_Sno))
                         {
@@ -668,7 +699,13 @@ namespace Mirle.WebAPI.Event
                         else if (lot.toPortId == "E800-8")
                         {
                             cmd.Stn_No = lot.toPortId;
-                        }    
+                        }
+                        else if (ConveyorDef.GetSharingNode().Where(r => r.Stn_No == lot.toPortId).Any())
+                        {
+                            TwoNodeOneStnnoInfo Cv_to = new TwoNodeOneStnnoInfo();
+                            Cv_to = ConveyorDef.GetTwoNodeOneStnnoByStnNo(lot.toPortId);
+                            cmd.Stn_No = Cv_to.start.BufferName;
+                        }
                         else
                         {
                             var cv_to = ConveyorDef.GetBuffer_ByStnNo(lot.toPortId);
@@ -699,6 +736,7 @@ namespace Mirle.WebAPI.Event
                         oklot.largest = lot.largest;
 
                         info.lotList.Add(oklot);
+                        oklot = null;
                     }
                     info.priority = Body.priority;
                     if (!clsAPI.GetAPI().GetLotRetrieveTransfer().FunReport(info, clsAPI.GetTowerApiConfig().IP))
@@ -940,7 +978,11 @@ namespace Mirle.WebAPI.Event
                             portId = con.StnNo,
                             carrierId = Body.barcode,
                             storageType = "B800"
-                        };
+                        }; 
+                        if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                        {
+                            info.portId = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                        }
                         if (!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
                             throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}.");
                     }
@@ -954,18 +996,24 @@ namespace Mirle.WebAPI.Event
                             carrierId = Body.barcode,
                             storageType = "M800"
                         };
+                        if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                        {
+                            info.portId = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                        }
                         if (!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
                             throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}.");
                     }
                     else
                     {
                         //以下為無MES測試時使用
+                        
                         rMsg.transactionId = "AUTO_" + rMsg.transactionId + "_ignore_CarrierReturnNext";
                         rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                         rMsg.returnComment = "";
 
                         clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
                         return Json(rMsg);
+                        
                         //以上為無MES測試時使用
 
                         CarrierReturnNextInfo info = new CarrierReturnNextInfo
@@ -975,6 +1023,11 @@ namespace Mirle.WebAPI.Event
                             fromLocation = con.StnNo,
                             carrierType = Def.clsTool.FunSwitchCarrierType(Body.carrierType)
                         };
+                        if(ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                        {
+                            info.fromLocation = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                        }
+                            
                         if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
                             throw new Exception($"Error: Sending CarrierReturnNext to WES fail, jobId = {Body.jobId}");
                     }
@@ -1033,7 +1086,11 @@ namespace Mirle.WebAPI.Event
                     {
                         carrierId = Body.binId,
                         location = con.StnNo
-                    };
+                    }; 
+                    if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                    {
+                        info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                    }
                     if (!clsAPI.GetAPI().GetEmptyCarrierUnload().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     {
                         strEM = $"Error: EmptyCarrierUnload to WES fail, jobid = {Body.jobId}.";
@@ -1501,13 +1558,18 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>EMPTY_BIN_LOAD_REQUEST start!");
             try
             {
+                ConveyorInfo con = new ConveyorInfo();
+                con = ConveyorDef.GetBuffer(Body.location);
                 EmptyESDCarrierLoadRequestInfo info = new EmptyESDCarrierLoadRequestInfo
                 {
-                    location = Body.location,
+                    location = con.StnNo,
                     reqQty = Body.reqQty,
                     withClapBoard = clsConstValue.YesNo.No
                 };
-
+                if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                {
+                    info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                }
                 if (!clsAPI.GetAPI().GetEmptyESDCarrierLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     throw new Exception($"Error: Send Empty ESDCarrier Load Request to WES fail, location = {Body.location}.");
 
@@ -1782,7 +1844,7 @@ namespace Mirle.WebAPI.Event
 
                     if(clsAPI.GetAPI().GetPositionReport().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     {
-                        //測試線不論
+                        //不論WES是否PositionReport成功
                         //throw new Exception($"Error: PositionReport to WES fail, jobId = {Body.jobId}.");
                     }
                 }
@@ -2240,10 +2302,16 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_EMPTY_MAGAZINE_LOAD_REQUEST start!");
             try
             {
+                ConveyorInfo con = new ConveyorInfo();
+                con = ConveyorDef.GetBuffer(Body.location);
                 EmptyMagazineLoadRequestInfo info = new EmptyMagazineLoadRequestInfo
                 {
-                    location = Body.location
+                    location = con.StnNo
                 };
+                if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                {
+                    info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                }
                 if (!clsAPI.GetAPI().GetEmptyMagazineLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     throw new Exception($"Error: 傳送EmptyMagazineLoadRequest 至 WES 失敗, jobId = {info.jobId}");
 
@@ -2279,11 +2347,17 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_EMPTY_MAGAZINE_UNLOAD start!");
             try
             {
+                ConveyorInfo con = new ConveyorInfo();
+                con = ConveyorDef.GetBuffer(Body.location);
                 EmptyMagazineUnloadInfo info = new EmptyMagazineUnloadInfo
                 {
                     carrierId = Body.carrierId,
-                    location = Body.location
+                    location = con.StnNo
                 };
+                if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                {
+                    info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                }
                 if (!clsAPI.GetAPI().GetEmptyMagazineUnload().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     throw new Exception($"Error: 傳送EmptyMagazineUnload 至 WES 失敗, jobId = {info.jobId}");
 
@@ -2319,9 +2393,15 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_MAGAZINE_LOAD_REQUEST start!");
             try
             {
+                ConveyorInfo con = new ConveyorInfo();
+                con = ConveyorDef.GetBuffer(Body.location);
                 MagazineLoadRequestInfo info = new MagazineLoadRequestInfo();
-                info.location = Body.location;
-                
+                info.location = con.StnNo;
+                if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                {
+                    info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                }
+
                 if (!clsAPI.GetAPI().GetMagazineLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     throw new Exception($"Error: 傳送MagazineLoadRequest 至 WES 失敗, jobId = {info.jobId}");
 
@@ -2379,6 +2459,10 @@ namespace Mirle.WebAPI.Event
                         reqQty = 1,
                         withClapBoard = clsConstValue.YesNo.Yes
                     };
+                    if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                    {
+                        info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                    }
                     if (!clsAPI.GetAPI().GetEmptyESDCarrierLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
                         throw new Exception($"Error: EmptyESDCarrierLoadRequest to WES fail, jobId = {Body.jobId}.");
                 }

@@ -2,6 +2,7 @@
 using Mirle.Def;
 using Mirle.Def.U2NMMA30;
 using Mirle.EccsSignal;
+using Mirle.Gird;
 using Mirle.MapController;
 using Mirle.Middle;
 using Mirle.Structure;
@@ -67,12 +68,26 @@ namespace Mirle.DB.Proc
                                 string sRemark = "";
                                 Location Start = null; Location End = null;
                                 if (!Routdef.FunGetLocation(cmd, Router, ref Start, ref End, db)) continue;
-                                if(cmd.Stn_No.Contains(',') && Start == End && Start != null && End != null)
+                                
+                                //B800撿料口順途
+                                if (cmd.Stn_No.Contains(',') && Start == End && Start != null && End != null)
                                 {
                                     if (cmd.Stn_No.Contains("," + Start))
                                         cmd.Stn_No = cmd.Stn_No.Replace("," + Start, "");
                                     else
                                         cmd.Stn_No = cmd.Stn_No.Replace(Start + ",", "");
+                                    if(!Cmd_Mst.FunUpdateStnNo(cmd.Cmd_Sno, cmd.Stn_No, sRemark, db))
+                                    {
+                                        sRemark = $"雙撿料口更新已到達撿料口({Start})失敗！";
+                                        if(!Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db))
+                                        {
+                                            sRemark = $"更新sRemark失敗";
+                                            if (Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db))
+                                            { };
+                                        }
+                                    }
+                                        
+
                                 }
                                 else if (Start == End && Start != null && End != null)
                                 {
@@ -167,9 +182,10 @@ namespace Mirle.DB.Proc
 
                                             break;
                                         default:
-                                            //B800減料雙port口
-                                            
-                                            con = ConveyorDef.GetBuffer(cmd.Stn_No);
+                                            if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == cmd.Stn_No).Any())
+                                                con = ConveyorDef.GetTwoNodeOneStnnoByBufferName(cmd.Stn_No).end;
+                                            else
+                                                con = ConveyorDef.GetBuffer(cmd.Stn_No);
                                             retrieveCompleteInfo = new CarrierRetrieveCompleteInfo
                                             {
                                                 carrierId = cmd.BoxID,
@@ -440,6 +456,9 @@ namespace Mirle.DB.Proc
                                                         continue;
                                                     }
 
+                                                    //放寬PositionReport之條件，不理會WES是否成功
+                                                    api.GetPositionReport().FunReport(info, _wmsApi.IP);
+                                                    /*
                                                     if (!api.GetPositionReport().FunReport(info, _wmsApi.IP))
                                                     {
                                                         db.TransactionCtrl(TransactionTypes.Rollback);
@@ -450,7 +469,7 @@ namespace Mirle.DB.Proc
                                                         }
 
                                                         continue;
-                                                    }
+                                                    }*/
 
                                                     db.TransactionCtrl(TransactionTypes.Commit);
                                                     return true;

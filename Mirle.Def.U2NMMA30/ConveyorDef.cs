@@ -1243,5 +1243,29 @@ namespace Mirle.Def.U2NMMA30
 
             return 0;
         }
+
+        public static TwoNodeOneStnnoInfo GetTwoNodeOneStnnoByStnNo(string sStnNo)
+        {
+            var v = GetSharingNode().Where(r => r.Stn_No == sStnNo);
+            foreach (var s in v)
+            {
+                return s;
+            }
+            return new TwoNodeOneStnnoInfo();
+        }
+        public static TwoNodeOneStnnoInfo GetTwoNodeOneStnnoByBufferName(string sBufferName)
+        {
+            var v1 = GetSharingNode().Where(r => r.end.BufferName == sBufferName);
+            foreach (var s in v1)
+            {
+                return s;
+            }
+            var v2 = GetSharingNode().Where(r => r.start.BufferName == sBufferName);
+            foreach (var s in v2)
+            {
+                return s;
+            }
+            return new TwoNodeOneStnnoInfo();
+        }
     }
 }

@@ -1826,5 +1826,141 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
+        public bool FunCommandComplete(string sCmdSno, string sCmdMode, string sEmptyRetrieval, string sPortId, string sCarrierId, string WESAPI, ref string strEM)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        CmdMstInfo cmd = new CmdMstInfo();
+                        int newRet = 0;
+                        string sRemark = "";
+                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                        {
+                            sRemark = "Error: Begin失敗！";
+                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                            return false;
+                        }
+
+                        if (sCmdMode == clsConstValue.CmdMode.StockIn)
+                        {
+                            
+                            if (!Cmd_Mst.FunGetCommand(sCmdSno, ref cmd, ref newRet, db))
+                            {
+                                strEM = $"Error: 取得cmdMst命令失敗, jobId = {sCmdSno}.";
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+
+                            if (!Cmd_Mst.FunUpdateCmdSts(sCmdSno, clsConstValue.CmdSts.strCmd_Finish_Wait, "", db))
+                            {
+                                strEM = $"Error: Update CmdSts fail, jobId = {sCmdSno}.";
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+
+                            LotPutawayCompleteInfo info = new LotPutawayCompleteInfo
+                            {
+                                jobId = cmd.JobID,
+                                lotId = cmd.BoxID,
+                                shelfId = cmd.Loc,
+                                isComplete = clsConstValue.YesNo.Yes
+                            };
+                            if (!api.GetLotPutawayComplete().FunReport(info, WESAPI))
+                            {
+                                strEM = $"Error: LotPutawayComplete to WES fail, jobId = {sCmdSno}.";
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+                        }
+                        if (sCmdMode == clsConstValue.CmdMode.StockOut)
+                        {
+                            if (!Cmd_Mst.FunGetCommand(sCmdSno, ref cmd, ref newRet, db))
+                            {
+                                strEM = $"Error: 取得cmdMst命令失敗, jobId = {sCmdSno}.";
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+
+                            LotRetrieveCompleteInfo info = new LotRetrieveCompleteInfo
+                            {
+                                jobId = cmd.JobID,
+                                lotId = cmd.BoxID,
+                                portId = sPortId,
+                                carrierId = sCarrierId
+                            };
+
+                            if (sEmptyRetrieval == clsConstValue.WesApi.EmptyRetrieval.Normal)
+                            {
+                                if (!Cmd_Mst.FunUpdateCmdSts(sCmdSno, clsConstValue.CmdSts.strCmd_Finish_Wait, "", db))
+                                {
+                                    strEM = $"Error: Update CmdSts fail, jobId = {sCmdSno}.";
+                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                info.isComplete = clsConstValue.YesNo.Yes;
+                                info.disableLocation = "N";
+                            }
+                            else if (sEmptyRetrieval == clsConstValue.WesApi.EmptyRetrieval.EmptyRetrieve)
+                            {
+                                sRemark = "異常：空出庫";
+                                if (!Cmd_Mst.FunUpdateCmdSts(sCmdSno, clsConstValue.CmdSts.strCmd_Cancel_Wait, clsEnum.Cmd_Abnormal.E2, sRemark, db))
+                                {
+                                    strEM = $"Error: Update cmdSts【空出庫】 fail, jobId = {sCmdSno}.";
+                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                info.isComplete = clsConstValue.YesNo.No;
+                                info.emptyTransfer = clsConstValue.YesNo.Yes;
+                                info.disableLocation = clsConstValue.YesNo.Yes;
+                            }
+                            else if (sEmptyRetrieval == clsConstValue.WesApi.EmptyRetrieval.RetrieveFail)
+                            {
+                                sRemark = "異常：料捲取出失敗";
+                                if (!Cmd_Mst.FunUpdateCmdSts(sCmdSno, clsConstValue.CmdSts.strCmd_Cancel_Wait, clsEnum.Cmd_Abnormal.EP, sRemark, db))
+                                {
+                                    strEM = $"Error: Update cmdSts【料捲取出失敗】 fail, jobId = {sCmdSno}.";
+                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                                info.isComplete = clsConstValue.YesNo.No;
+                                info.disableLocation = clsConstValue.YesNo.Yes;
+                            }
+                            else
+                            {
+                                strEM = $"Error: emptyRetrieval 格式不合, jobId = {sCmdSno}.";
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+
+                            if (!api.GetLotRetrieveComplete().FunReport(info, WESAPI))
+                            {
+                                strEM = $"Error: LotRetrieveComplete to WES fail, jobId = {sCmdSno}.";
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+                        }
+
+                        db.TransactionCtrl(TransactionTypes.Commit);
+                        return true;
+                    }
+                    else
+                    {
+                        strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
     }
 }

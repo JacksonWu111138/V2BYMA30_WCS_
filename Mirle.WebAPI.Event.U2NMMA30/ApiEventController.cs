@@ -1361,74 +1361,80 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>COMMAND_COMPLETE start!");
             try
             {
-                if (Body.cmdMode == clsConstValue.CmdMode.StockIn)
-                {
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Finish_Wait, ""))
-                        throw new Exception($"Error: Update CmdSts fail, jobId = {Body.jobId}.");
+                string strEM = "";
+                if (!clsDB_Proc.GetDB_Object().GetProc().FunCommandComplete(Body.jobId, Body.cmdMode, Body.emptyRetrieval, Body.portId, Body.carrierId, clsAPI.GetWesApiConfig().IP, ref strEM))
+                    throw new Exception(strEM);
+                #region 修正
+                //if (Body.cmdMode == clsConstValue.CmdMode.StockIn)
+                //{
+                //    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Finish_Wait, ""))
+                //        throw new Exception($"Error: Update CmdSts fail, jobId = {Body.jobId}.");
 
-                    CmdMstInfo cmd = new CmdMstInfo();
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
-                        throw new Exception($"Error: 取得cmdMst命令失敗, jobId = {Body.jobId}.");
+                //    CmdMstInfo cmd = new CmdMstInfo();
+                //    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
+                //        throw new Exception($"Error: 取得cmdMst命令失敗, jobId = {Body.jobId}.");
 
-                    LotPutawayCompleteInfo info = new LotPutawayCompleteInfo
-                    {
-                        jobId = cmd.JobID,
-                        lotId = cmd.BoxID,
-                        shelfId = cmd.Loc,
-                        isComplete = clsConstValue.YesNo.Yes
-                    };
-                    if (!clsAPI.GetAPI().GetLotPutawayComplete().FunReport(info, clsAPI.GetWesApiConfig().IP))
-                        throw new Exception($"Error: LotPutawayComplete to WES fail, jobId = {Body.jobId}.");
-                }
-                if (Body.cmdMode == clsConstValue.CmdMode.StockOut)
-                {
-                    CmdMstInfo cmd = new CmdMstInfo();
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
-                        throw new Exception($"Error: 取得cmdMst命令失敗, jobId = {Body.jobId}.");
+                //    LotPutawayCompleteInfo info = new LotPutawayCompleteInfo
+                //    {
+                //        jobId = cmd.JobID,
+                //        lotId = cmd.BoxID,
+                //        shelfId = cmd.Loc,
+                //        isComplete = clsConstValue.YesNo.Yes
+                //    };
+                //    if (!clsAPI.GetAPI().GetLotPutawayComplete().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                //        throw new Exception($"Error: LotPutawayComplete to WES fail, jobId = {Body.jobId}.");
+                //}
+                //if (Body.cmdMode == clsConstValue.CmdMode.StockOut)
+                //{
+                //    CmdMstInfo cmd = new CmdMstInfo();
+                //    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
+                //        throw new Exception($"Error: 取得cmdMst命令失敗, jobId = {Body.jobId}.");
 
-                    LotRetrieveCompleteInfo info = new LotRetrieveCompleteInfo
-                    {
-                        jobId = cmd.JobID,
-                        lotId = cmd.BoxID,
-                        portId = Body.portId,
-                        carrierId = Body.carrierId
-                    };
+                //    LotRetrieveCompleteInfo info = new LotRetrieveCompleteInfo
+                //    {
+                //        jobId = cmd.JobID,
+                //        lotId = cmd.BoxID,
+                //        portId = Body.portId,
+                //        carrierId = Body.carrierId
+                //    };
 
-                    if (Body.emptyRetrieval == clsConstValue.WesApi.EmptyRetrieval.Normal)
-                    {
-                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Finish_Wait, ""))
-                            throw new Exception($"Error: Update CmdSts fail, jobId = {Body.jobId}.");
-                        info.isComplete = clsConstValue.YesNo.Yes;
-                        info.disableLocation = "N";
-                    }
-                    else if (Body.emptyRetrieval == clsConstValue.WesApi.EmptyRetrieval.EmptyRetrieve)
-                    {
-                        string sRemark = "異常：空出庫";
-                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Cancel_Wait,
-                            clsEnum.Cmd_Abnormal.E2, sRemark))
-                            throw new Exception($"Error: Update cmdSts【空出庫】 fail, jobId = {Body.jobId}.");
-                        info.isComplete = clsConstValue.YesNo.No;
-                        info.emptyTransfer = clsConstValue.YesNo.Yes;
-                        info.disableLocation = clsConstValue.YesNo.Yes;
-                    }
-                    else if (Body.emptyRetrieval == clsConstValue.WesApi.EmptyRetrieval.RetrieveFail)
-                    {
-                        string sRemark = "異常：料捲取出失敗";
-                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Cancel_Wait,
-                            clsEnum.Cmd_Abnormal.EP, sRemark))
-                            throw new Exception($"Error: Update cmdSts【料捲取出失敗】 fail, jobId = {Body.jobId}.");
+                //    if (Body.emptyRetrieval == clsConstValue.WesApi.EmptyRetrieval.Normal)
+                //    {
+                //        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Finish_Wait, ""))
+                //            throw new Exception($"Error: Update CmdSts fail, jobId = {Body.jobId}.");
+                //        info.isComplete = clsConstValue.YesNo.Yes;
+                //        info.disableLocation = "N";
+                //    }
+                //    else if (Body.emptyRetrieval == clsConstValue.WesApi.EmptyRetrieval.EmptyRetrieve)
+                //    {
+                //        string sRemark = "異常：空出庫";
+                //        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Cancel_Wait,
+                //            clsEnum.Cmd_Abnormal.E2, sRemark))
+                //            throw new Exception($"Error: Update cmdSts【空出庫】 fail, jobId = {Body.jobId}.");
+                //        info.isComplete = clsConstValue.YesNo.No;
+                //        info.emptyTransfer = clsConstValue.YesNo.Yes;
+                //        info.disableLocation = clsConstValue.YesNo.Yes;
+                //    }
+                //    else if (Body.emptyRetrieval == clsConstValue.WesApi.EmptyRetrieval.RetrieveFail)
+                //    {
+                //        string sRemark = "異常：料捲取出失敗";
+                //        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(Body.jobId, clsConstValue.CmdSts.strCmd_Cancel_Wait,
+                //            clsEnum.Cmd_Abnormal.EP, sRemark))
+                //            throw new Exception($"Error: Update cmdSts【料捲取出失敗】 fail, jobId = {Body.jobId}.");
 
-                        info.isComplete = clsConstValue.YesNo.No;
-                        info.disableLocation = clsConstValue.YesNo.Yes;
-                    }
-                    else
-                    {
-                        throw new Exception($"Error: emptyRetrieval 格式不合, jobId = {Body.jobId}.");
-                    }
+                //        info.isComplete = clsConstValue.YesNo.No;
+                //        info.disableLocation = clsConstValue.YesNo.Yes;
+                //    }
+                //    else
+                //    {
+                //        throw new Exception($"Error: emptyRetrieval 格式不合, jobId = {Body.jobId}.");
+                //    }
 
-                    if (!clsAPI.GetAPI().GetLotRetrieveComplete().FunReport(info, clsAPI.GetWesApiConfig().IP))
-                        throw new Exception($"Error: LotRetrieveComplete to WES fail, jobId = {Body.jobId}.");
-                }
+                //    if (!clsAPI.GetAPI().GetLotRetrieveComplete().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                //        throw new Exception($"Error: LotRetrieveComplete to WES fail, jobId = {Body.jobId}.");
+                //}
+                #endregion 修正
+
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";

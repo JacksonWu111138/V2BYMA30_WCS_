@@ -359,7 +359,7 @@ namespace Mirle.Def.U2NMMA30
             public static TwoNodeOneStnnoInfo S800_M2 = new TwoNodeOneStnnoInfo { Stn_No = "S800-M2", end = Line.A4_14, start = Line.A4_15 };
             public static TwoNodeOneStnnoInfo S800_B1 = new TwoNodeOneStnnoInfo { Stn_No = "S800-B1", end = Line.A4_02, start = Line.A4_03 };
             public static TwoNodeOneStnnoInfo S800_B2 = new TwoNodeOneStnnoInfo { Stn_No = "S800-B2", end = Line.A4_06, start = Line.A4_07 };
-            public static TwoNodeOneStnnoInfo S811_4 = new TwoNodeOneStnnoInfo { Stn_No = "S811-4", end = SMTC.S1_38, start = SMTC.S };
+            public static TwoNodeOneStnnoInfo S811_4 = new TwoNodeOneStnnoInfo { Stn_No = "S811-4", end = SMTC.S1_38, start = SMTC.S1_39 };
         }
 
         public static string DeviceID_AGV = "";

@@ -278,7 +278,7 @@ namespace Mirle.DB.Fun
                         string sCmdSno_CV = "";
                         if (!middle.CheckIsInReady(Device, sLoc_Start, ref sCmdSno_CV))
                         {
-                            sRemark = $"Error: {sLoc_Start.LocationId}沒發入庫Ready";
+                            sRemark = $"Error: {sLoc_Start.LocationId}沒發送出Ready";
 
                             if (sRemark != cmd.Remark)
                             {
@@ -415,7 +415,7 @@ namespace Mirle.DB.Fun
                         string sCmdSno_CV = "";
                         if (!middle.CheckIsInReady(buffer, ref sCmdSno_CV))
                         {
-                            sRemark = $"Error: {sLoc_Start.LocationId}沒發入庫Ready";
+                            sRemark = $"Error: {sLoc_Start.LocationId}沒發送出Ready";
 
                             if (sRemark != cmd.Remark)
                             {
@@ -476,7 +476,7 @@ namespace Mirle.DB.Fun
                             #region 左右一定都要有東西
                             if (!middle.CheckIsInReady(buffer, ref sCmdSno_CV[1]))
                             {
-                                sRemark = $"Error: {buffer.BufferName}沒發入庫Ready";
+                                sRemark = $"Error: {buffer.BufferName}沒發送出Ready";
 
                                 if (sRemark != cmd.Remark)
                                 {
@@ -488,7 +488,7 @@ namespace Mirle.DB.Fun
 
                             if (!middle.CheckIsInReady(buffer_another, ref sCmdSno_CV[0]))
                             {
-                                sRemark = $"Error: {buffer_another.BufferName}沒發入庫Ready";
+                                sRemark = $"Error: {buffer_another.BufferName}沒發送出Ready";
 
                                 if (sRemark != cmd.Remark)
                                 {
@@ -518,7 +518,7 @@ namespace Mirle.DB.Fun
                         {
                             if (!middle.CheckIsInReady(buffer, ref sCmdSno_CV[0]))
                             {
-                                sRemark = $"Error: {buffer.BufferName}沒發入庫Ready";
+                                sRemark = $"Error: {buffer.BufferName}沒發送出Ready";
 
                                 if (sRemark != cmd.Remark)
                                 {
@@ -538,7 +538,7 @@ namespace Mirle.DB.Fun
                                         IsDoubleCmd = true;
                                         if (!middle.CheckIsInReady(buffer_another, ref sCmdSno_CV[1]))
                                         {
-                                            sRemark = $"Error: {buffer_another.BufferName}沒發入庫Ready";
+                                            sRemark = $"Error: {buffer_another.BufferName}沒發送出Ready";
 
                                             if (sRemark != cmd.Remark)
                                             {
@@ -724,7 +724,7 @@ namespace Mirle.DB.Fun
                     case LocationTypes.IO:
                         if (!middle.CheckIsOutReady(Device, sLoc_End))
                         {
-                            sRemark = $"Error: {sLoc_End.LocationId}沒發出庫Ready";
+                            sRemark = $"Error: {sLoc_End.LocationId}沒發接收Ready";
                             if (sRemark != cmd.Remark)
                             {
                                 Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
@@ -845,7 +845,7 @@ namespace Mirle.DB.Fun
 
                         if (!middle.CheckIsOutReady(buffer))
                         {
-                            sRemark = $"Error: {sLoc_End.LocationId}沒發出庫Ready";
+                            sRemark = $"Error: {sLoc_End.LocationId}沒發接收Ready";
                             if (sRemark != cmd.Remark)
                             {
                                 Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
@@ -882,7 +882,7 @@ namespace Mirle.DB.Fun
                     case LocationTypes.IO:
                         if (!middle.CheckIsOutReady(Device, sLoc_End))
                         {
-                            sRemark = $"Error: {sLoc_End.LocationId}沒發出庫Ready";
+                            sRemark = $"Error: {sLoc_End.LocationId}沒發接收Ready";
                             if (sRemark != cmd.Remark)
                             {
                                 Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
@@ -904,7 +904,7 @@ namespace Mirle.DB.Fun
 
                             if (!middle.CheckIsOutReady(buffer_another))
                             {
-                                sRemark = $"Error: {buffer_another.BufferName}沒發出庫Ready";
+                                sRemark = $"Error: {buffer_another.BufferName}沒發接收Ready";
                                 if (sRemark != cmd.Remark)
                                 {
                                     Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);

@@ -73,9 +73,9 @@ namespace Mirle.DB.Proc
                                 if (cmd.Stn_No.Contains(',') && Start == End && Start != null && End != null)
                                 {
                                     if (cmd.Stn_No.Contains("," + Start))
-                                        cmd.Stn_No = cmd.Stn_No.Replace("," + Start, "");
+                                        cmd.Stn_No = cmd.Stn_No.Replace("," + Start.LocationId, "");
                                     else
-                                        cmd.Stn_No = cmd.Stn_No.Replace(Start + ",", "");
+                                        cmd.Stn_No = cmd.Stn_No.Replace(Start.LocationId + ",", "");
                                     if(!Cmd_Mst.FunUpdateStnNo(cmd.Cmd_Sno, cmd.Stn_No, sRemark, db))
                                     {
                                         sRemark = $"雙撿料口更新已到達撿料口({Start})失敗！";
@@ -296,8 +296,14 @@ namespace Mirle.DB.Proc
                                     {
                                         if(sLoc_Start.DeviceId == sLoc_End.DeviceId)
                                         {//是電子料塔或AGV的命令
+
                                             string sDeviceID = "";
-                                            if (!tool.IsAGV(sLoc_Start.DeviceId, ref sDeviceID))
+                                            if (sLoc_Start.LocationId.Contains("B") || sLoc_Start.LocationId.Contains("CVIN"))
+                                            {
+                                                //箱式倉命令
+                                                continue;
+                                            }
+                                            else if (!tool.IsAGV(sLoc_Start.DeviceId, ref sDeviceID))
                                             {
                                                 sDeviceID = ConveyorDef.DeviceID_Tower;
                                             }
@@ -391,7 +397,7 @@ namespace Mirle.DB.Proc
                                                 string sCmdSno_CV = "";
                                                 if (!middle.CheckIsInReady(con, ref sCmdSno_CV))
                                                 {
-                                                    sRemark = $"Error: {con.BufferName}並非入庫Ready";
+                                                    sRemark = $"Error: {con.BufferName}並非送出Ready";
                                                     if (sRemark != cmd.Remark)
                                                     {
                                                         Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
@@ -863,62 +869,98 @@ namespace Mirle.DB.Proc
                                                 emptyNo[j] = Convert.ToInt32(emptyLocDTTmp.Rows[0][j].ToString());
                                             if (string.IsNullOrWhiteSpace(cmd.Equ_No))
                                             {
-                                                if (emptyNo[CurrentStockInLoc] > 0)
+                                                bool getEquNo = false;
+                                                for(int count = 0; count < emptyNo.Length; count++)
                                                 {
-                                                    if(Cmd_Mst.FunUpdateEquNo(cmd.Cmd_Sno, (CurrentStockInLoc + 3).ToString(), db))
+                                                    if (emptyNo[(CurrentStockInLoc + count) % 3] > 0)
                                                     {
-                                                        CurrentStockInLoc++;
-                                                        if (CurrentStockInLoc > 2)
-                                                            CurrentStockInLoc = 0;
+                                                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                                        {
+                                                            sRemark = "Error: Begin失敗！";
+                                                            if (sRemark != cmd.Remark)
+                                                            {
+                                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                            }
+                                                            break;
+                                                        }
+
+                                                        if (Cmd_Mst.FunUpdateEquNo(cmd.Cmd_Sno, (((CurrentStockInLoc + count) % 3) + 3).ToString(), db))
+                                                        {
+                                                            CurrentStockInLoc++;
+                                                            if (CurrentStockInLoc > 2)
+                                                                CurrentStockInLoc = 0;
+                                                        }
+                                                        else
+                                                        {
+                                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                                            break;
+                                                        }
+                                                        sRemark = $"箱式倉設定儲位Line完成, jobId = {cmd.Cmd_Sno}.";
+                                                        if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
+                                                        {
+                                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                                            break;
+                                                        }
+
+                                                        db.TransactionCtrl(TransactionTypes.Commit);
+                                                        getEquNo = true;
+                                                        break;
                                                     }
+                                                }
+                                                if(!getEquNo)
+                                                {
+                                                    sRemark = $"箱式倉暫無空閒儲位, jobId = {cmd.Cmd_Sno}.";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+                                                    continue;
                                                 }
                                             }
                                         }
                                     }
-                                    if ((cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName && cmd.Equ_No == "3") ||
+                                    else if ((cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName && cmd.Equ_No == "3") ||
                                         (cmd.CurLoc == ConveyorDef.Box.B1_041.BufferName && cmd.Equ_No == "4") ||
                                         (cmd.CurLoc == ConveyorDef.Box.B1_045.BufferName && cmd.Equ_No == "5") ||
                                         (cmd.CurLoc == ConveyorDef.Box.B1_117.BufferName && cmd.Equ_No == "3") ||
                                         (cmd.CurLoc == ConveyorDef.Box.B1_121.BufferName && cmd.Equ_No == "4") ||
                                         (cmd.CurLoc == ConveyorDef.Box.B1_125.BufferName && cmd.Equ_No == "5"))
                                     {
-                                        if (cmd.Loc == "Shelf")
+                                        if (cmd.Loc == "SHELF")
                                         {
-                                            string CustomBuffer1 = "";
-                                            string CustomBuffer2 = "";
+                                            ConveyorInfo CusBuff1 = new ConveyorInfo();
+                                            ConveyorInfo CusBuff2 = new ConveyorInfo();
                                             if (cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName)
                                             {
-                                                CustomBuffer1 = "B1-033";
-                                                CustomBuffer2 = "B1-036";
+                                                CusBuff1 = ConveyorDef.Box.B1_033;
+                                                CusBuff2 = ConveyorDef.Box.B1_036;
                                             }
                                             else if (cmd.CurLoc == ConveyorDef.Box.B1_041.BufferName)
                                             {
-                                                CustomBuffer1 = "B1-021";
-                                                CustomBuffer2 = "B1-024";
+                                                CusBuff1 = ConveyorDef.Box.B1_021;
+                                                CusBuff2 = ConveyorDef.Box.B1_024;
                                             }
                                             else if (cmd.CurLoc == ConveyorDef.Box.B1_045.BufferName)
                                             {
-                                                CustomBuffer1 = "B1-009";
-                                                CustomBuffer2 = "B1-012";
+                                                CusBuff1 = ConveyorDef.Box.B1_009;
+                                                CusBuff2 = ConveyorDef.Box.B1_012;
                                             }
                                             else if (cmd.CurLoc == ConveyorDef.Box.B1_117.BufferName)
                                             {
-                                                CustomBuffer1 = "B1-113";
-                                                CustomBuffer2 = "B1-116";
+                                                CusBuff1 = ConveyorDef.Box.B1_113;
+                                                CusBuff2 = ConveyorDef.Box.B1_116;
                                             }
                                             else if (cmd.CurLoc == ConveyorDef.Box.B1_121.BufferName)
                                             {
-                                                CustomBuffer1 = "B1-101";
-                                                CustomBuffer2 = "B1-104";
+                                                CusBuff1 = ConveyorDef.Box.B1_101;
+                                                CusBuff2 = ConveyorDef.Box.B1_104;
                                             }
                                             else
                                             {
-                                                CustomBuffer1 = "B1-089";
-                                                CustomBuffer2 = "B1-092";
+                                                CusBuff1 = ConveyorDef.Box.B1_089;
+                                                CusBuff2 = ConveyorDef.Box.B1_092;
                                             }
 
-                                            var CusBuff1 = ConveyorDef.GetBuffer(CustomBuffer1);
-                                            var CusBuff2 = ConveyorDef.GetBuffer(CustomBuffer2);
                                             string[] CmdCheck = new string[2];
                                             //檢查前方Buffer的CmdSno
                                             for (int checkBuff = 0; checkBuff < 2; checkBuff++)
@@ -927,7 +969,7 @@ namespace Mirle.DB.Proc
                                                 var BuffCheck = checkBuff == 0 ? CusBuff1 : CusBuff2;
                                                 BufferStatusQueryInfo checkInfo = new BufferStatusQueryInfo
                                                 {
-                                                    bufferId = CusBuff1.BufferName
+                                                    bufferId = BuffCheck.BufferName
                                                 };
                                                 BufferStatusReply checkReply = new BufferStatusReply();
                                                 if (api.GetBufferStatusQuery().FunReport(checkInfo, BuffCheck.API.IP, ref checkReply))
@@ -993,6 +1035,7 @@ namespace Mirle.DB.Proc
 
                                                     continue;
                                                 }
+
                                             }
                                             //前方滿板
                                             else if (!string.IsNullOrWhiteSpace(CmdCheck[0]) && !string.IsNullOrWhiteSpace(CmdCheck[1]))
@@ -1078,6 +1121,7 @@ namespace Mirle.DB.Proc
                                                     }
                                                 }
                                             }
+                                            db.TransactionCtrl(TransactionTypes.Commit);
 
                                         }
                                         else
@@ -1133,15 +1177,16 @@ namespace Mirle.DB.Proc
 
                                                 continue;
                                             }
+                                            db.TransactionCtrl(TransactionTypes.Commit);
                                         }
                                     }
 
-                                    if ((cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName && cmd.Equ_No != "3") ||
+                                    else if ((cmd.CurLoc == ConveyorDef.Box.B1_037.BufferName && cmd.Equ_No != "3") ||
                                         (cmd.CurLoc == ConveyorDef.Box.B1_041.BufferName && cmd.Equ_No != "4") ||
                                         (cmd.CurLoc == ConveyorDef.Box.B1_045.BufferName && cmd.Equ_No != "5") ||
-                                        (cmd.CurLoc == ConveyorDef.Box.B1_117.BufferName && cmd.Equ_No == "3") ||
-                                        (cmd.CurLoc == ConveyorDef.Box.B1_121.BufferName && cmd.Equ_No == "4") ||
-                                        (cmd.CurLoc == ConveyorDef.Box.B1_125.BufferName && cmd.Equ_No == "5"))
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_117.BufferName && cmd.Equ_No != "3") ||
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_121.BufferName && cmd.Equ_No != "4") ||
+                                        (cmd.CurLoc == ConveyorDef.Box.B1_125.BufferName && cmd.Equ_No != "5"))
                                     {
                                         if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                         {
@@ -1185,6 +1230,7 @@ namespace Mirle.DB.Proc
 
                                             continue;
                                         }
+                                        db.TransactionCtrl(TransactionTypes.Commit);
                                     }
                                 }
 

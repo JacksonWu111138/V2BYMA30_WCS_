@@ -79,7 +79,7 @@ namespace Mirle.Middle
         }
 
         /// <summary>
-        /// 確認是否是入庫Ready
+        /// 確認是否是送出Ready
         /// </summary>
         /// <param name="Device"></param>
         /// <param name="location"></param>
@@ -107,7 +107,7 @@ namespace Mirle.Middle
         }
 
         /// <summary>
-        /// 確認是否是入庫Ready
+        /// 確認是否是送出Ready
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns></returns>
@@ -126,7 +126,7 @@ namespace Mirle.Middle
         }
 
         /// <summary>
-        /// 確認是否是入庫Ready
+        /// 確認是否是送出Ready
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns></returns>
@@ -144,7 +144,7 @@ namespace Mirle.Middle
         }
 
         /// <summary>
-        /// 確認是否是出庫Ready
+        /// 確認是否是接收Ready
         /// </summary>
         /// <param name="Device"></param>
         /// <param name="location"></param>
@@ -172,7 +172,7 @@ namespace Mirle.Middle
         }
 
         /// <summary>
-        /// 確認是否是出庫Ready
+        /// 確認是否是接收Ready
         /// </summary>
         /// <param name="buffer"></param>
         /// <returns></returns>

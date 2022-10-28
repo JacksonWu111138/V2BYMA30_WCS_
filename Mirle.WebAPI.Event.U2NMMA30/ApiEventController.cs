@@ -151,7 +151,7 @@ namespace Mirle.WebAPI.Event
                     }
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
-                    cmd.carrierType = Body.carrierType; 
+                    cmd.carrierType = Def.clsTool.FunSwitchCarrierType(Body.carrierType);
 
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                         throw new Exception(strEM);
@@ -1158,7 +1158,7 @@ namespace Mirle.WebAPI.Event
                         {
                             string[] locations = cmd.Stn_No.Split(',');
 
-                            //找到當下閒置的撿料口
+                            //找尋當下閒置的撿料口
                             BufferStatusQueryInfo info = new BufferStatusQueryInfo
                             {
                                 jobId = cmd.Cmd_Sno

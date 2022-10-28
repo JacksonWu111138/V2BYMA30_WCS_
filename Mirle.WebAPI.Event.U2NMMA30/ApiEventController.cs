@@ -342,7 +342,7 @@ namespace Mirle.WebAPI.Event
                     {
                         TwoNodeOneStnnoInfo Cv_to = new TwoNodeOneStnnoInfo();
                         Cv_to = ConveyorDef.GetTwoNodeOneStnnoByStnNo(Body.toLocation);
-                        cmd.Stn_No = Cv_to.start.BufferName;
+                        cmd.Stn_No = Cv_to.end.BufferName;
                     }
                     else
                     {
@@ -354,7 +354,7 @@ namespace Mirle.WebAPI.Event
 
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
-                    cmd.carrierType = Body.carrierType;
+                    cmd.carrierType = Def.clsTool.FunSwitchCarrierType(Body.carrierType);
 
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                         throw new Exception(strEM);
@@ -688,7 +688,7 @@ namespace Mirle.WebAPI.Event
                         {
                             TwoNodeOneStnnoInfo Cv_to = new TwoNodeOneStnnoInfo();
                             Cv_to = ConveyorDef.GetTwoNodeOneStnnoByStnNo(lot.toPortId);
-                            cmd.Stn_No = Cv_to.start.BufferName;
+                            cmd.Stn_No = Cv_to.end.BufferName;
                         }
                         else
                         {

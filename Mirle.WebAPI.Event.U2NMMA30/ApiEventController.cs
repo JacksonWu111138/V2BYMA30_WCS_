@@ -90,7 +90,7 @@ namespace Mirle.WebAPI.Event
                         while (count < ConveyorDef.GetB800CV_List().Count())
                         {
                             B800CV = ConveyorDef.GetB800CV();
-                            if (clsMiddle.GetMiddle().CheckIsInReady(B800CV))
+                            if (clsMiddle.GetMiddle().CheckIsOutReady(B800CV))
                             {
                                 cmd.New_Loc = B800CV.BufferName;
                                 check = true;
@@ -151,7 +151,7 @@ namespace Mirle.WebAPI.Event
                     }
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
-                    cmd.carrierType = Body.carrierType;
+                    cmd.carrierType = Body.carrierType; 
 
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                         throw new Exception(strEM);
@@ -211,7 +211,7 @@ namespace Mirle.WebAPI.Event
                     cmd.End_Date = "";
 
                     cmd.Loc = Body.toShelfId;
-                    cmd.Equ_No = cmd.Loc == "Shelf" ? "" : tool.funGetEquNoByLoc(cmd.Loc).ToString();
+                    cmd.Equ_No = cmd.Loc == "SHELF" ? "" : tool.funGetEquNoByLoc(cmd.Loc).ToString();
 
                     cmd.EXP_Date = "";
                     cmd.JobID = Body.jobId;
@@ -237,7 +237,7 @@ namespace Mirle.WebAPI.Event
                     }
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
-                    cmd.carrierType = Body.carrierType;
+                    cmd.carrierType = Def.clsTool.FunSwitchCarrierType(Body.carrierType);
 
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                         throw new Exception(strEM);
@@ -959,7 +959,7 @@ namespace Mirle.WebAPI.Event
                     {
                         CarrierPutawayCheckInfo info = new CarrierPutawayCheckInfo
                         {
-                            portId = con.StnNo,
+                            portId = ConveyorDef.WES_B800CV,
                             carrierId = Body.barcode,
                             storageType = "B800"
                         }; 
@@ -1224,7 +1224,7 @@ namespace Mirle.WebAPI.Event
                         }
                     }
                     else if (cmd.Cmd_Mode == CmdMode.StockIn)
-                    { 
+                    {
                         if (cmd.CurLoc == "CVIN")
                         {
                             if (cmd.Loc != "Shelf")
@@ -1302,6 +1302,8 @@ namespace Mirle.WebAPI.Event
                                 }
                             }
                         }
+                        else
+                            rMsg.toLocation = "GO";
                     }
                     else if (cmd.Cmd_Mode == CmdMode.S2S)
                     {

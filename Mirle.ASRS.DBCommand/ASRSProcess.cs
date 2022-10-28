@@ -9,6 +9,7 @@ using Mirle.MapController;
 using Mirle.Middle;
 using Mirle.EccsSignal;
 using Mirle.DB.Proc;
+using static Mirle.Def.clsEnum;
 
 namespace Mirle.ASRS.DBCommand
 {
@@ -17,9 +18,9 @@ namespace Mirle.ASRS.DBCommand
         private clsEnum.CmdType.CraneType craneType;
         private int _stockerId;
         private readonly List<ICrane> _cranes = new List<ICrane>();
-        public ASRSProcess(clsDbConfig dbConfig, clsDbConfig dbConfig_WMS, clsPlcConfig plcConfig, DeviceInfo Device, MapHost Router, MidHost middle, SignalHost CrnSignal)
+        public ASRSProcess(WebApiConfig wmsApi, clsDbConfig dbConfig, clsDbConfig dbConfig_WMS, clsPlcConfig plcConfig, DeviceInfo Device, MapHost Router, MidHost middle, SignalHost CrnSignal)
         {
-            Initial(dbConfig, dbConfig_WMS);
+            Initial(dbConfig, wmsApi, dbConfig_WMS);
             craneType = plcConfig.CraneType;
             _stockerId = int.Parse(Device.DeviceID);
             _cranes.Add(new CraneProcess(1, wcs, wms, plcConfig, Device, Router, middle, CrnSignal));
@@ -45,9 +46,9 @@ namespace Mirle.ASRS.DBCommand
         public clsHost GetWCS() => wcs;
         public DB.WMS.Proc.clsHost GetWMS() => wms;
 
-       private void Initial(clsDbConfig dbConfig, clsDbConfig dbConfig_WMS)
+       private void Initial(clsDbConfig dbConfig, WebApiConfig wmsApi, clsDbConfig dbConfig_WMS)
         {
-            wcs = new clsHost(dbConfig, new WebApiConfig(), new WebApiConfig(), dbConfig_WMS);
+            wcs = new clsHost(dbConfig, wmsApi, new WebApiConfig(), dbConfig_WMS);
             wms = new DB.WMS.Proc.clsHost(dbConfig_WMS);
         }
     }

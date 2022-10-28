@@ -773,6 +773,11 @@ namespace Mirle.ASRS.WCS.View
         {
             for (int i = 0; i < 5; i++)
             {
+                if( i > 1 )
+                {
+                    Box[i - 2] = new DeviceInfo();
+                    Box[i - 2].Floors = new List<FloorInfo>();
+                }
                 for (int f = 1; f <= 2; f++)
                 {
                     if (i < 2 && f == 2) continue;
@@ -801,7 +806,7 @@ namespace Mirle.ASRS.WCS.View
                             break;
                         #endregion PCBA
                         #region 箱式倉
-                        case 2:
+                        case 4:
                             if (f == 1)
                             {
                                 floor.Group_IN.Add(ConveyorDef.Box.B1_007);
@@ -816,9 +821,15 @@ namespace Mirle.ASRS.WCS.View
                                 floor.Group_OUT.Add(ConveyorDef.Box.B1_081);
                                 floor.Group_OUT.Add(ConveyorDef.Box.B1_084);
                             }
-                            Box[i - 2] = new DeviceInfo();
-                            Box[i - 2].Floors = new List<FloorInfo>();
-                            Box[i - 2].Floors.Add(floor);
+                            if(f == 1)
+                            {
+                                Box[i - 2].Floors.Add(floor);
+                                floor = null;
+                                floor = new FloorInfo();
+                            }
+                            else
+                                Box[i - 2].Floors.Add(floor);
+
                             break;
                         case 3:
                             if (f == 1)
@@ -835,9 +846,14 @@ namespace Mirle.ASRS.WCS.View
                                 floor.Group_OUT.Add(ConveyorDef.Box.B1_093);
                                 floor.Group_OUT.Add(ConveyorDef.Box.B1_096);
                             }
-                            Box[i - 2] = new DeviceInfo();
-                            Box[i - 2].Floors = new List<FloorInfo>();
-                            Box[i - 2].Floors.Add(floor);
+                            if (f == 1)
+                            {
+                                Box[i - 2].Floors.Add(floor);
+                                floor = null;
+                                floor = new FloorInfo();
+                            }
+                            else
+                                Box[i - 2].Floors.Add(floor);
                             break;
                         default:
                             if (f == 1)
@@ -854,9 +870,14 @@ namespace Mirle.ASRS.WCS.View
                                 floor.Group_OUT.Add(ConveyorDef.Box.B1_105);
                                 floor.Group_OUT.Add(ConveyorDef.Box.B1_108);
                             }
-                            Box[i - 2] = new DeviceInfo();
-                            Box[i - 2].Floors = new List<FloorInfo>();
-                            Box[i - 2].Floors.Add(floor);
+                            if (f == 1)
+                            {
+                                Box[i - 2].Floors.Add(floor);
+                                floor = null;
+                                floor = new FloorInfo();
+                            }
+                            else
+                                Box[i - 2].Floors.Add(floor);
                             break;
                             #endregion 箱式倉
                     }
@@ -920,13 +941,13 @@ namespace Mirle.ASRS.WCS.View
                 {
                     CraneSignals[i] = new SignalHost(clInitSys.DbConfig, PCBA[i].DeviceID);
                     plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Single;
-                    AsrsCommand[i] = new ASRSProcess(clInitSys.DbConfig, clInitSys.DbConfig_WMS, plcConfig, PCBA[i], router, middle, CraneSignals[i]);
+                    AsrsCommand[i] = new ASRSProcess(clInitSys.WmsApi_Config, clInitSys.DbConfig, clInitSys.DbConfig_WMS, plcConfig, PCBA[i], router, middle, CraneSignals[i]);
                 }
                 else
                 {
                     CraneSignals[i] = new SignalHost(clInitSys.DbConfig, Box[i - 2].DeviceID);
                     plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Double;
-                    AsrsCommand[i] = new ASRSProcess(clInitSys.DbConfig, clInitSys.DbConfig_WMS, plcConfig, Box[i - 2], router, middle, CraneSignals[i]);
+                    AsrsCommand[i] = new ASRSProcess(clInitSys.WmsApi_Config, clInitSys.DbConfig, clInitSys.DbConfig_WMS, plcConfig, Box[i - 2], router, middle, CraneSignals[i]);
                 }
 
                 craneSts_View[i] = new EccsSignal_2.View.ucCrane_Sts(CraneSignals[i])

@@ -34,6 +34,7 @@ namespace Mirle.DB.Proc
         private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
         private WebApiConfig _wmsApi = new WebApiConfig();
         private WebApiConfig _towerApi = new WebApiConfig();
+        private DB.WMS.Proc.clsHost wms;
         private int CurrentStockInLoc = 0;
         public clsProc(clsDbConfig config, WebApiConfig WmsApi_Config, WebApiConfig TowerApi_Config, clsDbConfig config_WMS)
         {
@@ -41,6 +42,7 @@ namespace Mirle.DB.Proc
             _wmsApi = WmsApi_Config;
             _towerApi = TowerApi_Config;
             _config_WMS = config_WMS;
+            wms = new DB.WMS.Proc.clsHost(config_WMS);
         }
 
         public Fun.clsRoutdef GetFun_Routdef() => Routdef;
@@ -679,7 +681,8 @@ namespace Mirle.DB.Proc
                                     }
                                     else
                                     {
-                                        bool IsDoubleCmd = false; CmdMstInfo cmd_DD = new CmdMstInfo();
+                                        bool IsDoubleCmd = false; 
+                                        CmdMstInfo cmd_DD = new CmdMstInfo();
                                         string[] sCmdSno_CV = new string[2];
                                         #region 判斷狀態
                                         if (!Routdef.CheckSourceIsOK(cmd, sLoc_Start, middle, Device, wms, ref IsDoubleCmd, ref cmd_DD,
@@ -801,6 +804,12 @@ namespace Mirle.DB.Proc
 
                                         if (IsDoubleCmd)
                                         {
+                                            if (!Cmd_Mst.FunUpdateWriteToMiddle(cmd_DD.Cmd_Sno, clsConstValue.YesNo.Yes, db))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                continue;
+                                            }
+
                                             if (!MiddleCmd.FunInsMiddleCmd(middleCmd_DD, db))
                                             {
                                                 db.TransactionCtrl(TransactionTypes.Rollback);
@@ -866,7 +875,10 @@ namespace Mirle.DB.Proc
                                         {
                                             int[] emptyNo = new int[3];
                                             for (int j = 0; j < 3; j++)
+                                            {
                                                 emptyNo[j] = Convert.ToInt32(emptyLocDTTmp.Rows[0][j].ToString());
+                                                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"相識倉儲位取得空儲位數: Line{(j+3).ToString()} = {emptyNo[j]}");
+                                            }
                                             if (string.IsNullOrWhiteSpace(cmd.Equ_No))
                                             {
                                                 bool getEquNo = false;
@@ -874,6 +886,7 @@ namespace Mirle.DB.Proc
                                                 {
                                                     if (emptyNo[(CurrentStockInLoc + count) % 3] > 0)
                                                     {
+                                                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"成功取得空儲位於: Line{((CurrentStockInLoc + count) % 3).ToString()}");
                                                         if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                                         {
                                                             sRemark = "Error: Begin失敗！";
@@ -898,6 +911,25 @@ namespace Mirle.DB.Proc
                                                         sRemark = $"箱式倉設定儲位Line完成, jobId = {cmd.Cmd_Sno}.";
                                                         if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
                                                         {
+                                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                                            break;
+                                                        }
+
+                                                        CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
+                                                        {
+                                                            jobId = cmd.Cmd_Sno,
+                                                            bufferId = cmd.Stn_No,
+                                                            carrierType = clsConstValue.ControllerApi.CarrierType.Bin
+                                                        };
+                                                        ConveyorInfo con = new ConveyorInfo();
+                                                        con = ConveyorDef.GetBuffer(cmd.Stn_No);
+                                                        if(!api.GetCV_ReceiveNewBinCmd().FunReport(info, con.API.IP))
+                                                        {
+                                                            sRemark = $"Error: CVReceiveNewBin fail, jobId = {cmd.Cmd_Sno}.";
+                                                            if (sRemark != cmd.Remark)
+                                                            {
+                                                                Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                            }
                                                             db.TransactionCtrl(TransactionTypes.Rollback);
                                                             break;
                                                         }
@@ -978,7 +1010,7 @@ namespace Mirle.DB.Proc
                                                 }
                                             }
                                             //前方空板
-                                            if (string.IsNullOrWhiteSpace(CmdCheck[0]) && string.IsNullOrWhiteSpace(CmdCheck[1]))
+                                            if (CmdCheck[0] == "00000" && CmdCheck[1] == "00000")
                                             {
                                                 string sStockInLoc = wms.GetLocMst().funSearchEmptyLoc(cmd.Equ_No);
                                                 if (string.IsNullOrWhiteSpace(sStockInLoc))
@@ -1018,6 +1050,7 @@ namespace Mirle.DB.Proc
                                                 var ShelfBuff = ConveyorDef.GetBuffer(cmd.CurLoc);
                                                 CarrierShelfReportInfo info = new CarrierShelfReportInfo
                                                 {
+                                                    jobId = cmd.JobID,
                                                     carrierId = cmd.BoxID,
                                                     shelfId = sStockInLoc,
                                                     shelfStatus = "IN",
@@ -1038,7 +1071,7 @@ namespace Mirle.DB.Proc
 
                                             }
                                             //前方滿板
-                                            else if (!string.IsNullOrWhiteSpace(CmdCheck[0]) && !string.IsNullOrWhiteSpace(CmdCheck[1]))
+                                            else if ( CmdCheck[0] != "00000" && CmdCheck[1] != "00000")
                                             {
                                                 sRemark = $"Error: <EquNo> {cmd.Equ_No} 前方等待搬運中。";
                                                 if (sRemark != cmd.Remark)
@@ -1051,7 +1084,7 @@ namespace Mirle.DB.Proc
                                             //選擇前方靜電箱的兄弟
                                             else
                                             {
-                                                string CmdSnoDD = !string.IsNullOrWhiteSpace(CmdCheck[0]) ? CmdCheck[0] : CmdCheck[1];
+                                                string CmdSnoDD = CmdCheck[0]!= "00000" ? CmdCheck[0] : CmdCheck[1];
                                                 CmdMstInfo cmd_DD = new CmdMstInfo();
                                                 if (!Cmd_Mst.FunGetCommandByCmdSno(CmdSnoDD, ref cmd_DD, db))
                                                 {

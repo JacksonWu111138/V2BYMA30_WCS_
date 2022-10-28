@@ -8,7 +8,7 @@ namespace Mirle.DB.WMS.Fun.Parameter
 {
     public class clsLocMst
     {
-        public const string TableName = "r_wms_location";
+        public const string TableName = "[WES].[dbo].[r_wms_location]";
         public class Column
         {
             public const string Loc = "LOCATION_CODE";

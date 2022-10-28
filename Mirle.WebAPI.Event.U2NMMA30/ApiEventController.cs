@@ -2179,7 +2179,7 @@ namespace Mirle.WebAPI.Event
                     PortStatusUpdateInfo info = new PortStatusUpdateInfo
                     {
                         portId = con.StnNo,
-                        portStatus = clsEnum.WmsApi.portStatus.Pickup_Ready.ToString()
+                        portStatus = ((int)clsEnum.WmsApi.portStatus.Pickup_Ready).ToString()
                     };
                     if (!clsAPI.GetAPI().GetPortStatusUpdate().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     {
@@ -2471,7 +2471,7 @@ namespace Mirle.WebAPI.Event
                     PortStatusUpdateInfo info = new PortStatusUpdateInfo
                     {
                         portId = con.StnNo,
-                        portStatus = clsEnum.WmsApi.portStatus.Empty.ToString()
+                        portStatus = ((int)clsEnum.WmsApi.portStatus.Empty).ToString()
                     };
                     if (!clsAPI.GetAPI().GetPortStatusUpdate().FunReport(info, clsAPI.GetWesApiConfig().IP))
                         throw new Exception($"Error: PortStatusUpdate to WES fail, jobId = {Body.jobId}.");
@@ -2523,8 +2523,13 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>STATUS_CHANGE_REPORT start!");
             try
             {
-
-
+                EQPStatusUpdateInfo info = new EQPStatusUpdateInfo
+                {
+                    craneId = $"E80{Body.chipSTKCId}",
+                    craneStatus = Body.status == clsConstValue.ControllerApi.RunDown.Run ? "1" : "0"
+                };
+                if (!clsAPI.GetAPI().GetEQPStatusUpdate().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    throw new Exception($"Error: EqpStatusUpdate to WES fail, jobId = {Body.jobId}.");
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";

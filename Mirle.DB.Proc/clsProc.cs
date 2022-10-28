@@ -1947,7 +1947,6 @@ namespace Mirle.DB.Proc
 
                         if (sCmdMode == clsConstValue.CmdMode.StockIn)
                         {
-                            
                             if (!Cmd_Mst.FunGetCommand(sCmdSno, ref cmd, ref newRet, db))
                             {
                                 strEM = $"Error: 取得cmdMst命令失敗, jobId = {sCmdSno}.";
@@ -1955,28 +1954,52 @@ namespace Mirle.DB.Proc
                                 return false;
                             }
 
-                            if (!Cmd_Mst.FunUpdateCmdSts(sCmdSno, clsConstValue.CmdSts.strCmd_Finish_Wait, "", db))
+                            if (sEmptyRetrieval != "F")
                             {
-                                strEM = $"Error: Update CmdSts fail, jobId = {sCmdSno}.";
-                                db.TransactionCtrl(TransactionTypes.Rollback);
-                                return false;
-                            }
+                                if (!Cmd_Mst.FunUpdateCmdSts(sCmdSno, clsConstValue.CmdSts.strCmd_Finish_Wait, "", db))
+                                {
+                                    strEM = $"Error: Update CmdSts fail, jobId = {sCmdSno}.";
+                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                    return false;
+                                }
 
-                            LotPutawayCompleteInfo info = new LotPutawayCompleteInfo
+                                LotPutawayCompleteInfo info = new LotPutawayCompleteInfo
+                                {
+                                    jobId = cmd.JobID,
+                                    lotId = cmd.BoxID,
+                                    shelfId = cmd.Loc,
+                                    isComplete = clsConstValue.YesNo.Yes
+                                };
+                                if (!api.GetLotPutawayComplete().FunReport(info, WESAPI))
+                                {
+                                    strEM = $"Error: LotPutawayComplete to WES fail, jobId = {sCmdSno}.";
+                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                    return false;
+                                }
+                            }
+                            else
                             {
-                                jobId = cmd.JobID,
-                                lotId = cmd.BoxID,
-                                shelfId = cmd.Loc,
-                                isComplete = clsConstValue.YesNo.Yes
-                            };
-                            if (!api.GetLotPutawayComplete().FunReport(info, WESAPI))
-                            {
-                                strEM = $"Error: LotPutawayComplete to WES fail, jobId = {sCmdSno}.";
-                                db.TransactionCtrl(TransactionTypes.Rollback);
-                                return false;
+                                if (!Cmd_Mst.FunUpdateCmdSts(sCmdSno, clsConstValue.CmdSts.strCmd_Cancel_Wait, "", db))
+                                {
+                                    strEM = $"Error: Update CmdSts fail, jobId = {sCmdSno}.";
+                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                    return false;
+                                }
+
+                                //WCSCancelInfo info = new WCSCancelInfo
+                                //{
+                                //    lotIdCarrierId = sCarrierId,
+                                //    cancelType = clsConstValue.WesApi.CancelType.Lot_Putaway
+                                //};
+                                //if (!api.GetWCSCancel().FunReport(info, WESAPI))
+                                //{
+                                //    strEM = $"Error: LotPutawayCancel to WES fail, jobId = {sCmdSno}.";
+                                //    db.TransactionCtrl(TransactionTypes.Rollback);
+                                //    return false;
+                                //}
                             }
                         }
-                        if (sCmdMode == clsConstValue.CmdMode.StockOut)
+                        else if (sCmdMode == clsConstValue.CmdMode.StockOut)
                         {
                             if (!Cmd_Mst.FunGetCommand(sCmdSno, ref cmd, ref newRet, db))
                             {
@@ -2013,7 +2036,7 @@ namespace Mirle.DB.Proc
                                     db.TransactionCtrl(TransactionTypes.Rollback);
                                     return false;
                                 }
-                                info.isComplete = clsConstValue.YesNo.No;
+                                info.isComplete = clsConstValue.YesNo.Yes;
                                 info.emptyTransfer = clsConstValue.YesNo.Yes;
                                 info.disableLocation = clsConstValue.YesNo.Yes;
                             }
@@ -2026,7 +2049,7 @@ namespace Mirle.DB.Proc
                                     db.TransactionCtrl(TransactionTypes.Rollback);
                                     return false;
                                 }
-                                info.isComplete = clsConstValue.YesNo.No;
+                                info.isComplete = clsConstValue.YesNo.Yes;
                                 info.disableLocation = clsConstValue.YesNo.Yes;
                             }
                             else

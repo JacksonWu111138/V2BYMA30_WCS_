@@ -374,6 +374,11 @@ namespace Mirle.Def
                 /// </summary>
                 public const string Mag = "MAG";
             }
+            public class RunDown
+            {
+                public const string Run = "Run";
+                public const string Down = "Down";
+            }
         }
         public class WesApi
         {

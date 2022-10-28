@@ -271,7 +271,7 @@ namespace Mirle.DB.Fun
                     bufferName == Box.B1_007.BufferName || bufferName == Box.B1_010.BufferName ||
                     bufferName == Box.B1_081.BufferName || bufferName == Box.B1_084.BufferName ||
                     bufferName == Box.B1_087.BufferName || bufferName == Box.B1_090.BufferName)
-                return "3";
+                return "5";
             else if (bufferName == Box.B1_013.BufferName || bufferName == Box.B1_016.BufferName ||
                     bufferName == Box.B1_019.BufferName || bufferName == Box.B1_022.BufferName ||
                     bufferName == Box.B1_093.BufferName || bufferName == Box.B1_096.BufferName ||
@@ -281,13 +281,19 @@ namespace Mirle.DB.Fun
                     bufferName == Box.B1_031.BufferName || bufferName == Box.B1_034.BufferName ||
                     bufferName == Box.B1_105.BufferName || bufferName == Box.B1_108.BufferName ||
                     bufferName == Box.B1_111.BufferName || bufferName == Box.B1_114.BufferName)
-                return "5";
+                return "3";
             //Tower
             else if (bufferName == Tower.E1_04.BufferName || bufferName == AGV.E2_38.BufferName || bufferName == AGV.E2_39.BufferName)
                 return "7";
             //AGV
-
-
+            else if (ConveyorDef.GetAGV_3FPort().Where(r => r.BufferName == bufferName).Any())
+                return "63";
+            else if (ConveyorDef.GetAGV_5FPort().Where(r => r.BufferName == bufferName).Any())
+                return "65";
+            else if (ConveyorDef.GetAGV_6FPort().Where(r => r.BufferName == bufferName).Any())
+                return "66";
+            else if (ConveyorDef.GetAGV_8FPort().Where(r => r.BufferName == bufferName).Any())
+                return "68";
             else
                 return "";
         }

@@ -76,19 +76,19 @@ namespace Mirle.Def.U2NMMA30
             public static ConveyorInfo B1_113 = new ConveyorInfo { Index = 113, BufferName = "B1-113" };
             public static ConveyorInfo B1_116 = new ConveyorInfo { Index = 116, BufferName = "B1-116" };
             /// <summary>
-            /// 站口
+            /// 下左撿料口
             /// </summary>
             public static ConveyorInfo B1_062 = new ConveyorInfo { Index = 62, BufferName = "B1-062", Path = 10 };
             /// <summary>
-            /// 站口
+            /// 下右撿料口
             /// </summary>
             public static ConveyorInfo B1_067 = new ConveyorInfo { Index = 67, BufferName = "B1-067", Path = 20 };
             /// <summary>
-            /// 站口
+            /// 上左撿料口
             /// </summary>
             public static ConveyorInfo B1_142 = new ConveyorInfo { Index = 142, BufferName = "B1-142", Path = 30 };
             /// <summary>
-            /// 站口
+            /// 上右撿料口
             /// </summary>
             public static ConveyorInfo B1_147 = new ConveyorInfo { Index = 147, BufferName = "B1-147", Path = 40 };
         }
@@ -409,7 +409,6 @@ namespace Mirle.Def.U2NMMA30
             public static TwoNodeOneStnnoInfo SF603 = new TwoNodeOneStnnoInfo { Stn_No = "SF603", end = SMT6C.A3_10, start = SMT6C.A3_11 };
             public static TwoNodeOneStnnoInfo SF604 = new TwoNodeOneStnnoInfo { Stn_No = "SF604", end = SMT6C.A3_14, start = SMT6C.A3_15 };
             public static TwoNodeOneStnnoInfo SF605 = new TwoNodeOneStnnoInfo { Stn_No = "SF605", end = SMT6C.A3_18, start = SMT6C.A3_19 };
-
 
         }
 

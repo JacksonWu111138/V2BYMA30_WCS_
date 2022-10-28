@@ -478,14 +478,14 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.PCBA.M1_11.DeviceId = MainForm.PCBA[1].DeviceID;
             ConveyorDef.PCBA.M1_16.DeviceId = MainForm.PCBA[1].DeviceID;
 
-            ConveyorDef.Box.B1_001.DeviceId = MainForm.Box[0].DeviceID;
-            ConveyorDef.Box.B1_004.DeviceId = MainForm.Box[0].DeviceID;
-            ConveyorDef.Box.B1_007.DeviceId = MainForm.Box[0].DeviceID;
-            ConveyorDef.Box.B1_010.DeviceId = MainForm.Box[0].DeviceID;
-            ConveyorDef.Box.B1_081.DeviceId = MainForm.Box[0].DeviceID;
-            ConveyorDef.Box.B1_084.DeviceId = MainForm.Box[0].DeviceID;
-            ConveyorDef.Box.B1_087.DeviceId = MainForm.Box[0].DeviceID;
-            ConveyorDef.Box.B1_090.DeviceId = MainForm.Box[0].DeviceID;
+            ConveyorDef.Box.B1_001.DeviceId = MainForm.Box[2].DeviceID;
+            ConveyorDef.Box.B1_004.DeviceId = MainForm.Box[2].DeviceID;
+            ConveyorDef.Box.B1_007.DeviceId = MainForm.Box[2].DeviceID;
+            ConveyorDef.Box.B1_010.DeviceId = MainForm.Box[2].DeviceID;
+            ConveyorDef.Box.B1_081.DeviceId = MainForm.Box[2].DeviceID;
+            ConveyorDef.Box.B1_084.DeviceId = MainForm.Box[2].DeviceID;
+            ConveyorDef.Box.B1_087.DeviceId = MainForm.Box[2].DeviceID;
+            ConveyorDef.Box.B1_090.DeviceId = MainForm.Box[2].DeviceID;
 
             ConveyorDef.Box.B1_013.DeviceId = MainForm.Box[1].DeviceID;
             ConveyorDef.Box.B1_016.DeviceId = MainForm.Box[1].DeviceID;
@@ -496,14 +496,14 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.Box.B1_099.DeviceId = MainForm.Box[1].DeviceID;
             ConveyorDef.Box.B1_102.DeviceId = MainForm.Box[1].DeviceID;
 
-            ConveyorDef.Box.B1_025.DeviceId = MainForm.Box[2].DeviceID;
-            ConveyorDef.Box.B1_028.DeviceId = MainForm.Box[2].DeviceID;
-            ConveyorDef.Box.B1_031.DeviceId = MainForm.Box[2].DeviceID;
-            ConveyorDef.Box.B1_034.DeviceId = MainForm.Box[2].DeviceID;
-            ConveyorDef.Box.B1_105.DeviceId = MainForm.Box[2].DeviceID;
-            ConveyorDef.Box.B1_108.DeviceId = MainForm.Box[2].DeviceID;
-            ConveyorDef.Box.B1_111.DeviceId = MainForm.Box[2].DeviceID;
-            ConveyorDef.Box.B1_114.DeviceId = MainForm.Box[2].DeviceID;
+            ConveyorDef.Box.B1_025.DeviceId = MainForm.Box[0].DeviceID;
+            ConveyorDef.Box.B1_028.DeviceId = MainForm.Box[0].DeviceID;
+            ConveyorDef.Box.B1_031.DeviceId = MainForm.Box[0].DeviceID;
+            ConveyorDef.Box.B1_034.DeviceId = MainForm.Box[0].DeviceID;
+            ConveyorDef.Box.B1_105.DeviceId = MainForm.Box[0].DeviceID;
+            ConveyorDef.Box.B1_108.DeviceId = MainForm.Box[0].DeviceID;
+            ConveyorDef.Box.B1_111.DeviceId = MainForm.Box[0].DeviceID;
+            ConveyorDef.Box.B1_114.DeviceId = MainForm.Box[0].DeviceID;
 
             ConveyorDef.Tower.E1_04.DeviceId = ConveyorDef.DeviceID_Tower;
             ConveyorDef.Tower.E1_10.DeviceId = ConveyorDef.DeviceID_Tower;

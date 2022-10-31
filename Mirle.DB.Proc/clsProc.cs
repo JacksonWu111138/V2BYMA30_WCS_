@@ -7,6 +7,7 @@ using Mirle.MapController;
 using Mirle.Middle;
 using Mirle.Structure;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
+using Mirle.WriLog;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -300,7 +301,7 @@ namespace Mirle.DB.Proc
                                         {//是電子料塔或AGV的命令
 
                                             string sDeviceID = "";
-                                            if (sLoc_Start.LocationId.Contains("B") || sLoc_Start.LocationId.Contains("CVIN"))
+                                            if ((sLoc_Start.LocationId.Contains("B") && sLoc_End.LocationId.Contains("B")) || sLoc_Start.LocationId.Contains("CVIN"))
                                             {
                                                 //箱式倉命令
                                                 continue;
@@ -657,6 +658,7 @@ namespace Mirle.DB.Proc
                             for (int i = 0; i < dtTmp.Rows.Count; i++)
                             {
                                 CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
+                                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "開始檢查Crane狀態");
                                 if (!Cmd_Mst.CheckCraneStatus(cmd, Device, CrnSignal, db)) continue;
 
                                 string sRemark = "";

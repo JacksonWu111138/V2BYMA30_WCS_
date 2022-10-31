@@ -534,6 +534,8 @@ namespace Mirle.DB.Fun
                                 {
                                     if(IsLoad)
                                     {
+                                        //CmdMstInfo cmd_another = new CmdMstInfo();
+                                        //if(Cmd_Mst.getcom)
                                         #region 左右都有
                                         IsDoubleCmd = true;
                                         if (!middle.CheckIsInReady(buffer_another, ref sCmdSno_CV[1]))

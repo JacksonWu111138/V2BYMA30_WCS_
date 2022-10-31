@@ -105,6 +105,7 @@
     <Compile Include="ReplyForController\BufferStatusReply.cs" />
     <Compile Include="ReplyForController\BufferReply.cs" />
     <Compile Include="ReplyForController\BlockStatusQueryReply.cs" />
+    <Compile Include="ReplyForWES\CarrierReturnNextReply .cs" />
     <Compile Include="ReplyForWES\CarrierShelfReply.cs" />
     <Compile Include="ReplyForWES\LotCarrierReply.cs" />
     <Compile Include="ReplyForWES\EmptyShelfQueryReply.cs" />

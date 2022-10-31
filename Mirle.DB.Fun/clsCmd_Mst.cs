@@ -14,6 +14,8 @@ namespace Mirle.DB.Fun
         private clsTool tool = new clsTool();
         public bool CheckCraneStatus(CmdMstInfo cmd, DeviceInfo Device, SignalHost CrnSignal, DataBase.DB db)
         {
+
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"Crane狀態列表: EquNo = {CrnSignal.GetEquNo()}, CrnMode = {CrnSignal.CrnMode}, CrnSts = {CrnSignal.CrnSts}.");
             string sRemark = "";
             bool bCraneSts;
             if (CrnSignal.CrnMode != clsConstValue.Crane.Mode.Computer)
@@ -34,7 +36,7 @@ namespace Mirle.DB.Fun
                 sRemark = $"Line{Device.DeviceID}動作中";
             }
             else bCraneSts = true;
-
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"Crane狀態確認完畢.");
             if (!bCraneSts)
             {
                 if (sRemark != cmd.Remark)

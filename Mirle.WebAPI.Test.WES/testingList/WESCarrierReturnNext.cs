@@ -35,7 +35,9 @@ namespace Mirle.WebAPI.Test.WES.testingList
                 isEmpty = textBox_isEmpty.Text,
                 carrierType = textBox_carrierType.Text
             };
-            if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
+            CarrierReturnNextReply reply = new CarrierReturnNextReply();
+
+            if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
             {
                 MessageBox.Show($"失敗, jobId:{info.jobId}.", "Carrier Return Next", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }

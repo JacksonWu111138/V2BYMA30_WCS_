@@ -944,9 +944,20 @@ namespace Mirle.WebAPI.Event
 
                 if (check)
                 {
+                    //transaction, LIFT Carrier Type
                     clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{cmd.Cmd_Sno}>This BCRCheck exist.");
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, Body.location))
                         throw new Exception($"Error: UpdateCurLoc Fail. jobId = {Body.jobId}");
+                    CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
+                    {
+                        jobId = cmd.Cmd_Sno,
+                        bufferId = Body.location,
+                        carrierType = Body.carrierType
+                    };
+
+                    con = ConveyorDef.GetBuffer(Body.location);
+                    if(!clsAPI.GetAPI().GetCV_ReceiveNewBinCmd().FunReport(info, con.API.IP))
+                        throw new Exception($"Error: CV_RECEIVE_NEW_BIN fail. jobId = {Body.jobId}");
                 }
                 else if (!check)
                 {
@@ -955,7 +966,7 @@ namespace Mirle.WebAPI.Event
                         Body.location == ConveyorDef.Box.B1_117.BufferName || Body.location == ConveyorDef.Box.B1_121.BufferName ||
                         Body.location == ConveyorDef.Box.B1_125.BufferName || Body.location == ConveyorDef.Box.B1_134.BufferName ||
                         Body.location == ConveyorDef.AGV.B1_070.BufferName || Body.location == ConveyorDef.AGV.B1_074.BufferName ||
-                        Body.location == ConveyorDef.AGV.B1_078.BufferName)
+                        Body.location == ConveyorDef.AGV.B1_078.BufferName )
                     {
                         CarrierPutawayCheckInfo info = new CarrierPutawayCheckInfo
                         {
@@ -1011,9 +1022,23 @@ namespace Mirle.WebAPI.Event
                         {
                             info.fromLocation = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
                         }
-                            
-                        if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                        CarrierReturnNextReply reply = new CarrierReturnNextReply();    
+
+                        if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
+                        {
+                            if (reply.returnStock == clsConstValue.YesNo.Yes)
+                            {
+                                CarrierPutawayCheckInfo info_2 = new CarrierPutawayCheckInfo
+                                {
+                                    portId = con.StnNo,
+                                    carrierId = Body.barcode,
+                                    storageType = "B800"
+                                };
+                                if(!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info_2, clsAPI.GetWesApiConfig().IP))
+                                    throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}");
+                            }
                             throw new Exception($"Error: Sending CarrierReturnNext to WES fail, jobId = {Body.jobId}");
+                        }
                     }
 
                 }
@@ -1202,10 +1227,21 @@ namespace Mirle.WebAPI.Event
                                 rMsg.toLocation = cmd.boxStockOutAgv;
                             }
                         }
-                        else if (cmd.Stn_No == ConveyorDef.Box.B1_062.BufferName || cmd.Stn_No == ConveyorDef.Box.B1_067.BufferName ||
-                            cmd.Stn_No == ConveyorDef.Box.B1_142.BufferName || cmd.Stn_No == ConveyorDef.Box.B1_147.BufferName)
+                        else if (cmd.Stn_No == ConveyorDef.Box.B1_062.BufferName)
                         {
-                            rMsg.toLocation = cmd.Stn_No;
+                            rMsg.toLocation = "B1-061";
+                        }
+                        else if (cmd.Stn_No == ConveyorDef.Box.B1_067.BufferName)
+                        {
+                            rMsg.toLocation = "B1-066";
+                        }
+                        else if (cmd.Stn_No == ConveyorDef.Box.B1_142.BufferName)
+                        {
+                            rMsg.toLocation = "B1-141";
+                        }
+                        else if (cmd.Stn_No == ConveyorDef.Box.B1_147.BufferName)
+                        {
+                            rMsg.toLocation = "B1-146";
                         }
                         else if (ConveyorDef.GetLifetNode_List().Where(r => r.BufferName == Body.location).Any())
                         {
@@ -1585,12 +1621,19 @@ namespace Mirle.WebAPI.Event
             {
                 ConveyorInfo con = new ConveyorInfo();
                 con = ConveyorDef.GetBuffer(Body.location);
+                if (Body.location == "B1-061")
+                    con = ConveyorDef.Box.B1_062;
+                else if (Body.location == "B1-066")
+                    con = ConveyorDef.Box.B1_067;
+
                 EmptyESDCarrierLoadRequestInfo info = new EmptyESDCarrierLoadRequestInfo
                 {
                     location = con.StnNo,
                     reqQty = Body.reqQty,
                     withClapBoard = clsConstValue.YesNo.No
                 };
+                if (Body.location.Contains("B1"))
+                    info.jobId = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
                 {
                     info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
@@ -2006,7 +2049,9 @@ namespace Mirle.WebAPI.Event
                                 fromLocation = con.StnNo,
                                 carrierType = clsConstValue.WesApi.CarrierType.Rack
                             };
-                            if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                            CarrierReturnNextReply reply = new CarrierReturnNextReply();
+
+                            if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
                             {
                                 strEM = $"Error: CarrierRetrurnNext fail, jobid = {Body.jobId}.";
                                 throw new Exception(strEM);
@@ -2067,7 +2112,9 @@ namespace Mirle.WebAPI.Event
                         fromLocation = con.StnNo,
                         carrierType = clsConstValue.WesApi.CarrierType.Rack
                     };
-                    if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    CarrierReturnNextReply reply = new CarrierReturnNextReply();
+
+                    if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
                     {
                         strEM = $"Error: CarrierRetrurnNext fail, jobid = {Body.jobId}.";
                         throw new Exception(strEM);
@@ -2129,7 +2176,9 @@ namespace Mirle.WebAPI.Event
                         isEmpty = "N",  
                         carrierType = clsConstValue.WesApi.CarrierType.Rack
                     };
-                    if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    CarrierReturnNextReply reply = new CarrierReturnNextReply();
+
+                    if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
                     {
                         strEM = $"Error: CarrierRetrurnNext fail, jobid = {Body.jobId}.";
                         throw new Exception(strEM);
@@ -2525,6 +2574,7 @@ namespace Mirle.WebAPI.Event
             {
                 EQPStatusUpdateInfo info = new EQPStatusUpdateInfo
                 {
+                    jobId = Body.jobId,
                     craneId = $"E80{Body.chipSTKCId}",
                     craneStatus = Body.status == clsConstValue.ControllerApi.RunDown.Run ? "1" : "0"
                 };

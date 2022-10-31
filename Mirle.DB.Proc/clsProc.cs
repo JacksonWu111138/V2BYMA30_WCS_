@@ -794,6 +794,99 @@ namespace Mirle.DB.Proc
                                             continue;
                                         }
 
+                                        //修正箱式倉右外儲位預約左外站口之錯誤
+                                        if(!IsDoubleCmd && cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut)
+                                        {
+                                            if(Convert.ToInt32(middleCmd.Source.Substring(0, 2)) % 4 == 0)
+                                            {
+                                                //若判斷為單板且由右外儲位送到外ASRS站口，更改為送至內ASRS站口
+                                                if (middleCmd.Destination == ConveyorDef.Box.B1_105.BufferName )
+                                                {
+                                                    middleCmd.Destination = ConveyorDef.Box.B1_108.BufferName;
+                                                    if (!middle.CheckIsOutReady(ConveyorDef.Box.B1_108))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        sRemark = $"Error: {middleCmd.Destination}沒發接收Ready";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+                                                        continue;
+                                                    }
+                                                }
+                                                else if(middleCmd.Destination == ConveyorDef.Box.B1_093.BufferName )
+                                                {
+                                                    middleCmd.Destination = ConveyorDef.Box.B1_096.BufferName;
+                                                    if (!middle.CheckIsOutReady(ConveyorDef.Box.B1_096))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        sRemark = $"Error: {middleCmd.Destination}沒發接收Ready";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+                                                        continue;
+                                                    }
+                                                }
+                                                else if (middleCmd.Destination == ConveyorDef.Box.B1_081.BufferName )
+                                                {
+                                                    middleCmd.Destination = ConveyorDef.Box.B1_084.BufferName;
+                                                    if (!middle.CheckIsOutReady(ConveyorDef.Box.B1_084))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        sRemark = $"Error: {middleCmd.Destination}沒發接收Ready";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+                                                        continue;
+                                                    }
+                                                }
+                                                else if(middleCmd.Destination == ConveyorDef.Box.B1_025.BufferName )
+                                                {
+                                                    middleCmd.Destination = ConveyorDef.Box.B1_028.BufferName;
+                                                    if (!middle.CheckIsOutReady(ConveyorDef.Box.B1_028))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        sRemark = $"Error: {middleCmd.Destination}沒發接收Ready";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+                                                        continue;
+                                                    }
+                                                }
+                                                else if (middleCmd.Destination == ConveyorDef.Box.B1_013.BufferName )
+                                                {
+                                                    middleCmd.Destination = ConveyorDef.Box.B1_016.BufferName;
+                                                    if (!middle.CheckIsOutReady(ConveyorDef.Box.B1_016))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        sRemark = $"Error: {middleCmd.Destination}沒發接收Ready";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+                                                        continue;
+                                                    }
+                                                }
+                                                else if (middleCmd.Destination == ConveyorDef.Box.B1_001.BufferName)
+                                                {
+                                                    middleCmd.Destination = ConveyorDef.Box.B1_004.BufferName;
+                                                    if (!middle.CheckIsOutReady(ConveyorDef.Box.B1_004))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        sRemark = $"Error: {middleCmd.Destination}沒發接收Ready";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+                                                        continue;
+                                                    }
+                                                }
+                                            }
+                                        }
+
                                         if (!MiddleCmd.FunInsMiddleCmd(middleCmd, db))
                                         {
                                             db.TransactionCtrl(TransactionTypes.Rollback);

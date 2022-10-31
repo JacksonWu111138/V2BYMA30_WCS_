@@ -944,10 +944,15 @@ namespace Mirle.WebAPI.Event
 
                 if (check)
                 {
-                    //transaction, LIFT Carrier Type
+                    //transaction
+                    if ((cmd.Cmd_Mode == clsConstValue.CmdMode.S2S && Body.location == cmd.New_Loc) ||
+                        (cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut && Body.location == cmd.Stn_No))
+                        throw new Exception($"Error: 目前抵達命令終點，稍後等待命令清除！ jobId = {cmd.Cmd_Sno}.");
+
                     clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{cmd.Cmd_Sno}>This BCRCheck exist.");
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, Body.location))
                         throw new Exception($"Error: UpdateCurLoc Fail. jobId = {Body.jobId}");
+
                     CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
                     {
                         jobId = cmd.Cmd_Sno,

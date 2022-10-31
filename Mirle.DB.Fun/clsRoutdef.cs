@@ -488,7 +488,8 @@ namespace Mirle.DB.Fun
 
                             if (!middle.CheckIsInReady(buffer_another, ref sCmdSno_CV[0]))
                             {
-                                IsDoubleCmd = false;
+                                if (sCmdSno_CV[0] == "00000")
+                                    IsDoubleCmd = false;
                                 /*
                                 sRemark = $"Error: {buffer_another.BufferName}沒發送出Ready";
 

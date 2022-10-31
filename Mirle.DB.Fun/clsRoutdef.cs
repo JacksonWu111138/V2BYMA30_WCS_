@@ -488,6 +488,8 @@ namespace Mirle.DB.Fun
 
                             if (!middle.CheckIsInReady(buffer_another, ref sCmdSno_CV[0]))
                             {
+                                IsDoubleCmd = false;
+                                /*
                                 sRemark = $"Error: {buffer_another.BufferName}沒發送出Ready";
 
                                 if (sRemark != cmd.Remark)
@@ -495,22 +497,25 @@ namespace Mirle.DB.Fun
                                     Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
                                 }
 
-                                return false;
+                                return false;*/
                             }
-
-                            IsDoubleCmd = true;
-                            string sCmdSno_DD = middle.GetBufferCmd(buffer_another).ToString().PadLeft(5, '0');
-                            bool bFlag = Cmd_Mst.FunGetCommand(sCmdSno_DD, ref cmd_DD, ref iRet, db);
-                            if (!bFlag)
+                            else
+                                IsDoubleCmd = true;
+                            if(IsDoubleCmd)
                             {
-                                sRemark = $"Error: 取得{buffer_another.BufferName}命令失敗 => " +
-                                    $"<{Parameter.clsCmd_Mst.Column.Cmd_Sno}>{sCmdSno_DD}";
-                                if (sRemark != cmd.Remark)
+                                string sCmdSno_DD = middle.GetBufferCmd(buffer_another).ToString().PadLeft(5, '0');
+                                bool bFlag = Cmd_Mst.FunGetCommand(sCmdSno_DD, ref cmd_DD, ref iRet, db);
+                                if (!bFlag)
                                 {
-                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                }
+                                    sRemark = $"Error: 取得{buffer_another.BufferName}命令失敗 => " +
+                                        $"<{Parameter.clsCmd_Mst.Column.Cmd_Sno}>{sCmdSno_DD}";
+                                    if (sRemark != cmd.Remark)
+                                    {
+                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                    }
 
-                                return false;
+                                    return false;
+                                }
                             }
                             #endregion 左右一定都要有東西
                         }

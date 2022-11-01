@@ -56,12 +56,12 @@ namespace Mirle.DB.Fun
                 string strSql = $"select * from {Parameter.clsCmd_Mst.TableName} where " +
                     $"({Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{clsConstValue.CmdSts.strCmd_Running}' and " +
                     $"(({Parameter.clsCmd_Mst.Column.CurLoc} not in ({sAsrsStockInLocation_Sql})) or" +
-                    $"(({Parameter.clsCmd_Mst.Column.CurLoc} in 'Shelf') and ({Parameter.clsCmd_Mst.Column.CurDeviceID} not in ({sAsrsEquNo_Sql})))) or " +
+                    $"(({Parameter.clsCmd_Mst.Column.CurLoc} in ('Shelf')) and ({Parameter.clsCmd_Mst.Column.CurDeviceID} not in ({sAsrsEquNo_Sql})))) or " +
                     $"({Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{clsConstValue.CmdSts.strCmd_Initial}' and " +
                     $"({Parameter.clsCmd_Mst.Column.Cmd_Mode} in ('{clsConstValue.CmdMode.S2S}', '{clsConstValue.CmdMode.StockIn}') or " +
                     $"({Parameter.clsCmd_Mst.Column.Cmd_Mode} in ('{clsConstValue.CmdMode.StockOut}', '{clsConstValue.CmdMode.L2L}') and " +
                     $"{Parameter.clsCmd_Mst.Column.Equ_No} not in ({sAsrsEquNo_Sql}))" +
-                    $"))";
+                    $")))";
                 strSql += $" ORDER BY {Parameter.clsCmd_Mst.Column.Prty}," +
                   $" {Parameter.clsCmd_Mst.Column.Create_Date}, {Parameter.clsCmd_Mst.Column.Cmd_Sno}";
                 dtTmp = new DataTable();

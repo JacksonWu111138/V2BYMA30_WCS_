@@ -189,8 +189,7 @@ namespace Mirle.DB.Fun
 
                                 if (api.GetBufferStatusQuery().FunReport(info, s.API.IP, ref reply))
                                 {
-                                    int.TryParse(reply.ready, out var ready);
-                                    if (ready == (int)clsEnum.ControllerApi.Ready.OutReady)
+                                    if (reply.jobId == "00000" || string.IsNullOrEmpty(reply.jobId))
                                     {
                                         sBuffername = s.BufferName;
                                         isFindLocation = true;
@@ -473,7 +472,7 @@ namespace Mirle.DB.Fun
 
                         if(buffer.DoubleType == DoubleType.Right)
                         {
-                            #region 左右一定都要有東西
+                            #region 左右不一定都要有東西
                             if (!middle.CheckIsInReady(buffer, ref sCmdSno_CV[1]))
                             {
                                 sRemark = $"Error: {buffer.BufferName}沒發送出Ready";
@@ -518,7 +517,7 @@ namespace Mirle.DB.Fun
                                     return false;
                                 }
                             }
-                            #endregion 左右一定都要有東西
+                            #endregion 左右不一定都要有東西
                         }
                         else
                         {

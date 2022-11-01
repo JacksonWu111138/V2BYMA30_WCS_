@@ -1031,7 +1031,8 @@ namespace Mirle.WebAPI.Event
 
                         if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
                         {
-                            if (reply.returnStock == clsConstValue.YesNo.Yes)
+                            //若為產線，returnStock是否為Y?
+                            if (reply.returnStock == clsConstValue.YesNo.Yes && Body.location.Contains("B1"))
                             {
                                 CarrierPutawayCheckInfo info_2 = new CarrierPutawayCheckInfo
                                 {
@@ -1198,13 +1199,24 @@ namespace Mirle.WebAPI.Event
                             bool isFindLocation = false;
                             for (int i = 0; i < locations.Length; i++)
                             {
+                                /*
+                                if (locations[i] == ConveyorDef.Box.B1_147.BufferName)
+                                    rMsg.toLocation = "B1-146";
+                                else if (locations[i] == ConveyorDef.Box.B1_142.BufferName)
+                                    rMsg.toLocation = "B1-141";
+                                isFindLocation = true;
+                                break;*/
                                 info.bufferId = locations[i];
                                 if (!clsAPI.GetAPI().GetBufferStatusQuery().FunReport(info, clsAPI.GetBoxApiConfig().IP, ref bufferStatusReply))
                                     throw new Exception($"Error: 詢問箱式倉撿料口失敗, jobId = {cmd.Cmd_Sno}.");
-                                int.TryParse(bufferStatusReply.ready, out var ready);
-                                if (ready == (int)clsEnum.ControllerApi.Ready.OutReady)
+
+                                //判斷撿料口若無命令序號則為空閒
+                                if(bufferStatusReply.jobId == "00000" || string.IsNullOrEmpty(bufferStatusReply.jobId))
                                 {
-                                    rMsg.toLocation = locations[i];
+                                    if (locations[i] == ConveyorDef.Box.B1_147.BufferName)
+                                        rMsg.toLocation = "B1-146";
+                                    else if (locations[i] == ConveyorDef.Box.B1_142.BufferName)
+                                        rMsg.toLocation = "B1-141";
                                     isFindLocation = true;
                                     break;
                                 }
@@ -1212,7 +1224,7 @@ namespace Mirle.WebAPI.Event
 
                             if (!isFindLocation)
                             {
-                                throw new Exception($"Error: 現在無可放入之撿料口, jobId = {cmd.Cmd_Sno}.");
+                                rMsg.toLocation = "GO";
                             }
                         }
                         else if ((cmd.Stn_No != ConveyorDef.Box.B1_062.BufferName && cmd.Stn_No != ConveyorDef.Box.B1_067.BufferName &&
@@ -1369,6 +1381,23 @@ namespace Mirle.WebAPI.Event
                                     rMsg.toLocation = ConveyorDef.AGV.LO6_04.BufferName;
                                 else
                                     rMsg.toLocation = ConveyorDef.AGV.LO3_01.BufferName;
+                            }
+                        }
+                        else if ((cmd.New_Loc != ConveyorDef.Box.B1_062.BufferName && cmd.New_Loc != ConveyorDef.Box.B1_067.BufferName &&
+                                cmd.New_Loc != ConveyorDef.Box.B1_142.BufferName && cmd.New_Loc != ConveyorDef.Box.B1_147.BufferName) &&
+                                !ConveyorDef.GetLifetNode_List().Where(r => r.BufferName == Body.location).Any())
+                        {
+                            if (cmd.boxStockOutAgv == "")
+                            {
+                                cmd.boxStockOutAgv = ConveyorDef.GetB800CVOut().BufferName;
+                                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateboxStockOutAgv(Body.jobId, cmd.boxStockOutAgv))
+                                    rMsg.toLocation = cmd.boxStockOutAgv;
+                                else
+                                    throw new Exception($"Error: 更新boxStockOutAgv失敗, jobId = {Body.jobId}.");
+                            }
+                            else
+                            {
+                                rMsg.toLocation = cmd.boxStockOutAgv;
                             }
                         }
                     }

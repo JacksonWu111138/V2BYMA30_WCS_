@@ -283,7 +283,7 @@ namespace Mirle.DB.Fun
                     bufferName == Box.B1_111.BufferName || bufferName == Box.B1_114.BufferName)
                 return "3";
             //Tower
-            else if (bufferName == Tower.E1_04.BufferName || bufferName == AGV.E2_38.BufferName || bufferName == AGV.E2_39.BufferName)
+            else if (bufferName == Tower.E1_04.BufferName)
                 return "7";
             //AGV
             else if (ConveyorDef.GetAGV_3FPort().Where(r => r.BufferName == bufferName).Any())
@@ -294,6 +294,19 @@ namespace Mirle.DB.Fun
                 return "66";
             else if (ConveyorDef.GetAGV_8FPort().Where(r => r.BufferName == bufferName).Any())
                 return "68";
+            //整理區
+            else if (bufferName.Contains("A4"))
+                return "Line";
+            //線邊倉
+            else if (bufferName.Contains("A3"))
+                return "SMT6C";
+            else if (bufferName.Contains("A2"))
+                return "SMT5C";
+            else if (bufferName.Contains("A1"))
+                return "SMT3C";
+            //產線
+            else if (bufferName.Contains("S"))
+                return "SMTC";
             else
                 return "";
         }

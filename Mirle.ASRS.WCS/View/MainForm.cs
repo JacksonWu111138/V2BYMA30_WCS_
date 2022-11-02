@@ -788,7 +788,7 @@ namespace Mirle.ASRS.WCS.View
                     switch(i)
                     {
                         #region PCBA
-                        case 0:
+                        case 1:
                             floor.Group_IN.Add(ConveyorDef.PCBA.M1_06);
                             floor.Group_OUT.Add(ConveyorDef.PCBA.M1_01);
 
@@ -796,7 +796,7 @@ namespace Mirle.ASRS.WCS.View
                             PCBA[i].Floors = new List<FloorInfo>();
                             PCBA[i].Floors.Add(floor);
                             break;
-                        case 1:
+                        case 0:
                             floor.Group_IN.Add(ConveyorDef.PCBA.M1_16);
                             floor.Group_OUT.Add(ConveyorDef.PCBA.M1_11);
 

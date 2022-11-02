@@ -444,6 +444,40 @@ namespace Mirle.Middle.DB_Proc
                                                 continue;
                                             }
 
+                                            BufferStatusQueryInfo infostatus = new BufferStatusQueryInfo()
+                                            {
+                                                jobId = cmd.CommandID,
+                                                bufferId = conveyor.BufferName
+                                            };
+                                            BufferStatusReply replyStatus = new BufferStatusReply();
+
+                                            if(api.GetBufferStatusQuery().FunReport(infostatus, conveyor.API.IP, ref replyStatus))
+                                            {
+                                                int.TryParse(replyStatus.ready, out var ready);
+                                                if (ready != (int)clsEnum.ControllerApi.Ready.OutReady)
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    sRemark = $"Error: {conveyor.BufferName}並非接收ready！";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                sRemark = $"Error: 確定{conveyor.BufferName}失敗！";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    EquCmd.FunUpdateRemark_MiddleCmd(cmd.CommandID, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+
                                             if (!api.GetCV_ReceiveNewBinCmd().FunReport(info, conveyor.API.IP))
                                             {
                                                 db.TransactionCtrl(TransactionTypes.Rollback);

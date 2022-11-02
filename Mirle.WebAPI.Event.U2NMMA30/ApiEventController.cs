@@ -29,6 +29,7 @@ using static Mirle.Def.clsEnum.ControllerApi;
 using Mirle.Structure.Info;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
+using System.Web;
 
 namespace Mirle.WebAPI.Event
 {
@@ -632,8 +633,14 @@ namespace Mirle.WebAPI.Event
                 }
                 else
                 {
+
                     V2BYMA30.ReportInfo.LotRetrieveTransferInfo info = new V2BYMA30.ReportInfo.LotRetrieveTransferInfo();
                     info.lotList = new List<LotListInfo>();
+                    //toPortList [1] => E800-5, [2] => E800-6, [3] => E800-7, [4] => E800-8
+                    int[] toPortList = new int[4];
+                    for (int i = 0; i < toPortList.Length; i++)
+                        toPortList[i] = 0;
+
                     foreach (var lot in Body.lotList)
                     {
                         LotListInfo oklot = new LotListInfo();
@@ -695,6 +702,16 @@ namespace Mirle.WebAPI.Event
                             var cv_to = ConveyorDef.GetBuffer_ByStnNo(lot.toPortId);
                             cmd.Stn_No = cv_to.BufferName;
                         }
+
+                        if (lot.toPortId == "E800-5")
+                            toPortList[0] = 1;
+                        else if (lot.toPortId == "E800-6")
+                            toPortList[1] = 1;
+                        else if (lot.toPortId == "E800-7")
+                            toPortList[2] = 1;
+                        else if (lot.toPortId == "E800-8")
+                            toPortList[3] = 1;
+
                         cmd.rackLocation = lot.rackLocation;
                         cmd.largest = lot.largest;
                         cmd.Host_Name = "WES";
@@ -726,8 +743,35 @@ namespace Mirle.WebAPI.Event
                     if (!clsAPI.GetAPI().GetLotRetrieveTransfer().FunReport(info, clsAPI.GetTowerApiConfig().IP))
                         throw new Exception($"Error: LotRetrieveTransfer to E800 fail, jobId = {Body.jobId}");
                     //E800端出庫失敗後如何回覆lotId?
-                }
+                    for(int i = 0; i< toPortList.Length; i++)
+                    {
+                        if (toPortList[i] == 1)
+                        {
+                            PortStatusUpdateInfo info2 = new PortStatusUpdateInfo
+                            {
+                                portStatus = ((int)clsEnum.WmsApi.portStatus.Processing).ToString(),
+                            };
+                            switch (i)
+                            {
+                                case 0:
+                                    info2.portId = "E800-5";
+                                    break;
+                                case 1:
+                                    info2.portId = "E800-6";
+                                    break;
+                                case 2:
+                                    info2.portId = "E800-7";
+                                    break;
+                                case 3:
+                                    info2.portId = "E800-8";
+                                    break;
+                            }
 
+                            if (!clsAPI.GetAPI().GetPortStatusUpdate().FunReport(info2, clsAPI.GetWesApiConfig().IP))
+                                throw new Exception($"Error: PortStatusUpdate to WES fail, WES's jobId = {cmd.JobID}.");
+                        }
+                    }
+                }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -947,7 +991,20 @@ namespace Mirle.WebAPI.Event
                     //transaction
                     if ((cmd.Cmd_Mode == clsConstValue.CmdMode.S2S && Body.location == cmd.New_Loc) ||
                         (cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut && Body.location == cmd.Stn_No))
+                    {
+                        if(Body.location == ConveyorDef.Tower.E1_04.BufferName)
+                        {
+                            if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, Body.location))
+                                throw new Exception($"Error: UpdateCurLoc Fail. jobId = {Body.jobId}");
+                            rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
+                            rMsg.returnComment = "";
+
+                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
+                            return Json(rMsg);
+                        }
+
                         throw new Exception($"Error: 目前抵達命令終點，稍後等待命令清除！ jobId = {cmd.Cmd_Sno}.");
+                    }
 
                     clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{cmd.Cmd_Sno}>This BCRCheck exist.");
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, Body.location))
@@ -1006,7 +1063,7 @@ namespace Mirle.WebAPI.Event
                     else
                     {
                         //以下為無MES測試時使用
-                        
+                        /*
                         rMsg.transactionId = "AUTO_" + rMsg.transactionId + "_ignore_CarrierReturnNext";
                         rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                         rMsg.returnComment = "";
@@ -1014,7 +1071,7 @@ namespace Mirle.WebAPI.Event
                         clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
                         return Json(rMsg);
                         
-                        //以上為無MES測試時使用
+                        *///以上為無MES測試時使用
 
                         CarrierReturnNextInfo info = new CarrierReturnNextInfo
                         {
@@ -1031,7 +1088,6 @@ namespace Mirle.WebAPI.Event
 
                         if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
                         {
-                            //若為產線，returnStock是否為Y?
                             if (reply.returnStock == clsConstValue.YesNo.Yes && Body.location.Contains("B1"))
                             {
                                 CarrierPutawayCheckInfo info_2 = new CarrierPutawayCheckInfo
@@ -1099,6 +1155,7 @@ namespace Mirle.WebAPI.Event
                 {
                     EmptyCarrierUnloadInfo info = new EmptyCarrierUnloadInfo
                     {
+                        jobId = Body.jobId,
                         carrierId = Body.binId,
                         location = con.StnNo
                     }; 
@@ -1348,7 +1405,7 @@ namespace Mirle.WebAPI.Event
                                 }
                                 else if (temp == 17 || temp == 20)
                                 {
-                                    if (Body.location == ConveyorDef.Box.B1_041.BufferName)
+                                    if (Body.location == ConveyorDef.Box.B1_045.BufferName)
                                         rMsg.toLocation = ConveyorDef.Box.B1_012.BufferName;
                                     else
                                         rMsg.toLocation = ConveyorDef.Box.B1_092.BufferName;

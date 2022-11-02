@@ -453,6 +453,20 @@ namespace Mirle.DB.Proc
                                                         continue;
                                                     }
 
+                                                    string deviceId = tool.GetDeviceId(con.BufferName);
+
+                                                    if (!Cmd_Mst.FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, con.BufferName, db))
+                                                    {
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        sRemark = $"Error: 更新CurLoc = {con.BufferName}失敗";
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+
                                                     if (!api.GetCV_ReceiveNewBinCmd().FunReport(info_cv, con.API.IP))
                                                     {
                                                         db.TransactionCtrl(TransactionTypes.Rollback);
@@ -464,6 +478,7 @@ namespace Mirle.DB.Proc
 
                                                         continue;
                                                     }
+
 
                                                     //放寬PositionReport之條件，不理會WES是否成功
                                                     api.GetPositionReport().FunReport(info, _wmsApi.IP);

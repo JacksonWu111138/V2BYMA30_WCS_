@@ -47,7 +47,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult CARRIER_TRANSFER([FromBody] CarrierTransferInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_TRANSFER> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             U2NMMA30.Models.CarrierReply rMsg = new U2NMMA30.Models.CarrierReply
             {
@@ -162,6 +162,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>/CARRIER_TRANSFER record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -179,7 +180,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult CARRIER_PUTAWAY_TRANSFER([FromBody] CarrierPutawayTransferInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             U2NMMA30.Models.CarrierReply rMsg = new U2NMMA30.Models.CarrierReply
             {
@@ -247,7 +248,9 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
 
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CARRIER_PUTAWAY_TRANSFER record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CARRIER_PUTAWAY_TRANSFER record end!"); 
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
+
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -265,7 +268,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult CARRIER_RETRIEVE_TRANSFER([FromBody] CarrierRetrieveTransferInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_RETRIEVE_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_RETRIEVE_TRANSFER> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             U2NMMA30.Models.CarrierReply rMsg = new U2NMMA30.Models.CarrierReply
             {
@@ -365,6 +368,8 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CARRIER_RETRIEVE_TRANSFER record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
+
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -382,7 +387,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult CARRIER_SHELF_TRANSFER([FromBody] CarrierShelfTransferInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_SHELF_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_SHELF_TRANSFER> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             U2NMMA30.Models.CarrierReply rMsg = new U2NMMA30.Models.CarrierReply
             {
@@ -438,6 +443,8 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CARRIER_SHELF_TRANSFER record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
+
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -455,7 +462,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult CARRIER_TRANSFER_CANCEL([FromBody] CarrierTransferCancelInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_TRANSFER_CANCEL> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_TRANSFER_CANCEL> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             U2NMMA30.Models.CarrierReply rMsg = new U2NMMA30.Models.CarrierReply
             {
@@ -474,6 +481,8 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CARRIER_TRANSFER_CANCEL record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
+
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -491,7 +500,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult LOT_PUTAWAY_TRANSFER([FromBody] LotPutawayTransferInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_PUTAWAY_TRANSFER> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             U2NMMA30.Models.LotReply rMsg = new U2NMMA30.Models.LotReply
             {
@@ -569,7 +578,7 @@ namespace Mirle.WebAPI.Event
 
                     cmd.carrierType = "";
                     cmd.lotSize = Body.lotSize;
-
+                    //以下用transaction取代
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                         throw new Exception(strEM);
 
@@ -585,13 +594,20 @@ namespace Mirle.WebAPI.Event
 
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, ""))
                         throw new Exception($"Error: 更改CmdSts至Running失敗, jobId = {cmd.Cmd_Sno}.");
+                    //以上用transaction取代
 
+                    //transaction方法
+                    /*
+                    if (!clsDB_Proc.GetDB_Object().GetProc().FunLotPutawayTransfer(cmd, clsAPI.GetTowerApiConfig().IP, ref strEM))
+                        throw new Exception(strEM);
+                    */
                 }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_PUTAWAY_TRANSFER record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -609,7 +625,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult LOT_RETRIEVE_TRANSFER([FromBody] U2NMMA30.Models.LotRetrieveTransferInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_RETRIEVE_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_RETRIEVE_TRANSFER> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -644,7 +660,7 @@ namespace Mirle.WebAPI.Event
                     foreach (var lot in Body.lotList)
                     {
                         LotListInfo oklot = new LotListInfo();
-                        cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
+                        cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSNO);
                         if (string.IsNullOrWhiteSpace(cmd.Cmd_Sno))
                         {
                             throw new Exception($"<{Body.jobId}>取得序號失敗！");
@@ -729,6 +745,9 @@ namespace Mirle.WebAPI.Event
                             continue;
                         }
 
+                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, ""))
+                            throw new Exception($"Error: 更改CmdSts至Running失敗, jobId = {cmd.Cmd_Sno}.");
+
                         oklot.cmdSno = cmd.Cmd_Sno;
                         oklot.lotId = lot.lotId;
                         oklot.toPortId = lot.toPortId;
@@ -777,6 +796,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_RETRIEVE_TRANSFER record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -794,7 +814,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult LOT_SHELF_TRANSFER([FromBody] LotShelfTransferInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_SHELF_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_SHELF_TRANSFER> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             U2NMMA30.Models.LotReply rMsg = new U2NMMA30.Models.LotReply
             {
@@ -811,6 +831,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_SHELF_TRANSFER record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -828,7 +849,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult LOT_TRANSFER_CANCEL([FromBody] U2NMMA30.Models.LotTransferCancelInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_TRANSFER_CANCEL> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_TRANSFER_CANCEL> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             U2NMMA30.Models.LotReply rMsg = new U2NMMA30.Models.LotReply
             {
@@ -847,6 +868,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_TRANSFER_CANCEL record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -867,7 +889,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult AGV_POS_REPORT([FromBody] AGVPosReportInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<AGV_POS_REPORT> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<AGV_POS_REPORT> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -894,6 +916,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>AGV_POS_REPORT record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -911,7 +934,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult ALARM_HAPPEN_REPORT([FromBody] AlarmInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<ALARM_HAPPEN_REPORT> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<ALARM_HAPPEN_REPORT> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -941,6 +964,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>ALARM_HAPPEN_REPORT record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -958,7 +982,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult BCR_CHECK_REQUEST([FromBody] BCRCheckInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<BCR_CHECK_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<BCR_CHECK_REQUEST> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -975,6 +999,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
                 */
                 //以上為測試CV時使用
@@ -1000,6 +1025,7 @@ namespace Mirle.WebAPI.Event
                             rMsg.returnComment = "";
 
                             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
+                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                             return Json(rMsg);
                         }
 
@@ -1009,17 +1035,26 @@ namespace Mirle.WebAPI.Event
                     clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{cmd.Cmd_Sno}>This BCRCheck exist.");
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, Body.location))
                         throw new Exception($"Error: UpdateCurLoc Fail. jobId = {Body.jobId}");
-
-                    CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
+                    if(((Body.location == ConveyorDef.Box.B1_037.BufferName || Body.location == ConveyorDef.Box.B1_117.BufferName) && cmd.Equ_No == "3") ||
+                       ((Body.location == ConveyorDef.Box.B1_041.BufferName || Body.location == ConveyorDef.Box.B1_121.BufferName) && cmd.Equ_No == "4") ||
+                       ((Body.location == ConveyorDef.Box.B1_045.BufferName || Body.location == ConveyorDef.Box.B1_125.BufferName) && cmd.Equ_No == "5"))
                     {
-                        jobId = cmd.Cmd_Sno,
-                        bufferId = Body.location,
-                        carrierType = Body.carrierType
-                    };
 
-                    con = ConveyorDef.GetBuffer(Body.location);
-                    if(!clsAPI.GetAPI().GetCV_ReceiveNewBinCmd().FunReport(info, con.API.IP))
-                        throw new Exception($"Error: CV_RECEIVE_NEW_BIN fail. jobId = {Body.jobId}");
+                    }
+                    else
+                    {
+                        CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
+                        {
+                            jobId = cmd.Cmd_Sno,
+                            bufferId = Body.location,
+                            carrierType = Body.carrierType
+                        };
+
+                        con = ConveyorDef.GetBuffer(Body.location);
+                        if (!clsAPI.GetAPI().GetCV_ReceiveNewBinCmd().FunReport(info, con.API.IP))
+                            throw new Exception($"Error: CV_RECEIVE_NEW_BIN fail. jobId = {Body.jobId}");
+                    }
+                    
                 }
                 else if (!check)
                 {
@@ -1069,6 +1104,7 @@ namespace Mirle.WebAPI.Event
                         rMsg.returnComment = "";
 
                         clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                         return Json(rMsg);
                         
                         *///以上為無MES測試時使用
@@ -1109,6 +1145,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1126,7 +1163,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult BIN_EMPTY_LEAVE_REQUEST([FromBody] BinEmptyLeaveInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<BIN_EMPTY_LEAVE_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<BIN_EMPTY_LEAVE_REQUEST> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             BinReply rMsg = new BinReply
             {
@@ -1174,6 +1211,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BIN_EMPTY_LEAVE_REQUEST record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1191,7 +1229,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult BLOCK_STATUS_CHANGE([FromBody] BlockStatusInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<BLOCK_STATUS_CHANGE> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<BLOCK_STATUS_CHANGE> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -1208,6 +1246,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BLOCK_STATUS_CHANGE record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1225,7 +1264,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult CMD_DESTINATION_CHECK([FromBody] CmdDestinationCheckInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CMD_DESTINATION_CHECK> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CMD_DESTINATION_CHECK> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             CmdDestinationCheckReply rMsg = new CmdDestinationCheckReply
             {
@@ -1469,6 +1508,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CMD_DESTINATION_CHECK record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1486,7 +1526,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult CMD_DOUBLE_STORAGE_REQUEST([FromBody] CmdDoubleStorageInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CMD_DOUBLE_STORAGE_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CMD_DOUBLE_STORAGE_REQUEST> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             CmdDoubleStorageReply rMsg = new CmdDoubleStorageReply
             {
@@ -1543,6 +1583,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CMD_DOUBLE_STORAGE_REQUEST record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1560,7 +1601,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult COMMAND_COMPLETE([FromBody] CommandCompleteInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<COMMAND_COMPLETE> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<COMMAND_COMPLETE> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -1649,6 +1690,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>COMMAND_COMPLETE record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1666,7 +1708,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult CONTROL_CHANGE([FromBody] ControlChangeInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CONTROL_CHANGE> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CONTROL_CHANGE> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -1683,6 +1725,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CONTROL_CHANGE record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1700,7 +1743,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult EMPTY_BIN_LOAD_REQUEST([FromBody] EmptyBinLoadRequestInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<EMPTY_BIN_LOAD_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<EMPTY_BIN_LOAD_REQUEST> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -1736,6 +1779,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>EMPTY_BIN_LOAD_REQUEST record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1753,7 +1797,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult FORK_STATUS_REPORT([FromBody] ForkStatusReportInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<FORK_STATUS_REPORT> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<FORK_STATUS_REPORT> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -1770,6 +1814,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>FORK_STATUS_REPORT record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1787,7 +1832,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult LOCATION_DISABLE_REQUEST([FromBody] LocationDisableRequestInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOCATION_DISABLE_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOCATION_DISABLE_REQUEST> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -1804,6 +1849,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOCATION_DISABLE_REQUEST record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1821,7 +1867,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult LOT_NG_REPORT([FromBody] LotNGReportInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_NG_REPORT> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_NG_REPORT> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -1845,6 +1891,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_NG_REPORT record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1862,7 +1909,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult LOT_RETRIEVE_CANCEL([FromBody] ReelIdInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_RETRIEVE_CANCEL> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<LOT_RETRIEVE_CANCEL> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -1884,6 +1931,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_RETRIEVE_CANCEL record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1901,7 +1949,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult MODE_CHANGE([FromBody] ModeChangeInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<MODE_CHANGE> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<MODE_CHANGE> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -1919,6 +1967,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>MODE_CHANGE record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -1936,7 +1985,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult POSITION_REPORT([FromBody] U2NMMA30.Models.PositionReportInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<POSITION_REPORT> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<POSITION_REPORT> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2014,6 +2063,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>POSITION_REPORT record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2031,7 +2081,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult RACK_AWAY_INFO([FromBody] RackInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<RACK_AWAY_INFO> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<RACK_AWAY_INFO> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2155,6 +2205,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>RACK_AWAY_INFO record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2172,7 +2223,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult RACK_COMMAND_DONE([FromBody] RackInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<RACK_COMMAND_DONE> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<RACK_COMMAND_DONE> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2216,6 +2267,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>RACK_COMMAND_DONE record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2233,7 +2285,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult RACK_ID_REPORT([FromBody] RackIdInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<RACK_ID_REPORT> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<RACK_ID_REPORT> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2280,6 +2332,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>RACK_ID_REPORT record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2297,7 +2350,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult RACK_RECEIVED_INFO([FromBody] RackInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<RACK_RECEIVED_INFO> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<RACK_RECEIVED_INFO> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2342,6 +2395,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>RACK_RECEIVED_INFO record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2359,7 +2413,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult RACK_TURN_REQUEST([FromBody] RackInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<RACK_TURN_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<RACK_TURN_REQUEST> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2396,6 +2450,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>RACK_TURN_REQUEST record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2413,7 +2468,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult REEL_STOCK_IN([FromBody] ReelIdInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<REEL_STOCK_IN> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<REEL_STOCK_IN> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReelStockInReply rMsg = new ReelStockInReply
             {
@@ -2440,6 +2495,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>REEL_STOCK_IN record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2457,7 +2513,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult SMTC_EMPTY_MAGAZINE_LOAD_REQUEST([FromBody] SMTCEmptyMagazineLoadRequestInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<SMTC_EMPTY_MAGAZINE_LOAD_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<SMTC_EMPTY_MAGAZINE_LOAD_REQUEST> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2485,6 +2541,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_EMPTY_MAGAZINE_LOAD_REQUEST record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2502,7 +2559,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult SMTC_EMPTY_MAGAZINE_UNLOAD([FromBody] SMTCEmptyMagazineUnloadInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<SMTC_EMPTY_MAGAZINE_UNLOAD> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<SMTC_EMPTY_MAGAZINE_UNLOAD> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2531,6 +2588,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_EMPTY_MAGAZINE_UNLOAD record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2548,7 +2606,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult SMTC_MAGAZINE_LOAD_REQUEST([FromBody] SMTCMagazineLoadRequestInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<SMTC_MAGAZINE_LOAD_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<SMTC_MAGAZINE_LOAD_REQUEST> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2575,6 +2633,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_MAGAZINE_LOAD_REQUEST record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2592,7 +2651,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult STAGE_EMPTY_INFO([FromBody] StageEmptyInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<STAGE_EMPTY_INFO> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<STAGE_EMPTY_INFO> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2636,6 +2695,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>STAGE_EMPTY_INFO record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2653,7 +2713,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult STATUS_CHANGE_REPORT([FromBody] StatusChangeInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<STATUS_CHANGE_REPORT> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<STATUS_CHANGE_REPORT> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2676,6 +2736,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>STATUS_CHANGE_REPORT record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2693,7 +2754,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult TASK_COMPLETE([FromBody] BaseInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<TASK_COMPLETE> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<TASK_COMPLETE> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2712,6 +2773,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>TASK_COMPLETE record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2729,7 +2791,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult TRANSFER_COMMAND_DONE([FromBody] TransferCommandDoneInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<TRANSFER_COMMAND_DONE> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<TRANSFER_COMMAND_DONE> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2746,6 +2808,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>TRANSFER_COMMAND_DONE record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2763,7 +2826,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult UNKNOWN_BIN_LEAVE_INFO([FromBody] UnknownBinLeaveInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<UNKNOWN_BIN_LEAVE_INFO> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<UNKNOWN_BIN_LEAVE_INFO> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             ReplyCode rMsg = new ReplyCode
             {
@@ -2798,7 +2861,7 @@ namespace Mirle.WebAPI.Event
                 while (count < ConveyorDef.GetB800CV_List().Count())
                 {
                     B800CV = ConveyorDef.GetB800CV();
-                    if (clsMiddle.GetMiddle().CheckIsInReady(B800CV))
+                    if (clsMiddle.GetMiddle().CheckIsOutReady(B800CV))
                     {
                         cmd.New_Loc = B800CV.BufferName;
                         check = true;
@@ -2808,7 +2871,7 @@ namespace Mirle.WebAPI.Event
                 }
                 if (!check)
                 {
-                    throw new Exception("Error: B800CV 無InReady儲位");
+                    throw new Exception("Error: B800CV 無接收ready站口");
                 }
 
                 cmd.Prty = "5";
@@ -2818,7 +2881,7 @@ namespace Mirle.WebAPI.Event
 
                 cmd.Host_Name = "WCS";
                 cmd.Zone_ID = "";
-                cmd.carrierType = "";
+                cmd.carrierType = clsConstValue.ControllerApi.CarrierType.Bin;
 
                 if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                     throw new Exception(strEM);
@@ -2828,6 +2891,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>UNKNOWN_BIN_LEAVE_INFO record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2845,7 +2909,7 @@ namespace Mirle.WebAPI.Event
         [HttpPost]
         public IHttpActionResult WRONG_EQU_STOCK_IN_REQUEST([FromBody] WrongEquStockInInfo Body)
         {
-            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<WRONG_EQU_STOCK_IN_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(Body)}");
+            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<WRONG_EQU_STOCK_IN_REQUEST> <WCS Get>\n{JsonConvert.SerializeObject(Body)}");
 
             WrongEquStockInRequestReply rMsg = new WrongEquStockInRequestReply
             {
@@ -2887,6 +2951,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>WRONG_EQU_STOCK_IN_REQUEST record end!");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)

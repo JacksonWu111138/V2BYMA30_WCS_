@@ -472,11 +472,11 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.DeviceID_AGV = lcsini.EquNo.AGV.Trim();
             ConveyorDef.DeviceID_Tower = lcsini.EquNo.Tower.Trim();
 
-            ConveyorDef.PCBA.M1_01.DeviceId = MainForm.PCBA[0].DeviceID;
-            ConveyorDef.PCBA.M1_06.DeviceId = MainForm.PCBA[0].DeviceID;
+            ConveyorDef.PCBA.M1_01.DeviceId = MainForm.PCBA[1].DeviceID;
+            ConveyorDef.PCBA.M1_06.DeviceId = MainForm.PCBA[1].DeviceID;
 
-            ConveyorDef.PCBA.M1_11.DeviceId = MainForm.PCBA[1].DeviceID;
-            ConveyorDef.PCBA.M1_16.DeviceId = MainForm.PCBA[1].DeviceID;
+            ConveyorDef.PCBA.M1_11.DeviceId = MainForm.PCBA[0].DeviceID;
+            ConveyorDef.PCBA.M1_16.DeviceId = MainForm.PCBA[0].DeviceID;
 
             ConveyorDef.Box.B1_001.DeviceId = MainForm.Box[2].DeviceID;
             ConveyorDef.Box.B1_004.DeviceId = MainForm.Box[2].DeviceID;

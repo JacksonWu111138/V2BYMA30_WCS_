@@ -263,9 +263,9 @@ namespace Mirle.DB.Fun
         {
             //PCBA
             if (bufferName == PCBA.M1_01.BufferName || bufferName == PCBA.M1_06.BufferName)
-                return "1";
-            else if (bufferName == PCBA.M1_11.BufferName || bufferName == PCBA.M1_16.BufferName)
                 return "2";
+            else if (bufferName == PCBA.M1_11.BufferName || bufferName == PCBA.M1_16.BufferName)
+                return "1";
             //BOX
             else if (bufferName == Box.B1_001.BufferName || bufferName == Box.B1_004.BufferName ||
                     bufferName == Box.B1_007.BufferName || bufferName == Box.B1_010.BufferName ||

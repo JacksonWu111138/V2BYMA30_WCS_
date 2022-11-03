@@ -117,111 +117,23 @@ namespace Mirle.DB.Proc
                                         continue;
                                     }
 
-                                    sRemark = "Error: 上報WES命令完成失敗";
-                                    ConveyorInfo con = new ConveyorInfo();
-                                    switch (cmd.Cmd_Mode)
+                                    if(Convert.ToInt32(cmd.Cmd_Sno.ToString()) < 20000)
                                     {
-                                        case clsConstValue.CmdMode.L2L:
-                                            shelfCompleteInfo = new CarrierShelfCompleteInfo
-                                            {
-                                                carrierId = cmd.BoxID,
-                                                emptyTransfer = clsConstValue.YesNo.No,
-                                                jobId = cmd.JobID,
-                                                shelfId = cmd.New_Loc
-                                            };
-
-                                            if (!api.GetCarrierShelfComplete().FunReport(shelfCompleteInfo, _wmsApi.IP))
-                                            {
-                                                db.TransactionCtrl(TransactionTypes.Rollback);
-                                                if (sRemark != cmd.Remark)
+                                        sRemark = "Error: 上報WES命令完成失敗";
+                                        ConveyorInfo con = new ConveyorInfo();
+                                        switch (cmd.Cmd_Mode)
+                                        {
+                                            case clsConstValue.CmdMode.L2L:
+                                                shelfCompleteInfo = new CarrierShelfCompleteInfo
                                                 {
-                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                }
-
-                                                continue;
-                                            }
-
-                                            break;
-                                        case clsConstValue.CmdMode.S2S:
-                                            con = ConveyorDef.GetBuffer(cmd.New_Loc);
-                                            transferCompleteInfo = new CarrierTransferCompleteInfo
-                                            {
-                                                carrierId = cmd.BoxID,
-                                                jobId = cmd.JobID,
-                                                location = con.StnNo
-                                            };
-
-                                            if (!api.GetCarrierTransferComplete().FunReport(transferCompleteInfo, _wmsApi.IP))
-                                            {
-                                                db.TransactionCtrl(TransactionTypes.Rollback);
-                                                if (sRemark != cmd.Remark)
-                                                {
-                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                }
-
-                                                continue;
-                                            }
-
-                                            break;
-                                        case clsConstValue.CmdMode.StockIn:
-                                            putawayCompleteInfo = new CarrierPutawayCompleteInfo
-                                            {
-                                                carrierId = cmd.BoxID,
-                                                isComplete = clsConstValue.YesNo.Yes,
-                                                jobId = cmd.JobID,
-                                                shelfId = cmd.Loc
-                                            };
-
-                                            if (!api.GetCarrierPutawayComplete().FunReport(putawayCompleteInfo, _wmsApi.IP))
-                                            {
-                                                db.TransactionCtrl(TransactionTypes.Rollback);
-                                                if (sRemark != cmd.Remark)
-                                                {
-                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                }
-
-                                                continue;
-                                            }
-
-                                            break;
-                                        default:
-                                            if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == cmd.Stn_No).Any())
-                                                con = ConveyorDef.GetTwoNodeOneStnnoByBufferName(cmd.Stn_No).end;
-                                            else
-                                                con = ConveyorDef.GetBuffer(cmd.Stn_No);
-                                            retrieveCompleteInfo = new CarrierRetrieveCompleteInfo
-                                            {
-                                                carrierId = cmd.BoxID,
-                                                emptyTransfer = clsConstValue.YesNo.No,
-                                                isComplete = clsConstValue.YesNo.Yes,
-                                                jobId = cmd.JobID,
-                                                location = con.StnNo,
-                                                portId = con.StnNo
-                                            };
-
-                                            if (!api.GetCarrierRetrieveComplete().FunReport(retrieveCompleteInfo, _wmsApi.IP))
-                                            {
-                                                db.TransactionCtrl(TransactionTypes.Rollback);
-                                                if (sRemark != cmd.Remark)
-                                                {
-                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
-                                                }
-
-                                                continue;
-                                            }
-
-                                            if (cmd.JobID.StartsWith("EBR")) //判斷條件待修正
-                                            {
-                                                EmptyBinLoadDoneInfo emptyBinLoadDoneInfo = new EmptyBinLoadDoneInfo
-                                                {
-                                                    jobId = cmd.Cmd_Sno,
-                                                    location = cmd.Stn_No
+                                                    carrierId = cmd.BoxID,
+                                                    emptyTransfer = clsConstValue.YesNo.No,
+                                                    jobId = cmd.JobID,
+                                                    shelfId = cmd.New_Loc
                                                 };
-                                                ConveyorInfo con_1 = new ConveyorInfo();
-                                                con_1 = ConveyorDef.GetBuffer(cmd.Stn_No);
-                                                if (!api.GetEmptyBinLoadDone().FunReport(emptyBinLoadDoneInfo, con_1.API.IP))
+
+                                                if (!api.GetCarrierShelfComplete().FunReport(shelfCompleteInfo, _wmsApi.IP))
                                                 {
-                                                    sRemark = $"Error: 傳送EmptyBinLoadDone給 {con_1.BufferName} 失敗, jobId = {cmd.Cmd_Sno}.";
                                                     db.TransactionCtrl(TransactionTypes.Rollback);
                                                     if (sRemark != cmd.Remark)
                                                     {
@@ -230,9 +142,101 @@ namespace Mirle.DB.Proc
 
                                                     continue;
                                                 }
-                                            }
-                                            break;
+
+                                                break;
+                                            case clsConstValue.CmdMode.S2S:
+                                                con = ConveyorDef.GetBuffer(cmd.New_Loc);
+                                                transferCompleteInfo = new CarrierTransferCompleteInfo
+                                                {
+                                                    carrierId = cmd.BoxID,
+                                                    jobId = cmd.JobID,
+                                                    location = con.StnNo
+                                                };
+
+                                                if (!api.GetCarrierTransferComplete().FunReport(transferCompleteInfo, _wmsApi.IP))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
+                                                break;
+                                            case clsConstValue.CmdMode.StockIn:
+                                                putawayCompleteInfo = new CarrierPutawayCompleteInfo
+                                                {
+                                                    carrierId = cmd.BoxID,
+                                                    isComplete = clsConstValue.YesNo.Yes,
+                                                    jobId = cmd.JobID,
+                                                    shelfId = cmd.Loc
+                                                };
+
+                                                if (!api.GetCarrierPutawayComplete().FunReport(putawayCompleteInfo, _wmsApi.IP))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
+                                                break;
+                                            default:
+                                                if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == cmd.Stn_No).Any())
+                                                    con = ConveyorDef.GetTwoNodeOneStnnoByBufferName(cmd.Stn_No).end;
+                                                else
+                                                    con = ConveyorDef.GetBuffer(cmd.Stn_No);
+                                                retrieveCompleteInfo = new CarrierRetrieveCompleteInfo
+                                                {
+                                                    carrierId = cmd.BoxID,
+                                                    emptyTransfer = clsConstValue.YesNo.No,
+                                                    isComplete = clsConstValue.YesNo.Yes,
+                                                    jobId = cmd.JobID,
+                                                    location = con.StnNo,
+                                                    portId = con.StnNo
+                                                };
+
+                                                if (!api.GetCarrierRetrieveComplete().FunReport(retrieveCompleteInfo, _wmsApi.IP))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
+                                                if (cmd.JobID.StartsWith("EBR")) //判斷條件待修正
+                                                {
+                                                    EmptyBinLoadDoneInfo emptyBinLoadDoneInfo = new EmptyBinLoadDoneInfo
+                                                    {
+                                                        jobId = cmd.Cmd_Sno,
+                                                        location = cmd.Stn_No
+                                                    };
+                                                    ConveyorInfo con_1 = new ConveyorInfo();
+                                                    con_1 = ConveyorDef.GetBuffer(cmd.Stn_No);
+                                                    if (!api.GetEmptyBinLoadDone().FunReport(emptyBinLoadDoneInfo, con_1.API.IP))
+                                                    {
+                                                        sRemark = $"Error: 傳送EmptyBinLoadDone給 {con_1.BufferName} 失敗, jobId = {cmd.Cmd_Sno}.";
+                                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                                        if (sRemark != cmd.Remark)
+                                                        {
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        }
+
+                                                        continue;
+                                                    }
+                                                }
+                                                break;
+                                        }
                                     }
+                                    
 
                                     db.TransactionCtrl(TransactionTypes.Commit);
                                     return true;
@@ -2089,6 +2093,68 @@ namespace Mirle.DB.Proc
                             strEM = $"<JobID> {sCmdSno} => 取得命令資料失敗！";
                             return false;
                         }
+                    }
+                    else
+                    {
+                        strEM = "Error: 開啟DB失敗！";
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strEM);
+                        return false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+        public bool FunLotPutawayTransfer(CmdMstInfo cmd, string TowerIp, ref string strEM)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        string sRemark = "";
+                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                        {
+                            strEM = "Error: 開啟Transaction失敗";
+                            return false;
+                        }
+
+                        if (!Cmd_Mst.FunInsCmdMst(cmd, ref strEM, db))
+                        {
+                            strEM = "Error: 建立LotPutaway命令失敗";
+                            db.TransactionCtrl(TransactionTypes.Rollback);
+                            return false;
+                        }
+
+                        PutawayTransferInfo info = new PutawayTransferInfo
+                        {
+                            jobId = cmd.Cmd_Sno,
+                            reelId = cmd.BoxID,
+                            lotSize = cmd.lotSize,
+                            toShelfId = cmd.Loc
+                        };
+                        if (!api.GetPutawayTransfer().FunReport(info, TowerIp))
+                        {
+                            strEM = "Error: PutawayTransfer E800C接收失敗";
+                            db.TransactionCtrl(TransactionTypes.Rollback);
+                            return false;
+                        }
+
+                        if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, "", db))
+                        {
+                            strEM = "Error: 更改CmdSts至Running失敗";
+                            db.TransactionCtrl(TransactionTypes.Rollback);
+                            return false;
+                        }
+
+                        db.TransactionCtrl(TransactionTypes.Commit);
+                        return true;
                     }
                     else
                     {

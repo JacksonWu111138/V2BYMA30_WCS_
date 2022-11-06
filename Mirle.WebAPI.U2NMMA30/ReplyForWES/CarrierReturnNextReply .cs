@@ -8,6 +8,6 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
 {
     public class CarrierReturnNextReply : CarrierReply
     {
-        public string returnStock { get; set; }
+        public string returnStocker { get; set; }
     }
 }

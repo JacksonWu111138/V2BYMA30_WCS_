@@ -1104,7 +1104,7 @@ namespace Mirle.WebAPI.Event
                         rMsg.returnComment = "";
 
                         clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                         return Json(rMsg);
                         
                         *///以上為無MES測試時使用
@@ -1122,9 +1122,9 @@ namespace Mirle.WebAPI.Event
                         }
                         CarrierReturnNextReply reply = new CarrierReturnNextReply();    
 
-                        if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
+                        if (clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
                         {
-                            if (reply.returnStock == clsConstValue.YesNo.Yes && Body.location.Contains("B1"))
+                            if (reply.returnStocker == clsConstValue.YesNo.Yes && Body.location.Contains("B1"))
                             {
                                 CarrierPutawayCheckInfo info_2 = new CarrierPutawayCheckInfo
                                 {
@@ -1135,8 +1135,9 @@ namespace Mirle.WebAPI.Event
                                 if(!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info_2, clsAPI.GetWesApiConfig().IP))
                                     throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}");
                             }
-                            throw new Exception($"Error: Sending CarrierReturnNext to WES fail, jobId = {Body.jobId}");
                         }
+                        else
+                            throw new Exception($"Error: Sending CarrierReturnNext to WES fail, jobId = {Body.jobId}");
                     }
 
                 }
@@ -1959,11 +1960,42 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>MODE_CHANGE start!");
             try
             {
-                //mode == 1正常，mode ==2異常
+                //未撰寫
+                //mode == 1正常，mode ==2異常，mode == 3盤點
                 //PCBA以M1-05, M1-10, M1-15, M1-20分別代表四條線
+                switch(Body.mode)
+                {
+                    case clsConstValue.ControllerApi.M800Mode.Normal:
+                        break;
+                    case clsConstValue.ControllerApi.M800Mode.Malfunction:
+                        break;
+                    case clsConstValue.ControllerApi.M800Mode.Cycle:
+                        break;
+                }
+
+                if(Body.bufferId == ConveyorDef.AGV.M1_05.BufferName)
+                {
+
+                }
+                else if (Body.bufferId == ConveyorDef.AGV.M1_10.BufferName)
+                {
+
+                }
+                else if (Body.bufferId == ConveyorDef.AGV.M1_15.BufferName)
+                {
+
+                }
+                else if (Body.bufferId == ConveyorDef.AGV.M1_20.BufferName)
+                {
+
+                }
+                else
+                {
+                    throw new Exception($"Error: M800給予ModeChange點位錯誤(error bufferId = {Body.bufferId}), jobId = {Body.jobId}.");
+                }
 
 
-                rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
+                                    rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>MODE_CHANGE record end!");
@@ -2107,7 +2139,7 @@ namespace Mirle.WebAPI.Event
                     if (Body.rackId == "UNKNOWN")
                     {
                         //待修改線邊倉的料價站(S0-05)點
-                        if (Body.stagePosition == ConveyorDef.AGV.S4_49.BufferName)
+                        if (Body.stagePosition == ConveyorDef.AGV.S0_05.BufferName)
                         {
                             RackRequestInfo info = new RackRequestInfo
                             {
@@ -2142,7 +2174,7 @@ namespace Mirle.WebAPI.Event
                             cmd.JobID = Body.jobId;
                             cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
 
-                            cmd.New_Loc = ConveyorDef.AGV.S4_49.BufferName;//新站口，尚未有站號更新至程式
+                            cmd.New_Loc = ConveyorDef.AGV.S0_05.BufferName;
 
                             cmd.Prty = "5";
                             cmd.Remark = "";

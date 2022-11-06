@@ -379,6 +379,12 @@ namespace Mirle.Def
                 public const string Run = "Run";
                 public const string Down = "Down";
             }
+            public class M800Mode
+            {
+                public const string Normal = "1";
+                public const string Malfunction = "2";
+                public const string Cycle = "3";
+            }
         }
         public class WesApi
         {

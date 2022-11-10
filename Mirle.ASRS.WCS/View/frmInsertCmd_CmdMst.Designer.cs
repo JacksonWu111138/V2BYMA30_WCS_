@@ -233,7 +233,7 @@ namespace Mirle.ASRS.WCS.View
             this.txtBoxID.Font = new System.Drawing.Font("微軟正黑體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.txtBoxID.Location = new System.Drawing.Point(221, 274);
             this.txtBoxID.Margin = new System.Windows.Forms.Padding(4);
-            this.txtBoxID.MaxLength = 7;
+            this.txtBoxID.MaxLength = 30;
             this.txtBoxID.Name = "txtBoxID";
             this.txtBoxID.Size = new System.Drawing.Size(355, 39);
             this.txtBoxID.TabIndex = 72;

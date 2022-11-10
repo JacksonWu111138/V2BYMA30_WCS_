@@ -53,6 +53,8 @@ namespace Mirle.DB.Fun
                 carrierType= Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.carrierType]),
                 writeToMiddle = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.writeToMiddle]),
                 boxStockOutAgv = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.boxStockOutAgv]),
+                updateFailTime = Convert.ToString(drTmp[Parameter.clsCmd_Mst.Column.updateFailTime])
+
             };
 
             return cmd;

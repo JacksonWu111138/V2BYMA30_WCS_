@@ -145,6 +145,10 @@ namespace Mirle.DB.Fun.Parameter
             /// 箱式倉出庫所使用的AGVport口
             /// </summary>
             public const string boxStockOutAgv = "boxStockOutAgv";
+            /// <summary>
+            /// 上次向WES上報失敗之時間
+            /// </summary>
+            public const string updateFailTime = "updateFailTime";
         }
     }
 }

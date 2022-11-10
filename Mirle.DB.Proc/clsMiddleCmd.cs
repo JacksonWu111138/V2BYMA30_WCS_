@@ -3,6 +3,7 @@ using Mirle.DB.Proc.Events;
 using Mirle.Def;
 using Mirle.Def.U2NMMA30;
 using Mirle.Structure;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -26,9 +27,12 @@ namespace Mirle.DB.Proc
         private Fun.clsRoutdef routdef = new Fun.clsRoutdef();
         private Fun.clsTool tool = new Fun.clsTool();
         private clsDbConfig _config = new clsDbConfig();
-        public clsMiddleCmd(clsDbConfig config)
+        private WebAPI.V2BYMA30.clsHost api = new WebAPI.V2BYMA30.clsHost();
+        private WebApiConfig boxApi_Config = new WebApiConfig();
+        public clsMiddleCmd(clsDbConfig config, WebApiConfig BoxApi_Config)
         {
             _config = config;
+            boxApi_Config = BoxApi_Config;
         }
 
         public int FunGetMiddleCmd_Grid(ref DataTable dtTmp)
@@ -91,6 +95,21 @@ namespace Mirle.DB.Proc
                                     string sCurLoc = routdef.GetLocaionByCmdMode(sCmdMode, sCmdSts, DeviceID, sLocation, db);
                                     if (ConveyorDef.FunCheckInAGVSendToCVEnd(sCurLoc))
                                         sCurLoc = routdef.FunGetNextPortID(sCurLoc, db);
+
+                                    if(sLocation == ConveyorDef.Box.B1_081.BufferName || sLocation == ConveyorDef.Box.B1_084.BufferName ||
+                                       sLocation == ConveyorDef.Box.B1_093.BufferName || sLocation == ConveyorDef.Box.B1_096.BufferName ||
+                                       sLocation == ConveyorDef.Box.B1_105.BufferName || sLocation == ConveyorDef.Box.B1_108.BufferName )
+                                    {
+                                        PositionReportInfo info = new PositionReportInfo
+                                        {
+                                            jobId = cmd.JobID,
+                                            carrierId = cmd.BoxID,
+                                            location = "BOXCV",
+                                        };
+
+                                        api.GetPositionReport().FunReport(info, boxApi_Config.IP);
+                                    }
+
                                     string sRemark = "";
                                     if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                     {

@@ -10,5 +10,6 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
     {
         public string ready { get; set; }
         public string isLoad { get; set; }
+        public string isEmpty { get; set; }
     }
 }

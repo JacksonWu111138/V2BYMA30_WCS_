@@ -992,18 +992,6 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST start!");
             try
             {
-                //以下為測試CV時使用
-                /*
-                rMsg.transactionId = "AUTO_" + rMsg.transactionId;
-                rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
-                rMsg.returnComment = "";
-
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
-                return Json(rMsg);
-                */
-                //以上為測試CV時使用
-
                 CmdMstInfo cmd = new CmdMstInfo();
                 bool check = false;
                 check = clsDB_Proc.GetDB_Object().GetCmd_Mst().FunCheckHasCommand_ByBoxID(Body.barcode, ref cmd);
@@ -1088,7 +1076,7 @@ namespace Mirle.WebAPI.Event
                             carrierId = Body.barcode,
                             storageType = "M800"
                         };
-                        if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                        if (ConveyorDef.GetSharingNode().Any(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName))
                         {
                             info.portId = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
                         }
@@ -1112,11 +1100,11 @@ namespace Mirle.WebAPI.Event
                         CarrierReturnNextInfo info = new CarrierReturnNextInfo
                         {
                             carrierId = Body.barcode,
-                            isEmpty = "N",
+                            isEmpty = clsConstValue.YesNo.No,
                             fromLocation = con.StnNo,
                             carrierType = Def.clsTool.FunSwitchCarrierType(Body.carrierType)
                         };
-                        if(ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                        if(ConveyorDef.GetSharingNode().Any(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName))
                         {
                             info.fromLocation = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
                         }
@@ -1468,13 +1456,16 @@ namespace Mirle.WebAPI.Event
                             {
                                 rMsg.toLocation = ConveyorDef.E04.LO1_07.BufferName;
                             }
-                            else 
+                            else //Lift5C
                             {
-                                if (ConveyorDef.GetAGV_3FPort().Where(r => r.BufferName == cmd.Stn_No).Any())
+                                if (ConveyorDef.GetSharingNode3F().Any(r => r.end.BufferName == cmd.New_Loc || r.start.BufferName == cmd.New_Loc) ||
+                                    ConveyorDef.GetAGV_3FPort().Any(r => r.BufferName == cmd.New_Loc))
                                     rMsg.toLocation = ConveyorDef.AGV.LO4_04.BufferName;
-                                else if (ConveyorDef.GetAGV_5FPort().Where(r => r.BufferName == cmd.Stn_No).Any())
+                                else if (ConveyorDef.GetSharingNode5F().Any(r => r.end.BufferName == cmd.New_Loc || r.start.BufferName == cmd.New_Loc) ||
+                                        ConveyorDef.GetAGV_5FPort().Any(r => r.BufferName == cmd.New_Loc))
                                     rMsg.toLocation = ConveyorDef.AGV.LO5_04.BufferName;
-                                else if (ConveyorDef.GetAGV_6FPort().Where(r => r.BufferName == cmd.Stn_No).Any())
+                                else if (ConveyorDef.GetSharingNode6F().Any(r => r.end.BufferName == cmd.New_Loc || r.start.BufferName == cmd.New_Loc) || 
+                                        ConveyorDef.GetAGV_6FPort().Any(r => r.BufferName == cmd.New_Loc))
                                     rMsg.toLocation = ConveyorDef.AGV.LO6_04.BufferName;
                                 else
                                     rMsg.toLocation = ConveyorDef.AGV.LO3_01.BufferName;
@@ -1761,20 +1752,35 @@ namespace Mirle.WebAPI.Event
                 else if (Body.location == "B1-066")
                     con = ConveyorDef.Box.B1_067;
 
-                EmptyESDCarrierLoadRequestInfo info = new EmptyESDCarrierLoadRequestInfo
+                if(Body.location == ConveyorDef.Line.A4_10.BufferName || Body.location == ConveyorDef.Line.A4_14.BufferName)
                 {
-                    location = con.StnNo,
-                    reqQty = Body.reqQty,
-                    withClapBoard = clsConstValue.YesNo.No
-                };
-                if (Body.location.Contains("B1"))
+                    EmptyMagazineLoadRequestInfo info = new EmptyMagazineLoadRequestInfo();
+                    info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(Body.location).Stn_No;
                     info.jobId = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
-                {
-                    info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+
+                    if (!clsAPI.GetAPI().GetEmptyMagazineLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    {
+                        throw new Exception($"Error: EmptyMagazineLoadRequest to WES fail, location = {Body.location}.");
+                    }
                 }
-                if (!clsAPI.GetAPI().GetEmptyESDCarrierLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
-                    throw new Exception($"Error: Send Empty ESDCarrier Load Request to WES fail, location = {Body.location}.");
+                else
+                {
+                    EmptyESDCarrierLoadRequestInfo info = new EmptyESDCarrierLoadRequestInfo
+                    {
+                        location = con.StnNo,
+                        reqQty = Body.reqQty,
+                        withClapBoard = clsConstValue.YesNo.No
+                    };
+                    if (Body.location.Contains("B1"))
+                        info.jobId = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                    {
+                        info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                    }
+                    if (!clsAPI.GetAPI().GetEmptyESDCarrierLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                        throw new Exception($"Error: Send Empty ESDCarrier Load Request to WES fail, location = {Body.location}.");
+                }
+                
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -2344,19 +2350,104 @@ namespace Mirle.WebAPI.Event
                 }
                 else
                 {
-                    CarrierReturnNextInfo info = new CarrierReturnNextInfo
+                    BufferStatusQueryInfo bufferStatusQueryInfo = new BufferStatusQueryInfo
                     {
-                        carrierId = Body.rackId,
-                        fromLocation = con.StnNo,
-                        isEmpty = "N",  
-                        carrierType = clsConstValue.WesApi.CarrierType.Rack
+                        bufferId = Body.rackLoc
                     };
-                    CarrierReturnNextReply reply = new CarrierReturnNextReply();
+                    BufferStatusReply bufferStatusReply = new BufferStatusReply();
 
-                    if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
+                    if(!clsAPI.GetAPI().GetBufferStatusQuery().FunReport(bufferStatusQueryInfo, con.API.IP, ref bufferStatusReply))
                     {
-                        strEM = $"Error: CarrierRetrurnNext fail, jobid = {Body.jobId}.";
-                        throw new Exception(strEM);
+                        throw new Exception($"Error: BufferStatusQuery for {con.BufferName} fail, URL = {con.API.IP}/BUFFER_STATUS_QUERY");
+                    }
+
+                    if(bufferStatusReply.isEmpty == clsConstValue.YesNo.Yes)
+                    {
+                        //詢問電子料塔是否有空閒站口
+                        bool getEmptyStation = false;
+                        for (int i = 0; i < 3; i ++)
+                        {
+                            switch(i)
+                            {
+                                case 0:
+                                    bufferStatusQueryInfo.bufferId = ConveyorDef.AGV.E2_35.BufferName;
+                                    break;
+                                case 1:
+                                    bufferStatusQueryInfo.bufferId = ConveyorDef.AGV.E2_36.BufferName;
+                                    break;
+                                case 2:
+                                    bufferStatusQueryInfo.bufferId = ConveyorDef.AGV.E2_37.BufferName;
+                                    break;
+                            }
+                            bufferStatusReply = new BufferStatusReply();
+                            if (!clsAPI.GetAPI().GetBufferStatusQuery().FunReport(bufferStatusQueryInfo, clsAPI.GetTowerApiConfig().IP, ref bufferStatusReply))
+                            {
+                                throw new Exception($"Error: BufferStatusQuery for {bufferStatusQueryInfo.bufferId} fail. 空料架詢問電子料塔是否可接收空料架流程失敗.");
+                            }
+
+                            if(bufferStatusReply.ready == ((int)clsEnum.Ready.OUT).ToString())
+                            {
+                                getEmptyStation = true;
+                                cmd = new CmdMstInfo();
+
+                                cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
+                                if (string.IsNullOrWhiteSpace(cmd.Cmd_Sno))
+                                {
+                                    throw new Exception($"<{Body.jobId}>取得序號失敗！");
+                                }
+
+                                cmd.BoxID = Body.rackId;
+                                cmd.Cmd_Mode = clsConstValue.CmdMode.S2S;
+                                cmd.CurDeviceID = "";
+                                cmd.CurLoc = "";
+                                cmd.End_Date = "";
+                                cmd.Loc = "";
+                                cmd.Equ_No = "";
+                                cmd.EXP_Date = "";
+                                cmd.JobID = Body.jobId;
+                                cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
+
+                                cmd.New_Loc = bufferStatusReply.bufferId;
+
+                                cmd.Prty = "5";
+                                cmd.Remark = "";
+
+                                cmd.Stn_No = Body.rackLoc;
+
+                                cmd.Host_Name = "WCS";
+                                cmd.Zone_ID = "";
+                                cmd.carrierType = clsConstValue.ControllerApi.CarrierType.Rack;
+
+                                con = ConveyorDef.GetBuffer(bufferStatusReply.bufferId);
+
+                                if (!clsDB_Proc.GetDB_Object().GetProc().FunSendEmptyRackToTower(con, cmd, ref strEM))
+                                    throw new Exception(strEM);
+
+                                break;
+
+                            }
+                        }
+                        if(!getEmptyStation)
+                        {
+                            //暫時不確定如何處理電子料塔無空閒站口之回覆
+                        }
+                    }
+                    else
+                    {
+                        CarrierReturnNextInfo info = new CarrierReturnNextInfo
+                        {
+                            carrierId = Body.rackId,
+                            fromLocation = con.StnNo,
+                            isEmpty = "N",
+                            carrierType = clsConstValue.WesApi.CarrierType.Rack
+                        };
+                        CarrierReturnNextReply reply = new CarrierReturnNextReply();
+
+                        if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
+                        {
+                            strEM = $"Error: CarrierRetrurnNext fail to WES, jobid = {Body.jobId}.";
+                            throw new Exception(strEM);
+                        }
                     }
                 }
 
@@ -2406,6 +2497,10 @@ namespace Mirle.WebAPI.Event
                         portId = con.StnNo,
                         portStatus = ((int)clsEnum.WmsApi.portStatus.Pickup_Ready).ToString()
                     };
+
+                    if (con.StnNo == ConveyorDef.AGV.E2_38.StnNo || con.StnNo == ConveyorDef.AGV.E2_39.StnNo)
+                        info.portId = "E800-8";
+                    
                     if (!clsAPI.GetAPI().GetPortStatusUpdate().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     {
                         strEM = $"Error: Port Status Update fail, jobId = {Body.jobId}";
@@ -2601,19 +2696,35 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_EMPTY_MAGAZINE_UNLOAD start!");
             try
             {
+                CmdMstInfo cmd = new CmdMstInfo();
+                bool check = false;
+                check = clsDB_Proc.GetDB_Object().GetCmd_Mst().FunCheckHasCommand_ByBoxID(Body.carrierId, ref cmd);
+                string strEM;
                 ConveyorInfo con = new ConveyorInfo();
                 con = ConveyorDef.GetBuffer(Body.location);
-                EmptyMagazineUnloadInfo info = new EmptyMagazineUnloadInfo
+                string deviceId = con.DeviceId == "" ? con.ControllerID : con.DeviceId;
+                if (check)
                 {
-                    carrierId = Body.carrierId,
-                    location = con.StnNo
-                };
-                if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
-                {
-                    info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, con.BufferName))
+                    {
+                        strEM = $"Error: Update CmdMst curLoc fail, jobId = {Body.jobId}.";
+                        throw new Exception(strEM);
+                    }
                 }
-                if (!clsAPI.GetAPI().GetEmptyMagazineUnload().FunReport(info, clsAPI.GetWesApiConfig().IP))
-                    throw new Exception($"Error: 傳送EmptyMagazineUnload 至 WES 失敗, jobId = {info.jobId}");
+                else
+                {
+                    EmptyMagazineUnloadInfo info = new EmptyMagazineUnloadInfo
+                    {
+                        carrierId = Body.carrierId,
+                        location = con.StnNo
+                    };
+                    if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                    {
+                        info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                    }
+                    if (!clsAPI.GetAPI().GetEmptyMagazineUnload().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                        throw new Exception($"Error: 傳送EmptyMagazineUnload 至 WES 失敗, jobId = {info.jobId}");
+                }
 
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
@@ -2869,15 +2980,21 @@ namespace Mirle.WebAPI.Event
             try
             {
                 string strEM = "";
+                bool doubleUnknownBin = false;
                 CmdMstInfo cmd = new CmdMstInfo();
 
+                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand_byBoxID("UNKNOWM_BIN_" + Body.position + "1", ref cmd) == DBResult.Success)
+                    doubleUnknownBin = true;
+
+                cmd = new CmdMstInfo();
                 cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
                 if (string.IsNullOrWhiteSpace(cmd.Cmd_Sno))
                 {
                     throw new Exception($"<{Body.jobId}>取得序號失敗！");
                 }
 
-                cmd.BoxID = "";
+                cmd.BoxID = "UNKNOWM_BIN_" + Body.position;
+                cmd.BoxID = doubleUnknownBin ? cmd.BoxID + "_2" : cmd.BoxID + "_1";
                 cmd.Cmd_Mode = clsConstValue.CmdMode.S2S;
                 cmd.CurDeviceID = "";
                 cmd.CurLoc = "";

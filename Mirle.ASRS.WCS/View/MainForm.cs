@@ -889,7 +889,7 @@ namespace Mirle.ASRS.WCS.View
         {
             var archive = new AutoArchive();
             archive.Start();
-            clsDB_Proc.Initial(clInitSys.DbConfig, clInitSys.DbConfig_WMS, clInitSys.WmsApi_Config, clInitSys.TowerApi_Config);
+            clsDB_Proc.Initial(clInitSys.DbConfig, clInitSys.DbConfig_WMS, clInitSys.WmsApi_Config, clInitSys.TowerApi_Config, clInitSys.BoxApi_Config);
             clsMiddle.Initial(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box,
                 ConveyorDef.DeviceID_AGV, ConveyorDef.DeviceID_Tower, clInitSys.DbConfig, clInitSys.AgvApi_Config, clInitSys.TowerApi_Config);
             clsAPI.Initial(clInitSys.WmsApi_Config, clInitSys.AgvApi_Config, clInitSys.TowerApi_Config, clInitSys.BoxApi_Config,
@@ -941,13 +941,13 @@ namespace Mirle.ASRS.WCS.View
                 {
                     CraneSignals[i] = new SignalHost(clInitSys.DbConfig, PCBA[i].DeviceID);
                     plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Single;
-                    AsrsCommand[i] = new ASRSProcess(clInitSys.WmsApi_Config, clInitSys.DbConfig, clInitSys.DbConfig_WMS, plcConfig, PCBA[i], router, middle, CraneSignals[i]);
+                    AsrsCommand[i] = new ASRSProcess(clInitSys.WmsApi_Config, clInitSys.BoxApi_Config, clInitSys.DbConfig, clInitSys.DbConfig_WMS, plcConfig, PCBA[i], router, middle, CraneSignals[i]);
                 }
                 else
                 {
                     CraneSignals[i] = new SignalHost(clInitSys.DbConfig, Box[i - 2].DeviceID);
                     plcConfig.CV_Type = clsEnum.CmdType.CV_Type.Double;
-                    AsrsCommand[i] = new ASRSProcess(clInitSys.WmsApi_Config, clInitSys.DbConfig, clInitSys.DbConfig_WMS, plcConfig, Box[i - 2], router, middle, CraneSignals[i]);
+                    AsrsCommand[i] = new ASRSProcess(clInitSys.WmsApi_Config, clInitSys.BoxApi_Config, clInitSys.DbConfig, clInitSys.DbConfig_WMS, plcConfig, Box[i - 2], router, middle, CraneSignals[i]);
                 }
 
                 craneSts_View[i] = new EccsSignal_2.View.ucCrane_Sts(CraneSignals[i])

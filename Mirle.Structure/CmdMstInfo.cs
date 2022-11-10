@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Mirle.Structure
 {
@@ -55,5 +56,6 @@ namespace Mirle.Structure
         public string lotSize { get; set; } = "";
         public string writeToMiddle { get; set; } = "N";
         public string boxStockOutAgv { get; set; } = "";
+        public string updateFailTime { get; set; }
     }
 }

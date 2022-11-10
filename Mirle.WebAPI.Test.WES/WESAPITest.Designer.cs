@@ -268,7 +268,7 @@
             this.WESPortStatusUpdate.Name = "WESPortStatusUpdate";
             this.WESPortStatusUpdate.Size = new System.Drawing.Size(242, 47);
             this.WESPortStatusUpdate.TabIndex = 19;
-            this.WESPortStatusUpdate.Text = "GetBufferName";
+            this.WESPortStatusUpdate.Text = "PortStatusUpdate";
             this.WESPortStatusUpdate.UseVisualStyleBackColor = true;
             this.WESPortStatusUpdate.Click += new System.EventHandler(this.WESPortStatusUpload_Click);
             // 

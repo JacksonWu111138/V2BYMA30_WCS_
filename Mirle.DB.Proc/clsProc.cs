@@ -14,9 +14,11 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Security.Cryptography;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.AxHost;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace Mirle.DB.Proc
@@ -43,7 +45,7 @@ namespace Mirle.DB.Proc
             _wmsApi = WmsApi_Config;
             _towerApi = TowerApi_Config;
             _config_WMS = config_WMS;
-            wms = new DB.WMS.Proc.clsHost(config_WMS);
+            wms = new WMS.Proc.clsHost(config_WMS);
         }
 
         public Fun.clsRoutdef GetFun_Routdef() => Routdef;
@@ -68,9 +70,29 @@ namespace Mirle.DB.Proc
                                     string.IsNullOrWhiteSpace(cmd.CurLoc))
                                     continue;
 
+                                string sDate1 = cmd.updateFailTime;
+                                
+                                if(!string.IsNullOrEmpty(sDate1))
+                                {
+                                    string sClsTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                                    TimeSpan ts1 = new TimeSpan(DateTime.ParseExact(sDate1,
+                                                           "yyyy-MM-dd HH:mm:ss",
+                                                           System.Globalization.CultureInfo.InvariantCulture
+                                                           ).Ticks);
+                                    TimeSpan ts2 = new TimeSpan(DateTime.ParseExact(sClsTime,
+                                                           "yyyy-MM-dd HH:mm:ss",
+                                                           System.Globalization.CultureInfo.InvariantCulture
+                                                           ).Ticks);
+                                    TimeSpan ts = ts1.Subtract(ts2).Duration();
+                                    if (ts.TotalSeconds < 60) continue;
+                                }
+                                
+
+
                                 string sRemark = "";
                                 Location Start = null; Location End = null;
                                 if (!Routdef.FunGetLocation(cmd, Router, ref Start, ref End, db)) continue;
+
                                 
                                 //B800撿料口順途
                                 if (cmd.Stn_No.Contains(',') && Start == End && Start != null && End != null)
@@ -140,6 +162,11 @@ namespace Mirle.DB.Proc
                                                         Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
                                                     }
 
+                                                    if(!Cmd_Mst.FunUpdateupdateFailTime(cmd.Cmd_Sno, sRemark, db))
+                                                    {
+                                                        sRemark = "Error: 更新上報WES失敗時間流程失敗";
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
                                                     continue;
                                                 }
 
@@ -153,11 +180,28 @@ namespace Mirle.DB.Proc
                                                     location = con.StnNo
                                                 };
 
+                                                if(cmd.New_Loc == ConveyorDef.AGV.S0_05.BufferName || cmd.New_Loc == ConveyorDef.SMTC.S0_02.BufferName)
+                                                {
+                                                    PositionReportInfo positionReportInfo = new PositionReportInfo
+                                                    {
+                                                        jobId = cmd.JobID,
+                                                        carrierId = cmd.BoxID,
+                                                        location = con.StnNo
+                                                    };
+                                                    api.GetPositionReport().FunReport(positionReportInfo, _wmsApi.IP);
+                                                }
+
                                                 if (!api.GetCarrierTransferComplete().FunReport(transferCompleteInfo, _wmsApi.IP))
                                                 {
                                                     db.TransactionCtrl(TransactionTypes.Rollback);
                                                     if (sRemark != cmd.Remark)
                                                     {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    if (!Cmd_Mst.FunUpdateupdateFailTime(cmd.Cmd_Sno, sRemark, db))
+                                                    {
+                                                        sRemark = "Error: 更新上報WES失敗時間流程失敗";
                                                         Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
                                                     }
 
@@ -182,6 +226,12 @@ namespace Mirle.DB.Proc
                                                         Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
                                                     }
 
+                                                    if (!Cmd_Mst.FunUpdateupdateFailTime(cmd.Cmd_Sno, sRemark, db))
+                                                    {
+                                                        sRemark = "Error: 更新上報WES失敗時間流程失敗";
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
                                                     continue;
                                                 }
 
@@ -191,6 +241,18 @@ namespace Mirle.DB.Proc
                                                     con = ConveyorDef.GetTwoNodeOneStnnoByBufferName(cmd.Stn_No).end;
                                                 else
                                                     con = ConveyorDef.GetBuffer(cmd.Stn_No);
+
+                                                if (con.BufferName == ConveyorDef.AGV.S0_05.BufferName || con.BufferName == ConveyorDef.SMTC.S0_02.BufferName)
+                                                {
+                                                    PositionReportInfo positionReportInfo = new PositionReportInfo
+                                                    {
+                                                        jobId = cmd.JobID,
+                                                        carrierId = cmd.BoxID,
+                                                        location = con.StnNo
+                                                    };
+                                                    api.GetPositionReport().FunReport(positionReportInfo, _wmsApi.IP);
+                                                }
+
                                                 retrieveCompleteInfo = new CarrierRetrieveCompleteInfo
                                                 {
                                                     carrierId = cmd.BoxID,
@@ -206,6 +268,12 @@ namespace Mirle.DB.Proc
                                                     db.TransactionCtrl(TransactionTypes.Rollback);
                                                     if (sRemark != cmd.Remark)
                                                     {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    if (!Cmd_Mst.FunUpdateupdateFailTime(cmd.Cmd_Sno, sRemark, db))
+                                                    {
+                                                        sRemark = "Error: 更新上報WES失敗時間流程失敗";
                                                         Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
                                                     }
 
@@ -2338,6 +2406,52 @@ namespace Mirle.DB.Proc
                         clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strEM);
                         return false;
                     }
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+        public bool FunSendEmptyRackToTower(ConveyorInfo toBuffer, CmdMstInfo cmd, ref string strEM)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                        {
+                            strEM = "Error: Begin失敗！";
+                            return false;
+                        }
+
+                        if (!Cmd_Mst.FunInsCmdMst(cmd, ref strEM, db))
+                        {
+                            db.TransactionCtrl(TransactionTypes.Rollback);
+                            return false;
+                        }
+
+                        PortStatusUpdateInfo info = new PortStatusUpdateInfo
+                        {
+                            portId = toBuffer.StnNo,
+                            portStatus = ((int)clsEnum.WmsApi.portStatus.Processing).ToString()
+                        };
+                        if(!api.GetPortStatusUpdate().FunReport(info, _wmsApi.IP))
+                        {
+                            db.TransactionCtrl(TransactionTypes.Rollback);
+                            throw new Exception($"Error: PortStatusUpdate to WES fail, portId = {info.portId}.");
+                        }
+
+                        db.TransactionCtrl(TransactionTypes.Commit);
+                        return true;
+
+                    }
+                    else return false;
                 }
             }
             catch (Exception ex)

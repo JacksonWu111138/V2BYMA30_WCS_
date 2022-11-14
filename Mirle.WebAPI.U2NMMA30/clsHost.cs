@@ -60,6 +60,7 @@ namespace Mirle.WebAPI.V2BYMA30
         private TransferCommandRequest TransferCommandRequest = new TransferCommandRequest();
         private BufferInitial BufferInitial = new BufferInitial();
         private EmptyBinLoadDone EmptyBinLoadDone = new EmptyBinLoadDone();
+        private RackLeavingNG RackLeavingNG = new RackLeavingNG();
 
         public CVReceiveNewBinCmd GetCV_ReceiveNewBinCmd() => RECEIVE_NEW_BIN_CMD;
         public BufferStatusQuery GetBufferStatusQuery() => BufferStatusQuery;
@@ -110,6 +111,7 @@ namespace Mirle.WebAPI.V2BYMA30
         public TransferCommandRequest GetTransferCommandRequest() => TransferCommandRequest;
         public BufferInitial GetBufferInitial() => BufferInitial;
         public EmptyBinLoadDone GetEmptyBinLoadDone() => EmptyBinLoadDone;
+        public RackLeavingNG GetRackLeavingNG() => RackLeavingNG;
 
     }
 }

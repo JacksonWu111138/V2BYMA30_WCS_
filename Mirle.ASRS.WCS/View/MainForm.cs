@@ -894,6 +894,9 @@ namespace Mirle.ASRS.WCS.View
                 ConveyorDef.DeviceID_AGV, ConveyorDef.DeviceID_Tower, clInitSys.DbConfig, clInitSys.AgvApi_Config, clInitSys.TowerApi_Config);
             clsAPI.Initial(clInitSys.WmsApi_Config, clInitSys.AgvApi_Config, clInitSys.TowerApi_Config, clInitSys.BoxApi_Config,
                 clInitSys.PcbaApi_Config, clInitSys.SmtcApi_Config, clInitSys.OsmtcApi_Config, clInitSys.E04Api_Config, clInitSys.E05Api_Config);
+            clsControllerID.Initial(clInitSys.Tower_ControllerID, clInitSys.Box1F_ControllerID, clInitSys.Box2F_ControllerID, clInitSys.PCBA_ControllerID,
+                        clInitSys.SMTC_ControllerID, clInitSys.Line_ControllerID, clInitSys.SMT3C_ControllerID, clInitSys.SMT5C_ControllerID, clInitSys.SMT6C_ControllerID,
+                        clInitSys.E04_ControllerID, clInitSys.E05_ControllerID);
             router = new MapHost(clInitSys.DbConfig);
             CVLocation = new clsGetCVLocation(router);
             ConveyorDef.FunNodeListAddInit();

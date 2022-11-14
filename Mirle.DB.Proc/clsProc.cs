@@ -2436,6 +2436,7 @@ namespace Mirle.DB.Proc
                             return false;
                         }
 
+                        //上報WES此料架站口已有命令正在使用
                         PortStatusUpdateInfo info = new PortStatusUpdateInfo
                         {
                             portId = toBuffer.StnNo,

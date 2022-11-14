@@ -758,22 +758,22 @@ namespace Mirle.Def.U2NMMA30
         public static List<TwoNodeOneStnnoInfo> GetSharingNode5F() => Sharing_Node_5F;
         public static void FunSharingNode_5FListInit()
         {
-            Sharing_Node_3F.Add(SharingNode.SF501);
-            Sharing_Node_3F.Add(SharingNode.SF502);
-            Sharing_Node_3F.Add(SharingNode.SF503);
-            Sharing_Node_3F.Add(SharingNode.SF504);
-            Sharing_Node_3F.Add(SharingNode.SF505);
+            Sharing_Node_5F.Add(SharingNode.SF501);
+            Sharing_Node_5F.Add(SharingNode.SF502);
+            Sharing_Node_5F.Add(SharingNode.SF503);
+            Sharing_Node_5F.Add(SharingNode.SF504);
+            Sharing_Node_5F.Add(SharingNode.SF505);
         }
 
         private static List<TwoNodeOneStnnoInfo> Sharing_Node_6F = new List<TwoNodeOneStnnoInfo>();
         public static List<TwoNodeOneStnnoInfo> GetSharingNode6F() => Sharing_Node_6F;
         public static void FunSharingNode_6FListInit()
         {
-            Sharing_Node_3F.Add(SharingNode.SF601);
-            Sharing_Node_3F.Add(SharingNode.SF602);
-            Sharing_Node_3F.Add(SharingNode.SF603);
-            Sharing_Node_3F.Add(SharingNode.SF604);
-            Sharing_Node_3F.Add(SharingNode.SF605);
+            Sharing_Node_6F.Add(SharingNode.SF601);
+            Sharing_Node_6F.Add(SharingNode.SF602);
+            Sharing_Node_6F.Add(SharingNode.SF603);
+            Sharing_Node_6F.Add(SharingNode.SF604);
+            Sharing_Node_6F.Add(SharingNode.SF605);
         }
 
         public static void FunAGVListInit()

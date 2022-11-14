@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Mirle.WebAPI.V2BYMA30.ReportInfo
 {
-    public class RemoveRackShowInfo
+    public class RackLeavingNGInfo
     {
+        /// <summary>
+        /// 命令序號
+        /// </summary>
         public string jobId { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-        public string transactionId { get; set; } = "REMOVE_RACK_SHOW";
-        public string carrierId { get; set; }
-        public string location { get; set; }
+        public string transactionId { get; set; } = "RACK_LEAVING_NG";
+        public string bufferId { get; set; }
     }
 }

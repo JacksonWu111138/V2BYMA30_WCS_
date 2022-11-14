@@ -1001,6 +1001,10 @@ namespace Mirle.WebAPI.Event
 
                 if (check)
                 {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{cmd.Cmd_Sno}>This BCRCheck exist.");
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, Body.location))
+                        throw new Exception($"Error: UpdateCurLoc Fail. jobId = {Body.jobId}");
+
                     //transaction
                     if ((cmd.Cmd_Mode == clsConstValue.CmdMode.S2S && Body.location == cmd.New_Loc) ||
                         (cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut && Body.location == cmd.Stn_No))
@@ -1013,7 +1017,7 @@ namespace Mirle.WebAPI.Event
                             rMsg.returnComment = "";
 
                             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
-                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
+                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<BCR_CHECK_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                             return Json(rMsg);
                         }
 
@@ -1314,7 +1318,7 @@ namespace Mirle.WebAPI.Event
                         }
                         else if ((cmd.Stn_No != ConveyorDef.Box.B1_062.BufferName && cmd.Stn_No != ConveyorDef.Box.B1_067.BufferName &&
                                 cmd.Stn_No != ConveyorDef.Box.B1_142.BufferName && cmd.Stn_No != ConveyorDef.Box.B1_147.BufferName) &&
-                                !ConveyorDef.GetLifetNode_List().Where(r => r.BufferName == Body.location).Any())
+                                !ConveyorDef.GetLifetNode_List().Any(r => r.BufferName == Body.location))
                         {
                             if (cmd.boxStockOutAgv == "")
                             {
@@ -1345,17 +1349,17 @@ namespace Mirle.WebAPI.Event
                         {
                             rMsg.toLocation = "B1-146";
                         }
-                        else if (ConveyorDef.GetLifetNode_List().Where(r => r.BufferName == Body.location).Any())
+                        else if (ConveyorDef.GetLifetNode_List().Any(r => r.BufferName == Body.location))
                         {
                             if (cmd.Stn_No == ConveyorDef.E04.LO1_07.BufferName)
                             {
                                 rMsg.toLocation = ConveyorDef.E04.LO1_07.BufferName;
                             }
-                            else if (ConveyorDef.GetAGV_3FPort().Where(r => r.BufferName == cmd.Stn_No).Any())
+                            else if (ConveyorDef.GetAGV_3FPort().Any(r => r.BufferName == cmd.Stn_No))
                                 rMsg.toLocation = ConveyorDef.AGV.LO4_04.BufferName;
-                            else if (ConveyorDef.GetAGV_5FPort().Where(r => r.BufferName == cmd.Stn_No).Any())
+                            else if (ConveyorDef.GetAGV_5FPort().Any(r => r.BufferName == cmd.Stn_No))
                                 rMsg.toLocation = ConveyorDef.AGV.LO5_04.BufferName;
-                            else if (ConveyorDef.GetAGV_6FPort().Where(r => r.BufferName == cmd.Stn_No).Any())
+                            else if (ConveyorDef.GetAGV_6FPort().Any(r => r.BufferName == cmd.Stn_No))
                                 rMsg.toLocation = ConveyorDef.AGV.LO6_04.BufferName;
                             else
                                 rMsg.toLocation = ConveyorDef.AGV.LO3_01.BufferName;
@@ -1445,7 +1449,7 @@ namespace Mirle.WebAPI.Event
                     }
                     else if (cmd.Cmd_Mode == CmdMode.S2S)
                     {
-                        if (ConveyorDef.GetLifetNode_List().Where(r => r.BufferName == Body.location).Any())
+                        if (ConveyorDef.GetLifetNode_List().Any(r => r.BufferName == Body.location))
                         {
                             //Lift4C只有兩樓交換
                             if(Body.location == ConveyorDef.E04.LO1_02.BufferName)
@@ -1500,7 +1504,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CMD_DESTINATION_CHECK record end!");
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CMD_DESTINATION_CHECK> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2038,7 +2042,7 @@ namespace Mirle.WebAPI.Event
                     throw new Exception($"Error: Get CmdMst fail, jobId = {Body.jobId}.");
 
                 ConveyorInfo con = new ConveyorInfo();
-                
+
                 //箱式倉減料口定位設定
                 switch (Body.position)
                 {
@@ -2060,7 +2064,16 @@ namespace Mirle.WebAPI.Event
                 }
 
                 string deviceId = con.DeviceId != "" ? con.DeviceId : con.ControllerID;
-                
+                if(Body.position.Contains("LI2"))
+                {
+                    con.BufferName = "LIFT5";
+                    deviceId = con.BufferName+"C";
+                }
+                else if(Body.position.Contains("LI1"))
+                {
+                    con.BufferName = "LIFT4";
+                    deviceId = con.BufferName+"C";
+                }
 
                 if (Body.carrierType == clsConstValue.ControllerApi.CarrierType.Lot)
                 {
@@ -2142,7 +2155,7 @@ namespace Mirle.WebAPI.Event
                 }
                 else
                 {
-                    if (Body.rackId == "UNKNOWN")
+                    if (Body.rackId.Contains("UNKNOWN") )
                     {
                         //待修改線邊倉的料價站(S0-05)點
                         if (Body.stagePosition == ConveyorDef.AGV.S0_05.BufferName)
@@ -2363,6 +2376,14 @@ namespace Mirle.WebAPI.Event
 
                     if(bufferStatusReply.isEmpty == clsConstValue.YesNo.Yes)
                     {
+                        //上報WES空料架需離開線邊倉
+                        RemoveRackShowInfo removeRackShowInfo = new RemoveRackShowInfo
+                        {
+                            carrierId = Body.rackId,
+                            location = con.StnNo
+                        };
+                        clsAPI.GetAPI().GetRemoveRackShow().FunReport(removeRackShowInfo, clsAPI.GetWesApiConfig().IP);
+
                         //詢問電子料塔是否有空閒站口
                         bool getEmptyStation = false;
                         for (int i = 0; i < 3; i ++)
@@ -2429,7 +2450,12 @@ namespace Mirle.WebAPI.Event
                         }
                         if(!getEmptyStation)
                         {
-                            //暫時不確定如何處理電子料塔無空閒站口之回覆
+                            RackLeavingNGInfo rackLeavingNG = new RackLeavingNGInfo
+                            {
+                                bufferId = Body.rackLoc
+                            };
+                            if(!clsAPI.GetAPI().GetRackLeavingNG().FunReport(rackLeavingNG, con.API.IP))
+                                throw new Exception($"Error: 傳送RackLeavingNG至{rackLeavingNG.bufferId}失敗, IP: {con.API.IP}/RACK_LEAVING_NG.");
                         }
                     }
                     else
@@ -2455,7 +2481,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>RACK_ID_REPORT record end!");
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<RACK_ID_REPORT> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -2983,6 +3009,8 @@ namespace Mirle.WebAPI.Event
                 bool doubleUnknownBin = false;
                 CmdMstInfo cmd = new CmdMstInfo();
 
+
+                //判斷此buffer是否預約過
                 if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand_byBoxID("UNKNOWM_BIN_" + Body.position + "1", ref cmd) == DBResult.Success)
                     doubleUnknownBin = true;
 

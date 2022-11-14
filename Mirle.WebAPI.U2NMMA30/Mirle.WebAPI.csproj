@@ -51,6 +51,7 @@
     <Compile Include="clsWriLog.cs" />
     <Compile Include="FunctionForController\BufferInitial.cs" />
     <Compile Include="FunctionForController\BufferStatusQuery.cs" />
+    <Compile Include="FunctionForController\RackLeavingNG.cs" />
     <Compile Include="FunctionForController\MoveTask.cs" />
     <Compile Include="FunctionForController\EmptyBinLoadDone.cs" />
     <Compile Include="FunctionForController\TransferCommandRequest.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="ReplyForWES\LotPutawayCheckReply.cs" />
     <Compile Include="ReplyForWES\CarrierPutawayCheckReply.cs" />
     <Compile Include="ReportInfoForController\BufferInitialInfo.cs" />
+    <Compile Include="ReportInfoForController\RackLeavingNGInfo.cs" />
     <Compile Include="ReportInfoForController\EmptyBinLoadDoneInfo.cs" />
     <Compile Include="ReportInfoForController\MoveTaskInfo.cs" />
     <Compile Include="ReportInfoForController\TransferCommandRequestInfo.cs" />

@@ -25,6 +25,17 @@ namespace Mirle.ASRS.WCS
         public static WebApiConfig E04Api_Config = new WebApiConfig();
         public static WebApiConfig E05Api_Config = new WebApiConfig();
         public static WebApiConfig WcsApi_Config = new WebApiConfig();
+        public static string Tower_ControllerID;
+        public static string Box1F_ControllerID;
+        public static string Box2F_ControllerID;
+        public static string PCBA_ControllerID;
+        public static string SMTC_ControllerID;
+        public static string Line_ControllerID;
+        public static string SMT3C_ControllerID;
+        public static string SMT5C_ControllerID;
+        public static string SMT6C_ControllerID;
+        public static string E04_ControllerID;
+        public static string E05_ControllerID;
         public static ASRSINI lcsini;
         public static int L2L_MaxCount = 5;
         
@@ -91,6 +102,18 @@ namespace Mirle.ASRS.WCS
 
         private static void FunControllerID_Config(ASRSINI lcsini)
         {
+            Tower_ControllerID = lcsini.ControllerID.Tower;
+            Box1F_ControllerID = lcsini.ControllerID.Box1;
+            Box2F_ControllerID = lcsini.ControllerID.Box2;
+            PCBA_ControllerID = lcsini.ControllerID.PCBA;
+            SMTC_ControllerID = lcsini.ControllerID.SMTC;
+            SMT3C_ControllerID = lcsini.ControllerID.SMT3C;
+            SMT5C_ControllerID = lcsini.ControllerID.SMT5C;
+            SMT6C_ControllerID = lcsini.ControllerID.SMT6C;
+            Line_ControllerID = lcsini.ControllerID.Line;
+            E04_ControllerID = lcsini.ControllerID.E04;
+            E05_ControllerID = lcsini.ControllerID.E05;
+
             ConveyorDef.AGV.E1_01.ControllerID = lcsini.ControllerID.Tower;
             ConveyorDef.Tower.E1_04.ControllerID = lcsini.ControllerID.Tower;
             ConveyorDef.AGV.E1_08.ControllerID = lcsini.ControllerID.Tower;

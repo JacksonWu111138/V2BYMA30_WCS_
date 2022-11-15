@@ -1087,6 +1087,58 @@ namespace Mirle.WebAPI.Event
                         if (!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
                             throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}.");
                     }
+                    else if (Body.location == ConveyorDef.AGV.LO3_01.BufferName)
+                    {
+
+                        //設定為：生成空靜電箱回庫
+                        string strEM = "";
+                        cmd = new CmdMstInfo();
+                        cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
+                        if (string.IsNullOrWhiteSpace(cmd.Cmd_Sno))
+                        {
+                            throw new Exception($"<{Body.jobId}>取得序號失敗！");
+                        }
+
+                        cmd.BoxID = Body.barcode;
+                        cmd.Cmd_Mode = clsConstValue.CmdMode.S2S;
+                        cmd.CurDeviceID = "";
+                        cmd.CurLoc = "";
+                        cmd.End_Date = "";
+                        cmd.Loc = "";
+                        cmd.Equ_No = "";
+                        cmd.EXP_Date = "";
+                        cmd.JobID = Body.jobId;
+                        cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
+
+                        ConveyorInfo B800CV = new ConveyorInfo();
+                        int count = 0; check = false;
+                        while (count < ConveyorDef.GetB800CV_List().Count())
+                        {
+                            B800CV = ConveyorDef.GetB800CV();
+                            if (clsMiddle.GetMiddle().CheckIsOutReady(B800CV))
+                            {
+                                cmd.New_Loc = B800CV.BufferName;
+                                check = true;
+                                break;
+                            }
+                            count++;
+                        }
+                        if (!check)
+                        {
+                            throw new Exception("Error: B800CV 無接收ready站口");
+                        }
+                        cmd.Prty = "5";
+                        cmd.Remark = "";
+
+                        cmd.Stn_No = Body.location;
+
+                        cmd.Host_Name = "WCS";
+                        cmd.Zone_ID = "";
+                        cmd.carrierType = clsConstValue.ControllerApi.CarrierType.Bin;
+
+                        if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
+                            throw new Exception(strEM);
+                    }
                     else
                     {
                         //以下為無MES測試時使用
@@ -1138,7 +1190,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<BCR_CHECK_REQUEST> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)
@@ -3008,10 +3060,11 @@ namespace Mirle.WebAPI.Event
                 string strEM = "";
                 bool doubleUnknownBin = false;
                 CmdMstInfo cmd = new CmdMstInfo();
-
+                ConveyorInfo con = new ConveyorInfo();
+                con = ConveyorDef.GetBuffer(Body.position);
 
                 //判斷此buffer是否預約過
-                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand_byBoxID("UNKNOWM_BIN_" + Body.position + "1", ref cmd) == DBResult.Success)
+                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand_byBoxID("UNKNOWM_BIN_" + Body.position + "_1", ref cmd) == DBResult.Success)
                     doubleUnknownBin = true;
 
                 cmd = new CmdMstInfo();
@@ -3033,22 +3086,31 @@ namespace Mirle.WebAPI.Event
                 cmd.JobID = Body.jobId;
                 cmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
 
-                ConveyorInfo B800CV = new ConveyorInfo();
-                int count = 0; bool check = false;
-                while (count < ConveyorDef.GetB800CV_List().Count())
+                //356樓未掃Barcode之空靜電箱離開，命令只到8樓電梯口；其餘空靜電箱離開，命令直接回庫
+                if(con.ControllerID == clsControllerID.sMT3C_ControllerID || con.ControllerID == clsControllerID.sMT5C_ControllerID ||
+                    con.ControllerID == clsControllerID.sMT6C_ControllerID)
                 {
-                    B800CV = ConveyorDef.GetB800CV();
-                    if (clsMiddle.GetMiddle().CheckIsOutReady(B800CV))
-                    {
-                        cmd.New_Loc = B800CV.BufferName;
-                        check = true;
-                        break;
-                    }
-                    count++;
+                    cmd.New_Loc = ConveyorDef.E05.LO3_02.BufferName;
                 }
-                if (!check)
+                else
                 {
-                    throw new Exception("Error: B800CV 無接收ready站口");
+                    ConveyorInfo B800CV = new ConveyorInfo();
+                    int count = 0; bool check = false;
+                    while (count < ConveyorDef.GetB800CV_List().Count())
+                    {
+                        B800CV = ConveyorDef.GetB800CV();
+                        if (clsMiddle.GetMiddle().CheckIsOutReady(B800CV))
+                        {
+                            cmd.New_Loc = B800CV.BufferName;
+                            check = true;
+                            break;
+                        }
+                        count++;
+                    }
+                    if (!check)
+                    {
+                        throw new Exception("Error: B800CV 無接收ready站口");
+                    }
                 }
 
                 cmd.Prty = "5";
@@ -3068,7 +3130,7 @@ namespace Mirle.WebAPI.Event
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>UNKNOWN_BIN_LEAVE_INFO record end!");
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<UNKNOWN_BIN_LEAVE_INFO> <WCS Send>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)

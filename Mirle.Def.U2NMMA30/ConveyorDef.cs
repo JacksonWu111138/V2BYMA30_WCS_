@@ -21,6 +21,13 @@ namespace Mirle.Def.U2NMMA30
             /// </summary>
             public static ConveyorInfo LO1_07 = new ConveyorInfo { Index = 7, BufferName = "LO1-07" };
         }
+        public class E05
+        {
+            /// <summary>
+            /// 八樓離開電梯第一節
+            /// </summary>
+            public static ConveyorInfo LO3_02 = new ConveyorInfo { Index = 2, BufferName = "LO3-02" };
+        }
 
         /// <summary>
         /// 箱式倉
@@ -576,6 +583,7 @@ namespace Mirle.Def.U2NMMA30
             Node_All.Add(AGV.LO2_04);
             Node_All.Add(AGV.LO3_01);
             Node_All.Add(AGV.LO3_04);
+            Node_All.Add(E05.LO3_02);
             Node_All.Add(AGV.LO4_01);
             Node_All.Add(AGV.LO4_04);
             Node_All.Add(AGV.LO5_01);
@@ -1078,6 +1086,7 @@ namespace Mirle.Def.U2NMMA30
             Node_Lift.Add(AGV.LO2_01);
             Node_Lift.Add(AGV.LO2_04);
             Node_Lift.Add(AGV.LO3_01);
+            Node_Lift.Add(E05.LO3_02);
             Node_Lift.Add(AGV.LO3_04);
             Node_Lift.Add(AGV.LO4_01);
             Node_Lift.Add(AGV.LO4_04);

@@ -365,6 +365,7 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.LO6_04.ControllerID = lcsini.ControllerID.E05;
             ConveyorDef.AGV.LO3_01.ControllerID = lcsini.ControllerID.E05;
             ConveyorDef.AGV.LO3_04.ControllerID = lcsini.ControllerID.E05;
+            ConveyorDef.E05.LO3_02.ControllerID = lcsini.ControllerID.E05;
         }
 
         private static void FunStnNoConfig(ASRSINI lcsini)
@@ -797,6 +798,7 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.LO6_04.API.IP = lcsini.Client_API.E05;
             ConveyorDef.AGV.LO3_01.API.IP = lcsini.Client_API.E05;
             ConveyorDef.AGV.LO3_04.API.IP = lcsini.Client_API.E05;
+            ConveyorDef.E05.LO3_02.API.IP = lcsini.Client_API.E05;
 
             WcsApi_Config.IP = lcsini.Server_API.IP;
         }

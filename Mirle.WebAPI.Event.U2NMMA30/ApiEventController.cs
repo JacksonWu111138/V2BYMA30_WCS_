@@ -1087,9 +1087,8 @@ namespace Mirle.WebAPI.Event
                         if (!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
                             throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}.");
                     }
-                    else if (Body.location == ConveyorDef.AGV.LO3_01.BufferName)
+                    else if (Body.location == ConveyorDef.AGV.LO3_01.BufferName && Body.carrierType == clsConstValue.ControllerApi.CarrierType.Bin)
                     {
-
                         //設定為：生成空靜電箱回庫
                         string strEM = "";
                         cmd = new CmdMstInfo();
@@ -2209,7 +2208,6 @@ namespace Mirle.WebAPI.Event
                 {
                     if (Body.rackId.Contains("UNKNOWN") )
                     {
-                        //待修改線邊倉的料價站(S0-05)點
                         if (Body.stagePosition == ConveyorDef.AGV.S0_05.BufferName)
                         {
                             RackRequestInfo info = new RackRequestInfo

@@ -13,8 +13,8 @@ namespace Mirle.DB.Fun
     {
         public clsTool() { }
 
-        private DeviceInfo[] pcba;
-        private DeviceInfo[] box;
+        private static DeviceInfo[] pcba;
+        private static DeviceInfo[] box;
         public clsTool(DeviceInfo[] PCBA, DeviceInfo[] Box)
         {
             pcba = PCBA;

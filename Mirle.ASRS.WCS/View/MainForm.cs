@@ -118,9 +118,27 @@ namespace Mirle.ASRS.WCS.View
                     {
                         EmptyShelfQueryInfo info = new EmptyShelfQueryInfo
                         {
-                            craneId = e.EquNo,
                             lotIdCarrierId = e.BoxID
                         };
+                        switch(e.EquNo)
+                        {
+                            case "1":
+                            case "2":
+                                info.craneId = "M80" + e.EquNo;
+                                break;
+                            case "3":
+                                info.craneId = "B801";
+                                break;
+                            case "4":
+                                info.craneId = "B802";
+                                break;
+                            case "5":
+                                info.craneId = "B801";
+                                break;
+                            default:
+                                info.craneId = e.EquNo;
+                                break;
+                        }
 
                         EmptyShelfQueryReply reply = new EmptyShelfQueryReply();
                         if (api.GetEmptyShelfQuery().FunReport(info, ref reply, clInitSys.WmsApi_Config.IP))

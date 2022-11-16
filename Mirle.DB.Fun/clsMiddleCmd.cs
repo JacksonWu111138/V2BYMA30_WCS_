@@ -106,8 +106,18 @@ namespace Mirle.DB.Fun
                 middleCmd.CommandID = cmd.Cmd_Sno;
                 middleCmd.DeviceID = cmd.Equ_No;
                 middleCmd.CSTID = cmd.BoxID;
-                middleCmd.CmdMode = clsConstValue.CmdMode.L2L;
-                middleCmd.Source = cmd.Loc;
+
+                if (cmd.CurLoc == Location.LocationID.LeftFork.ToString())
+                    middleCmd.CmdMode = clsConstValue.CmdMode.Deposit;
+                else
+                    middleCmd.CmdMode = clsConstValue.CmdMode.L2L;
+
+                if (middleCmd.CmdMode == clsConstValue.CmdMode.Deposit) 
+                    middleCmd.Source = "";
+                else
+                    middleCmd.Source = cmd.Loc;
+
+
                 middleCmd.Destination = cmd.New_Loc;
                 middleCmd.Priority = Convert.ToInt32(cmd.Prty);
                 middleCmd.Path = 0;

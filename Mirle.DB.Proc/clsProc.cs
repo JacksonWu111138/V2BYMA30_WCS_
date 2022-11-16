@@ -1,4 +1,5 @@
 ﻿using Mirle.DataBase;
+using Mirle.DB.Fun.Events;
 using Mirle.Def;
 using Mirle.Def.U2NMMA30;
 using Mirle.EccsSignal;
@@ -13,6 +14,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.ServiceModel;
 using System.Text;
@@ -370,17 +372,18 @@ namespace Mirle.DB.Proc
                                     else
                                     {
                                         if(sLoc_Start.DeviceId == sLoc_End.DeviceId)
-                                        {//是電子料塔或AGV的命令
+                                        {//是電子料塔或AGV的命令//箱式倉內orASRSL2L命令
 
                                             string sDeviceID = "";
-                                            if ((sLoc_Start.LocationId.Contains("B") && sLoc_End.LocationId.Contains("B")) || sLoc_Start.LocationId.Contains("CVIN"))
+                                            if (sLoc_Start.DeviceId == ConveyorDef.DeviceID_Tower)
                                             {
-                                                //箱式倉命令
-                                                continue;
+                                                sDeviceID = ConveyorDef.DeviceID_Tower;
                                             }
                                             else if (!tool.IsAGV(sLoc_Start.DeviceId, ref sDeviceID))
                                             {
-                                                sDeviceID = ConveyorDef.DeviceID_Tower;
+                                                //箱式倉命令
+                                                //ARSR L2L命令或其他內部命令
+                                                continue;
                                             }
 
                                             ConveyorInfo conveyor = new ConveyorInfo();
@@ -1605,7 +1608,7 @@ namespace Mirle.DB.Proc
                                                     carrierId = cmd.BoxID,
                                                     emptyTransfer = clsEnum.WmsApi.EmptyRetrieval.Y.ToString(),
                                                     jobId = cmd.JobID,
-                                                    shelfId = ""
+                                                    shelfId = cmd.Loc
                                                 };
                                             }
 
@@ -1706,9 +1709,27 @@ namespace Mirle.DB.Proc
                                                         EmptyShelfQueryInfo emptyShelfQueryInfo = new EmptyShelfQueryInfo
                                                         {
                                                             jobId = cmd.JobID,
-                                                            craneId = middleCmd.DeviceID,
                                                             lotIdCarrierId = cmd.BoxID
                                                         };
+                                                        switch (middleCmd.DeviceID)
+                                                        {
+                                                            case "1":
+                                                            case "2":
+                                                                emptyShelfQueryInfo.craneId = "M80" + middleCmd.DeviceID;
+                                                                break;
+                                                            case "3":
+                                                                emptyShelfQueryInfo.craneId = "B801";
+                                                                break;
+                                                            case "4":
+                                                                emptyShelfQueryInfo.craneId = "B802";
+                                                                break;
+                                                            case "5":
+                                                                emptyShelfQueryInfo.craneId = "B801";
+                                                                break;
+                                                            default:
+                                                                emptyShelfQueryInfo.craneId = middleCmd.DeviceID;
+                                                                break;
+                                                        }
 
                                                         EmptyShelfQueryReply emptyShelfQueryResponse = new EmptyShelfQueryReply();
                                                         if (!api.GetEmptyShelfQuery().FunReport(emptyShelfQueryInfo, ref emptyShelfQueryResponse, _wmsApi.IP))
@@ -1853,7 +1874,8 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public bool subCraneWrR2R(DeviceInfo Device, SignalHost CrnSignal)
+        public bool subCraneWrR2R(DeviceInfo Device, SignalHost CrnSignal, MapHost Router,
+            WMS.Proc.clsHost wms, MidHost middle)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -1873,6 +1895,15 @@ namespace Mirle.DB.Proc
                                 if (int.Parse(cmd.Equ_No) != iEquNo_To) continue;
                                 if (!Cmd_Mst.CheckCraneStatus(cmd, Device, CrnSignal, db)) continue;
                                 string sRemark = "";
+
+                                #region 確定是否需要內儲位的庫對庫命令
+
+                                Location Start = null; Location End = null;
+                                if (!Routdef.FunGetLocation(cmd, Router, ref Start, ref End, db)) continue;
+                                if (!Routdef.CheckSourceIsOK(cmd, Start, middle, Device, wms, db)) continue;
+
+                                #endregion 確定是否需要內儲位的庫對庫命令
+
                                 iRet = MiddleCmd.CheckHasMiddleCmd(Device.DeviceID, db);
                                 if (iRet == DBResult.Success)
                                 {

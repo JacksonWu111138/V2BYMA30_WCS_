@@ -209,8 +209,7 @@ namespace Mirle.DB.WMS.Fun
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet == DBResult.Success)
                 {
-                    IsEmpty = Convert.ToString(dtTmp.Rows[0]["STORAGE_STATUS"]).Trim().ToUpper() ==
-                        clsConstValue.LocSts.Empty;
+                    IsEmpty = Convert.ToString(dtTmp.Rows[0]["STORAGE_STATUS"]).Trim().ToUpper() == clsConstValue.LocSts.Empty;
                     BoxID = Convert.ToString(dtTmp.Rows[0][Parameter.clsLocMst.Column.BoxID]);
                 }
                 else

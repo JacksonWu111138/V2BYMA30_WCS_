@@ -51,7 +51,7 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork
 
                     if (clsHost.IsConn)
                     {
-                        _wcs.GetProc().subCraneWrR2R(device, signal);
+                        _wcs.GetProc().subCraneWrR2R(device, signal, router, _wms, middle);
 
                         if (clsHost.IsConn)
                             _wcs.GetMiddleCmd().FunMiddleCmdFinish_Proc(device.DeviceID);

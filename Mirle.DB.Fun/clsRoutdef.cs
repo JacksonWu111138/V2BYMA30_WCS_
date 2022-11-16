@@ -322,6 +322,9 @@ namespace Mirle.DB.Fun
                                             )
                                           )
                                         {
+                                            //庫對庫搬運是否有死胡同的可能
+                                            //Ex.A外儲位&B外儲位都有L2L，但A內儲位有物，先判斷A外儲位流程，得到送至B內儲位的L2L，B外儲位不能執行，送完內儲位，反觀B外儲位同理，申請A內儲位
+                                            
                                             bCheckCanDo = false;
                                         }
                                     }

@@ -187,30 +187,28 @@ namespace Mirle.ASRS.WCS.View
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, "WCS OffLine.");
         }
 
-        private void chkCycleRun_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkCycleRun.Checked)
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "周邊CycleRun啟動！");
-            else
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "周邊CycleRun關閉！");
-        }
+        //private void chkCycleRun_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    if (chkCycleRun.Checked)
+        //        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "周邊CycleRun啟動！");
+        //    else
+        //        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "周邊CycleRun關閉！");
+        //}
 
-        private void chkIgnoreTkt_CheckedChanged(object sender, EventArgs e)
-        {
-            if (chkIgnoreTkt.Checked)
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "啟動IgnoreTicket功能！");
-            else
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "關閉IgnoreTicket功能！");
-        }
+        //private void chkIgnoreTkt_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    if (chkIgnoreTkt.Checked)
+        //        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "啟動IgnoreTicket功能！");
+        //    else
+        //        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, "關閉IgnoreTicket功能！");
+        //}
 
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
             //Ctrl + L
             if (e.KeyCode == Keys.L && e.Modifiers == Keys.Control)
             {
-                Def.clsTool.FunVisbleChange(ref btnTeachMaintain);
-                Def.clsTool.FunVisbleChange(ref chkCycleRun);
-                Def.clsTool.FunVisbleChange(ref chkIgnoreTkt);
+                
             }
         }
 
@@ -1198,44 +1196,45 @@ namespace Mirle.ASRS.WCS.View
             }
         }
 
-        private void ChangeSubForm(Form subForm)
-        {
-            try
-            {
-                var children = spcMainView.Panel1.Controls;
-                foreach (Control c in children)
-                {
-                    if (c is Form)
-                    {
-                        var thisChild = c as Form;
-                        //thisChild.Hide();
-                        spcMainView.Panel1.Controls.Remove(thisChild);
-                        thisChild.Width = 0;
-                    }
-                }
+        //private void ChangeSubForm(Form subForm)
+        //{
+        //    try
+        //    {
+        //        var children = spcMainView.Panel1.Controls;
+        //        foreach (Control c in children)
+        //        {
+        //            if (c is Form)
+        //            {
+        //                var thisChild = c as Form;
+        //                //thisChild.Hide();
+        //                spcMainView.Panel1.Controls.Remove(thisChild);
+        //                thisChild.Width = 0;
+        //            }
+        //        }
 
-                if (subForm != null)
-                {
-                    subForm.TopLevel = false;
-                    subForm.Dock = DockStyle.Fill;//適應窗體大小
-                    subForm.FormBorderStyle = FormBorderStyle.None;//隱藏右上角的按鈕
-                    subForm.Parent = spcMainView.Panel1;
-                    spcMainView.Panel1.Controls.Add(subForm);
-                    subForm.Show();
-                }
-            }
-            catch (Exception ex)
-            {
-                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
-                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
-                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
-            }
-        }
+        //        if (subForm != null)
+        //        {
+        //            subForm.TopLevel = false;
+        //            subForm.Dock = DockStyle.Fill;//適應窗體大小
+        //            subForm.FormBorderStyle = FormBorderStyle.None;//隱藏右上角的按鈕
+        //            subForm.Parent = spcMainView.Panel1;
+        //            spcMainView.Panel1.Controls.Add(subForm);
+        //            subForm.Show();
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+        //        var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+        //        clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+        //    }
+        //}
 
         private void button_Controller_API_TEST_Click(object sender, EventArgs e)
         {
             ControllersAPITest form_2 = new ControllersAPITest();
             form_2.Show();
         }
+
     }
 }

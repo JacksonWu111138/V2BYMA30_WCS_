@@ -40,22 +40,15 @@
             this.chkOnline = new System.Windows.Forms.CheckBox();
             this.lblDBConn_WCS = new System.Windows.Forms.Label();
             this.pnlCraneSts = new System.Windows.Forms.Panel();
-            this.spcView = new System.Windows.Forms.SplitContainer();
-            this.spcMainView = new System.Windows.Forms.SplitContainer();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.chkIgnoreTkt = new System.Windows.Forms.CheckBox();
-            this.btnCrandSpeedMaintain = new System.Windows.Forms.Button();
-            this.btnStockerModeMaintain = new System.Windows.Forms.Button();
-            this.btnTeachMaintain = new System.Windows.Forms.Button();
-            this.btnTransferToTeachLoc = new System.Windows.Forms.Button();
-            this.chkCycleRun = new System.Windows.Forms.CheckBox();
-            this.btnOEEParameterMaintain = new System.Windows.Forms.Button();
-            this.AGVTaskCancelButten = new System.Windows.Forms.Button();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.tbcCmdInfo = new System.Windows.Forms.TabControl();
             this.tbpCmdMst = new System.Windows.Forms.TabPage();
             this.Grid1 = new System.Windows.Forms.DataGridView();
             this.tbpMiddleCmd = new System.Windows.Forms.TabPage();
             this.Grid_MiddleCmd = new System.Windows.Forms.DataGridView();
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.button_Controller_API_TEST = new System.Windows.Forms.Button();
+            this.AGVTaskCancelButten = new System.Windows.Forms.Button();
             this.mnuTransferCmd = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuTransferCmdComplete = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTransferCmdCancel = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,7 +58,6 @@
             this.mnuMiddleComplete = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMiddleCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuInsertMiddleCmd = new System.Windows.Forms.ToolStripMenuItem();
-            this.button_Controller_API_TEST = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -73,19 +65,16 @@
             this.tlpMainSts.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.picMirle)).BeginInit();
             this.tableLayoutPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.spcView)).BeginInit();
-            this.spcView.Panel1.SuspendLayout();
-            this.spcView.Panel2.SuspendLayout();
-            this.spcView.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.spcMainView)).BeginInit();
-            this.spcMainView.Panel2.SuspendLayout();
-            this.spcMainView.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             this.tbcCmdInfo.SuspendLayout();
             this.tbpCmdMst.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid1)).BeginInit();
             this.tbpMiddleCmd.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid_MiddleCmd)).BeginInit();
+            this.tableLayoutPanel1.SuspendLayout();
             this.mnuTransferCmd.SuspendLayout();
             this.mnuMiddleCmd.SuspendLayout();
             this.SuspendLayout();
@@ -108,7 +97,7 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.spcView);
+            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Size = new System.Drawing.Size(1756, 898);
             this.splitContainer1.SplitterDistance = 118;
             this.splitContainer1.SplitterWidth = 6;
@@ -230,54 +219,86 @@
             this.pnlCraneSts.Size = new System.Drawing.Size(1012, 112);
             this.pnlCraneSts.TabIndex = 269;
             // 
-            // spcView
+            // splitContainer2
             // 
-            this.spcView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.spcView.Location = new System.Drawing.Point(0, 0);
-            this.spcView.Margin = new System.Windows.Forms.Padding(4);
-            this.spcView.Name = "spcView";
-            this.spcView.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
             // 
-            // spcView.Panel1
+            // splitContainer2.Panel1
             // 
-            this.spcView.Panel1.Controls.Add(this.spcMainView);
+            this.splitContainer2.Panel1.Controls.Add(this.tbcCmdInfo);
             // 
-            // spcView.Panel2
+            // splitContainer2.Panel2
             // 
-            this.spcView.Panel2.Controls.Add(this.tbcCmdInfo);
-            this.spcView.Size = new System.Drawing.Size(1756, 774);
-            this.spcView.SplitterDistance = 567;
-            this.spcView.SplitterWidth = 6;
-            this.spcView.TabIndex = 0;
+            this.splitContainer2.Panel2.Controls.Add(this.tableLayoutPanel1);
+            this.splitContainer2.Size = new System.Drawing.Size(1756, 774);
+            this.splitContainer2.SplitterDistance = 1538;
+            this.splitContainer2.TabIndex = 1;
             // 
-            // spcMainView
+            // tbcCmdInfo
             // 
-            this.spcMainView.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.spcMainView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.spcMainView.Location = new System.Drawing.Point(0, 0);
-            this.spcMainView.Margin = new System.Windows.Forms.Padding(4);
-            this.spcMainView.Name = "spcMainView";
+            this.tbcCmdInfo.Controls.Add(this.tbpCmdMst);
+            this.tbcCmdInfo.Controls.Add(this.tbpMiddleCmd);
+            this.tbcCmdInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbcCmdInfo.Font = new System.Drawing.Font("微軟正黑體", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.tbcCmdInfo.Location = new System.Drawing.Point(0, 0);
+            this.tbcCmdInfo.Name = "tbcCmdInfo";
+            this.tbcCmdInfo.SelectedIndex = 0;
+            this.tbcCmdInfo.Size = new System.Drawing.Size(1538, 774);
+            this.tbcCmdInfo.TabIndex = 0;
             // 
-            // spcMainView.Panel2
+            // tbpCmdMst
             // 
-            this.spcMainView.Panel2.Controls.Add(this.tableLayoutPanel1);
-            this.spcMainView.Size = new System.Drawing.Size(1756, 567);
-            this.spcMainView.SplitterDistance = 1571;
-            this.spcMainView.SplitterWidth = 6;
-            this.spcMainView.TabIndex = 0;
+            this.tbpCmdMst.Controls.Add(this.Grid1);
+            this.tbpCmdMst.Location = new System.Drawing.Point(4, 34);
+            this.tbpCmdMst.Name = "tbpCmdMst";
+            this.tbpCmdMst.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpCmdMst.Size = new System.Drawing.Size(1530, 736);
+            this.tbpCmdMst.TabIndex = 0;
+            this.tbpCmdMst.Text = "System Command";
+            this.tbpCmdMst.UseVisualStyleBackColor = true;
+            // 
+            // Grid1
+            // 
+            this.Grid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Grid1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Grid1.Location = new System.Drawing.Point(3, 3);
+            this.Grid1.Margin = new System.Windows.Forms.Padding(4);
+            this.Grid1.Name = "Grid1";
+            this.Grid1.RowHeadersWidth = 62;
+            this.Grid1.RowTemplate.Height = 24;
+            this.Grid1.Size = new System.Drawing.Size(1524, 730);
+            this.Grid1.TabIndex = 1;
+            // 
+            // tbpMiddleCmd
+            // 
+            this.tbpMiddleCmd.Controls.Add(this.Grid_MiddleCmd);
+            this.tbpMiddleCmd.Location = new System.Drawing.Point(4, 34);
+            this.tbpMiddleCmd.Name = "tbpMiddleCmd";
+            this.tbpMiddleCmd.Padding = new System.Windows.Forms.Padding(3);
+            this.tbpMiddleCmd.Size = new System.Drawing.Size(1530, 736);
+            this.tbpMiddleCmd.TabIndex = 1;
+            this.tbpMiddleCmd.Text = "Middle Command";
+            this.tbpMiddleCmd.UseVisualStyleBackColor = true;
+            // 
+            // Grid_MiddleCmd
+            // 
+            this.Grid_MiddleCmd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.Grid_MiddleCmd.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Grid_MiddleCmd.Location = new System.Drawing.Point(3, 3);
+            this.Grid_MiddleCmd.Margin = new System.Windows.Forms.Padding(4);
+            this.Grid_MiddleCmd.Name = "Grid_MiddleCmd";
+            this.Grid_MiddleCmd.RowHeadersWidth = 62;
+            this.Grid_MiddleCmd.RowTemplate.Height = 24;
+            this.Grid_MiddleCmd.Size = new System.Drawing.Size(1524, 730);
+            this.Grid_MiddleCmd.TabIndex = 2;
             // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.button_Controller_API_TEST, 0, 8);
-            this.tableLayoutPanel1.Controls.Add(this.chkIgnoreTkt, 0, 6);
-            this.tableLayoutPanel1.Controls.Add(this.btnCrandSpeedMaintain, 0, 3);
-            this.tableLayoutPanel1.Controls.Add(this.btnStockerModeMaintain, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.btnTeachMaintain, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.btnTransferToTeachLoc, 0, 2);
-            this.tableLayoutPanel1.Controls.Add(this.chkCycleRun, 0, 5);
-            this.tableLayoutPanel1.Controls.Add(this.btnOEEParameterMaintain, 0, 4);
             this.tableLayoutPanel1.Controls.Add(this.AGVTaskCancelButten, 0, 7);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -294,166 +315,32 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(177, 565);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(214, 774);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
-            // chkIgnoreTkt
+            // button_Controller_API_TEST
             // 
-            this.chkIgnoreTkt.AutoSize = true;
-            this.chkIgnoreTkt.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chkIgnoreTkt.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.chkIgnoreTkt.Location = new System.Drawing.Point(4, 358);
-            this.chkIgnoreTkt.Margin = new System.Windows.Forms.Padding(4);
-            this.chkIgnoreTkt.Name = "chkIgnoreTkt";
-            this.chkIgnoreTkt.Size = new System.Drawing.Size(169, 28);
-            this.chkIgnoreTkt.TabIndex = 10;
-            this.chkIgnoreTkt.Text = "Ignore Ticket";
-            this.chkIgnoreTkt.UseVisualStyleBackColor = true;
-            this.chkIgnoreTkt.Visible = false;
-            this.chkIgnoreTkt.CheckedChanged += new System.EventHandler(this.chkIgnoreTkt_CheckedChanged);
-            // 
-            // btnCrandSpeedMaintain
-            // 
-            this.btnCrandSpeedMaintain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnCrandSpeedMaintain.Location = new System.Drawing.Point(4, 202);
-            this.btnCrandSpeedMaintain.Margin = new System.Windows.Forms.Padding(4);
-            this.btnCrandSpeedMaintain.Name = "btnCrandSpeedMaintain";
-            this.btnCrandSpeedMaintain.Size = new System.Drawing.Size(169, 58);
-            this.btnCrandSpeedMaintain.TabIndex = 6;
-            this.btnCrandSpeedMaintain.Text = "Stocker Speed Maintain";
-            this.btnCrandSpeedMaintain.UseVisualStyleBackColor = true;
-            // 
-            // btnStockerModeMaintain
-            // 
-            this.btnStockerModeMaintain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnStockerModeMaintain.Location = new System.Drawing.Point(4, 4);
-            this.btnStockerModeMaintain.Margin = new System.Windows.Forms.Padding(4);
-            this.btnStockerModeMaintain.Name = "btnStockerModeMaintain";
-            this.btnStockerModeMaintain.Size = new System.Drawing.Size(169, 58);
-            this.btnStockerModeMaintain.TabIndex = 0;
-            this.btnStockerModeMaintain.Text = "Stocker Mode Maintain";
-            this.btnStockerModeMaintain.UseVisualStyleBackColor = true;
-            // 
-            // btnTeachMaintain
-            // 
-            this.btnTeachMaintain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnTeachMaintain.Location = new System.Drawing.Point(4, 70);
-            this.btnTeachMaintain.Margin = new System.Windows.Forms.Padding(4);
-            this.btnTeachMaintain.Name = "btnTeachMaintain";
-            this.btnTeachMaintain.Size = new System.Drawing.Size(169, 58);
-            this.btnTeachMaintain.TabIndex = 5;
-            this.btnTeachMaintain.Text = "TeachLoc Maintain";
-            this.btnTeachMaintain.UseVisualStyleBackColor = true;
-            this.btnTeachMaintain.Visible = false;
-            // 
-            // btnTransferToTeachLoc
-            // 
-            this.btnTransferToTeachLoc.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnTransferToTeachLoc.Location = new System.Drawing.Point(3, 136);
-            this.btnTransferToTeachLoc.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.btnTransferToTeachLoc.Name = "btnTransferToTeachLoc";
-            this.btnTransferToTeachLoc.Size = new System.Drawing.Size(171, 58);
-            this.btnTransferToTeachLoc.TabIndex = 8;
-            this.btnTransferToTeachLoc.Text = "Transfer To TeachLoc";
-            this.btnTransferToTeachLoc.UseVisualStyleBackColor = true;
-            // 
-            // chkCycleRun
-            // 
-            this.chkCycleRun.AutoSize = true;
-            this.chkCycleRun.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chkCycleRun.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.chkCycleRun.Location = new System.Drawing.Point(4, 322);
-            this.chkCycleRun.Margin = new System.Windows.Forms.Padding(4);
-            this.chkCycleRun.Name = "chkCycleRun";
-            this.chkCycleRun.Size = new System.Drawing.Size(169, 28);
-            this.chkCycleRun.TabIndex = 7;
-            this.chkCycleRun.Text = "Cycle Run";
-            this.chkCycleRun.UseVisualStyleBackColor = true;
-            this.chkCycleRun.Visible = false;
-            this.chkCycleRun.CheckedChanged += new System.EventHandler(this.chkCycleRun_CheckedChanged);
-            // 
-            // btnOEEParameterMaintain
-            // 
-            this.btnOEEParameterMaintain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOEEParameterMaintain.Location = new System.Drawing.Point(4, 269);
-            this.btnOEEParameterMaintain.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.btnOEEParameterMaintain.Name = "btnOEEParameterMaintain";
-            this.btnOEEParameterMaintain.Size = new System.Drawing.Size(169, 44);
-            this.btnOEEParameterMaintain.TabIndex = 9;
-            this.btnOEEParameterMaintain.Text = "OEE Parameter";
-            this.btnOEEParameterMaintain.UseVisualStyleBackColor = true;
+            this.button_Controller_API_TEST.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button_Controller_API_TEST.Location = new System.Drawing.Point(3, 57);
+            this.button_Controller_API_TEST.Name = "button_Controller_API_TEST";
+            this.button_Controller_API_TEST.Size = new System.Drawing.Size(208, 34);
+            this.button_Controller_API_TEST.TabIndex = 0;
+            this.button_Controller_API_TEST.Text = "Controller API test";
+            this.button_Controller_API_TEST.UseVisualStyleBackColor = true;
+            this.button_Controller_API_TEST.Click += new System.EventHandler(this.button_Controller_API_TEST_Click);
             // 
             // AGVTaskCancelButten
             // 
             this.AGVTaskCancelButten.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.AGVTaskCancelButten.Location = new System.Drawing.Point(4, 395);
+            this.AGVTaskCancelButten.Location = new System.Drawing.Point(4, 5);
             this.AGVTaskCancelButten.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.AGVTaskCancelButten.Name = "AGVTaskCancelButten";
-            this.AGVTaskCancelButten.Size = new System.Drawing.Size(169, 44);
+            this.AGVTaskCancelButten.Size = new System.Drawing.Size(206, 44);
             this.AGVTaskCancelButten.TabIndex = 11;
             this.AGVTaskCancelButten.Text = "WES API Testing";
             this.AGVTaskCancelButten.UseVisualStyleBackColor = true;
             this.AGVTaskCancelButten.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // tbcCmdInfo
-            // 
-            this.tbcCmdInfo.Controls.Add(this.tbpCmdMst);
-            this.tbcCmdInfo.Controls.Add(this.tbpMiddleCmd);
-            this.tbcCmdInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbcCmdInfo.Font = new System.Drawing.Font("微軟正黑體", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.tbcCmdInfo.Location = new System.Drawing.Point(0, 0);
-            this.tbcCmdInfo.Name = "tbcCmdInfo";
-            this.tbcCmdInfo.SelectedIndex = 0;
-            this.tbcCmdInfo.Size = new System.Drawing.Size(1756, 201);
-            this.tbcCmdInfo.TabIndex = 0;
-            // 
-            // tbpCmdMst
-            // 
-            this.tbpCmdMst.Controls.Add(this.Grid1);
-            this.tbpCmdMst.Location = new System.Drawing.Point(4, 34);
-            this.tbpCmdMst.Name = "tbpCmdMst";
-            this.tbpCmdMst.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpCmdMst.Size = new System.Drawing.Size(1748, 163);
-            this.tbpCmdMst.TabIndex = 0;
-            this.tbpCmdMst.Text = "System Command";
-            this.tbpCmdMst.UseVisualStyleBackColor = true;
-            // 
-            // Grid1
-            // 
-            this.Grid1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Grid1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Grid1.Location = new System.Drawing.Point(3, 3);
-            this.Grid1.Margin = new System.Windows.Forms.Padding(4);
-            this.Grid1.Name = "Grid1";
-            this.Grid1.RowHeadersWidth = 62;
-            this.Grid1.RowTemplate.Height = 24;
-            this.Grid1.Size = new System.Drawing.Size(1742, 157);
-            this.Grid1.TabIndex = 1;
-            // 
-            // tbpMiddleCmd
-            // 
-            this.tbpMiddleCmd.Controls.Add(this.Grid_MiddleCmd);
-            this.tbpMiddleCmd.Location = new System.Drawing.Point(4, 34);
-            this.tbpMiddleCmd.Name = "tbpMiddleCmd";
-            this.tbpMiddleCmd.Padding = new System.Windows.Forms.Padding(3);
-            this.tbpMiddleCmd.Size = new System.Drawing.Size(1748, 163);
-            this.tbpMiddleCmd.TabIndex = 1;
-            this.tbpMiddleCmd.Text = "Middle Command";
-            this.tbpMiddleCmd.UseVisualStyleBackColor = true;
-            // 
-            // Grid_MiddleCmd
-            // 
-            this.Grid_MiddleCmd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.Grid_MiddleCmd.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Grid_MiddleCmd.Location = new System.Drawing.Point(3, 3);
-            this.Grid_MiddleCmd.Margin = new System.Windows.Forms.Padding(4);
-            this.Grid_MiddleCmd.Name = "Grid_MiddleCmd";
-            this.Grid_MiddleCmd.RowHeadersWidth = 62;
-            this.Grid_MiddleCmd.RowTemplate.Height = 24;
-            this.Grid_MiddleCmd.Size = new System.Drawing.Size(1742, 157);
-            this.Grid_MiddleCmd.TabIndex = 2;
             // 
             // mnuTransferCmd
             // 
@@ -527,17 +414,6 @@
             this.mnuInsertMiddleCmd.Text = "Insert";
             this.mnuInsertMiddleCmd.Click += new System.EventHandler(this.mnuInsertMiddleCmd_Click);
             // 
-            // button_Controller_API_TEST
-            // 
-            this.button_Controller_API_TEST.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button_Controller_API_TEST.Location = new System.Drawing.Point(3, 447);
-            this.button_Controller_API_TEST.Name = "button_Controller_API_TEST";
-            this.button_Controller_API_TEST.Size = new System.Drawing.Size(171, 34);
-            this.button_Controller_API_TEST.TabIndex = 0;
-            this.button_Controller_API_TEST.Text = "Controller API test";
-            this.button_Controller_API_TEST.UseVisualStyleBackColor = true;
-            this.button_Controller_API_TEST.Click += new System.EventHandler(this.button_Controller_API_TEST_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -560,20 +436,16 @@
             ((System.ComponentModel.ISupportInitialize)(this.picMirle)).EndInit();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
-            this.spcView.Panel1.ResumeLayout(false);
-            this.spcView.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.spcView)).EndInit();
-            this.spcView.ResumeLayout(false);
-            this.spcMainView.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.spcMainView)).EndInit();
-            this.spcMainView.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             this.tbcCmdInfo.ResumeLayout(false);
             this.tbpCmdMst.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Grid1)).EndInit();
             this.tbpMiddleCmd.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Grid_MiddleCmd)).EndInit();
+            this.tableLayoutPanel1.ResumeLayout(false);
             this.mnuTransferCmd.ResumeLayout(false);
             this.mnuMiddleCmd.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -584,21 +456,12 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label lblDBConn_WCS;
-        private System.Windows.Forms.SplitContainer spcView;
         private System.Windows.Forms.CheckBox chkOnline;
-        private System.Windows.Forms.SplitContainer spcMainView;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Button btnStockerModeMaintain;
         private System.Windows.Forms.TableLayoutPanel tlpMainSts;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.PictureBox picMirle;
         private System.Windows.Forms.Label lblTimer;
-        private System.Windows.Forms.Button btnTeachMaintain;
-        private System.Windows.Forms.Button btnCrandSpeedMaintain;
-        private System.Windows.Forms.CheckBox chkCycleRun;
-        private System.Windows.Forms.Button btnTransferToTeachLoc;
-        private System.Windows.Forms.Button btnOEEParameterMaintain;
-        private System.Windows.Forms.CheckBox chkIgnoreTkt;
         private System.Windows.Forms.Label lblDBConn_WMS;
         private System.Windows.Forms.Button AGVTaskCancelButten;
         private System.Windows.Forms.TabControl tbcCmdInfo;
@@ -617,6 +480,7 @@
         private System.Windows.Forms.DataGridView Grid_MiddleCmd;
         private System.Windows.Forms.Panel pnlCraneSts;
         private System.Windows.Forms.Button button_Controller_API_TEST;
+        private System.Windows.Forms.SplitContainer splitContainer2;
     }
 }
 

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.CtrlBufferInitial = new System.Windows.Forms.Button();
             this.CtrlTransferCommandRequest = new System.Windows.Forms.Button();
             this.CtrlTaskCancel = new System.Windows.Forms.Button();
             this.CtrlRetrieveTransferInfo = new System.Windows.Forms.Button();
@@ -46,7 +47,7 @@
             this.CtrlBufferStatusQuery = new System.Windows.Forms.Button();
             this.CtrlBlockStatusQuery = new System.Windows.Forms.Button();
             this.CtrlBufferRollInfo = new System.Windows.Forms.Button();
-            this.CtrlBufferInitial = new System.Windows.Forms.Button();
+            this.CtrlEmptyBinLoadDone = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,6 +58,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel1.Controls.Add(this.CtrlEmptyBinLoadDone, 3, 3);
             this.tableLayoutPanel1.Controls.Add(this.CtrlBufferInitial, 3, 2);
             this.tableLayoutPanel1.Controls.Add(this.CtrlTransferCommandRequest, 3, 1);
             this.tableLayoutPanel1.Controls.Add(this.CtrlTaskCancel, 3, 0);
@@ -85,6 +87,17 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(864, 354);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // CtrlBufferInitial
+            // 
+            this.CtrlBufferInitial.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlBufferInitial.Location = new System.Drawing.Point(651, 143);
+            this.CtrlBufferInitial.Name = "CtrlBufferInitial";
+            this.CtrlBufferInitial.Size = new System.Drawing.Size(210, 64);
+            this.CtrlBufferInitial.TabIndex = 1;
+            this.CtrlBufferInitial.Text = "BufferInitial";
+            this.CtrlBufferInitial.UseVisualStyleBackColor = true;
+            this.CtrlBufferInitial.Click += new System.EventHandler(this.CtrlBufferInitial_Click);
             // 
             // CtrlTransferCommandRequest
             // 
@@ -273,16 +286,16 @@
             this.CtrlBufferRollInfo.UseVisualStyleBackColor = true;
             this.CtrlBufferRollInfo.Click += new System.EventHandler(this.CtrlBufferRollInfo_Click);
             // 
-            // CtrlBufferInitial
+            // CtrlEmptyBinLoadDone
             // 
-            this.CtrlBufferInitial.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CtrlBufferInitial.Location = new System.Drawing.Point(651, 143);
-            this.CtrlBufferInitial.Name = "CtrlBufferInitial";
-            this.CtrlBufferInitial.Size = new System.Drawing.Size(210, 64);
-            this.CtrlBufferInitial.TabIndex = 1;
-            this.CtrlBufferInitial.Text = "BufferInitial";
-            this.CtrlBufferInitial.UseVisualStyleBackColor = true;
-            this.CtrlBufferInitial.Click += new System.EventHandler(this.CtrlBufferInitial_Click);
+            this.CtrlEmptyBinLoadDone.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlEmptyBinLoadDone.Location = new System.Drawing.Point(651, 213);
+            this.CtrlEmptyBinLoadDone.Name = "CtrlEmptyBinLoadDone";
+            this.CtrlEmptyBinLoadDone.Size = new System.Drawing.Size(210, 64);
+            this.CtrlEmptyBinLoadDone.TabIndex = 1;
+            this.CtrlEmptyBinLoadDone.Text = "EmptyBinLoadDone";
+            this.CtrlEmptyBinLoadDone.UseVisualStyleBackColor = true;
+            this.CtrlEmptyBinLoadDone.Click += new System.EventHandler(this.CtrlEmptyBinLoadDone_Click);
             // 
             // ControllersAPITest
             // 
@@ -318,6 +331,7 @@
         private System.Windows.Forms.Button CtrlTaskCancel;
         private System.Windows.Forms.Button CtrlTransferCommandRequest;
         private System.Windows.Forms.Button CtrlBufferInitial;
+        private System.Windows.Forms.Button CtrlEmptyBinLoadDone;
     }
 }
 

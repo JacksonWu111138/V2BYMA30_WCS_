@@ -8,7 +8,7 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
 {
     public class CarrierShelfRequestInfo
     {
-        public string jobId { get; set; } = DateTime.Now.ToString("g");
+        public string jobId { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         public string transactionId { get; set; } = "CARRIER_SHELF_REQUEST";
         public string fromShelfId { get; set; }
         public string toShelfId { get; set; }

@@ -130,5 +130,11 @@ namespace Mirle.WebAPI.Test.Controllers
             CtrlBufferInitialInfo form = new CtrlBufferInitialInfo();
             form.Show();
         }
+
+        private void CtrlEmptyBinLoadDone_Click(object sender, EventArgs e)
+        {
+            CtrlEmptyBinLoadDone form = new CtrlEmptyBinLoadDone();
+            form.Show();
+        }
     }
 }

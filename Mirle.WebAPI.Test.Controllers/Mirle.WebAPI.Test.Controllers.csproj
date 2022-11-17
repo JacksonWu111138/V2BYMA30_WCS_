@@ -154,6 +154,12 @@
     <Compile Include="ApiList\CtrlBufferInitialInfo.Designer.cs">
       <DependentUpon>CtrlBufferInitialInfo.cs</DependentUpon>
     </Compile>
+    <Compile Include="ApiList\CtrlEmptyBinLoadDone.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ApiList\CtrlEmptyBinLoadDone.Designer.cs">
+      <DependentUpon>CtrlEmptyBinLoadDone.cs</DependentUpon>
+    </Compile>
     <Compile Include="ControllersAPITest.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -179,6 +185,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ApiList\CtrlCVReceiveNewBinCmd.resx">
       <DependentUpon>CtrlCVReceiveNewBinCmd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ApiList\CtrlEmptyBinLoadDone.resx">
+      <DependentUpon>CtrlEmptyBinLoadDone.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="ApiList\CtrlHealthCheck.resx">
       <DependentUpon>CtrlHealthCheck.cs</DependentUpon>

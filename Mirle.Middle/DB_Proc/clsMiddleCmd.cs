@@ -328,6 +328,7 @@ namespace Mirle.Middle.DB_Proc
                                     }
                                     else
                                     {
+                                        //PCBA倉
                                         if (FunSingleAsrsCmdProc(cmd, db)) return true;
                                         else continue;
                                     }
@@ -412,7 +413,7 @@ namespace Mirle.Middle.DB_Proc
                                         db.TransactionCtrl(TransactionTypes.Commit);
                                         return true;
                                     }
-                                    else
+                                    else if (cmd.DeviceID == sDeviceID_AGV)
                                     {
                                         if (cmd.CmdSts == clsConstValue.CmdSts_MiddleCmd.strCmd_Initial)
                                         {
@@ -537,6 +538,7 @@ namespace Mirle.Middle.DB_Proc
                                             return true;
                                         }
                                     }
+                                    else { }
                                 }
                             }
                         }

@@ -253,6 +253,7 @@ namespace Mirle.DB.Fun
 
                         return false;
                     }
+                    cmd.New_Loc = sNewLoc;
                 }
                 else
                 {
@@ -268,6 +269,7 @@ namespace Mirle.DB.Fun
 
                         return false;
                     }
+                    cmd.Loc = sNewLoc;
                 }
 
                 if (!MiddleCmd.FunInsertHisMiddleCmd(cmd.Cmd_Sno, db))
@@ -294,6 +296,31 @@ namespace Mirle.DB.Fun
                     return false;
                 }
 
+                MiddleCmd middleCmd2 = new MiddleCmd();
+                if (!MiddleCmd.FunGetMiddelCmd_Deposit(cmd, ref middleCmd2, db))
+                {
+                    db.TransactionCtrl(TransactionTypes.Rollback);
+                    sRemark = "Error: 取得置物命令失敗";
+                    if (sRemark != cmd.Remark)
+                    {
+                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                    }
+
+                    return false;
+                }
+                
+                if(!MiddleCmd.FunInsMiddleCmd(middleCmd2, db))
+                {
+                    db.TransactionCtrl(TransactionTypes.Rollback);
+                    sRemark = "Error: insert置物middle命令失敗";
+                    if (sRemark != cmd.Remark)
+                    {
+                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                    }
+
+                    return false;
+                }
+                    
                 if (!api.GetCarrierShelfReport().FunReport(info, apiConfig.IP))
                 {
                     db.TransactionCtrl(TransactionTypes.Rollback);

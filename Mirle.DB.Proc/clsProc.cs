@@ -1589,6 +1589,7 @@ namespace Mirle.DB.Proc
                                             #region 空出庫流程
                                             CarrierShelfCompleteInfo shelfCompleteInfo = new CarrierShelfCompleteInfo();
                                             CarrierRetrieveCompleteInfo retrieveCompleteInfo = new CarrierRetrieveCompleteInfo();
+                                            BufferInitialInfo bufferInitialInfo = new BufferInitialInfo();
                                             if (cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut)
                                             {
                                                 retrieveCompleteInfo = new CarrierRetrieveCompleteInfo
@@ -1599,6 +1600,11 @@ namespace Mirle.DB.Proc
                                                     jobId = cmd.JobID,
                                                     location = "",
                                                     portId = ""
+                                                };
+
+                                                bufferInitialInfo = new BufferInitialInfo
+                                                {
+                                                    bufferId = middleCmd.Destination
                                                 };
                                             }
                                             else
@@ -1656,6 +1662,20 @@ namespace Mirle.DB.Proc
 
                                             if (cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut)
                                             {
+                                                ConveyorInfo con = ConveyorDef.GetBuffer(bufferInitialInfo.bufferId);
+
+                                                if(!api.GetBufferInitial().FunReport(bufferInitialInfo, con.API.IP))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    sRemark = "Error: 初始CV站口失敗";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
                                                 if (!api.GetCarrierRetrieveComplete().FunReport(retrieveCompleteInfo, _wmsApi.IP))
                                                 {
                                                     db.TransactionCtrl(TransactionTypes.Rollback);
@@ -1898,9 +1918,13 @@ namespace Mirle.DB.Proc
 
                                 #region 確定是否需要內儲位的庫對庫命令
 
-                                Location Start = null; Location End = null;
-                                if (!Routdef.FunGetLocation(cmd, Router, ref Start, ref End, db)) continue;
-                                if (!Routdef.CheckSourceIsOK(cmd, Start, middle, Device, wms, db)) continue;
+                                if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
+                                {
+                                    Location Start = null; Location End = null;
+                                    if (!Routdef.FunGetLocation(cmd, Router, ref Start, ref End, db)) continue;
+                                    if (!Routdef.CheckSourceIsOK(cmd, Start, middle, Device, wms, db))
+                                        continue;
+                                }
 
                                 #endregion 確定是否需要內儲位的庫對庫命令
 

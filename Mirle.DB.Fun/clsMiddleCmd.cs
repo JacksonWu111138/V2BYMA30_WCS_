@@ -107,15 +107,9 @@ namespace Mirle.DB.Fun
                 middleCmd.DeviceID = cmd.Equ_No;
                 middleCmd.CSTID = cmd.BoxID;
 
-                if (cmd.CurLoc == Location.LocationID.LeftFork.ToString())
-                    middleCmd.CmdMode = clsConstValue.CmdMode.Deposit;
-                else
-                    middleCmd.CmdMode = clsConstValue.CmdMode.L2L;
+                middleCmd.CmdMode = clsConstValue.CmdMode.L2L;
 
-                if (middleCmd.CmdMode == clsConstValue.CmdMode.Deposit) 
-                    middleCmd.Source = "";
-                else
-                    middleCmd.Source = cmd.Loc;
+                middleCmd.Source = cmd.Loc;
 
 
                 middleCmd.Destination = cmd.New_Loc;
@@ -213,6 +207,51 @@ namespace Mirle.DB.Fun
             }
         }
 
+        public bool FunGetMiddelCmd_Deposit(CmdMstInfo cmd, ref MiddleCmd middleCmd, DataBase.DB db, string BatchID = "")
+        {
+            try
+            {
+                middleCmd = new MiddleCmd();
+                middleCmd.TaskNo = SNO.FunGetSeqNo(clsEnum.enuSnoType.CMDSUO, db);
+                if (string.IsNullOrWhiteSpace(middleCmd.TaskNo))
+                {
+                    string sRemark = "Error: 取得TaskNo失敗！";
+                    if (sRemark != cmd.Remark)
+                    {
+                        CMD_MST.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                    }
+
+                    return false;
+                }
+
+                middleCmd.CommandID = cmd.Cmd_Sno;
+                middleCmd.DeviceID = cmd.Equ_No;
+                middleCmd.CSTID = cmd.BoxID;
+
+                middleCmd.CmdMode = clsConstValue.CmdMode.Deposit ;
+                string ToLoc = cmd.Cmd_Mode == clsConstValue.CmdMode.L2L ? cmd.New_Loc : cmd.Loc;
+
+                middleCmd.Source = "";
+                middleCmd.Destination = ToLoc;
+                middleCmd.lotSize = cmd.lotSize;
+                middleCmd.Priority = Convert.ToInt32(cmd.Prty);
+
+                string sStnNo = cmd.Cmd_Mode == clsConstValue.CmdMode.S2S ? cmd.New_Loc : cmd.Stn_No;
+                middleCmd.Path = ConveyorDef.GetPathByStn(sStnNo);
+                middleCmd.BatchID = BatchID;
+                middleCmd.Iotype = cmd.IO_Type;
+                middleCmd.carrierType = cmd.carrierType;
+                middleCmd.largest = cmd.largest;
+                middleCmd.rackLocation = cmd.rackLocation;
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
         public bool FunGetMiddleCmd_NonASRS(CmdMstInfo cmd, Location sLoc_Start, Location sLoc_End, ref MiddleCmd middleCmd, string sDeviceID, DataBase.DB db, string BatchID = "")
         {
             try

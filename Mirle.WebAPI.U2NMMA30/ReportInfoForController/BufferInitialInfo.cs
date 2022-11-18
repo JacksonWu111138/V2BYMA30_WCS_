@@ -11,7 +11,7 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
         /// <summary>
         /// 命令序號
         /// </summary>
-        public string jobId { get; set; } = "";
+        public string jobId { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
         public string transactionId { get; set; } = "BUFFER_INITIAL";
         public string bufferId { get; set; }
     }

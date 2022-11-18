@@ -8,7 +8,8 @@ namespace Mirle.WebAPI.Event.U2NMMA30.Models
 {
     public class ModeChangeInfo : BaseInfo
     {
-        public string bufferId { get; set; }
-        public string mode { get; set; }
+        public string craneId { get; set; }
+        public string outPortMode { get; set; }
+        public string inPortMode { get; set; }
     }
 }

@@ -40,6 +40,9 @@ namespace Mirle.DB.Fun
                         if (iRet != DBResult.Exception)
                             location = IsTeach ? Location.LocationID.Teach.ToString() : Location.LocationID.Shelf.ToString();
                         break;
+                    case clsConstValue.CmdMode.Deposit:
+                        location = Location.LocationID.LeftFork.ToString();
+                        break;
                     default:
                         location = sLocation;
                         break;
@@ -51,6 +54,7 @@ namespace Mirle.DB.Fun
                 {
                     case clsConstValue.CmdMode.StockIn:
                     case clsConstValue.CmdMode.L2L:
+                    case clsConstValue.CmdMode.Deposit:
                         iRet = LocMst.CheckIsTeach(sDeviceID, sLocation, ref IsTeach, db);
                         if (iRet != DBResult.Exception)
                             location = IsTeach ? Location.LocationID.Teach.ToString() : Location.LocationID.Shelf.ToString();

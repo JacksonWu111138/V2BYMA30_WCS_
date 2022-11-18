@@ -2026,39 +2026,53 @@ namespace Mirle.WebAPI.Event
                 //未撰寫
                 //mode == 1正常，mode ==2異常，mode == 3盤點
                 //PCBA以M1-05, M1-10, M1-15, M1-20分別代表四條線
-                switch(Body.mode)
+                ConveyorInfo outCV = new ConveyorInfo();
+                ConveyorInfo inCV = new ConveyorInfo();
+                switch (Body.craneId)
                 {
-                    case clsConstValue.ControllerApi.M800Mode.Normal:
+                    case "M801":
+                        outCV = ConveyorDef.AGV.M1_15;
+                        inCV = ConveyorDef.AGV.M1_20;
                         break;
-                    case clsConstValue.ControllerApi.M800Mode.Malfunction:
+                    case "M802":
+                        outCV = ConveyorDef.AGV.M1_05;
+                        inCV = ConveyorDef.AGV.M1_10;
                         break;
-                    case clsConstValue.ControllerApi.M800Mode.Cycle:
-                        break;
+                    default:
+                        throw new Exception($"Error: 傳遞craneId格式有誤。 craneId = {Body.craneId}");
                 }
 
-                if(Body.bufferId == ConveyorDef.AGV.M1_05.BufferName)
+                if (Body.outPortMode == clsConstValue.ControllerApi.M800Mode.Normal)
                 {
+                    if (Body.inPortMode == clsConstValue.ControllerApi.M800Mode.Normal)
+                    {
 
+                    }
+                    else if (Body.inPortMode == clsConstValue.ControllerApi.M800Mode.Malfunction)
+                    {
+
+                    }
                 }
-                else if (Body.bufferId == ConveyorDef.AGV.M1_10.BufferName)
+                else if (Body.outPortMode == clsConstValue.ControllerApi.M800Mode.Malfunction)
                 {
+                    if (Body.inPortMode == clsConstValue.ControllerApi.M800Mode.Normal)
+                    {
 
-                }
-                else if (Body.bufferId == ConveyorDef.AGV.M1_15.BufferName)
-                {
+                    }
+                    else if (Body.inPortMode == clsConstValue.ControllerApi.M800Mode.Malfunction)
+                    {
 
+                    }
                 }
-                else if (Body.bufferId == ConveyorDef.AGV.M1_20.BufferName)
+                else if (Body.outPortMode == clsConstValue.ControllerApi.M800Mode.Cycle && Body.inPortMode == clsConstValue.ControllerApi.M800Mode.Cycle)
                 {
 
                 }
                 else
-                {
-                    throw new Exception($"Error: M800給予ModeChange點位錯誤(error bufferId = {Body.bufferId}), jobId = {Body.jobId}.");
-                }
+                    throw new Exception($"Error: 傳送mode格式有誤, inPortMode = {Body.inPortMode} and outPortMode = {Body.outPortMode}.");
 
 
-                                    rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
+                rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>MODE_CHANGE record end!");

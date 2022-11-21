@@ -5,6 +5,8 @@ using System.Data;
 using System.Linq;
 using Mirle.DRCS;
 using Mirle.Def;
+using Mirle.Def.U2NMMA30;
+using Mirle.WriLog;
 
 namespace Mirle.MapController
 {
@@ -87,6 +89,7 @@ namespace Mirle.MapController
                     }
 
                     Done = true;
+                    FunInitPCBACV();
                     timRead.Enabled = false;
                 }
                 else timRead.Enabled = true;
@@ -188,6 +191,48 @@ namespace Mirle.MapController
                 clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
                 return false;
             }
+        }
+
+        public void FunInitPCBACV()
+        {
+            Location M1_01 = GetLocation("2", ConveyorDef.PCBA.M1_01.BufferName);
+            Location M1_05 = GetLocation(ConveyorDef.DeviceID_AGV + "8", ConveyorDef.AGV.M1_05.BufferName);
+            Location M1_06 = GetLocation("2", ConveyorDef.PCBA.M1_06.BufferName);
+            Location M1_10 = GetLocation(ConveyorDef.DeviceID_AGV + "8", ConveyorDef.AGV.M1_10.BufferName);
+            Location Shelf2 = GetLocation("2", LocationTypes.Shelf.ToString());
+            Location LeftFork2 = GetLocation("2", "LeftFork");
+
+            Location M1_11 = GetLocation("1", ConveyorDef.PCBA.M1_11.BufferName);
+            Location M1_15 = GetLocation(ConveyorDef.DeviceID_AGV + "8", ConveyorDef.AGV.M1_15.BufferName);
+            Location M1_16 = GetLocation("1", ConveyorDef.PCBA.M1_16.BufferName);
+            Location M1_20 = GetLocation(ConveyorDef.DeviceID_AGV + "8", ConveyorDef.AGV.M1_20.BufferName);
+            Location Shelf1 = GetLocation("1", LocationTypes.Shelf.ToString());
+            Location LeftFork1 = GetLocation("1", "LeftFork");
+
+            //禁用PCBA1故障模式路徑
+            if (!EnablePath(LeftFork1, M1_16, false))
+                clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{LeftFork1.LocationId}->{M1_16.LocationId}Fail.");
+            if (!EnablePath(Shelf1, M1_16, false))
+                clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{Shelf1.LocationId}->{M1_16.LocationId}Fail.");
+            if (!EnablePath(M1_16, M1_20, false))
+                clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{M1_16.LocationId}->{M1_20.LocationId}Fail.");
+            if (!EnablePath(M1_15, M1_11, false))
+                clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{M1_15.LocationId}->{M1_11.LocationId}Fail.");
+            if (!EnablePath(M1_11, Shelf1, false))
+                clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{M1_11.LocationId}->{Shelf1.LocationId}Fail.");
+
+            //禁用PCBA2故障模式路徑
+            if (!EnablePath(LeftFork2, M1_06, false))
+                clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_2路徑失敗：禁用路徑{LeftFork2.LocationId}->{M1_06.LocationId}Fail.");
+            if (!EnablePath(Shelf2, M1_06, false))
+                clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_2路徑失敗：禁用路徑{Shelf2.LocationId}->{M1_06.LocationId}Fail.");
+            if (!EnablePath(M1_06, M1_10, false))
+                clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_2路徑失敗：禁用路徑{M1_06.LocationId}->{M1_10.LocationId}Fail.");
+            if (!EnablePath(M1_05, M1_01, false))
+                clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_2路徑失敗：禁用路徑{M1_05.LocationId}->{M1_01.LocationId}Fail.");
+            if (!EnablePath(M1_01, Shelf2, false))
+                clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_2路徑失敗：禁用路徑{M1_01.LocationId}->{Shelf2.LocationId}Fail.");
+
         }
     }
 }

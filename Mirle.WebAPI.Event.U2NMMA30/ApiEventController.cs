@@ -30,6 +30,7 @@ using Mirle.Structure.Info;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Web;
+using Mirle.WriLog;
 
 namespace Mirle.WebAPI.Event
 {
@@ -2023,41 +2024,55 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>MODE_CHANGE start!");
             try
             {
-                //未撰寫
+                //正在撰寫
                 //mode == 1正常，mode ==2異常，mode == 3盤點
                 //PCBA以M1-05, M1-10, M1-15, M1-20分別代表四條線
+
+                //初始Conveyor點
+                ConveyorInfo outAGV = new ConveyorInfo();
                 ConveyorInfo outCV = new ConveyorInfo();
                 ConveyorInfo inCV = new ConveyorInfo();
+                ConveyorInfo inAGV = new ConveyorInfo();
                 switch (Body.craneId)
                 {
                     case "M801":
-                        outCV = ConveyorDef.AGV.M1_15;
-                        inCV = ConveyorDef.AGV.M1_20;
+                        outAGV = ConveyorDef.AGV.M1_15;
+                        outCV = ConveyorDef.PCBA.M1_11;
+                        inCV = ConveyorDef.PCBA.M1_16;
+                        inAGV = ConveyorDef.AGV.M1_20;
                         break;
                     case "M802":
-                        outCV = ConveyorDef.AGV.M1_05;
-                        inCV = ConveyorDef.AGV.M1_10;
+                        outAGV = ConveyorDef.AGV.M1_05;
+                        outCV = ConveyorDef.PCBA.M1_01;
+                        inCV = ConveyorDef.PCBA.M1_06;
+                        inAGV = ConveyorDef.AGV.M1_10;
                         break;
                     default:
                         throw new Exception($"Error: 傳遞craneId格式有誤。 craneId = {Body.craneId}");
                 }
 
+                //初始路徑啟用/禁用狀況
+                bool normalOut = false; bool normalIn = false;  bool abnormalOut = false; bool abnormalIn = false;
+
                 if (Body.outPortMode == clsConstValue.ControllerApi.M800Mode.Normal)
                 {
                     if (Body.inPortMode == clsConstValue.ControllerApi.M800Mode.Normal)
                     {
-
+                        normalOut = true;
+                        normalIn = true;
                     }
                     else if (Body.inPortMode == clsConstValue.ControllerApi.M800Mode.Malfunction)
                     {
-
+                        abnormalIn = true;
+                        normalOut = true;
                     }
                 }
                 else if (Body.outPortMode == clsConstValue.ControllerApi.M800Mode.Malfunction)
                 {
                     if (Body.inPortMode == clsConstValue.ControllerApi.M800Mode.Normal)
                     {
-
+                        abnormalOut = true;
+                        normalIn = true;
                     }
                     else if (Body.inPortMode == clsConstValue.ControllerApi.M800Mode.Malfunction)
                     {
@@ -2071,6 +2086,41 @@ namespace Mirle.WebAPI.Event
                 else
                     throw new Exception($"Error: 傳送mode格式有誤, inPortMode = {Body.inPortMode} and outPortMode = {Body.outPortMode}.");
 
+                //禁用/啟用路徑點位初始
+                Location OutCV = clsMapController.GetMapHost().GetLocation(outCV.DeviceId, outCV.BufferName);
+                Location OutAGV = clsMapController.GetMapHost().GetLocation(outAGV.DeviceId, outAGV.BufferName);
+                Location InCV = clsMapController.GetMapHost().GetLocation(inCV.DeviceId, inCV.BufferName);
+                Location InAGV = clsMapController.GetMapHost().GetLocation(inAGV.DeviceId, inAGV.BufferName);
+                Location leftFork = clsMapController.GetMapHost().GetLocation(inCV.DeviceId, Location.LocationID.LeftFork.ToString());
+                Location shelf = clsMapController.GetMapHost().GetLocation(inCV.DeviceId, LocationTypes.Shelf.ToString());
+
+                //正常出庫
+                if (!clsMapController.GetMapHost().EnablePath(leftFork, OutCV, normalOut))
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{leftFork.LocationId}->{OutCV.LocationId}Fail.");
+                if (!clsMapController.GetMapHost().EnablePath(shelf, OutCV, normalOut))
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{shelf.LocationId}->{OutCV.LocationId}Fail.");
+                if (!clsMapController.GetMapHost().EnablePath(OutCV, OutAGV, normalOut))
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{OutCV.LocationId}->{OutAGV.LocationId}Fail.");
+
+                //異常出庫
+                if (!clsMapController.GetMapHost().EnablePath(leftFork, InCV, abnormalOut))
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{leftFork.LocationId}->{InCV.LocationId}Fail.");
+                if (!clsMapController.GetMapHost().EnablePath(shelf, InCV, abnormalOut))
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{shelf.LocationId}->{InCV.LocationId}Fail.");
+                if (!clsMapController.GetMapHost().EnablePath(InCV, InAGV, abnormalOut))
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{InCV.LocationId}->{InAGV.LocationId}Fail.");
+
+                //正常入庫
+                if (!clsMapController.GetMapHost().EnablePath(InAGV, InCV, normalIn))
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{InAGV.LocationId}->{InCV.LocationId}Fail.");
+                if (!clsMapController.GetMapHost().EnablePath(InCV, shelf, normalIn))
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{InCV.LocationId}->{shelf.LocationId}Fail.");
+
+                //異常入庫
+                if (!clsMapController.GetMapHost().EnablePath(OutAGV, OutCV, normalIn))
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{OutAGV.LocationId}->{OutCV.LocationId}Fail.");
+                if (!clsMapController.GetMapHost().EnablePath(OutCV, shelf, normalIn))
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{OutCV.LocationId}->{shelf.LocationId}Fail.");
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";

@@ -445,6 +445,11 @@ namespace Mirle.Def
                 public const string Cycle = "3";
 
             }
+            public class CraneType
+            {
+                public const string PCBA = "M800";
+                public const string Box = "B800";
+            }
         }
         public class LineName
         {

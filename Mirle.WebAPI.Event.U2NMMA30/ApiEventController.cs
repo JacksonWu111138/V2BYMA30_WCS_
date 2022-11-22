@@ -1012,8 +1012,6 @@ namespace Mirle.WebAPI.Event
                     {
                         if(Body.location == ConveyorDef.Tower.E1_04.BufferName)
                         {
-                            if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, Body.location))
-                                throw new Exception($"Error: UpdateCurLoc Fail. jobId = {Body.jobId}");
                             rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                             rMsg.returnComment = "";
 
@@ -1025,9 +1023,6 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"Error: 目前抵達命令終點，稍後等待命令清除！ jobId = {cmd.Cmd_Sno}.");
                     }
 
-                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{cmd.Cmd_Sno}>This BCRCheck exist.");
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, Body.location))
-                        throw new Exception($"Error: UpdateCurLoc Fail. jobId = {Body.jobId}");
                     if(((Body.location == ConveyorDef.Box.B1_037.BufferName || Body.location == ConveyorDef.Box.B1_117.BufferName) && cmd.Equ_No == "3") ||
                        ((Body.location == ConveyorDef.Box.B1_041.BufferName || Body.location == ConveyorDef.Box.B1_121.BufferName) && cmd.Equ_No == "4") ||
                        ((Body.location == ConveyorDef.Box.B1_045.BufferName || Body.location == ConveyorDef.Box.B1_125.BufferName) && cmd.Equ_No == "5"))
@@ -2028,6 +2023,12 @@ namespace Mirle.WebAPI.Event
                 //mode == 1正常，mode ==2異常，mode == 3盤點
                 //PCBA以M1-05, M1-10, M1-15, M1-20分別代表四條線
 
+                EQPStatusUpdateInfo EQPinfo = new EQPStatusUpdateInfo
+                {
+                    craneId = Body.craneId,
+                    craneStatus = "1",
+                };
+
                 //初始Conveyor點
                 ConveyorInfo outAGV = new ConveyorInfo();
                 ConveyorInfo outCV = new ConveyorInfo();
@@ -2060,11 +2061,33 @@ namespace Mirle.WebAPI.Event
                     {
                         normalOut = true;
                         normalIn = true;
+                        switch(Body.craneId)
+                        {
+                            case "M801":
+                                ConveyorDef.AGV.M1_15.StnNo = "M800-3";
+                                ConveyorDef.AGV.M1_20.StnNo = "M800-1";
+                                break;
+                            case "M802":
+                                ConveyorDef.AGV.M1_05.StnNo = "M800-4";
+                                ConveyorDef.AGV.M1_10.StnNo = "M800-2";
+                                break;
+                        }
                     }
                     else if (Body.inPortMode == clsConstValue.ControllerApi.M800Mode.Malfunction)
                     {
                         abnormalIn = true;
                         normalOut = true;
+                        switch (Body.craneId)
+                        {
+                            case "M801":
+                                ConveyorDef.AGV.M1_15.StnNo = "M800-1";
+                                ConveyorDef.AGV.M1_20.StnNo = "M800-1_Malfunction";
+                                break;
+                            case "M802":
+                                ConveyorDef.AGV.M1_05.StnNo = "M800-2";
+                                ConveyorDef.AGV.M1_10.StnNo = "M800-2_Malfunction";
+                                break;
+                        }
                     }
                 }
                 else if (Body.outPortMode == clsConstValue.ControllerApi.M800Mode.Malfunction)
@@ -2073,10 +2096,21 @@ namespace Mirle.WebAPI.Event
                     {
                         abnormalOut = true;
                         normalIn = true;
+                        switch (Body.craneId)
+                        {
+                            case "M801":
+                                ConveyorDef.AGV.M1_15.StnNo = "M800-3_Malfunction";
+                                ConveyorDef.AGV.M1_20.StnNo = "M800-1";
+                                break;
+                            case "M802":
+                                ConveyorDef.AGV.M1_05.StnNo = "M800-4_Malfunction";
+                                ConveyorDef.AGV.M1_10.StnNo = "M800-2";
+                                break;
+                        }
                     }
                     else if (Body.inPortMode == clsConstValue.ControllerApi.M800Mode.Malfunction)
                     {
-
+                        EQPinfo.craneId = "0";
                     }
                 }
                 else if (Body.outPortMode == clsConstValue.ControllerApi.M800Mode.Cycle && Body.inPortMode == clsConstValue.ControllerApi.M800Mode.Cycle)
@@ -2096,37 +2130,41 @@ namespace Mirle.WebAPI.Event
 
                 //正常出庫
                 if (!clsMapController.GetMapHost().EnablePath(leftFork, OutCV, normalOut))
-                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{leftFork.LocationId}->{OutCV.LocationId}Fail.");
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"更新PCBA路徑失敗：禁用路徑{leftFork.LocationId}->{OutCV.LocationId} fail.");
                 if (!clsMapController.GetMapHost().EnablePath(shelf, OutCV, normalOut))
-                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{shelf.LocationId}->{OutCV.LocationId}Fail.");
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"更新PCBA路徑失敗：禁用路徑{shelf.LocationId}->{OutCV.LocationId} fail.");
                 if (!clsMapController.GetMapHost().EnablePath(OutCV, OutAGV, normalOut))
-                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{OutCV.LocationId}->{OutAGV.LocationId}Fail.");
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"更新PCBA路徑失敗：禁用路徑{OutCV.LocationId}->{OutAGV.LocationId} fail.");
 
                 //異常出庫
                 if (!clsMapController.GetMapHost().EnablePath(leftFork, InCV, abnormalOut))
-                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{leftFork.LocationId}->{InCV.LocationId}Fail.");
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"更新PCBA路徑失敗：禁用路徑{leftFork.LocationId}->{InCV.LocationId} fail.");
                 if (!clsMapController.GetMapHost().EnablePath(shelf, InCV, abnormalOut))
-                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{shelf.LocationId}->{InCV.LocationId}Fail.");
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"更新PCBA路徑失敗：禁用路徑{shelf.LocationId}->{InCV.LocationId} fail.");
                 if (!clsMapController.GetMapHost().EnablePath(InCV, InAGV, abnormalOut))
-                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{InCV.LocationId}->{InAGV.LocationId}Fail.");
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"更新PCBA路徑失敗：禁用路徑{InCV.LocationId}->{InAGV.LocationId} fail.");
 
                 //正常入庫
                 if (!clsMapController.GetMapHost().EnablePath(InAGV, InCV, normalIn))
-                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{InAGV.LocationId}->{InCV.LocationId}Fail.");
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"更新PCBA路徑失敗：禁用路徑{InAGV.LocationId}->{InCV.LocationId} fail.");
                 if (!clsMapController.GetMapHost().EnablePath(InCV, shelf, normalIn))
-                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{InCV.LocationId}->{shelf.LocationId}Fail.");
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"更新PCBA路徑失敗：禁用路徑{InCV.LocationId}->{shelf.LocationId} fail.");
 
                 //異常入庫
-                if (!clsMapController.GetMapHost().EnablePath(OutAGV, OutCV, normalIn))
-                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{OutAGV.LocationId}->{OutCV.LocationId}Fail.");
-                if (!clsMapController.GetMapHost().EnablePath(OutCV, shelf, normalIn))
-                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"初始PCBA_1路徑失敗：禁用路徑{OutCV.LocationId}->{shelf.LocationId}Fail.");
+                if (!clsMapController.GetMapHost().EnablePath(OutAGV, OutCV, abnormalIn))
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"更新PCBA路徑失敗：禁用路徑{OutAGV.LocationId}->{OutCV.LocationId} fail.");
+                if (!clsMapController.GetMapHost().EnablePath(OutCV, shelf, abnormalIn))
+                    clsWriLog.Log.FunWriLog(clsLog.Type.Error, $"更新PCBA路徑失敗：禁用路徑{OutCV.LocationId}->{shelf.LocationId} fail.");
+
+                //上報WES Crane是否可以入出庫
+                if (!clsAPI.GetAPI().GetEQPStatusUpdate().FunReport(EQPinfo, clsAPI.GetWesApiConfig().IP))
+                    throw new Exception($"Error: 上報WES EQP Status Update失敗, CraneId = {EQPinfo.craneId} and CraneStatus = {EQPinfo.craneStatus}.");
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
 
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>MODE_CHANGE record end!");
-                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<MODE_CHANGE> <WCS Reply>\n{JsonConvert.SerializeObject(rMsg)}");
+                clsWriLog.Log.FunWriLog(clsLog.Type.Trace, $"<{Body.jobId}>MODE_CHANGE record end!");
+                clsWriLog.Log.FunWriLog(clsLog.Type.Trace, $"<MODE_CHANGE> <WCS Reply>\n{JsonConvert.SerializeObject(rMsg)}");
                 return Json(rMsg);
             }
             catch (Exception ex)

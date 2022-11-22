@@ -8,7 +8,7 @@ namespace Mirle.WebAPI.V2BYMA30.ReportInfo
 {
     public class EQPStatusUpdateInfo
     {
-        public string jobId { get; set; }
+        public string jobId { get; set; } = DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss");
         public string transactionId { get; set; } = "EQP_STATUS_UPDATE";
         public string craneId { get; set; }
         public string craneStatus { get; set; }

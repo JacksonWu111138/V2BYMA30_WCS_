@@ -445,10 +445,23 @@ namespace Mirle.Def
                 public const string Cycle = "3";
 
             }
-            public class CraneType
+            public class StorageType
             {
                 public const string PCBA = "M800";
                 public const string Box = "B800";
+            }
+            public class CraneId
+            {
+                public const string E801 = "E801";
+                public const string E802 = "E802";
+                public const string E803 = "E803";
+                public const string E804 = "E804";
+                public const string E805 = "E805";
+                public const string B801 = "B801";
+                public const string B802 = "B802";
+                public const string B803 = "B803";
+                public const string M801 = "M801";
+                public const string M802 = "M802";
             }
         }
         public class LineName

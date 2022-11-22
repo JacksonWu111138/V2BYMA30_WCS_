@@ -2311,7 +2311,7 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
-        public bool FunCommandComplete(string sCmdSno, string sCmdMode, string sEmptyRetrieval, string sPortId, string sCarrierId, string WESAPI, ref string strEM)
+        public bool FunE800CommandComplete(string sCmdSno, string sCmdMode, string sEmptyRetrieval, string sPortId, string sCarrierId, string WESAPI, ref string strEM)
         {
             try
             {

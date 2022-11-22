@@ -1057,12 +1057,9 @@ namespace Mirle.WebAPI.Event
                         {
                             portId = ConveyorDef.WES_B800CV,
                             carrierId = Body.barcode,
-                            storageType = "B800"
+                            storageType = clsConstValue.WesApi.StorageType.Box
                         }; 
-                        if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
-                        {
-                            info.portId = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
-                        }
+                        
                         if (!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
                             throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}.");
                     }
@@ -1074,12 +1071,9 @@ namespace Mirle.WebAPI.Event
                         {
                             portId = con.StnNo,
                             carrierId = Body.barcode,
-                            storageType = "M800"
+                            storageType = clsConstValue.WesApi.StorageType.PCBA
                         };
-                        if (ConveyorDef.GetSharingNode().Any(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName))
-                        {
-                            info.portId = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
-                        }
+                        
                         if (!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
                             throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}.");
                     }
@@ -1265,6 +1259,7 @@ namespace Mirle.WebAPI.Event
             }
         }
 
+        //未撰寫
         [Route("WCS/BLOCK_STATUS_CHANGE")]
         [HttpPost]
         public IHttpActionResult BLOCK_STATUS_CHANGE([FromBody] BlockStatusInfo Body)
@@ -1588,19 +1583,19 @@ namespace Mirle.WebAPI.Event
                 switch (Body.locationId.Substring(0, 1))
                 {
                     case "A":
-                        info.craneId = "E801";
+                        info.craneId = clsConstValue.WesApi.CraneId.E801;
                         break;
                     case "B":
-                        info.craneId = "E802";
+                        info.craneId = clsConstValue.WesApi.CraneId.E802;
                         break;
                     case "C":
-                        info.craneId = "E803";
+                        info.craneId = clsConstValue.WesApi.CraneId.E803;
                         break;
                     case "D":
-                        info.craneId = "E804";
+                        info.craneId = clsConstValue.WesApi.CraneId.E804;
                         break;
                     case "E":
-                        info.craneId = "E805";
+                        info.craneId = clsConstValue.WesApi.CraneId.E805;
                         break;
                     default: throw new ArgumentOutOfRangeException(nameof(Body.locationId), "Error: E800 儲位ID不合格式.");
                 }
@@ -1614,7 +1609,7 @@ namespace Mirle.WebAPI.Event
                     shelfId = reply.shelfId,
                     shelfStatus = "IN",
                     lotId = reply.lotIdCarrierId,
-                    disableLocation = Body.doubleStorage == "Y" ? "Y" : "N"
+                    disableLocation = Body.doubleStorage == "Y" ? clsConstValue.YesNo.Yes : clsConstValue.YesNo.No
                 };
 
                 string strEM = "";
@@ -1655,7 +1650,7 @@ namespace Mirle.WebAPI.Event
             try
             {
                 string strEM = "";
-                if (!clsDB_Proc.GetDB_Object().GetProc().FunCommandComplete(Body.jobId, Body.cmdMode, Body.emptyRetrieval, Body.portId, Body.carrierId, clsAPI.GetWesApiConfig().IP, ref strEM))
+                if (!clsDB_Proc.GetDB_Object().GetProc().FunE800CommandComplete(Body.jobId, Body.cmdMode, Body.emptyRetrieval, Body.portId, Body.carrierId, clsAPI.GetWesApiConfig().IP, ref strEM))
                     throw new Exception(strEM);
                 #region 修正
                 //if (Body.cmdMode == clsConstValue.CmdMode.StockIn)
@@ -1747,6 +1742,7 @@ namespace Mirle.WebAPI.Event
             }
         }
 
+        //未撰寫
         [Route("WCS/CONTROL_CHANGE")]
         [HttpPost]
         public IHttpActionResult CONTROL_CHANGE([FromBody] ControlChangeInfo Body)
@@ -1826,7 +1822,7 @@ namespace Mirle.WebAPI.Event
                     };
                     if (Body.location.Contains("B1"))
                         info.jobId = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                    if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                    if (ConveyorDef.GetSharingNode().Any(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName))
                     {
                         info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
                     }
@@ -1853,6 +1849,7 @@ namespace Mirle.WebAPI.Event
             }
         }
 
+        //未撰寫
         [Route("WCS/FORK_STATUS_REPORT")]
         [HttpPost]
         public IHttpActionResult FORK_STATUS_REPORT([FromBody] ForkStatusReportInfo Body)
@@ -1888,6 +1885,7 @@ namespace Mirle.WebAPI.Event
             }
         }
 
+        //未撰寫
         [Route("WCS/LOCATION_DISABLE_REQUEST")]
         [HttpPost]
         public IHttpActionResult LOCATION_DISABLE_REQUEST([FromBody] LocationDisableRequestInfo Body)
@@ -2036,13 +2034,13 @@ namespace Mirle.WebAPI.Event
                 ConveyorInfo inAGV = new ConveyorInfo();
                 switch (Body.craneId)
                 {
-                    case "M801":
+                    case clsConstValue.WesApi.CraneId.M801:
                         outAGV = ConveyorDef.AGV.M1_15;
                         outCV = ConveyorDef.PCBA.M1_11;
                         inCV = ConveyorDef.PCBA.M1_16;
                         inAGV = ConveyorDef.AGV.M1_20;
                         break;
-                    case "M802":
+                    case clsConstValue.WesApi.CraneId.M802:
                         outAGV = ConveyorDef.AGV.M1_05;
                         outCV = ConveyorDef.PCBA.M1_01;
                         inCV = ConveyorDef.PCBA.M1_06;
@@ -2063,11 +2061,11 @@ namespace Mirle.WebAPI.Event
                         normalIn = true;
                         switch(Body.craneId)
                         {
-                            case "M801":
+                            case clsConstValue.WesApi.CraneId.M801:
                                 ConveyorDef.AGV.M1_15.StnNo = "M800-3";
                                 ConveyorDef.AGV.M1_20.StnNo = "M800-1";
                                 break;
-                            case "M802":
+                            case clsConstValue.WesApi.CraneId.M802:
                                 ConveyorDef.AGV.M1_05.StnNo = "M800-4";
                                 ConveyorDef.AGV.M1_10.StnNo = "M800-2";
                                 break;
@@ -2079,11 +2077,11 @@ namespace Mirle.WebAPI.Event
                         normalOut = true;
                         switch (Body.craneId)
                         {
-                            case "M801":
+                            case clsConstValue.WesApi.CraneId.M801:
                                 ConveyorDef.AGV.M1_15.StnNo = "M800-1";
                                 ConveyorDef.AGV.M1_20.StnNo = "M800-1_Malfunction";
                                 break;
-                            case "M802":
+                            case clsConstValue.WesApi.CraneId.M802:
                                 ConveyorDef.AGV.M1_05.StnNo = "M800-2";
                                 ConveyorDef.AGV.M1_10.StnNo = "M800-2_Malfunction";
                                 break;
@@ -2098,11 +2096,11 @@ namespace Mirle.WebAPI.Event
                         normalIn = true;
                         switch (Body.craneId)
                         {
-                            case "M801":
+                            case clsConstValue.WesApi.CraneId.M801:
                                 ConveyorDef.AGV.M1_15.StnNo = "M800-3_Malfunction";
                                 ConveyorDef.AGV.M1_20.StnNo = "M800-1";
                                 break;
-                            case "M802":
+                            case clsConstValue.WesApi.CraneId.M802:
                                 ConveyorDef.AGV.M1_05.StnNo = "M800-4_Malfunction";
                                 ConveyorDef.AGV.M1_10.StnNo = "M800-2";
                                 break;
@@ -3006,7 +3004,7 @@ namespace Mirle.WebAPI.Event
                         reqQty = 1,
                         withClapBoard = clsConstValue.YesNo.Yes
                     };
-                    if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                    if (ConveyorDef.GetSharingNode().Any(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName))
                     {
                         info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
                     }
@@ -3268,19 +3266,19 @@ namespace Mirle.WebAPI.Event
                 switch (Body.stockerId.Substring(0, 1))
                 {
                     case "A":
-                        info.craneId = "E801";
+                        info.craneId = clsConstValue.WesApi.CraneId.E801;
                         break;
                     case "B":
-                        info.craneId = "E802";
+                        info.craneId = clsConstValue.WesApi.CraneId.E802;
                         break;
                     case "C":
-                        info.craneId = "E803";
+                        info.craneId = clsConstValue.WesApi.CraneId.E803;
                         break;
                     case "D":
-                        info.craneId = "E804";
+                        info.craneId = clsConstValue.WesApi.CraneId.E804;
                         break;
                     case "E":
-                        info.craneId = "E805";
+                        info.craneId = clsConstValue.WesApi.CraneId.E805;
                         break;
                     default: throw new ArgumentOutOfRangeException(nameof(Body.stockerId), "Error: E800 stocker ID不合格式.");
                 }

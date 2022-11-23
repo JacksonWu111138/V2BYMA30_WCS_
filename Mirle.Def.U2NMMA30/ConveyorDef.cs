@@ -791,7 +791,22 @@ namespace Mirle.Def.U2NMMA30
             FunAGV_6Fport();
             FunAGV_5Fport();
             FunAGV_3Fport();
-            foreach(var s in AGV_3FPort)
+            FunNode_6F();
+            FunNode_5F();
+            FunNode_3F();
+            foreach (var s in Node_3F)
+            {
+                s.DeviceId = "SMT3C";
+            }
+            foreach (var s in Node_5F)
+            {
+                s.DeviceId = "SMT5C";
+            }
+            foreach (var s in Node_6F)
+            {
+                s.DeviceId = "SMT6C";
+            }
+            foreach (var s in AGV_3FPort)
             {
                 s.DeviceId = "63";
             }
@@ -964,6 +979,7 @@ namespace Mirle.Def.U2NMMA30
         public static void FunAGV_6Fport()
         {
             //線邊倉
+            
             AGV_6FPort.Add(AGV.A3_01);
             AGV_6FPort.Add(AGV.A3_04);
             AGV_6FPort.Add(AGV.A3_05);
@@ -974,10 +990,59 @@ namespace Mirle.Def.U2NMMA30
             AGV_6FPort.Add(AGV.A3_16);
             AGV_6FPort.Add(AGV.A3_17);
             AGV_6FPort.Add(AGV.A3_20);
+            
+            /*
+            AGV_6FPort.Add(SMT6C.A3_02);
+            AGV_6FPort.Add(SMT6C.A3_03);
+            AGV_6FPort.Add(SMT6C.A3_06);
+            AGV_6FPort.Add(SMT6C.A3_07);
+            AGV_6FPort.Add(SMT6C.A3_10);
+            AGV_6FPort.Add(SMT6C.A3_11);
+            AGV_6FPort.Add(SMT6C.A3_14);
+            AGV_6FPort.Add(SMT6C.A3_15);
+            AGV_6FPort.Add(SMT6C.A3_18);
+            AGV_6FPort.Add(SMT6C.A3_19);
+            */
 
             //5號電梯
             AGV_6FPort.Add(AGV.LO6_01);
             AGV_6FPort.Add(AGV.LO6_04);
+
+        }
+
+        private static List<ConveyorInfo> Node_6F = new List<ConveyorInfo>();
+        public static List<ConveyorInfo> GetNode_6F() => Node_6F;
+        public static void FunNode_6F()
+        {
+            //線邊倉
+
+            Node_6F.Add(AGV.A3_01);
+            Node_6F.Add(AGV.A3_04);
+            Node_6F.Add(AGV.A3_05);
+            Node_6F.Add(AGV.A3_08);
+            Node_6F.Add(AGV.A3_09);
+            Node_6F.Add(AGV.A3_12);
+            Node_6F.Add(AGV.A3_13);
+            Node_6F.Add(AGV.A3_16);
+            Node_6F.Add(AGV.A3_17);
+            Node_6F.Add(AGV.A3_20);
+
+
+            Node_6F.Add(SMT6C.A3_02);
+            Node_6F.Add(SMT6C.A3_03);
+            Node_6F.Add(SMT6C.A3_06);
+            Node_6F.Add(SMT6C.A3_07);
+            Node_6F.Add(SMT6C.A3_10);
+            Node_6F.Add(SMT6C.A3_11);
+            Node_6F.Add(SMT6C.A3_14);
+            Node_6F.Add(SMT6C.A3_15);
+            Node_6F.Add(SMT6C.A3_18);
+            Node_6F.Add(SMT6C.A3_19);
+
+
+            //5號電梯
+            Node_6F.Add(AGV.LO6_01);
+            Node_6F.Add(AGV.LO6_04);
 
         }
 
@@ -986,6 +1051,7 @@ namespace Mirle.Def.U2NMMA30
         public static void FunAGV_5Fport()
         {
             //線邊倉
+            
             AGV_5FPort.Add(AGV.A2_01);
             AGV_5FPort.Add(AGV.A2_04);
             AGV_5FPort.Add(AGV.A2_05);
@@ -996,10 +1062,54 @@ namespace Mirle.Def.U2NMMA30
             AGV_5FPort.Add(AGV.A2_16);
             AGV_5FPort.Add(AGV.A2_17);
             AGV_5FPort.Add(AGV.A2_20);
-
+            /*
+            AGV_5FPort.Add(SMT5C.A2_02);
+            AGV_5FPort.Add(SMT5C.A2_03);
+            AGV_5FPort.Add(SMT5C.A2_06);
+            AGV_5FPort.Add(SMT5C.A2_07);
+            AGV_5FPort.Add(SMT5C.A2_10);
+            AGV_5FPort.Add(SMT5C.A2_11);
+            AGV_5FPort.Add(SMT5C.A2_14);
+            AGV_5FPort.Add(SMT5C.A2_15);
+            AGV_5FPort.Add(SMT5C.A2_18);
+            AGV_5FPort.Add(SMT5C.A2_19);
+            */
             //5號電梯
             AGV_5FPort.Add(AGV.LO5_01);
             AGV_5FPort.Add(AGV.LO5_04);
+
+        }
+        private static List<ConveyorInfo> Node_5F = new List<ConveyorInfo>();
+        public static List<ConveyorInfo> GetNode_5F() => Node_5F;
+        public static void FunNode_5F()
+        {
+            //線邊倉
+
+            Node_5F.Add(AGV.A2_01);
+            Node_5F.Add(AGV.A2_04);
+            Node_5F.Add(AGV.A2_05);
+            Node_5F.Add(AGV.A2_08);
+            Node_5F.Add(AGV.A2_09);
+            Node_5F.Add(AGV.A2_12);
+            Node_5F.Add(AGV.A2_13);
+            Node_5F.Add(AGV.A2_16);
+            Node_5F.Add(AGV.A2_17);
+            Node_5F.Add(AGV.A2_20);
+
+            Node_5F.Add(SMT5C.A2_02);
+            Node_5F.Add(SMT5C.A2_03);
+            Node_5F.Add(SMT5C.A2_06);
+            Node_5F.Add(SMT5C.A2_07);
+            Node_5F.Add(SMT5C.A2_10);
+            Node_5F.Add(SMT5C.A2_11);
+            Node_5F.Add(SMT5C.A2_14);
+            Node_5F.Add(SMT5C.A2_15);
+            Node_5F.Add(SMT5C.A2_18);
+            Node_5F.Add(SMT5C.A2_19);
+
+            //5號電梯
+            Node_5F.Add(AGV.LO5_01);
+            Node_5F.Add(AGV.LO5_04);
 
         }
 
@@ -1014,10 +1124,45 @@ namespace Mirle.Def.U2NMMA30
             AGV_3FPort.Add(AGV.A1_08);
             AGV_3FPort.Add(AGV.A1_09);
             AGV_3FPort.Add(AGV.A1_12);
-            
+
+            /*
+            AGV_3FPort.Add(SMT3C.A1_02);
+            AGV_3FPort.Add(SMT3C.A1_03);
+            AGV_3FPort.Add(SMT3C.A1_06);
+            AGV_3FPort.Add(SMT3C.A1_07);
+            AGV_3FPort.Add(SMT3C.A1_10);
+            AGV_3FPort.Add(SMT3C.A1_11);
+            */
+
             //5號電梯
             AGV_3FPort.Add(AGV.LO4_01);
             AGV_3FPort.Add(AGV.LO4_04);
+
+        }
+        private static List<ConveyorInfo> Node_3F = new List<ConveyorInfo>();
+        public static List<ConveyorInfo> GetNode_3F() => Node_3F;
+        public static void FunNode_3F()
+        {
+            //線邊倉
+            Node_3F.Add(AGV.A1_01);
+            Node_3F.Add(AGV.A1_04);
+            Node_3F.Add(AGV.A1_05);
+            Node_3F.Add(AGV.A1_08);
+            Node_3F.Add(AGV.A1_09);
+            Node_3F.Add(AGV.A1_12);
+
+
+            Node_3F.Add(SMT3C.A1_02);
+            Node_3F.Add(SMT3C.A1_03);
+            Node_3F.Add(SMT3C.A1_06);
+            Node_3F.Add(SMT3C.A1_07);
+            Node_3F.Add(SMT3C.A1_10);
+            Node_3F.Add(SMT3C.A1_11);
+
+
+            //5號電梯
+            Node_3F.Add(AGV.LO4_01);
+            Node_3F.Add(AGV.LO4_04);
 
         }
 

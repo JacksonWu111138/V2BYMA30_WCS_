@@ -296,6 +296,13 @@ namespace Mirle.DB.Fun
                 return "66";
             else if (ConveyorDef.GetAGV_8FPort().Where(r => r.BufferName == bufferName).Any())
                 return "68";
+            //356線邊倉
+            else if (ConveyorDef.GetNode_3F().Where(r => r.BufferName == bufferName).Any())
+                return "SMT3C";
+            else if (ConveyorDef.GetNode_5F().Where(r => r.BufferName == bufferName).Any())
+                return "SMT5C";
+            else if (ConveyorDef.GetNode_6F().Where(r => r.BufferName == bufferName).Any())
+                return "SMT6C";
             //整理區
             else if (bufferName.Contains("A4"))
                 return "Line";

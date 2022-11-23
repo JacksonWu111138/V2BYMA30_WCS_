@@ -910,7 +910,7 @@ namespace Mirle.WebAPI.Event
                     BufferRollInfo info = new BufferRollInfo { jobId = Body.jobId, bufferId = conveyor.BufferName };
 
                     if (!clsAPI.GetAPI().GetBufferRoll().FunReport(info, conveyor.API.IP))
-                        throw new Exception(strEM);
+                        throw new Exception($"Error: BufferRoll to {Body.currentLoc} fail. jobId = {Body.jobId}.");
                 }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
@@ -1026,6 +1026,10 @@ namespace Mirle.WebAPI.Event
                     if(((Body.location == ConveyorDef.Box.B1_037.BufferName || Body.location == ConveyorDef.Box.B1_117.BufferName) && cmd.Equ_No == "3") ||
                        ((Body.location == ConveyorDef.Box.B1_041.BufferName || Body.location == ConveyorDef.Box.B1_121.BufferName) && cmd.Equ_No == "4") ||
                        ((Body.location == ConveyorDef.Box.B1_045.BufferName || Body.location == ConveyorDef.Box.B1_125.BufferName) && cmd.Equ_No == "5"))
+                    {
+
+                    }
+                    else if (con.ControllerID == clsControllerID.pCBA_ControllerID)
                     {
 
                     }
@@ -1397,11 +1401,14 @@ namespace Mirle.WebAPI.Event
                             {
                                 rMsg.toLocation = ConveyorDef.E04.LO1_07.BufferName;
                             }
-                            else if (ConveyorDef.GetAGV_3FPort().Any(r => r.BufferName == cmd.Stn_No))
+                            else if (ConveyorDef.GetSharingNode3F().Any(r => r.end.BufferName == cmd.Stn_No || r.start.BufferName == cmd.Stn_No)
+                                || ConveyorDef.GetNode_3F().Any(r => r.BufferName == cmd.Stn_No))
                                 rMsg.toLocation = ConveyorDef.AGV.LO4_04.BufferName;
-                            else if (ConveyorDef.GetAGV_5FPort().Any(r => r.BufferName == cmd.Stn_No))
+                            else if (ConveyorDef.GetSharingNode5F().Any(r => r.end.BufferName == cmd.Stn_No || r.start.BufferName == cmd.Stn_No)
+                                || ConveyorDef.GetNode_5F().Any(r => r.BufferName == cmd.Stn_No))
                                 rMsg.toLocation = ConveyorDef.AGV.LO5_04.BufferName;
-                            else if (ConveyorDef.GetAGV_6FPort().Any(r => r.BufferName == cmd.Stn_No))
+                            else if (ConveyorDef.GetSharingNode6F().Any(r => r.end.BufferName == cmd.Stn_No || r.start.BufferName == cmd.Stn_No)
+                                || ConveyorDef.GetNode_6F().Any(r => r.BufferName == cmd.Stn_No))
                                 rMsg.toLocation = ConveyorDef.AGV.LO6_04.BufferName;
                             else
                                 rMsg.toLocation = ConveyorDef.AGV.LO3_01.BufferName;
@@ -1505,13 +1512,13 @@ namespace Mirle.WebAPI.Event
                             else //Lift5C
                             {
                                 if (ConveyorDef.GetSharingNode3F().Any(r => r.end.BufferName == cmd.New_Loc || r.start.BufferName == cmd.New_Loc) ||
-                                    ConveyorDef.GetAGV_3FPort().Any(r => r.BufferName == cmd.New_Loc))
+                                    ConveyorDef.GetNode_3F().Any(r => r.BufferName == cmd.New_Loc))
                                     rMsg.toLocation = ConveyorDef.AGV.LO4_04.BufferName;
                                 else if (ConveyorDef.GetSharingNode5F().Any(r => r.end.BufferName == cmd.New_Loc || r.start.BufferName == cmd.New_Loc) ||
-                                        ConveyorDef.GetAGV_5FPort().Any(r => r.BufferName == cmd.New_Loc))
+                                        ConveyorDef.GetNode_5F().Any(r => r.BufferName == cmd.New_Loc))
                                     rMsg.toLocation = ConveyorDef.AGV.LO5_04.BufferName;
                                 else if (ConveyorDef.GetSharingNode6F().Any(r => r.end.BufferName == cmd.New_Loc || r.start.BufferName == cmd.New_Loc) || 
-                                        ConveyorDef.GetAGV_6FPort().Any(r => r.BufferName == cmd.New_Loc))
+                                        ConveyorDef.GetNode_6F().Any(r => r.BufferName == cmd.New_Loc))
                                     rMsg.toLocation = ConveyorDef.AGV.LO6_04.BufferName;
                                 else
                                     rMsg.toLocation = ConveyorDef.AGV.LO3_01.BufferName;

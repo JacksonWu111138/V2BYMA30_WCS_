@@ -807,6 +807,8 @@ namespace Mirle.ASRS.WCS.View
                         case 1:
                             floor.Group_IN.Add(ConveyorDef.PCBA.M1_06);
                             floor.Group_OUT.Add(ConveyorDef.PCBA.M1_01);
+                            floor.Group_IN.Add(ConveyorDef.PCBA.M1_01);
+                            floor.Group_OUT.Add(ConveyorDef.PCBA.M1_06);
 
                             PCBA[i] = new DeviceInfo();
                             PCBA[i].Floors = new List<FloorInfo>();
@@ -815,6 +817,8 @@ namespace Mirle.ASRS.WCS.View
                         case 0:
                             floor.Group_IN.Add(ConveyorDef.PCBA.M1_16);
                             floor.Group_OUT.Add(ConveyorDef.PCBA.M1_11);
+                            floor.Group_IN.Add(ConveyorDef.PCBA.M1_11);
+                            floor.Group_OUT.Add(ConveyorDef.PCBA.M1_16);
 
                             PCBA[i] = new DeviceInfo();
                             PCBA[i].Floors = new List<FloorInfo>();

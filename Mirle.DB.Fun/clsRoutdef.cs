@@ -211,7 +211,7 @@ namespace Mirle.DB.Fun
                             s = ConveyorDef.GetBuffer(sBuffername);
                         }
                         
-                        string sDeviceId = tool.GetDeviceId(s.BufferName);
+                        string sDeviceId = s.DeviceId != "" ? s.DeviceId : s.ControllerID;
                         if (sDeviceId == "") 
                             End = Router.GetLocation(s.ControllerID, s.BufferName);
                         else

@@ -191,7 +191,8 @@ namespace Mirle.ASRS.WCS.View
                     inStock = e.Location == Def.Location.LocationID.Shelf.ToString() ? clsConstValue.YesNo.Yes : clsConstValue.YesNo.No
                 };
 
-                api.GetPositionReport().FunReport(info, clInitSys.WmsApi_Config.IP);
+                if(e.Location != Def.Location.LocationID.Shelf.ToString())
+                    api.GetPositionReport().FunReport(info, clInitSys.WmsApi_Config.IP);
             }
         }
 

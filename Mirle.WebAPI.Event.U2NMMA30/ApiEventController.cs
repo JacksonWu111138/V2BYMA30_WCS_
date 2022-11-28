@@ -2511,9 +2511,10 @@ namespace Mirle.WebAPI.Event
                 string deviceId = tool.GetDeviceId(Body.rackLoc);
 
                 CmdMstInfo cmd = new CmdMstInfo();
-                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
+                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand_byBoxID(Body.rackId, ref cmd) == DBResult.Success && 
+                    (cmd.Cmd_Mode == clsConstValue.CmdMode.S2S && Body.rackLoc != cmd.New_Loc))
                 {
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, deviceId, con.BufferName))
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, con.BufferName))
                     {
                         strEM = $"Error: Update CurLoc fail, jobId = {Body.jobId}.";
                         throw new Exception(strEM);

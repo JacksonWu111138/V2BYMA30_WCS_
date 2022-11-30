@@ -261,6 +261,7 @@ namespace Mirle.DB.Fun
             }
             else return false;
         }
+        
         public string GetDeviceId(string bufferName)
         {
             //PCBA
@@ -320,6 +321,289 @@ namespace Mirle.DB.Fun
                 return "";
         }
 
+        public string FunGetCycleRunNextLocation(string lastCmdMode, string location, string lastShelf)
+        {
+            string nextlocation = "";
+            ConveyorInfo nowConveyor = ConveyorDef.GetBuffer(location);
+            int lastColumn = 0; int lastRow = 0; int lastLevel = 0;
+            lastColumn = Convert.ToInt32(lastShelf.Substring(0, 2));
+            lastRow = Convert.ToInt32(lastShelf.Substring(2, 3));
+            lastLevel = Convert.ToInt32(lastShelf.Substring(5, 2));
+            int nextColumn = 0, nextRow = 0, nextLevel = 0;
+
+            if(lastCmdMode == clsConstValue.CmdMode.StockOut)
+            {
+                if(nowConveyor.ControllerID == "PCBA")
+                {
+                    //只使用前兩個Row
+                    //路徑 01/01/01 -> 05/01/01 -> 02/01/01 -> 06/01/01... -> 08/01/01 -> 01/01/02 ->...->08/01/03 -> 01/02/01
+                    if(nowConveyor.BufferName == ConveyorDef.AGV.M1_15.BufferName || nowConveyor.BufferName == ConveyorDef.AGV.M1_20.BufferName)
+                    {
+                        //出庫到M801 AGV口
+                        if (lastColumn < 4)
+                        {
+                            //錯誤，未抓取Column成功
+                            return $"Error: LastColumn get fail, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+                        }
+                        else if (lastColumn < 8)
+                        {
+                            nextColumn = lastColumn - 3;
+                            nextRow = lastRow;
+                            nextLevel = lastLevel;
+                        }
+                        else if (lastColumn == 8)
+                        {
+                            nextColumn = 1;
+
+                            if (lastLevel == 0)
+                            {
+                                //錯誤，未抓取Level成功
+                                return $"Error: LastLevel get fail, string ver = {lastShelf.Substring(5, 2)} and int ver = {lastLevel}.";
+                            }
+                            else if(lastLevel < 3)
+                            {
+                                nextRow = lastRow;
+                                nextLevel = lastLevel + 1;
+                            }
+                            else if (lastLevel == 3)
+                            {
+                                nextLevel = 1;
+
+                                if(lastRow == 0)
+                                {
+                                    //錯誤，未抓取Row成功
+                                    return $"Error: LastRow get fail, string ver = {lastShelf.Substring(2, 3)} and int ver = {lastRow}.";
+                                }
+                                else if (lastRow > 3)
+                                {
+                                    //錯誤，未抓取Row成功
+                                    return $"Error: 入出庫 LastRow 取得庫對庫使用儲位, string ver = {lastShelf.Substring(2, 3)} and int ver = {lastRow}.";
+                                }
+                                else if (lastRow == 1)
+                                {
+                                    nextRow = lastRow + 1;
+                                }
+                                else if (lastRow == 2)
+                                {
+                                    nextRow = lastRow - 1;
+                                }
+                                else
+                                {
+                                    //錯誤，未抓取Row成功
+                                    return $"Error: LastRow get fail, string ver = {lastShelf.Substring(2, 3)} and int ver = {lastRow}.";
+                                }
+                            }
+                            else
+                            {
+                                //錯誤，未抓取Level成功
+                                return $"Error: LastLevel get fail, string ver = {lastShelf.Substring(5, 2)} and int ver = {lastLevel}.";
+                            }
+                        }
+                        else
+                        {
+                            //錯誤，未抓取Column成功
+                            return $"Error: LastColumn get fail, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+                        }
+                    }
+                    else if(nowConveyor.BufferName == ConveyorDef.AGV.M1_05.BufferName || nowConveyor.BufferName == ConveyorDef.AGV.M1_10.BufferName)
+                    {
+                        //出庫到M802 AGV口
+                        if (lastColumn == 0)
+                        {
+                            //錯誤，未抓取Column成功
+                            return $"Error: LastColumn get fail, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+                        }
+                        else if (lastColumn <= 4)
+                        {
+                            nextColumn = lastColumn + 4;
+                            nextRow = lastRow;
+                            nextLevel = lastLevel;
+                        }
+                        else
+                        {
+                            //錯誤，未抓取Column成功
+                            return $"Error: LastColumn get fail, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+                        }
+
+                    }
+                }
+
+                nextlocation = nextColumn.ToString().PadLeft(2, '0') + nextRow.ToString().PadLeft(3, '0') + nextLevel.ToString().PadLeft(2, '0');
+            }
+            else if(lastCmdMode == clsConstValue.CmdMode.StockIn)
+            {
+                int equNo = funGetEquNoByLoc(lastShelf);
+
+                switch(equNo)
+                {
+                    case 1:
+                        //PCBA倉命令
+                        nextlocation = ConveyorDef.GetBuffer_ByStnNo("M800-2").BufferName;
+                        break;
+                    case 2:
+                        //PCBA倉命令
+                        nextlocation = ConveyorDef.GetBuffer_ByStnNo("M800-1").BufferName;
+                        break;
+                    case 3:
+                    case 4:
+                    case 5:
+                        //箱式倉命令
+                        break;
+                    default:
+                        //錯誤，取得EquNo失敗
+                        return $"Error: LastShelf 入庫位置取得EquNo錯誤, lastShelf = {lastShelf} and EquNo = {equNo}.";
+                }
+            }
+            else if(lastCmdMode == clsConstValue.CmdMode.L2L)
+            {
+                int equNo = funGetEquNoByLoc(lastShelf);
+                if(equNo > 0 && equNo < 3)
+                {
+                    //PCBA倉命令
+                    if(equNo == 1)
+                    {
+                        //M801 庫對庫 Row 從 03 <-> 30
+                        //分兩區塊 03<->16, 17<->30
+                        //路徑01/03/01 -> 01/17/01 -> 01/03/02 -> 01/17/02 -> 01/03/03 -> 01/17/03 -> 02/03/01 -> 02/17/01 ->...-> 04/17/03 -> 01/04/01 -> 01/18/01 ->...
+                        if(lastRow > 2 && lastRow < 17)
+                        {
+                            nextColumn = lastColumn;
+                            nextRow = lastRow + 14;
+                            nextLevel = lastLevel;
+                        }
+                        else if(lastRow > 16 && lastRow < 31)
+                        {
+                            if(lastLevel == 0)
+                            {
+                                //錯誤，未抓取Level成功
+                                return $"Error: LastLevel M801庫對庫位置錯誤, string ver = {lastShelf.Substring(5, 2)} and int ver = {lastLevel}.";
+                            }
+                            else if(lastLevel < 3)
+                            {
+                                nextColumn = lastColumn;
+                                nextRow = lastRow - 14;
+                                nextLevel = lastLevel + 1;
+                            }
+                            else if(lastLevel == 3)
+                            {
+                                if(lastColumn == 0)
+                                {
+                                    //錯誤，未抓取Column成功
+                                    return $"Error: LastColumn M801庫對庫位置錯誤, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+                                }
+                                else if(lastColumn < 4)
+                                {
+                                    nextColumn = lastColumn + 1;
+                                    nextRow = lastRow - 14;
+                                    nextLevel = 1;
+                                }
+                                else if(lastColumn == 4)
+                                {
+                                    nextColumn = 1;
+                                    nextRow = lastRow - 13;
+                                    nextLevel = 1;
+                                    if (lastRow == 30)
+                                        nextRow = 3;
+                                }
+                                else
+                                {
+                                    //錯誤，未抓取Column成功
+                                    return $"Error: LastColumn M801庫對庫位置錯誤, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+                                }
+                            }
+                            else
+                            {
+                                //錯誤，未抓取Level成功
+                                return $"Error: LastLevel M801庫對庫位置錯誤, string ver = {lastShelf.Substring(5, 2)} and int ver = {lastLevel}.";
+                            }
+                        }
+                        else
+                        {
+                            //錯誤，取得Row失敗
+                            return $"Error: LastRow M801庫對庫位置錯誤, string ver = {lastShelf.Substring(2, 3)} and int ver = {lastRow}.";
+                        }
+                    }
+                    else if (equNo == 2)
+                    {
+                        //M802 庫對庫 Row 從 03 <-> 38
+                        //分兩區塊 03<->20, 21<->38
+                        //路徑05/03/01 -> 05/21/01 -> 05/03/02 -> 05/21/02 -> 05/03/03 -> 05/21/03 -> 06/03/01 -> 06/21/01 ->...-> 08/21/03 -> 05/04/01 -> 05/22/01 ->...
+                        if (lastRow > 2 && lastRow < 21)
+                        {
+                            nextColumn = lastColumn;
+                            nextRow = lastRow + 18;
+                            nextLevel = lastLevel;
+                        }
+                        else if (lastRow > 20 && lastRow < 39)
+                        {
+                            if (lastLevel == 0)
+                            {
+                                //錯誤，未抓取Level成功
+                                return $"Error: LastLevel M802庫對庫位置錯誤, string ver = {lastShelf.Substring(5, 2)} and int ver = {lastLevel}.";
+                            }
+                            else if (lastLevel < 3)
+                            {
+                                nextColumn = lastColumn;
+                                nextRow = lastRow - 18;
+                                nextLevel = lastLevel + 1;
+                            }
+                            else if (lastLevel == 3)
+                            {
+                                if (lastColumn < 5)
+                                {
+                                    //錯誤，未抓取Column成功
+                                    return $"Error: LastColumn M801庫對庫位置錯誤, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+                                }
+                                else if (lastColumn < 8)
+                                {
+                                    nextColumn = lastColumn + 1;
+                                    nextRow = lastRow - 18;
+                                    nextLevel = 1;
+                                }
+                                else if (lastColumn == 8)
+                                {
+                                    nextColumn = 5;
+                                    nextRow = lastRow - 17;
+                                    nextLevel = 1;
+                                    if (lastRow == 38)
+                                        nextRow = 3;
+                                }
+                                else
+                                {
+                                    //錯誤，未抓取Column成功
+                                    return $"Error: LastColumn M801庫對庫位置錯誤, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+                                }
+                            }
+                            else
+                            {
+                                //錯誤，未抓取Level成功
+                                return $"Error: LastLevel M802庫對庫位置錯誤, string ver = {lastShelf.Substring(5, 2)} and int ver = {lastLevel}.";
+                            }
+                        }
+                        else
+                        {
+                            //錯誤，取得Row失敗
+                            return $"Error: LastRow M802庫對庫位置錯誤, string ver = {lastShelf.Substring(2, 3)} and int ver = {lastRow}.";
+                        }
+                    }
+                }
+                else if(equNo > 2 && equNo < 6)
+                {
+                    //箱式倉命令
+
+                }
+                else
+                {
+                    return $"Error: LastShelf 庫對庫位置取得EquNo錯誤, lastShelf = {lastShelf} and EquNo = {equNo}.";
+                }
+
+                nextlocation = nextColumn.ToString().PadLeft(2, '0') + nextRow.ToString().PadLeft(3, '0') + nextLevel.ToString().PadLeft(2, '0');
+            }
+
+
+            return nextlocation;
+        }
+        
         public bool CheckWhId_ASRS(string sDeviceID, ref clsEnum.AsrsType type)
         {
             bool check = pcba.Where(r => r.DeviceID == sDeviceID).Any();

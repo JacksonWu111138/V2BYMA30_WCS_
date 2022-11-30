@@ -25,6 +25,7 @@ using Mirle.EccsSignal;
 using Mirle.WebAPI.Test.AGVTaskCancel;
 using Mirle.WebAPI.Test.WES;
 using Mirle.WebAPI.Test.Controllers;
+using Mirle.CycleRun;
 
 namespace Mirle.ASRS.WCS.View
 {
@@ -521,7 +522,7 @@ namespace Mirle.ASRS.WCS.View
                     clsDB_Proc.GetDB_Object().GetProc().FunAsrsCmd_AbnormalFinish_Proc(clsDB_Proc.GetWmsDB_Object());
 
                     if (!DB.Proc.clsHost.IsConn) return;
-                    clsDB_Proc.GetDB_Object().GetProc().FunCheckCmdFinish_Proc(router);
+                    clsDB_Proc.GetDB_Object().GetProc().FunCheckCmdFinish_Proc(router, clsCycleRun.GetPCBAcycleRun());
                 }
             }
             catch (Exception ex)
@@ -918,6 +919,7 @@ namespace Mirle.ASRS.WCS.View
             clsControllerID.Initial(clInitSys.Tower_ControllerID, clInitSys.Box1F_ControllerID, clInitSys.Box2F_ControllerID, clInitSys.PCBA_ControllerID,
                         clInitSys.SMTC_ControllerID, clInitSys.Line_ControllerID, clInitSys.SMT3C_ControllerID, clInitSys.SMT5C_ControllerID, clInitSys.SMT6C_ControllerID,
                         clInitSys.E04_ControllerID, clInitSys.E05_ControllerID);
+            DB.Object.clsCycleRun.Initial();
             router = new MapHost(clInitSys.DbConfig);
             CVLocation = new clsGetCVLocation(router);
             ConveyorDef.FunNodeListAddInit();
@@ -1260,5 +1262,10 @@ namespace Mirle.ASRS.WCS.View
             form_2.Show();
         }
 
+        private void button_CycleRun_Click(object sender, EventArgs e)
+        {
+            clsCycleRunform form_3 = new clsCycleRunform();
+            form_3.Show();
+        }
     }
 }

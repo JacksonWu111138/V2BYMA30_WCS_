@@ -1,5 +1,6 @@
 ﻿using Mirle.DataBase;
 using Mirle.DB.Fun.Events;
+using Mirle.DB.Fun.Parameter;
 using Mirle.Def;
 using Mirle.Def.U2NMMA30;
 using Mirle.EccsSignal;
@@ -52,7 +53,7 @@ namespace Mirle.DB.Proc
 
         public Fun.clsRoutdef GetFun_Routdef() => Routdef;
 
-        public bool FunCheckCmdFinish_Proc(MapHost Router)
+        public bool FunCheckCmdFinish_Proc(MapHost Router, bool PCBACycleRun)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -307,7 +308,6 @@ namespace Mirle.DB.Proc
                                         }
                                     }
                                     
-
                                     db.TransactionCtrl(TransactionTypes.Commit);
                                     return true;
                                 }
@@ -2232,6 +2232,7 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
+
         public bool FunLotPutawayTransfer(CmdMstInfo cmd, string TowerIp, ref string strEM)
         {
             try
@@ -2262,6 +2263,7 @@ namespace Mirle.DB.Proc
                             lotSize = cmd.lotSize,
                             toShelfId = cmd.Loc
                         };
+
                         if (!api.GetPutawayTransfer().FunReport(info, TowerIp))
                         {
                             strEM = "Error: PutawayTransfer E800C接收失敗";
@@ -2295,13 +2297,43 @@ namespace Mirle.DB.Proc
             }
         }
 
-        public bool FunGetStockInLocation(string sCmdSno, ref string sLoc, ref string strEM)
+        public bool FunPCBACycleRunInitial(CmdMstInfo StockCmd, CmdMstInfo M801L2LCmd, CmdMstInfo M802L2LCmd, ref string sRemark)
         {
             try
             {
                 using (var db = clsGetDB.GetDB(_config))
                 {
-                    return true;
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                        {
+                            sRemark = "Error: Transaction begin失敗！";
+                            throw new Exception(sRemark);
+                        }
+
+                        sRemark = "";
+                        if (!Cmd_Mst.FunInsCmdMst(StockCmd, ref sRemark ,db))
+                        {
+                            db.TransactionCtrl(TransactionTypes.Rollback);
+                            return false;
+                        }
+
+                        if (!Cmd_Mst.FunInsCmdMst(M801L2LCmd, ref sRemark, db))
+                        {
+                            db.TransactionCtrl(TransactionTypes.Rollback);
+                            return false;
+                        }
+                        if (!Cmd_Mst.FunInsCmdMst(M802L2LCmd, ref sRemark, db))
+                        {
+                            db.TransactionCtrl(TransactionTypes.Rollback);
+                            return false;
+                        }
+
+                        db.TransactionCtrl(TransactionTypes.Commit);
+                        return true;
+                    }
+                    else return false;
                 }
             }
             catch (Exception ex)
@@ -2311,6 +2343,7 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
+
         public bool FunE800CommandComplete(string sCmdSno, string sCmdMode, string sEmptyRetrieval, string sPortId, string sCarrierId, string WESAPI, ref string strEM)
         {
             try
@@ -2470,6 +2503,7 @@ namespace Mirle.DB.Proc
                 return false;
             }
         }
+        
         public bool FunSendEmptyRackToTower(ConveyorInfo toBuffer, CmdMstInfo cmd, ref string strEM)
         {
             try

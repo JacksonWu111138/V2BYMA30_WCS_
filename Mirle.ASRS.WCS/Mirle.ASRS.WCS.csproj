@@ -131,6 +131,10 @@
       <Project>{9441796e-d9f9-45cc-b0c8-c8b5eeb679eb}</Project>
       <Name>Mirle.ASRS.DBCommand</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mirle.CycleRun\Mirle.CycleRun.csproj">
+      <Project>{f91de67c-5f1f-4bc1-a6c0-fbc7679b6ca0}</Project>
+      <Name>Mirle.CycleRun</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.DB.ClearCmd.Proc\Mirle.DB.ClearCmd.Proc.csproj">
       <Project>{31deb747-36ca-4a92-8df1-89eee47a0fa4}</Project>
       <Name>Mirle.DB.ClearCmd.Proc</Name>

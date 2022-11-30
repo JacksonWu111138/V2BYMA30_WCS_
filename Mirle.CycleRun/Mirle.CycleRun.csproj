@@ -4,16 +4,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{25DDA85B-35BE-429D-81B4-025731C0E826}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mirle.DB.Object</RootNamespace>
-    <AssemblyName>Mirle.DB.Object</AssemblyName>
+    <ProjectGuid>{F91DE67C-5F1F-4BC1-A6C0-FBC7679B6CA0}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Mirle.CycleRun</RootNamespace>
+    <AssemblyName>Mirle.CycleRun</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -21,47 +22,71 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <LangVersion>8.0</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Service\clsControllerID.cs" />
-    <Compile Include="Service\clsAPI.cs" />
-    <Compile Include="Service\clsMapController.cs" />
-    <Compile Include="Service\clsCycleRun.cs" />
-    <Compile Include="Service\clsMiddle.cs" />
-    <Compile Include="Service\clsDB_Proc.cs" />
-    <Compile Include="clsWriLog.cs" />
+    <Compile Include="clsCycleRunform.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="clsCycleRunform.Designer.cs">
+      <DependentUpon>clsCycleRunform.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Table\clsCmd_Dtl.cs" />
-    <Compile Include="Table\clsCmd_Mst.cs" />
-    <Compile Include="Table\clsEQ_Alarm.cs" />
-    <Compile Include="Table\clsLocMst.cs" />
-    <Compile Include="Table\clsUnitMode_Sts.cs" />
+    <EmbeddedResource Include="clsCycleRunform.resx">
+      <DependentUpon>clsCycleRunform.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mirle.DB.Fun\Mirle.DB.Fun.csproj">
       <Project>{c40166b0-0f5d-4535-94a7-699764a59a83}</Project>
       <Name>Mirle.DB.Fun</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mirle.DB.Object\Mirle.DB.Object.csproj">
+      <Project>{25dda85b-35be-429d-81b4-025731c0e826}</Project>
+      <Name>Mirle.DB.Object</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.DB.Proc\Mirle.DB.Proc.csproj">
       <Project>{60c72719-d780-4bc8-9198-fc21c9754918}</Project>
@@ -75,21 +100,21 @@
       <Project>{553bd8cf-f4c1-4b39-97ab-42cc2f7c8187}</Project>
       <Name>Mirle.DB.WMS.Proc</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mirle.Def.U2NMMA30\Mirle.Def.U2NMMA30.csproj">
+      <Project>{e6f732fe-3905-49a7-b2cf-b4fa79c2dc5d}</Project>
+      <Name>Mirle.Def.U2NMMA30</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mirle.Def\Mirle.Def_2.csproj">
       <Project>{906da4ee-6b8d-40c7-bd49-a410feb1d2c8}</Project>
       <Name>Mirle.Def_2</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mirle.MapController\Mirle.MapController_2.csproj">
-      <Project>{e9c71b96-e8f4-4124-9f18-444e8a05cf80}</Project>
-      <Name>Mirle.MapController_2</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mirle.Middle\Mirle.Middle.csproj">
-      <Project>{312ed336-0211-4e88-9f3f-6b15a133f864}</Project>
-      <Name>Mirle.Middle</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mirle.Structure\Mirle.Structure.csproj">
       <Project>{cc7b0aac-3935-44cf-b363-55c0445358d0}</Project>
       <Name>Mirle.Structure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mirle.WebAPI.Event.U2NMMA30\Mirle.WebAPI.Event.csproj">
+      <Project>{2e09050b-3bb2-482a-b27b-cf23db03e342}</Project>
+      <Name>Mirle.WebAPI.Event</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mirle.WebAPI.U2NMMA30\Mirle.WebAPI.csproj">
       <Project>{646741d4-de4c-48ef-9b90-1785bd22cefd}</Project>
@@ -99,14 +124,6 @@
       <Project>{fcb3bfde-2247-4aa4-a652-f87c081b63fc}</Project>
       <Name>Mirle.WriLog_2</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Mirle">
-      <Version>2.1.5</Version>
-    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

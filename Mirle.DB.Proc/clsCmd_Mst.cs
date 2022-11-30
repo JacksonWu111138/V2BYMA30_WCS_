@@ -15,6 +15,7 @@ namespace Mirle.DB.Proc
         private clsSno sno;
         private clsDbConfig _config = new clsDbConfig();
         private WebApiConfig WesAPIConfig = new WebApiConfig();
+        private DB.Fun.clsTool tool = new DB.Fun.clsTool();
         public clsCmd_Mst(clsDbConfig config, WebApiConfig wesApi)
         {
             _config = config;
@@ -410,7 +411,7 @@ namespace Mirle.DB.Proc
         }
 
 
-        public bool FunMoveFinishCmdToHistory_Proc()
+        public bool FunMoveFinishCmdToHistory_Proc(bool PCBACycleRun)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -427,6 +428,18 @@ namespace Mirle.DB.Proc
                                 string sCmdSno = Convert.ToString(dtTmp.Rows[i]["CmdSno"]);
                                 string sRemark_Pre = Convert.ToString(dtTmp.Rows[i]["Remark"]);
                                 string sRemark = "";
+                                string sJobID = Convert.ToString(dtTmp.Rows[i]["jobID"]);
+                                CmdMstInfo nextCycleCmd = new CmdMstInfo();
+                                CmdMstInfo lastCycleCmd = new CmdMstInfo();
+                                if (!FunGetCommand(sCmdSno, ref lastCycleCmd))
+                                {
+                                    sRemark = "Error: 取得CycleRun先前命令失敗.";
+                                    if (FunUpdateRemark(sCmdSno, sRemark))
+                                        continue;
+                                    else
+                                        continue;
+                                }
+
                                 /*iRet = CMD_DTL.FunGetCmdDtl(sCmdSno, db);
                                 if(iRet == DBResult.Exception)
                                 {
@@ -460,6 +473,58 @@ namespace Mirle.DB.Proc
                                 {
                                     db.TransactionCtrl(TransactionTypes.Rollback);
                                     continue;
+                                }
+
+                                if (PCBACycleRun && sJobID.Contains("CYCLERUN"))
+                                {
+                                    nextCycleCmd = lastCycleCmd;
+
+                                    switch (lastCycleCmd.Cmd_Mode)
+                                    {
+                                        case clsConstValue.CmdMode.StockIn:
+                                            nextCycleCmd.Cmd_Mode = clsConstValue.CmdMode.StockOut;
+                                            nextCycleCmd.Stn_No = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.StockIn, lastCycleCmd.Stn_No, lastCycleCmd.Loc);
+                                            break;
+                                        case clsConstValue.CmdMode.StockOut:
+                                            nextCycleCmd.Cmd_Mode = clsConstValue.CmdMode.StockIn;
+                                            nextCycleCmd.Loc = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.StockOut, lastCycleCmd.Stn_No, lastCycleCmd.Loc);
+                                            switch (lastCycleCmd.Equ_No)
+                                            {
+                                                case "1":
+                                                    nextCycleCmd.Equ_No = "2";
+                                                    break;
+                                                case "2":
+                                                    nextCycleCmd.Equ_No = "1";
+                                                    break;
+                                                case "3":
+                                                case "4":
+                                                case "5":
+                                                    break;
+                                                default:
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    sRemark = $"Error: CycleRun先前EquNo有誤, EquNo = {lastCycleCmd.Equ_No}";
+                                                    FunUpdateRemark(sCmdSno, sRemark);
+                                                    continue;
+                                            }
+                                            break;
+                                        case clsConstValue.CmdMode.L2L:
+                                            nextCycleCmd.Loc = lastCycleCmd.New_Loc;
+                                            nextCycleCmd.New_Loc = tool.FunGetCycleRunNextLocation(lastCycleCmd.Cmd_Mode, lastCycleCmd.Stn_No, lastCycleCmd.New_Loc);
+                                            break;
+                                        default:
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            sRemark = $"Error: CycleRun先前命令模式有誤, cmdMode = {lastCycleCmd.Cmd_Mode}.";
+                                            if (FunUpdateRemark(sCmdSno, sRemark))
+                                                continue;
+                                            else
+                                                continue;
+                                    }
+
+                                    if (!CMD_MST.FunInsCmdMst(nextCycleCmd, ref sRemark, db))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        continue;
+                                    }
                                 }
 
                                 /*if (iRet == DBResult.Success)

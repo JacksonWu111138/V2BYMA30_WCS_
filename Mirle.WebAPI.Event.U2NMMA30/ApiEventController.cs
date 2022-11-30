@@ -1000,6 +1000,7 @@ namespace Mirle.WebAPI.Event
                 con = ConveyorDef.GetBuffer(Body.location);
                 string deviceId = tool.GetDeviceId(Body.location);
 
+                //待加入Cycle Run判斷
                 if (check)
                 {
                     clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{cmd.Cmd_Sno}>This BCRCheck exist.");
@@ -1050,13 +1051,33 @@ namespace Mirle.WebAPI.Event
                 }
                 else if (!check)
                 {
-                    if (Body.location == ConveyorDef.Box.B1_037.BufferName || Body.location == ConveyorDef.Box.B1_041.BufferName ||
+                    if(Body.jobId.Contains("EMPTY"))
+                    {
+                        //空箱回庫流程(有bcr)
+                        EmptyESDCarrierUnloadInfo info = new EmptyESDCarrierUnloadInfo
+                        {
+                            location = con.StnNo,
+                            carrierId = Body.barcode
+                        };
+
+                        if (ConveyorDef.GetSharingNode().Any(r => r.end.BufferName == Body.location || r.start.BufferName == Body.location))
+                        {
+                            foreach ( var v in ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == Body.location || r.start.BufferName == Body.location))
+                                info.location = v.Stn_No;
+                        }
+
+                        if (!clsAPI.GetAPI().GetEmptyESDCarrierUnload().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                            throw new Exception($"Error: EmptyESDCarrierUnload 上報WES失敗, barcode = {Body.barcode}.");
+
+                    }
+                    else if (Body.location == ConveyorDef.Box.B1_037.BufferName || Body.location == ConveyorDef.Box.B1_041.BufferName ||
                         Body.location == ConveyorDef.Box.B1_045.BufferName || Body.location == ConveyorDef.Box.B1_054.BufferName ||
                         Body.location == ConveyorDef.Box.B1_117.BufferName || Body.location == ConveyorDef.Box.B1_121.BufferName ||
                         Body.location == ConveyorDef.Box.B1_125.BufferName || Body.location == ConveyorDef.Box.B1_134.BufferName ||
                         Body.location == ConveyorDef.AGV.B1_070.BufferName || Body.location == ConveyorDef.AGV.B1_074.BufferName ||
                         Body.location == ConveyorDef.AGV.B1_078.BufferName )
                     {
+                        //待加入空箱回庫之判斷: jobId contains Empty, 上報EmptyESDCarrierUnload
                         CarrierPutawayCheckInfo info = new CarrierPutawayCheckInfo
                         {
                             portId = ConveyorDef.WES_B800CV,
@@ -1069,17 +1090,27 @@ namespace Mirle.WebAPI.Event
                     }
                     else if (Body.location == ConveyorDef.AGV.M1_10.BufferName || Body.location == ConveyorDef.AGV.M1_20.BufferName ||
                             Body.location == ConveyorDef.AGV.M1_05.BufferName || Body.location == ConveyorDef.AGV.M1_15.BufferName)
-                            //M1_05, M1_15為故障模式可能會使用之入庫點
+                    //M1_05, M1_15為故障模式可能會使用之入庫點
                     {
-                        CarrierPutawayCheckInfo info = new CarrierPutawayCheckInfo
+                        if (!clsCycleRun.GetPCBAcycleRun())
                         {
-                            portId = con.StnNo,
-                            carrierId = Body.barcode,
-                            storageType = clsConstValue.WesApi.StorageType.PCBA
-                        };
+                            //正常模式
+                            CarrierPutawayCheckInfo info = new CarrierPutawayCheckInfo
+                            {
+                                portId = con.StnNo,
+                                carrierId = Body.barcode,
+                                storageType = clsConstValue.WesApi.StorageType.PCBA
+                            };
+
+                            if (!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                                throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}.");
+                        }
+                        else
+                        {
+                            //Cycle Run 模式
+
+                        }
                         
-                        if (!clsAPI.GetAPI().GetCarrierPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
-                            throw new Exception($"Error: Sending CarrierPutawayCheck to WES fail, jobId = {Body.jobId}.");
                     }
                     else if (Body.location == ConveyorDef.AGV.LO3_01.BufferName && Body.carrierType == clsConstValue.ControllerApi.CarrierType.Bin)
                     {

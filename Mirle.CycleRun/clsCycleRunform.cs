@@ -140,7 +140,7 @@ namespace Mirle.CycleRun
                 cmdL2L_M802.JobID = "CYCLERUN_M802L2L";
                 cmdL2L_M802.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
 
-                cmdL2L_M802.New_Loc = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.L2L, "", textBox_L2LM801.Text.ToString());
+                cmdL2L_M802.New_Loc = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.L2L, "", textBox_L2LM802.Text.ToString());
                 if (string.IsNullOrEmpty(cmdL2L_M802.New_Loc))
                     throw new Exception("PCBA M801 Cycle Run 未取得正確庫對庫目的地");
                 else if (cmdL2L_M802.New_Loc.Contains("Error"))

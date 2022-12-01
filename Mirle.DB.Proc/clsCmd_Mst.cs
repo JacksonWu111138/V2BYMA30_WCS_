@@ -478,8 +478,22 @@ namespace Mirle.DB.Proc
                                 if (PCBACycleRun && sJobID.Contains("CYCLERUN"))
                                 {
                                     nextCycleCmd = lastCycleCmd;
+                                    //nextCycleCmd.Cmd_Sno = sno.FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
+                                    nextCycleCmd.CurLoc = "";
+                                    nextCycleCmd.CurDeviceID = "";
+                                    nextCycleCmd.Cmd_Sts = clsConstValue.CmdSts.strCmd_Initial;
+                                    nextCycleCmd.Remark = "";
+                                    nextCycleCmd.End_Date = "";
+                                    if (string.IsNullOrWhiteSpace(nextCycleCmd.Cmd_Sno))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        sRemark = $"Cycle Run 取得下筆命令序號失敗！";
+                                        if(sRemark != sRemark_Pre)
+                                            FunUpdateRemark(sCmdSno, sRemark);
+                                        continue;
+                                    }
 
-                                    switch (lastCycleCmd.Cmd_Mode)
+                                        switch (lastCycleCmd.Cmd_Mode)
                                     {
                                         case clsConstValue.CmdMode.StockIn:
                                             nextCycleCmd.Cmd_Mode = clsConstValue.CmdMode.StockOut;

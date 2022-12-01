@@ -36,123 +36,139 @@ namespace Mirle.CycleRun
                 CmdMstInfo cmdL2L_M801 = new CmdMstInfo();
                 CmdMstInfo cmdL2L_M802 = new CmdMstInfo();
 
+                cmdStock.Cmd_Sno = "";
+                cmdL2L_M801.Cmd_Sno = "";
+                cmdL2L_M802.Cmd_Sno = "";
+                
                 #region 出入庫cycle命令
-                cmdStock.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
-                if (string.IsNullOrWhiteSpace(cmdStock.Cmd_Sno))
+                if(textBox_StockInAndOutCarrierId.Text.ToString() != "" && textBox_StockInAndOutStartLocation.Text.ToString() != "")
                 {
-                    throw new Exception($"PCBA Cycle Run 取得序號失敗！");
+                    cmdStock.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
+                    if (string.IsNullOrWhiteSpace(cmdStock.Cmd_Sno))
+                    {
+                        throw new Exception($"PCBA Cycle Run 取得序號失敗！");
+                    }
+
+                    if (string.IsNullOrEmpty(textBox_StockInAndOutCarrierId.Text.ToString()))
+                    {
+                        throw new Exception($"PCBA Cycle Run 未輸入入出庫之使用 Magazine ID！");
+                    }
+
+                    cmdStock.BoxID = textBox_StockInAndOutCarrierId.Text.ToString();
+                    cmdStock.Cmd_Mode = clsConstValue.CmdMode.StockOut;
+                    cmdStock.CurDeviceID = "";
+                    cmdStock.CurLoc = "";
+                    cmdStock.End_Date = "";
+                    cmdStock.Loc = textBox_StockInAndOutStartLocation.Text.ToString();
+                    cmdStock.Equ_No = tool.funGetEquNoByLoc(textBox_StockInAndOutStartLocation.Text.ToString()).ToString();
+                    cmdStock.EXP_Date = "";
+                    cmdStock.JobID = "CYCLERUN_StockIn&Out";
+                    cmdStock.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
+                    cmdStock.New_Loc = "";
+                    cmdStock.Prty = "5";
+                    cmdStock.Remark = "";
+
+                    if (cmdStock.Equ_No == "1")
+                        cmdStock.Stn_No = ConveyorDef.GetBuffer_ByStnNo("M800-2").BufferName;
+                    else if (cmdStock.Equ_No == "2")
+                        cmdStock.Stn_No = ConveyorDef.GetBuffer_ByStnNo("M800-1").BufferName;
+
+                    if (string.IsNullOrEmpty(cmdStock.Stn_No))
+                    {
+                        throw new Exception($"PCBA Cycle Run 未找到出庫目的站口！");
+                    }
+
+                    cmdStock.Host_Name = "WCS";
+                    cmdStock.Zone_ID = "";
+
+                    cmdStock.carrierType = "MAG";
+                    cmdStock.lotSize = "";
                 }
-
-                if(string.IsNullOrEmpty(textBox_StockInAndOutCarrierId.Text.ToString()))
-                {
-                    throw new Exception($"PCBA Cycle Run 未輸入入出庫之使用 Magazine ID！");
-                }
-
-                cmdStock.BoxID = textBox_StockInAndOutCarrierId.Text.ToString();
-                cmdStock.Cmd_Mode = clsConstValue.CmdMode.StockOut;
-                cmdStock.CurDeviceID = "";
-                cmdStock.CurLoc = "";
-                cmdStock.End_Date = "";
-                cmdStock.Loc = textBox_StockInAndOutStartLocation.Text.ToString();
-                cmdStock.Equ_No = tool.funGetEquNoByLoc(textBox_StockInAndOutStartLocation.Text.ToString()).ToString();
-                cmdStock.EXP_Date = "";
-                cmdStock.JobID = "CYCLERUN_StockIn&Out";
-                cmdStock.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
-                cmdStock.New_Loc = "";
-                cmdStock.Prty = "5";
-                cmdStock.Remark = "";
-
-                if(cmdStock.Equ_No == "1")
-                    cmdStock.Stn_No = ConveyorDef.GetBuffer_ByStnNo("M800-2").BufferName;
-                else if(cmdStock.Equ_No == "2")
-                    cmdStock.Stn_No = ConveyorDef.GetBuffer_ByStnNo("M800-1").BufferName;
-
-                if(string.IsNullOrEmpty(cmdStock.Stn_No))
-                {
-                    throw new Exception($"PCBA Cycle Run 未找到出庫目的站口！");
-                }
-
-                cmdStock.Host_Name = "WCS";
-                cmdStock.Zone_ID = "";
-
-                cmdStock.carrierType = "MAG";
-                cmdStock.lotSize = "";
+                
                 #endregion 出入庫cycle命令
 
                 #region M801庫對庫cycle命令
-                cmdL2L_M801.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
-                if (string.IsNullOrWhiteSpace(cmdL2L_M801.Cmd_Sno))
+                if(textBox_L2LM801.Text.ToString() != "")
                 {
-                    throw new Exception($"PCBA M801 Cycle Run 取得序號失敗！");
+                    cmdL2L_M801.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
+                    if (string.IsNullOrWhiteSpace(cmdL2L_M801.Cmd_Sno))
+                    {
+                        throw new Exception($"PCBA M801 Cycle Run 取得序號失敗！");
+                    }
+
+                    if (string.IsNullOrEmpty(textBox_L2LM801.Text.ToString()) || tool.funGetEquNoByLoc(textBox_L2LM801.Text.ToString()) != 1)
+                    {
+                        throw new Exception($"PCBA M801 Cycle Run 未輸入正確起點！");
+                    }
+
+                    cmdL2L_M801.BoxID = "M801CycleL2L";
+                    cmdL2L_M801.Cmd_Mode = clsConstValue.CmdMode.L2L;
+                    cmdL2L_M801.CurDeviceID = "";
+                    cmdL2L_M801.CurLoc = "";
+                    cmdL2L_M801.End_Date = "";
+                    cmdL2L_M801.Loc = textBox_L2LM801.Text.ToString();
+                    cmdL2L_M801.Equ_No = tool.funGetEquNoByLoc(textBox_L2LM801.Text.ToString()).ToString();
+                    cmdL2L_M801.EXP_Date = "";
+                    cmdL2L_M801.JobID = "CYCLERUN_M801L2L";
+                    cmdL2L_M801.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
+
+                    cmdL2L_M801.New_Loc = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.L2L, "", textBox_L2LM801.Text.ToString());
+                    if (string.IsNullOrEmpty(cmdL2L_M801.New_Loc))
+                        throw new Exception("PCBA M801 Cycle Run 未取得正確庫對庫目的地");
+                    else if (cmdL2L_M801.New_Loc.Contains("Error"))
+                        throw new Exception(cmdL2L_M801.New_Loc);
+
+                    cmdL2L_M801.Prty = "9";
+                    cmdL2L_M801.Remark = "";
+                    cmdL2L_M801.Stn_No = "";
+                    cmdL2L_M801.Host_Name = "WCS";
+                    cmdL2L_M801.Zone_ID = "";
+                    cmdL2L_M801.carrierType = "MAG";
+                    cmdL2L_M801.lotSize = "";
                 }
-
-                if (string.IsNullOrEmpty(textBox_L2LM801.Text.ToString()) || tool.funGetEquNoByLoc(textBox_L2LM801.Text.ToString()) != 1)
-                {
-                    throw new Exception($"PCBA M801 Cycle Run 未輸入正確起點！");
-                }
-
-                cmdL2L_M801.BoxID = "M801CycleL2L";
-                cmdL2L_M801.Cmd_Mode = clsConstValue.CmdMode.L2L;
-                cmdL2L_M801.CurDeviceID = "";
-                cmdL2L_M801.CurLoc = "";
-                cmdL2L_M801.End_Date = "";
-                cmdL2L_M801.Loc = textBox_L2LM801.Text.ToString();
-                cmdL2L_M801.Equ_No = tool.funGetEquNoByLoc(textBox_L2LM801.Text.ToString()).ToString();
-                cmdL2L_M801.EXP_Date = "";
-                cmdL2L_M801.JobID = "CYCLERUN_M801L2L";
-                cmdL2L_M801.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
-
-                cmdL2L_M801.New_Loc = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.L2L, "", textBox_L2LM801.Text.ToString());
-                if (string.IsNullOrEmpty(cmdL2L_M801.New_Loc))
-                    throw new Exception("PCBA M801 Cycle Run 未取得正確庫對庫目的地");
-                else if (cmdL2L_M801.New_Loc.Contains("Error"))
-                    throw new Exception(cmdL2L_M801.New_Loc);
-
-                cmdL2L_M801.Prty = "9";
-                cmdL2L_M801.Remark = "";
-                cmdL2L_M801.Stn_No = "";
-                cmdL2L_M801.Host_Name = "WCS";
-                cmdL2L_M801.Zone_ID = "";
-                cmdL2L_M801.carrierType = "MAG";
-                cmdL2L_M801.lotSize = "";
+                
                 #endregion M801庫對庫cycle命令
 
                 #region M802庫對庫cycle命令
-                cmdL2L_M802.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
-                if (string.IsNullOrWhiteSpace(cmdL2L_M802.Cmd_Sno))
+                if(textBox_L2LM802.Text.ToString() != "")
                 {
-                    throw new Exception($"PCBA M802 Cycle Run 取得序號失敗！");
+                    cmdL2L_M802.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
+                    if (string.IsNullOrWhiteSpace(cmdL2L_M802.Cmd_Sno))
+                    {
+                        throw new Exception($"PCBA M802 Cycle Run 取得序號失敗！");
+                    }
+
+                    if (string.IsNullOrEmpty(textBox_L2LM802.Text.ToString()) || tool.funGetEquNoByLoc(textBox_L2LM802.Text.ToString()) != 2)
+                    {
+                        throw new Exception($"PCBA M802 Cycle Run 未輸入正確起點！");
+                    }
+
+                    cmdL2L_M802.BoxID = "M802CycleL2L";
+                    cmdL2L_M802.Cmd_Mode = clsConstValue.CmdMode.L2L;
+                    cmdL2L_M802.CurDeviceID = "";
+                    cmdL2L_M802.CurLoc = "";
+                    cmdL2L_M802.End_Date = "";
+                    cmdL2L_M802.Loc = textBox_L2LM802.Text.ToString();
+                    cmdL2L_M802.Equ_No = tool.funGetEquNoByLoc(textBox_L2LM802.Text.ToString()).ToString();
+                    cmdL2L_M802.EXP_Date = "";
+                    cmdL2L_M802.JobID = "CYCLERUN_M802L2L";
+                    cmdL2L_M802.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
+
+                    cmdL2L_M802.New_Loc = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.L2L, "", textBox_L2LM802.Text.ToString());
+                    if (string.IsNullOrEmpty(cmdL2L_M802.New_Loc))
+                        throw new Exception("PCBA M801 Cycle Run 未取得正確庫對庫目的地");
+                    else if (cmdL2L_M802.New_Loc.Contains("Error"))
+                        throw new Exception(cmdL2L_M802.New_Loc);
+
+                    cmdL2L_M802.Prty = "9";
+                    cmdL2L_M802.Remark = "";
+                    cmdL2L_M802.Stn_No = "";
+                    cmdL2L_M802.Host_Name = "WCS";
+                    cmdL2L_M802.Zone_ID = "";
+                    cmdL2L_M802.carrierType = "MAG";
+                    cmdL2L_M802.lotSize = "";
                 }
-
-                if (string.IsNullOrEmpty(textBox_L2LM802.Text.ToString()) || tool.funGetEquNoByLoc(textBox_L2LM802.Text.ToString()) != 2)
-                {
-                    throw new Exception($"PCBA M802 Cycle Run 未輸入正確起點！");
-                }
-
-                cmdL2L_M802.BoxID = "M802CycleL2L";
-                cmdL2L_M802.Cmd_Mode = clsConstValue.CmdMode.L2L;
-                cmdL2L_M802.CurDeviceID = "";
-                cmdL2L_M802.CurLoc = "";
-                cmdL2L_M802.End_Date = "";
-                cmdL2L_M802.Loc = textBox_L2LM802.Text.ToString();
-                cmdL2L_M802.Equ_No = tool.funGetEquNoByLoc(textBox_L2LM802.Text.ToString()).ToString();
-                cmdL2L_M802.EXP_Date = "";
-                cmdL2L_M802.JobID = "CYCLERUN_M802L2L";
-                cmdL2L_M802.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
-
-                cmdL2L_M802.New_Loc = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.L2L, "", textBox_L2LM802.Text.ToString());
-                if (string.IsNullOrEmpty(cmdL2L_M802.New_Loc))
-                    throw new Exception("PCBA M801 Cycle Run 未取得正確庫對庫目的地");
-                else if (cmdL2L_M802.New_Loc.Contains("Error"))
-                    throw new Exception(cmdL2L_M802.New_Loc);
-
-                cmdL2L_M802.Prty = "9";
-                cmdL2L_M802.Remark = "";
-                cmdL2L_M802.Stn_No = "";
-                cmdL2L_M802.Host_Name = "WCS";
-                cmdL2L_M802.Zone_ID = "";
-                cmdL2L_M802.carrierType = "MAG";
-                cmdL2L_M802.lotSize = "";
+                
                 #endregion M802庫對庫cycle命令
 
                 string sRemark = "";
@@ -198,7 +214,7 @@ namespace Mirle.CycleRun
 
         private void button2_Click(object sender, EventArgs e)
         {
-            string next = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.StockOut, "M1-10", textBox_testlocation.Text.ToString());
+            string next = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.L2L, "", textBox_testlocation.Text.ToString());
             label_testNextlocation.Text = "Next location = " + next;
         }
     }

@@ -2313,22 +2313,33 @@ namespace Mirle.DB.Proc
                         }
 
                         sRemark = "";
-                        if (!Cmd_Mst.FunInsCmdMst(StockCmd, ref sRemark ,db))
+                        if(StockCmd.Cmd_Sno != "")
                         {
-                            db.TransactionCtrl(TransactionTypes.Rollback);
-                            return false;
+                            if (!Cmd_Mst.FunInsCmdMst(StockCmd, ref sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
                         }
-
-                        if (!Cmd_Mst.FunInsCmdMst(M801L2LCmd, ref sRemark, db))
+                        
+                        if(M801L2LCmd.Cmd_Sno != "")
                         {
-                            db.TransactionCtrl(TransactionTypes.Rollback);
-                            return false;
+                            if (!Cmd_Mst.FunInsCmdMst(M801L2LCmd, ref sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
                         }
-                        if (!Cmd_Mst.FunInsCmdMst(M802L2LCmd, ref sRemark, db))
+                        
+                        if(M802L2LCmd.Cmd_Sno != "")
                         {
-                            db.TransactionCtrl(TransactionTypes.Rollback);
-                            return false;
+                            if (!Cmd_Mst.FunInsCmdMst(M802L2LCmd, ref sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
                         }
+                        
 
                         db.TransactionCtrl(TransactionTypes.Commit);
                         return true;

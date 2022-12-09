@@ -33,7 +33,7 @@ namespace Mirle.DB.ClearCmd.Proc
                     //AGV
                     clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdFinish_Proc(ConveyorDef.DeviceID_AGV);
 
-                    clsDB_Proc.GetDB_Object().GetCmd_Mst().FunMoveFinishCmdToHistory_Proc(clsCycleRun.GetPCBAcycleRun());
+                    clsDB_Proc.GetDB_Object().GetCmd_Mst().FunMoveFinishCmdToHistory_Proc(clsCycleRun.GetPCBAcycleRun(), clsCycleRun.GetBOXcycleRun());
                 }
 
             }

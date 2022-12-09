@@ -22,7 +22,7 @@ namespace Mirle.WebAPI.V2BYMA30.Function
                 string re = clsTool.HttpPost(sLink, strJson);
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, re);
                 replyInfo = (EmptyShelfQueryReply)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(EmptyShelfQueryReply));
-                if (replyInfo.returnCode == clsConstValue.ApiReturnCode.Success) return true;
+                if (replyInfo.returnCode != clsConstValue.ApiReturnCode.Waitretry) return true;
                 else return false;
             }
             catch (Exception ex)

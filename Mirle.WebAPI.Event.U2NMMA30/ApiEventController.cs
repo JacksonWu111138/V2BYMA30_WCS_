@@ -1024,7 +1024,8 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"Error: 目前抵達命令終點，稍後等待命令清除！ jobId = {cmd.Cmd_Sno}.");
                     }
 
-                    if(((Body.location == ConveyorDef.Box.B1_037.BufferName || Body.location == ConveyorDef.Box.B1_117.BufferName) && cmd.Equ_No == "3") ||
+                    if((cmd.Cmd_Mode == clsConstValue.CmdMode.StockIn) &&
+                       ((Body.location == ConveyorDef.Box.B1_037.BufferName || Body.location == ConveyorDef.Box.B1_117.BufferName) && cmd.Equ_No == "3") ||
                        ((Body.location == ConveyorDef.Box.B1_041.BufferName || Body.location == ConveyorDef.Box.B1_121.BufferName) && cmd.Equ_No == "4") ||
                        ((Body.location == ConveyorDef.Box.B1_045.BufferName || Body.location == ConveyorDef.Box.B1_125.BufferName) && cmd.Equ_No == "5"))
                     {
@@ -1032,7 +1033,19 @@ namespace Mirle.WebAPI.Event
                     }
                     else if (con.ControllerID == clsControllerID.pCBA_ControllerID)
                     {
-
+                        if(clsCycleRun.GetPCBAcycleRun())
+                        {
+                            CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
+                            {
+                                jobId = cmd.Cmd_Sno,
+                                carrierType = clsConstValue.ControllerApi.CarrierType.Mag,
+                                bufferId = Body.location
+                            };
+                            if(!clsAPI.GetAPI().GetCV_ReceiveNewBinCmd().FunReport(info, con.API.IP))
+                            {
+                                throw new Exception($"Error: Cycle Run 寫入序號失敗, BufferId = {Body.location} and jobId = {cmd.Cmd_Sno}.");
+                            }
+                        }
                     }
                     else
                     {
@@ -1162,6 +1175,19 @@ namespace Mirle.WebAPI.Event
 
                         if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                             throw new Exception(strEM);
+                    }
+                    else if (Body.location == ConveyorDef.E04.LO1_07.BufferName)
+                    {
+                        //到十樓需寫假帳使CV繼續至人員可操控區域
+                        CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
+                        {
+                            jobId = "99449",
+                            bufferId = ConveyorDef.E04.LO1_07.BufferName,
+                            carrierType = clsConstValue.ControllerApi.CarrierType.Bin
+                        };
+                        if (!clsAPI.GetAPI().GetCV_ReceiveNewBinCmd().FunReport(info, con.API.IP))
+                            throw new Exception($"Error: CVReceiveNewBinCmd fail to LIFT4C. BufferId = {info.bufferId}.");
+
                     }
                     else
                     {
@@ -2298,8 +2324,25 @@ namespace Mirle.WebAPI.Event
                         //throw new Exception($"Error: PositionReport to WES fail, jobId = {Body.jobId}.");
                     }
                 }
-                if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, con.BufferName))
-                    throw new Exception($"Error: Update CurLoc fail, jobId = {Body.jobId}.");
+
+                MiddleCmd middle = new MiddleCmd();
+
+                if(cmd.Cmd_Mode == clsConstValue.CmdMode.L2L || cmd.Cmd_Mode == clsConstValue.CmdMode.StockIn && cmd.Stn_No == Body.position)
+                {
+                    //新生成的命令，待時序處理起點預約
+                }
+                else if ((cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut && Body.position == cmd.Stn_No) || 
+                         (cmd.Cmd_Mode == clsConstValue.CmdMode.S2S && Body.position == cmd.New_Loc) && 
+                         ConveyorDef.GetAGV_8FPort().Any(r => r.BufferName == Body.position) &&
+                         clsDB_Proc.GetDB_Object().GetMiddleCmd().FunGetMiddleCmdbyCommandID(Body.position, ref middle))
+                {
+                    //若為出庫or站對站命令終點 & 終點為AGVport口 & Middle 尚有該筆AGV命令未完成，則待AGV命令完成再更新cmdMst
+                }
+                else
+                {
+                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, con.BufferName))
+                        throw new Exception($"Error: Update CurLoc fail, jobId = {Body.jobId}.");
+                }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
@@ -2775,6 +2818,7 @@ namespace Mirle.WebAPI.Event
                 };
 
                 MiddleCmd middlecmd = new MiddleCmd();
+                middlecmd.DeviceID = ConveyorDef.DeviceID_AGV;
                 middlecmd.CommandID = Body.jobId;
                 middlecmd.TaskNo = "RackTurnRequest";
                 middlecmd.CSTID = Body.rackId;
@@ -2833,7 +2877,6 @@ namespace Mirle.WebAPI.Event
 
                 if (!clsAPI.GetAPI().GetLotPutawayCheck().FunReport(info, clsAPI.GetWesApiConfig().IP))
                     throw new Exception($"Error: LotPutawayCheck fail, jobId = {Body.jobId}.");
-
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";

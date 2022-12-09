@@ -23,6 +23,7 @@ namespace Mirle.WebAPI.V2BYMA30.Function
                 string re = clsTool.HttpPost(sLink, strJson);
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, re);
                 var info_controller = (LotPutawayCheckReply)Newtonsoft.Json.Linq.JObject.Parse(re).ToObject(typeof(LotPutawayCheckReply));
+                //此電子料塔可以不須人員介入，自行執行NG流程，因此WES回復fail可直接回覆E800C失敗
                 if (info_controller.returnCode == clsConstValue.ApiReturnCode.Success) return true;
                 else if (info_controller.returnCode == clsConstValue.ApiReturnCode.Waitretry)
                 {

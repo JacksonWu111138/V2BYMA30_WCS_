@@ -4,6 +4,7 @@ using Mirle.Def;
 using Mirle.Structure;
 using Mirle.DataBase;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
+using Mirle.Def.U2NMMA30;
 
 namespace Mirle.DB.Proc
 {
@@ -411,7 +412,7 @@ namespace Mirle.DB.Proc
         }
 
 
-        public bool FunMoveFinishCmdToHistory_Proc(bool PCBACycleRun)
+        public bool FunMoveFinishCmdToHistory_Proc(bool PCBACycleRun, bool B800CycleRun)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -475,7 +476,7 @@ namespace Mirle.DB.Proc
                                     continue;
                                 }
 
-                                if (PCBACycleRun && sJobID.Contains("CYCLERUN"))
+                                if (PCBACycleRun && sJobID.Contains("CYCLERUN") && !sJobID.Contains("_B80"))
                                 {
                                     nextCycleCmd = lastCycleCmd;
                                     //nextCycleCmd.Cmd_Sno = sno.FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
@@ -493,11 +494,21 @@ namespace Mirle.DB.Proc
                                         continue;
                                     }
 
-                                        switch (lastCycleCmd.Cmd_Mode)
+                                    switch (lastCycleCmd.Cmd_Mode)
                                     {
                                         case clsConstValue.CmdMode.StockIn:
-                                            nextCycleCmd.Cmd_Mode = clsConstValue.CmdMode.StockOut;
-                                            nextCycleCmd.Stn_No = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.StockIn, lastCycleCmd.Stn_No, lastCycleCmd.Loc);
+                                            if(lastCycleCmd.JobID.Contains("L2L"))
+                                            {
+                                                nextCycleCmd.Cmd_Mode = clsConstValue.CmdMode.L2L;
+                                                nextCycleCmd.New_Loc = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.L2L, lastCycleCmd.Stn_No, lastCycleCmd.Loc);
+                                                nextCycleCmd.Prty = "9";
+                                                nextCycleCmd.Stn_No = "";
+                                            }
+                                            else
+                                            {
+                                                nextCycleCmd.Cmd_Mode = clsConstValue.CmdMode.StockOut;
+                                                nextCycleCmd.Stn_No = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.StockIn, lastCycleCmd.Stn_No, lastCycleCmd.Loc);
+                                            }
                                             break;
                                         case clsConstValue.CmdMode.StockOut:
                                             nextCycleCmd.Cmd_Mode = clsConstValue.CmdMode.StockIn;
@@ -505,7 +516,8 @@ namespace Mirle.DB.Proc
                                             switch (lastCycleCmd.Equ_No)
                                             {
                                                 case "1":
-                                                    nextCycleCmd.Equ_No = "2";
+                                                    if(!lastCycleCmd.JobID.Contains("L2L"))
+                                                        nextCycleCmd.Equ_No = "2";
                                                     break;
                                                 case "2":
                                                     nextCycleCmd.Equ_No = "1";
@@ -520,10 +532,18 @@ namespace Mirle.DB.Proc
                                                     FunUpdateRemark(sCmdSno, sRemark);
                                                     continue;
                                             }
+                                            
                                             break;
                                         case clsConstValue.CmdMode.L2L:
                                             nextCycleCmd.Loc = lastCycleCmd.New_Loc;
                                             nextCycleCmd.New_Loc = tool.FunGetCycleRunNextLocation(lastCycleCmd.Cmd_Mode, lastCycleCmd.Stn_No, lastCycleCmd.New_Loc);
+                                            if(nextCycleCmd.New_Loc == ConveyorDef.AGV.M1_20.BufferName) //六筆需出庫
+                                            {
+                                                nextCycleCmd.Cmd_Mode = clsConstValue.CmdMode.StockOut;
+                                                nextCycleCmd.Stn_No = ConveyorDef.AGV.M1_20.BufferName;
+                                                nextCycleCmd.Prty = "5";
+                                                nextCycleCmd.New_Loc = "";
+                                            }
                                             break;
                                         default:
                                             db.TransactionCtrl(TransactionTypes.Rollback);
@@ -540,7 +560,58 @@ namespace Mirle.DB.Proc
                                         continue;
                                     }
                                 }
+                                else if ((B800CycleRun && sJobID.Contains("CYCLERUN") && sJobID.Contains("_B80")))
+                                {
+                                    nextCycleCmd = lastCycleCmd;
 
+                                    nextCycleCmd.CurLoc = "";
+                                    nextCycleCmd.CurDeviceID = "";
+                                    nextCycleCmd.Cmd_Sts = clsConstValue.CmdSts.strCmd_Initial;
+                                    nextCycleCmd.Remark = "";
+                                    nextCycleCmd.End_Date = "";
+
+                                    switch (lastCycleCmd.Cmd_Mode)
+                                    {
+                                        case clsConstValue.CmdMode.StockIn:
+                                            nextCycleCmd.Cmd_Mode = clsConstValue.CmdMode.StockOut;
+                                            nextCycleCmd.Stn_No = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.StockIn, lastCycleCmd.Stn_No, lastCycleCmd.Loc);
+                                            break;
+                                        case clsConstValue.CmdMode.StockOut:
+                                            nextCycleCmd.Cmd_Mode = clsConstValue.CmdMode.StockIn;
+                                            nextCycleCmd.Loc = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.StockOut, lastCycleCmd.Stn_No, lastCycleCmd.Loc);
+                                            break;
+                                        case clsConstValue.CmdMode.L2L:
+                                            string[] nextLocation = tool.FunGetCycleRunNextLocation(clsConstValue.CmdMode.L2L, lastCycleCmd.Loc, lastCycleCmd.New_Loc).Split(',');
+                                            if(nextLocation.Length == 2)
+                                            {
+                                                nextCycleCmd.Loc = nextLocation[0];
+                                                nextCycleCmd.New_Loc = nextLocation[1];
+                                            }
+                                            else if(nextLocation.Length == 1)
+                                            {
+                                                nextCycleCmd.Loc = lastCycleCmd.New_Loc;
+                                                nextCycleCmd.New_Loc = nextLocation[0];
+                                            }
+                                            else
+                                            {
+                                                throw new Exception($"Error: 取得B800 庫對庫命令下個位置有誤. nextLocation = {nextLocation}");
+                                            }
+                                            break;
+                                        default:
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            sRemark = $"Error: CycleRun先前命令模式有誤, cmdMode = {lastCycleCmd.Cmd_Mode}.";
+                                            if (FunUpdateRemark(sCmdSno, sRemark))
+                                                continue;
+                                            else
+                                                continue;
+                                    }
+
+                                    if (!CMD_MST.FunInsCmdMst(nextCycleCmd, ref sRemark, db))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        continue;
+                                    }
+                                }
                                 /*if (iRet == DBResult.Success)
                                 {
                                     if (!CMD_DTL.FunInsertCmd_Dtl_His(sCmdSno, db))

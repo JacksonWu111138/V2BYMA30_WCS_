@@ -321,6 +321,37 @@ namespace Mirle.DB.Fun
                 return "";
         }
 
+        public string FunGetB800L2LCycleRunInitialDestiantion(string startShelf)
+        {
+            string nextlocation = "";
+            int lastRow = 0;
+            lastRow = Convert.ToInt32(startShelf.Substring(2, 3));
+
+
+            int equNo = funGetEquNoByLoc(startShelf);
+            if (equNo < 6 && equNo > 2)
+            {
+                if(lastRow > 10 && lastRow < 20)
+                {
+                    nextlocation = startShelf.Substring(0, 2) + (lastRow - 9).ToString().PadLeft(3, '0') + startShelf.Substring(5, 2);
+                }
+                else if (lastRow > 19 && lastRow < 27)
+                {
+                    nextlocation = startShelf.Substring(0, 2) + (lastRow - 18).ToString().PadLeft(3, '0') + startShelf.Substring(5, 2);
+                }
+                else
+                {
+                    return $"Error: LastRow B800庫對庫命令取得初始終點失敗， LastRow = {lastRow}.";
+                }
+            }
+            else
+            {
+                return $"Error: B800庫對庫命令取得初始終點失敗(EquNo有誤)， startShelf = {startShelf} and EquNo = {equNo}.";
+            }
+
+            return nextlocation;
+        }
+
         public string FunGetCycleRunNextLocation(string lastCmdMode, string location, string lastShelf)
         {
             string nextlocation = "";
@@ -337,13 +368,37 @@ namespace Mirle.DB.Fun
                 {
                     //只使用前兩個Row
                     //路徑 01/01/01 -> 05/01/01 -> 02/01/01 -> 06/01/01... -> 08/01/01 -> 01/01/02 ->...->08/01/03 -> 01/02/01
+                    //追加條件：M801庫對庫命令需六筆出庫入庫一次，因此需另外判斷
                     if(nowConveyor.BufferName == ConveyorDef.AGV.M1_15.BufferName || nowConveyor.BufferName == ConveyorDef.AGV.M1_20.BufferName)
                     {
                         //出庫到M801 AGV口
-                        if (lastColumn < 4)
+                        if (lastColumn < 5) //for M801庫對庫使用
                         {
-                            //錯誤，未抓取Column成功
-                            return $"Error: LastColumn get fail, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+                            //追加條件：M801庫對庫命令需六筆出庫入庫一次，因此需另外判斷
+                            if (lastColumn == 0)
+                            {
+                                //錯誤，未抓取Column成功
+                                return $"Error: LastColumn M801庫對庫位置錯誤, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+                            }
+                            else if (lastColumn < 4)
+                            {
+                                nextColumn = lastColumn + 1;
+                                nextRow = lastRow - 14;
+                                nextLevel = 1;
+                            }
+                            else if (lastColumn == 4)
+                            {
+                                nextColumn = 1;
+                                nextRow = lastRow - 13;
+                                nextLevel = 1;
+                                if (lastRow == 30)
+                                    nextRow = 3;
+                            }
+                            else
+                            {
+                                //錯誤，未抓取Column成功
+                                return $"Error: LastColumn M801庫對庫位置錯誤, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+                            }
                         }
                         else if (lastColumn < 8)
                         {
@@ -427,6 +482,43 @@ namespace Mirle.DB.Fun
 
                     }
                 }
+                else if (nowConveyor.ControllerID.Contains("Box"))
+                {
+                    //上撿料口->內儲位->下撿料口->外儲位，上撿料口
+                    //Ex. B1-142 -> 0900101 -> B1-062 -> 1100101 -> B1-142 -> 0900102 -> B1-062 -> 1100102
+                    if(nowConveyor == ConveyorDef.Box.B1_062 || nowConveyor == ConveyorDef.Box.B1_067)
+                    {
+                        if(lastColumn % 4 != 1 && lastColumn % 4 != 2)
+                            return $"Error: LastColumn get fail, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+
+                        nextColumn = lastColumn + 2;
+                        nextRow = lastRow;
+                        nextLevel = lastLevel;
+                    }
+                    else if(nowConveyor == ConveyorDef.Box.B1_142 || nowConveyor == ConveyorDef.Box.B1_147)
+                    {
+                        if (lastColumn % 4 != 3 && lastColumn % 4 != 0)
+                            return $"Error: LastColumn get fail, string ver = {lastShelf.Substring(0, 2)} and int ver = {lastColumn}.";
+
+                        if (lastLevel == 0 || lastLevel > 5)
+                        {
+                            //錯誤，未抓取Level成功
+                            return $"Error: LastLevel get fail, string ver = {lastShelf.Substring(5, 2)} and int ver = {lastLevel}.";
+                        }
+                        else if(lastLevel < 5)
+                        {
+                            nextColumn = lastColumn - 2;
+                            nextRow = lastRow;
+                            nextLevel = lastLevel + 1;
+                        }
+                        else //Case: lastLevel == 5
+                        {
+                            nextColumn = lastColumn - 2;
+                            nextRow = lastRow;
+                            nextLevel = 1;
+                        }
+                    }
+                }
 
                 nextlocation = nextColumn.ToString().PadLeft(2, '0') + nextRow.ToString().PadLeft(3, '0') + nextLevel.ToString().PadLeft(2, '0');
             }
@@ -448,6 +540,24 @@ namespace Mirle.DB.Fun
                     case 4:
                     case 5:
                         //箱式倉命令
+                        //上撿料口->內儲位->下撿料口->外儲位，上撿料口
+                        switch(lastColumn % 4)
+                        {
+                            case 1:
+                                nextlocation = ConveyorDef.Box.B1_062.BufferName;
+                                break;
+                            case 2:
+                                nextlocation = ConveyorDef.Box.B1_067.BufferName;
+                                break;
+                            case 3:
+                                nextlocation = ConveyorDef.Box.B1_142.BufferName;
+                                break;
+                            case 0:
+                                nextlocation = ConveyorDef.Box.B1_147.BufferName;
+                                break;
+                            default:
+                                return $"Error: LastColumn 判定入庫後Cycle Run尋找下個位置有誤, lastColumn = {lastColumn}.";
+                        }
                         break;
                     default:
                         //錯誤，取得EquNo失敗
@@ -464,8 +574,8 @@ namespace Mirle.DB.Fun
                     {
                         //M801 庫對庫 Row 從 03 <-> 30
                         //分兩區塊 03<->16, 17<->30
-                        //路徑01/03/01 -> 01/17/01 -> 01/03/02 -> 01/17/02 -> 01/03/03 -> 01/17/03 -> 02/03/01 -> 02/17/01 ->...-> 04/17/03 -> 01/04/01 -> 01/18/01 ->...
-                        if(lastRow > 2 && lastRow < 17)
+                        //路徑01/03/01 -> 01/17/01 -> 01/03/02 -> 01/17/02 -> 01/03/03 -> 01/17/03 -> M1-20 -> 02/03/01 -> 02/17/01 ->...-> 04/17/03 -> M1-20 -> 01/04/01 -> 01/18/01 ->...
+                        if (lastRow > 2 && lastRow < 17)
                         {
                             nextColumn = lastColumn;
                             nextRow = lastRow + 14;
@@ -486,6 +596,9 @@ namespace Mirle.DB.Fun
                             }
                             else if(lastLevel == 3)
                             {
+                                if (equNo == 1)
+                                    return ConveyorDef.AGV.M1_20.BufferName; //M801庫對庫Cycle六筆入出庫一次
+
                                 if(lastColumn == 0)
                                 {
                                     //錯誤，未抓取Column成功
@@ -590,6 +703,128 @@ namespace Mirle.DB.Fun
                 else if(equNo > 2 && equNo < 6)
                 {
                     //箱式倉命令
+                    //需要使用location (判定為上筆命令之起點)，lastShelf(判定為上筆命令之終點)
+                    //row ： 後面16排(26~11) 為雙版滿載儲位； 前9排(02~10)為目標空儲位
+                    //順序 03/11/01 <-> 03/02/01, 04/11/01 <-> 04/02/01, 03/11/02 <-> 03/02/02 ... <-> 04/02/05, 03/12/01 <-> ... 04/19/05 <-> 04/10/05, (延續下行)
+                    //03/20/01 <-> 03/02/01 ... 04/26/05 <-> 04/08/05, 03/11/01 <-> 03/02/01
+                    //跳過 20/{14, 15, 16}/{01,..., 05}
+                    int lastStartColumn = 0, lastStartRow = 0, lastStartLevel = 0;
+                    if (!string.IsNullOrEmpty(location))
+                    {
+                        lastStartColumn = Convert.ToInt32(location.Substring(0, 2));
+                        lastStartRow = Convert.ToInt32(location.Substring(2, 3));
+                        lastStartLevel = Convert.ToInt32(location.Substring(5, 2));
+                    }
+
+                    if (lastRow < 11 && lastRow > 1)
+                    {
+                        nextColumn = lastStartColumn;
+                        nextRow = lastStartRow;
+                        nextLevel = lastStartLevel;
+                    }
+                    else if(lastRow > 10 && lastRow < 20)
+                    {
+                        //雙版滿載儲位前半段
+                        //輸出兩個位置，以','分隔
+                        if(lastColumn % 4 == 3)
+                        {
+                            if(equNo == 5 && lastRow > 13 && lastRow < 17)
+                            {
+                                //跳過 20/{14, 15, 16}/{01,..., 05}
+                                if(lastLevel < 5)
+                                {
+                                    lastColumn = lastColumn + 1;
+                                }
+                                else if(lastLevel == 5)
+                                {
+                                    lastColumn = lastColumn + 1;
+                                }
+                                else
+                                {
+                                    return $"Error: LastLevel B800庫對庫命令取得錯誤，跳過禁用儲位失敗， lastLevel = {lastLevel}.";
+                                }
+
+                                lastShelf = lastColumn.ToString().PadLeft(2, '0') + lastRow.ToString().PadLeft(3, '0') + lastLevel.ToString().PadLeft(2, '0');
+                                return FunGetCycleRunNextLocation(lastCmdMode, "", lastShelf);
+                            }
+                            nextlocation = (equNo * 4).ToString().PadLeft(2, '0') + lastRow.ToString().PadLeft(3, '0') + lastLevel.ToString().PadLeft(2, '0');
+                            nextlocation +="," + (equNo * 4).ToString().PadLeft(2, '0') + (lastRow - 9).ToString().PadLeft(3, '0') + lastLevel.ToString().PadLeft(2, '0');
+                        }
+                        else if(lastColumn % 4 == 0)
+                        {
+                            if(lastLevel < 5)
+                            {
+                                nextlocation = ((equNo * 4) - 1).ToString().PadLeft(2, '0') + lastRow.ToString().PadLeft(3, '0') + (lastLevel + 1).ToString().PadLeft(2, '0');
+                                nextlocation += "," + ((equNo * 4) - 1).ToString().PadLeft(2, '0') + (lastRow - 9).ToString().PadLeft(3, '0') + (lastLevel + 1).ToString().PadLeft(2, '0');
+                            }
+                            else if (lastLevel == 5)
+                            {
+                                if(lastRow < 19)
+                                {
+                                    nextlocation = ((equNo * 4) - 1).ToString().PadLeft(2, '0') + (lastRow + 1).ToString().PadLeft(3, '0') + "01";
+                                    nextlocation += "," + ((equNo * 4) - 1).ToString().PadLeft(2, '0') + (lastRow + 1 - 9).ToString().PadLeft(3, '0') + "01";
+                                }
+                                else if(lastRow == 19)
+                                {
+                                    nextlocation = ((equNo * 4) - 1).ToString().PadLeft(2, '0') + (lastRow + 1).ToString().PadLeft(3, '0') + "01";
+                                    nextlocation += "," + ((equNo * 4) - 1).ToString().PadLeft(2, '0') + (lastRow + 1 - 18).ToString().PadLeft(3, '0') + "01";
+                                }
+                                else
+                                {
+                                    return $"Error: LastRow B800庫對庫命令取得失敗，lastRow = {lastRow}.";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            return $"Error: LastColumn B800庫對庫命令取得錯誤，lastColumn = {lastColumn}.";
+                        }
+                        return nextlocation;
+                    }
+                    else if (lastRow > 19 && lastRow < 27)
+                    {
+                        //雙版滿載儲位後半段
+                        //輸出兩個位置，以','分隔
+                        if (lastColumn % 4 == 3)
+                        {
+                            nextlocation = (equNo * 4).ToString().PadLeft(2, '0') + lastRow.ToString().PadLeft(3, '0') + lastLevel.ToString().PadLeft(2, '0');
+                            nextlocation += "," + (equNo * 4).ToString().PadLeft(2, '0') + (lastRow - 18).ToString().PadLeft(3, '0') + lastLevel.ToString().PadLeft(2, '0');
+                        }
+                        else if (lastColumn % 4 == 0)
+                        {
+                            if (lastLevel < 5)
+                            {
+                                nextlocation = ((equNo * 4) - 1).ToString().PadLeft(2, '0') + lastRow.ToString().PadLeft(3, '0') + (lastLevel + 1).ToString().PadLeft(2, '0');
+                                nextlocation += "," + ((equNo * 4) - 1).ToString().PadLeft(2, '0') + (lastRow - 18).ToString().PadLeft(3, '0') + (lastLevel + 1).ToString().PadLeft(2, '0');
+                            }
+                            else if (lastLevel == 5)
+                            {
+                                if (lastRow < 26)
+                                {
+                                    nextlocation = ((equNo * 4) - 1).ToString().PadLeft(2, '0') + (lastRow + 1).ToString().PadLeft(3, '0') + "01";
+                                    nextlocation += "," + ((equNo * 4) - 1).ToString().PadLeft(2, '0') + (lastRow + 1 - 18).ToString().PadLeft(3, '0') + "01";
+                                }
+                                else if (lastRow == 26)
+                                {
+                                    nextlocation = ((equNo * 4) - 1).ToString().PadLeft(2, '0') + "01101";
+                                    nextlocation += "," + ((equNo * 4) - 1).ToString().PadLeft(2, '0') + "00201";
+                                }
+                                else
+                                {
+                                    return $"Error: LastRow B800庫對庫命令取得失敗，lastRow = {lastRow}.";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            return $"Error: LastColumn B800庫對庫命令取得錯誤，lastColumn = {lastColumn}.";
+                        }
+                        return nextlocation;
+                    }
+                    else
+                    {
+                        return $"Error: LastRow B800庫對庫位置取得錯誤, lastRow = {lastRow}.";
+                    }    
 
                 }
                 else

@@ -72,6 +72,7 @@ namespace Mirle.DB.Proc
                             for (int i = 0; i < dtTmp.Rows.Count; i++)
                             {
                                 string sCmdSno = Convert.ToString(dtTmp.Rows[i][Fun.Parameter.clsMiddleCmd.Column.CommandID]);
+                                string sTaskNo = Convert.ToString(dtTmp.Rows[i][Fun.Parameter.clsMiddleCmd.Column.TaskNo]);
                                 CmdMstInfo cmd = new CmdMstInfo();
                                 if(cmd_Mst.FunGetCommand(sCmdSno, ref cmd, ref iRet, db))
                                 {
@@ -166,6 +167,35 @@ namespace Mirle.DB.Proc
                                     }
 
                                     return true;
+                                }
+                                else if (sTaskNo.Contains("RackTurnRequest"))
+                                {
+                                    //若為RackTurn直接刪除middle命令
+                                    string sRemark = "";
+                                    if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                    {
+                                        sRemark = "Error: Begin失敗！";
+                                        if (sRemark != cmd.Remark)
+                                        {
+                                            cmd_Mst.FunUpdateRemark(sCmdSno, sRemark, db);
+                                        }
+
+                                        continue;
+                                    }
+
+                                    if (!MiddleCmd.FunInsertHisMiddleCmd(sCmdSno, db))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        continue;
+                                    }
+
+                                    if (!MiddleCmd.FunDelMiddleCmd(sCmdSno, db))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        continue;
+                                    }
+                                    db.TransactionCtrl(TransactionTypes.Commit);
+
                                 }
                                 else
                                 {

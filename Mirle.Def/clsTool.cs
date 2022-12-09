@@ -46,6 +46,13 @@ namespace Mirle.Def
             else
                 control.Visible = true;
         }
+        public static void FunVisbleChange(ref TableLayoutPanel control)
+        {
+            if (control.Visible == true)
+                control.Visible = false;
+            else
+                control.Visible = true;
+        }
 
         public static string FunSwitchCarrierType(string carrierType)
         {

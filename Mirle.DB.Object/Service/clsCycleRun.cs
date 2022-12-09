@@ -13,16 +13,23 @@ namespace Mirle.DB.Object
     public class clsCycleRun
     {
         private static bool PCBAcycleRun;
+        private static bool BOXcycleRun;
         public static void Initial()
         {
             PCBAcycleRun = false;
+            BOXcycleRun = false;
         }
 
         public static bool GetPCBAcycleRun() => PCBAcycleRun;
+        public static bool GetBOXcycleRun() => BOXcycleRun;
 
         public static void ChangePCBACycleRun(bool status)
         {
             PCBAcycleRun = status;
+        }
+        public static void ChangeBOXCycleRun(bool status)
+        {
+            BOXcycleRun = status;
         }
     }
 }

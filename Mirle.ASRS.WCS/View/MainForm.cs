@@ -228,11 +228,11 @@ namespace Mirle.ASRS.WCS.View
             //Ctrl + L
             if (e.KeyCode == Keys.L && e.Modifiers == Keys.Control)
             {
-                
+                Def.clsTool.FunVisbleChange(ref tableLayoutPanel_Ctrl);
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void AGVTaskCancelButten_Click(object sender, EventArgs e)
         {
             WESAPITest form_1 = new WESAPITest();
             form_1.Show();

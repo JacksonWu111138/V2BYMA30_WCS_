@@ -1140,7 +1140,7 @@ namespace Mirle.DB.Proc
                                 string sRemark = "";
                                 if (cmd.Cmd_Mode == clsConstValue.CmdMode.StockIn)
                                 {
-                                    if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
+                                    if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial || string.IsNullOrEmpty(cmd.Equ_No))
                                     {
                                         DataTable emptyLocDTTmp = new DataTable();
                                         int emptyIRet = wms.GetLocMst().funCheckCountForEmptyLoc(ref emptyLocDTTmp);
@@ -2340,6 +2340,118 @@ namespace Mirle.DB.Proc
                             }
                         }
                         
+
+                        db.TransactionCtrl(TransactionTypes.Commit);
+                        return true;
+                    }
+                    else return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+
+        public bool FunBoxCycleRunInitial(CmdMstInfo B801LeftStockCmd, CmdMstInfo B801RightStockCmd, CmdMstInfo B802LeftStockCmd, CmdMstInfo B802RightStockCmd,
+            CmdMstInfo B803LeftStockCmd, CmdMstInfo B803RightStockCmd, CmdMstInfo B801L2LCmd, CmdMstInfo B802L2LCmd, CmdMstInfo B803L2LCmd, ref string sRemark)
+        {
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                        {
+                            sRemark = "Error: Transaction begin失敗！";
+                            throw new Exception(sRemark);
+                        }
+
+                        sRemark = "";
+                        if (B801LeftStockCmd.Cmd_Sno != "")
+                        {
+                            if (!Cmd_Mst.FunInsCmdMst(B801LeftStockCmd, ref sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+                        }
+
+                        if (B801RightStockCmd.Cmd_Sno != "")
+                        {
+                            if (!Cmd_Mst.FunInsCmdMst(B801RightStockCmd, ref sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+                        }
+
+                        if (B802LeftStockCmd.Cmd_Sno != "")
+                        {
+                            if (!Cmd_Mst.FunInsCmdMst(B802LeftStockCmd, ref sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+                        }
+
+                        if (B802RightStockCmd.Cmd_Sno != "")
+                        {
+                            if (!Cmd_Mst.FunInsCmdMst(B802RightStockCmd, ref sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+                        }
+
+                        if (B803LeftStockCmd.Cmd_Sno != "")
+                        {
+                            if (!Cmd_Mst.FunInsCmdMst(B803LeftStockCmd, ref sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+                        }
+
+                        if (B803RightStockCmd.Cmd_Sno != "")
+                        {
+                            if (!Cmd_Mst.FunInsCmdMst(B803RightStockCmd, ref sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+                        }
+
+                        if (B801L2LCmd.Cmd_Sno != "")
+                        {
+                            if (!Cmd_Mst.FunInsCmdMst(B801L2LCmd, ref sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+                        }
+
+                        if (B802L2LCmd.Cmd_Sno != "")
+                        {
+                            if (!Cmd_Mst.FunInsCmdMst(B802L2LCmd, ref sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+                        }
+
+                        if (B803L2LCmd.Cmd_Sno != "")
+                        {
+                            if (!Cmd_Mst.FunInsCmdMst(B803L2LCmd, ref sRemark, db))
+                            {
+                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                return false;
+                            }
+                        }
 
                         db.TransactionCtrl(TransactionTypes.Commit);
                         return true;

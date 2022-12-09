@@ -46,9 +46,10 @@
             this.Grid1 = new System.Windows.Forms.DataGridView();
             this.tbpMiddleCmd = new System.Windows.Forms.TabPage();
             this.Grid_MiddleCmd = new System.Windows.Forms.DataGridView();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel_Ctrl = new System.Windows.Forms.TableLayoutPanel();
             this.button_Controller_API_TEST = new System.Windows.Forms.Button();
             this.AGVTaskCancelButten = new System.Windows.Forms.Button();
+            this.button_CycleRun = new System.Windows.Forms.Button();
             this.mnuTransferCmd = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.mnuTransferCmdComplete = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuTransferCmdCancel = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,7 +59,6 @@
             this.mnuMiddleComplete = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuMiddleCancel = new System.Windows.Forms.ToolStripMenuItem();
             this.mnuInsertMiddleCmd = new System.Windows.Forms.ToolStripMenuItem();
-            this.button_CycleRun = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -75,7 +75,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Grid1)).BeginInit();
             this.tbpMiddleCmd.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.Grid_MiddleCmd)).BeginInit();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel_Ctrl.SuspendLayout();
             this.mnuTransferCmd.SuspendLayout();
             this.mnuMiddleCmd.SuspendLayout();
             this.SuspendLayout();
@@ -232,7 +232,7 @@
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.tableLayoutPanel1);
+            this.splitContainer2.Panel2.Controls.Add(this.tableLayoutPanel_Ctrl);
             this.splitContainer2.Size = new System.Drawing.Size(1756, 774);
             this.splitContainer2.SplitterDistance = 1538;
             this.splitContainer2.TabIndex = 1;
@@ -295,31 +295,31 @@
             this.Grid_MiddleCmd.Size = new System.Drawing.Size(1524, 730);
             this.Grid_MiddleCmd.TabIndex = 2;
             // 
-            // tableLayoutPanel1
+            // tableLayoutPanel_Ctrl
             // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.button_Controller_API_TEST, 0, 8);
-            this.tableLayoutPanel1.Controls.Add(this.AGVTaskCancelButten, 0, 7);
-            this.tableLayoutPanel1.Controls.Add(this.button_CycleRun, 0, 9);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 11;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(214, 774);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.tableLayoutPanel_Ctrl.ColumnCount = 1;
+            this.tableLayoutPanel_Ctrl.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel_Ctrl.Controls.Add(this.button_Controller_API_TEST, 0, 8);
+            this.tableLayoutPanel_Ctrl.Controls.Add(this.AGVTaskCancelButten, 0, 7);
+            this.tableLayoutPanel_Ctrl.Controls.Add(this.button_CycleRun, 0, 9);
+            this.tableLayoutPanel_Ctrl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanel_Ctrl.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutPanel_Ctrl.Margin = new System.Windows.Forms.Padding(4);
+            this.tableLayoutPanel_Ctrl.Name = "tableLayoutPanel_Ctrl";
+            this.tableLayoutPanel_Ctrl.RowCount = 11;
+            this.tableLayoutPanel_Ctrl.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel_Ctrl.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel_Ctrl.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel_Ctrl.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel_Ctrl.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel_Ctrl.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel_Ctrl.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel_Ctrl.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel_Ctrl.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel_Ctrl.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel_Ctrl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel_Ctrl.Size = new System.Drawing.Size(214, 774);
+            this.tableLayoutPanel_Ctrl.TabIndex = 0;
             // 
             // button_Controller_API_TEST
             // 
@@ -343,7 +343,18 @@
             this.AGVTaskCancelButten.TabIndex = 11;
             this.AGVTaskCancelButten.Text = "WES API Testing";
             this.AGVTaskCancelButten.UseVisualStyleBackColor = true;
-            this.AGVTaskCancelButten.Click += new System.EventHandler(this.button1_Click);
+            this.AGVTaskCancelButten.Click += new System.EventHandler(this.AGVTaskCancelButten_Click);
+            // 
+            // button_CycleRun
+            // 
+            this.button_CycleRun.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.button_CycleRun.Location = new System.Drawing.Point(3, 97);
+            this.button_CycleRun.Name = "button_CycleRun";
+            this.button_CycleRun.Size = new System.Drawing.Size(208, 47);
+            this.button_CycleRun.TabIndex = 12;
+            this.button_CycleRun.Text = "Cycle Run";
+            this.button_CycleRun.UseVisualStyleBackColor = true;
+            this.button_CycleRun.Click += new System.EventHandler(this.button_CycleRun_Click);
             // 
             // mnuTransferCmd
             // 
@@ -417,17 +428,6 @@
             this.mnuInsertMiddleCmd.Text = "Insert";
             this.mnuInsertMiddleCmd.Click += new System.EventHandler(this.mnuInsertMiddleCmd_Click);
             // 
-            // button_CycleRun
-            // 
-            this.button_CycleRun.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.button_CycleRun.Location = new System.Drawing.Point(3, 97);
-            this.button_CycleRun.Name = "button_CycleRun";
-            this.button_CycleRun.Size = new System.Drawing.Size(208, 47);
-            this.button_CycleRun.TabIndex = 12;
-            this.button_CycleRun.Text = "Cycle Run";
-            this.button_CycleRun.UseVisualStyleBackColor = true;
-            this.button_CycleRun.Click += new System.EventHandler(this.button_CycleRun_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
@@ -459,7 +459,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.Grid1)).EndInit();
             this.tbpMiddleCmd.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.Grid_MiddleCmd)).EndInit();
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel_Ctrl.ResumeLayout(false);
             this.mnuTransferCmd.ResumeLayout(false);
             this.mnuMiddleCmd.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -471,7 +471,7 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.Label lblDBConn_WCS;
         private System.Windows.Forms.CheckBox chkOnline;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel_Ctrl;
         private System.Windows.Forms.TableLayoutPanel tlpMainSts;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.PictureBox picMirle;

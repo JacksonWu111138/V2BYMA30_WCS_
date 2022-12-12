@@ -1009,7 +1009,8 @@ namespace Mirle.WebAPI.Event
 
                     //transaction
                     if ((cmd.Cmd_Mode == clsConstValue.CmdMode.S2S && Body.location == cmd.New_Loc) ||
-                        (cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut && Body.location == cmd.Stn_No))
+                        (cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut && Body.location == cmd.Stn_No) && 
+                        Body.location != ConveyorDef.E04.LO1_07.BufferName)
                     {
                         if(Body.location == ConveyorDef.Tower.E1_04.BufferName)
                         {
@@ -1064,7 +1065,7 @@ namespace Mirle.WebAPI.Event
                 }
                 else if (!check)
                 {
-                    if(Body.jobId.Contains("EMPTY"))
+                    if(!string.IsNullOrEmpty(Body.jobId) && Body.jobId.Contains("EMPTY"))
                     {
                         //空箱回庫流程(有bcr)
                         EmptyESDCarrierUnloadInfo info = new EmptyESDCarrierUnloadInfo
@@ -1370,7 +1371,7 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CMD_DESTINATION_CHECK start!");
             try
             {
-                if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCSTID(Body.jobId))
+                if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCmdSno(Body.jobId))
                 {
                     CmdMstInfo cmd = new CmdMstInfo();
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))

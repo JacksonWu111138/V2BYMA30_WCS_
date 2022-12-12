@@ -1282,6 +1282,7 @@ namespace Mirle.DB.Proc
                                                     CmdCheck[checkBuff] = checkReply.jobId;
                                                 }
                                             }
+                                            
                                             //前方空板
                                             if (CmdCheck[0] == "00000" && CmdCheck[1] == "00000")
                                             {
@@ -1357,7 +1358,7 @@ namespace Mirle.DB.Proc
                                             //選擇前方靜電箱的兄弟
                                             else
                                             {
-                                                string CmdSnoDD = CmdCheck[0]!= "00000" ? CmdCheck[0] : CmdCheck[1];
+                                                string CmdSnoDD = CmdCheck[0] != "00000" ? CmdCheck[0] : CmdCheck[1];
                                                 CmdMstInfo cmd_DD = new CmdMstInfo();
                                                 if (!Cmd_Mst.FunGetCommandByCmdSno(CmdSnoDD, ref cmd_DD, db))
                                                 {
@@ -1427,6 +1428,7 @@ namespace Mirle.DB.Proc
                                                     }
                                                 }
                                             }
+                                            
                                             db.TransactionCtrl(TransactionTypes.Commit);
 
                                         }

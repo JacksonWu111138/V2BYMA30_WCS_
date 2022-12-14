@@ -548,6 +548,7 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.AGV.E1_01.API.IP = lcsini.Client_API.Tower;
             ConveyorDef.Tower.E1_04.API.IP = lcsini.Client_API.Tower;
             ConveyorDef.AGV.E1_08.API.IP = lcsini.Client_API.Tower;
+            ConveyorDef.Tower.E1_10.API.IP = lcsini.Client_API.Tower;
             ConveyorDef.AGV.E2_35.API.IP = lcsini.Client_API.Tower;
             ConveyorDef.AGV.E2_36.API.IP = lcsini.Client_API.Tower;
             ConveyorDef.AGV.E2_37.API.IP = lcsini.Client_API.Tower;

@@ -361,7 +361,6 @@ namespace Mirle.Def.U2NMMA30
 
         public class SharingNode
         {
-            public static TwoNodeOneStnnoInfo S800_10 = new TwoNodeOneStnnoInfo { Stn_No = "S800-10", end = E04.LO1_07, start = E04.LO1_02 };
             public static TwoNodeOneStnnoInfo S800_12 = new TwoNodeOneStnnoInfo { Stn_No = "S800-12", end = SMTC.S0_02, start = SMTC.S0_03 };
             public static TwoNodeOneStnnoInfo S800_M1 = new TwoNodeOneStnnoInfo { Stn_No = "S800-M1", end = Line.A4_10, start = Line.A4_11 };
             public static TwoNodeOneStnnoInfo S800_M2 = new TwoNodeOneStnnoInfo { Stn_No = "S800-M2", end = Line.A4_14, start = Line.A4_15 };
@@ -688,7 +687,6 @@ namespace Mirle.Def.U2NMMA30
         public static List<TwoNodeOneStnnoInfo> GetSharingNode() => Sharing_Node;
         public static void FunSharingNode_ListInit()
         {
-            Sharing_Node.Add(SharingNode.S800_10);
             Sharing_Node.Add(SharingNode.S800_12);
             Sharing_Node.Add(SharingNode.S800_M1);
             Sharing_Node.Add(SharingNode.S800_M2);

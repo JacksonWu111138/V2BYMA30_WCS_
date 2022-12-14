@@ -476,6 +476,12 @@ namespace Mirle.Def
             public const string Line4 = "B802";
             public const string Line5 = "B803";
         }
+        public class RoundSts
+        {
+            public const string Happen = "H";
+            public const string Teach = "L";
+            public const string StockOut = "S";
+        }
         public class CompleteCode
         {
             public const string PickProc_T2TimeOut = "C0";             //取物 T2 time out

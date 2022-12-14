@@ -377,7 +377,13 @@ namespace Mirle.DB.Proc
                                             string sDeviceID = "";
                                             if (sLoc_Start.DeviceId == ConveyorDef.DeviceID_Tower)
                                             {
+                                                //不由Middle電子料塔控制命令
                                                 sDeviceID = ConveyorDef.DeviceID_Tower;
+                                                if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
+                                                {
+                                                    continue;
+                                                }
+                                                continue;
                                             }
                                             else if (!tool.IsAGV(sLoc_Start.DeviceId, ref sDeviceID))
                                             {
@@ -1159,6 +1165,10 @@ namespace Mirle.DB.Proc
                                                 {
                                                     if (emptyNo[(CurrentStockInLoc + count) % 3] > 0)
                                                     {
+
+                                                        
+                                                        
+
                                                         clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"成功取得空儲位於: Line{((CurrentStockInLoc + count) % 3).ToString()}");
                                                         if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                                         {

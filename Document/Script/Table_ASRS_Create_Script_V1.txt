@@ -18,6 +18,19 @@ Drop Table Teach_Loc;
 DROP Table AlarmCVCLog;
 DROP Table LotRetrieveNG;
 Drop Table AlarmCVCDef;
+Drop Table L2LCount;
+
+Create Table L2LCount
+(
+BoxId	 VARCHAR(350)   NOT NULL,
+EquNo	 Varchar(2)    NOT NULL,
+RoundSts Varchar(1)    NOT NULL,
+L2LTimes Varchar(1)    NOT NULL,
+HisLoc	 NVarchar(50) Not Null Default '',
+CrtDate	 NVarchar(20) Not Null Default '',
+ExpDate	 NVarchar(20) Not Null Default '',
+TeachLoc VARCHAR(10) Default ''
+);
 
 CREATE TABLE AlarmCVCDef
 (

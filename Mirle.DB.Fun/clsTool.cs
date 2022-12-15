@@ -6,6 +6,7 @@ using System.Data;
 using System.Collections.Generic;
 using Mirle.Def.U2NMMA30;
 using static Mirle.Def.U2NMMA30.ConveyorDef;
+using Mirle.Structure.Info;
 
 namespace Mirle.DB.Fun
 {
@@ -58,6 +59,22 @@ namespace Mirle.DB.Fun
             };
 
             return cmd;
+        }
+
+        public L2LCountInfo Get2LCountInfo(DataRow drTmp)
+        {
+            L2LCountInfo CountInfo = new L2LCountInfo
+            {
+                BoxId = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.BoxID]),
+                EquNo = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.EquNo]),
+                RoundSts = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.RoundSts]),
+                L2LTimes = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.Count]),
+                HisLoc = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.HisLoc]),
+                CrtDate = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.Create_Date]),
+                ExpDate = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.Update_Date]),
+                TeachLoc = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.TeachLoc]),
+            };
+            return CountInfo;
         }
 
         public LocDtlInfo GetLocDtl_FromCmdDtl(CmdMstInfo cmd, DataRow drCmdDtl)

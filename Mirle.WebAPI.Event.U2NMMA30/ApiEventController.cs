@@ -577,7 +577,7 @@ namespace Mirle.WebAPI.Event
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
 
-                    cmd.carrierType = "";
+                    cmd.carrierType = clsConstValue.WesApi.CarrierType.Lot;
                     cmd.lotSize = Body.lotSize;
                     //以下用transaction取代
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
@@ -675,6 +675,7 @@ namespace Mirle.WebAPI.Event
 
                         cmd.Loc = lot.fromShelfId;
                         cmd.Equ_No = "7";
+                        cmd.carrierType = clsConstValue.WesApi.CarrierType.Lot;
 
                         cmd.EXP_Date = "";
                         cmd.JobID = Body.jobId;
@@ -1025,12 +1026,14 @@ namespace Mirle.WebAPI.Event
                         throw new Exception($"Error: 目前抵達命令終點，稍後等待命令清除！ jobId = {cmd.Cmd_Sno}.");
                     }
 
-                    if((cmd.Cmd_Mode == clsConstValue.CmdMode.StockIn) &&
+                    if(
                        ((Body.location == ConveyorDef.Box.B1_037.BufferName || Body.location == ConveyorDef.Box.B1_117.BufferName) && cmd.Equ_No == "3") ||
                        ((Body.location == ConveyorDef.Box.B1_041.BufferName || Body.location == ConveyorDef.Box.B1_121.BufferName) && cmd.Equ_No == "4") ||
-                       ((Body.location == ConveyorDef.Box.B1_045.BufferName || Body.location == ConveyorDef.Box.B1_125.BufferName) && cmd.Equ_No == "5"))
+                       ((Body.location == ConveyorDef.Box.B1_045.BufferName || Body.location == ConveyorDef.Box.B1_125.BufferName) && cmd.Equ_No == "5")
+                        && cmd.Cmd_Mode == clsConstValue.CmdMode.StockIn 
+                       )
                     {
-
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{cmd.Cmd_Sno}>This BCRCheck 是入庫命令在正確流道上，等待箱式倉入庫時序處理.");
                     }
                     else if (con.ControllerID == clsControllerID.pCBA_ControllerID)
                     {
@@ -1371,8 +1374,9 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CMD_DESTINATION_CHECK start!");
             try
             {
-                if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCmdSno(Body.jobId))
-                {
+                //不會有Middle的命令需要CmdDestinationCheck
+                //if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCmdSno(Body.jobId))
+                //{
                     CmdMstInfo cmd = new CmdMstInfo();
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
                         throw new Exception($"Error: CMDMST與middle都沒有此命令, jobId = {Body.jobId}.");
@@ -1600,14 +1604,14 @@ namespace Mirle.WebAPI.Event
                             }
                         }
                     }
-                }
-                else
-                {
-                    MiddleCmd middle = new MiddleCmd();
-                    if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunGetMiddleCmdbyCommandID(Body.jobId, ref middle))
-                        throw new Exception($"Error: Get middle command fail jobId: {Body.jobId}");
-                    rMsg.toLocation = middle.Destination;
-                }
+                //}
+                //else
+                //{
+                //    MiddleCmd middle = new MiddleCmd();
+                //    if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunGetMiddleCmdbyCommandID(Body.jobId, ref middle))
+                //        throw new Exception($"Error: Get middle command fail jobId: {Body.jobId}");
+                //    rMsg.toLocation = middle.Destination;
+                //}
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CMD_DESTINATION_CHECK record end!");
@@ -2259,6 +2263,7 @@ namespace Mirle.WebAPI.Event
                 if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
                     throw new Exception($"Error: Get CmdMst fail, jobId = {Body.jobId}.");
 
+
                 ConveyorInfo con = new ConveyorInfo();
 
                 //箱式倉減料口定位設定
@@ -2293,7 +2298,14 @@ namespace Mirle.WebAPI.Event
                     deviceId = con.BufferName+"C";
                 }
 
-                if (Body.carrierType == clsConstValue.ControllerApi.CarrierType.Lot)
+
+                int cmdSno = Convert.ToInt32(cmd.Cmd_Sno);
+                if (cmdSno > 20000)
+                {
+                    //若為WCS自行生成命令，不上報WES
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>POSITION_REPORT 此為WCS自行生成命令，不上報WES!");
+                }
+                else if (Body.carrierType == clsConstValue.ControllerApi.CarrierType.Lot)
                 {
                     if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateCurLoc(Body.jobId, ConveyorDef.DeviceID_Tower, Body.position))
                         throw new Exception($"Error: Update CmdMst fail, jobId = {Body.jobId}.");

@@ -346,15 +346,19 @@ namespace Mirle.DB.Fun
             try
             {
                 string strEM = "";
-                string strSql = $"select {Parameter.clsCmd_Mst.Column.Cmd_Sno},{Parameter.clsCmd_Mst.Column.JobID}," +
-                    $"{Parameter.clsCmd_Mst.Column.BoxID},{Parameter.clsCmd_Mst.Column.Cmd_Sts}," +
-                    $"{Parameter.clsCmd_Mst.Column.Prty},{Parameter.clsCmd_Mst.Column.Cmd_Mode}," +
+                string strSql = $"select {Parameter.clsCmd_Mst.Column.Cmd_Sno},{Parameter.clsCmd_Mst.Column.Cmd_Mode},{Parameter.clsCmd_Mst.Column.Cmd_Sts}," +
+                    $"{Parameter.clsCmd_Mst.Column.Prty},{Parameter.clsCmd_Mst.Column.BoxID}," +
                     $"{Parameter.clsCmd_Mst.Column.Stn_No},{Parameter.clsCmd_Mst.Column.Loc}," +
-                    $"{Parameter.clsCmd_Mst.Column.Remark},{Parameter.clsCmd_Mst.Column.CurDeviceID}," +
-                    $"{Parameter.clsCmd_Mst.Column.CurLoc},{Parameter.clsCmd_Mst.Column.Equ_No}," +
-                    $"{Parameter.clsCmd_Mst.Column.Zone},{Parameter.clsCmd_Mst.Column.New_Loc}," +
-                    $"{Parameter.clsCmd_Mst.Column.NeedShelfToShelf},{Parameter.clsCmd_Mst.Column.Create_Date}," +
-                    $"{Parameter.clsCmd_Mst.Column.Expose_Date},{Parameter.clsCmd_Mst.Column.backupPortId} from " +
+                    $"{Parameter.clsCmd_Mst.Column.New_Loc},{Parameter.clsCmd_Mst.Column.Equ_No}," +
+                    $"{Parameter.clsCmd_Mst.Column.CurDeviceID}," +
+                    $"{Parameter.clsCmd_Mst.Column.CurLoc}," +
+                    //$"{Parameter.clsCmd_Mst.Column.Zone}," +
+                    //$"{Parameter.clsCmd_Mst.Column.NeedShelfToShelf}," +
+                    $"{Parameter.clsCmd_Mst.Column.Remark},{Parameter.clsCmd_Mst.Column.JobID}," +
+                    $"{Parameter.clsCmd_Mst.Column.Create_Date},{Parameter.clsCmd_Mst.Column.Expose_Date}," +
+                    $"{Parameter.clsCmd_Mst.Column.carrierType},{Parameter.clsCmd_Mst.Column.boxStockOutAgv} "+
+                    //$"{Parameter.clsCmd_Mst.Column.backupPortId} " +
+                    $"from " +
                     $"{Parameter.clsCmd_Mst.TableName}" +
                     $" where {Parameter.clsCmd_Mst.Column.Cmd_Sts} in ('{clsConstValue.CmdSts.strCmd_Initial}'," +
                     $" '{clsConstValue.CmdSts.strCmd_Running}')";

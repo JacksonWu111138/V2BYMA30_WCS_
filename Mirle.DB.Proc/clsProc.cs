@@ -2591,7 +2591,7 @@ namespace Mirle.DB.Proc
                                 }
                                 info.isComplete = clsConstValue.YesNo.Yes;
                                 info.emptyTransfer = clsConstValue.YesNo.Yes;
-                                info.disableLocation = clsConstValue.YesNo.Yes;
+                                info.disableLocation = clsConstValue.YesNo.No;
                             }
                             else if (sEmptyRetrieval == clsConstValue.WesApi.EmptyRetrieval.RetrieveFail)
                             {
@@ -2603,6 +2603,7 @@ namespace Mirle.DB.Proc
                                     return false;
                                 }
                                 info.isComplete = clsConstValue.YesNo.Yes;
+                                info.emptyTransfer = clsConstValue.YesNo.Yes;
                                 info.disableLocation = clsConstValue.YesNo.Yes;
                             }
                             else

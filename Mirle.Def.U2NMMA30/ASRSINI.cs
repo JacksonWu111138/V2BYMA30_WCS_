@@ -34,6 +34,9 @@ namespace Mirle.Def.U2NMMA30
 
         [Option(Alias = "Server API")]
         APIConfig Server_API { get; }
+
+        [Option(Alias = "TeachLoc")]
+        TeachLoc TeachLoc { get; }
     }
 
     public interface DatabaseConfig
@@ -136,6 +139,20 @@ namespace Mirle.Def.U2NMMA30
         string Speed { get; }
     }
 
+    public interface TeachLoc
+    {
+        string M801Left { get; }
+        string M801Right { get; }
+        string M802Left { get; }
+        string M802Right { get; }
+        string B801Left { get; }
+        string B801Right { get; }
+        string B802Left { get; }
+        string B802Right { get; }
+        string B803Left { get; }
+        string B803Right { get; }
+    }
+
     public interface ForkSetupConfig
     {
         string S1 { get; }
@@ -206,6 +223,7 @@ namespace Mirle.Def.U2NMMA30
     {
         string LO1_02 { get; }
         string LO1_07 { get; }
+        string LO3_01 { get; }
         string B1_062 { get; }
         string B1_067 { get; }
         string B1_070 { get; }

@@ -479,7 +479,7 @@ namespace Mirle.Def
         public class RoundSts
         {
             public const string Happen = "H";
-            public const string Teach = "L";
+            public const string Teach = "T";
             public const string StockOut = "S";
         }
         public class CompleteCode

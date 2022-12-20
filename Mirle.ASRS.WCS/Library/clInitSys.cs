@@ -58,6 +58,7 @@ namespace Mirle.ASRS.WCS
                 FunApiConfig(lcsini);
                 FunStkStnConfig(lcsini);
                 FunStnNoConfig(lcsini);
+                FunTeachLoc(lcsini);
                 //MainForm.AGVBuffer_Initial();
                 MainForm.CraneBuffer_Initial();
                 FunDeviceConfig(lcsini);
@@ -372,6 +373,7 @@ namespace Mirle.ASRS.WCS
         {
             ConveyorDef.E04.LO1_02.StnNo = lcsini.StnNo.LO1_02;
             ConveyorDef.E04.LO1_07.StnNo = lcsini.StnNo.LO1_07;
+            ConveyorDef.AGV.LO3_01.StnNo = lcsini.StnNo.LO3_01;
             ConveyorDef.Box.B1_062.StnNo = lcsini.StnNo.B1_062;
             ConveyorDef.Box.B1_067.StnNo = lcsini.StnNo.B1_067;
             ConveyorDef.AGV.B1_070.StnNo = lcsini.StnNo.B1_070;
@@ -531,6 +533,7 @@ namespace Mirle.ASRS.WCS
 
             ConveyorDef.Tower.E1_04.DeviceId = ConveyorDef.DeviceID_Tower;
             ConveyorDef.Tower.E1_10.DeviceId = ConveyorDef.DeviceID_Tower;
+
 
         }
       
@@ -839,6 +842,19 @@ namespace Mirle.ASRS.WCS
             ConveyorDef.Box.B1_114.StkPortID = lcsini.STK_STN.Right_Big_All;
         }
 
+        private static void FunTeachLoc(ASRSINI lcsini)
+        {
+            ConveyorDef.TeachLoc.M801Left = lcsini.TeachLoc.M801Left;
+            ConveyorDef.TeachLoc.M801Right = lcsini.TeachLoc.M801Right;
+            ConveyorDef.TeachLoc.M802Left = lcsini.TeachLoc.M802Left;
+            ConveyorDef.TeachLoc.M802Right = lcsini.TeachLoc.M802Right;
+            ConveyorDef.TeachLoc.B801Left = lcsini.TeachLoc.B801Left;
+            ConveyorDef.TeachLoc.B801Right = lcsini.TeachLoc.B801Right;
+            ConveyorDef.TeachLoc.B802Left = lcsini.TeachLoc.B802Left;
+            ConveyorDef.TeachLoc.B802Right = lcsini.TeachLoc.B802Right;
+            ConveyorDef.TeachLoc.B803Left = lcsini.TeachLoc.B803Left;
+            ConveyorDef.TeachLoc.B803Right = lcsini.TeachLoc.B803Right;
+        }
         /// <summary>
         /// 讀取ini檔的單一欄位
         /// </summary>

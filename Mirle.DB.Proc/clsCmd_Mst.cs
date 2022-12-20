@@ -5,6 +5,8 @@ using Mirle.Structure;
 using Mirle.DataBase;
 using Mirle.WebAPI.V2BYMA30.ReportInfo;
 using Mirle.Def.U2NMMA30;
+using Mirle.Structure.Info;
+using static Mirle.Def.U2NMMA30.ConveyorDef;
 
 namespace Mirle.DB.Proc
 {
@@ -17,6 +19,7 @@ namespace Mirle.DB.Proc
         private clsDbConfig _config = new clsDbConfig();
         private WebApiConfig WesAPIConfig = new WebApiConfig();
         private DB.Fun.clsTool tool = new DB.Fun.clsTool();
+        private Fun.clsL2LCount L2LCount = new Fun.clsL2LCount();
         public clsCmd_Mst(clsDbConfig config, WebApiConfig wesApi)
         {
             _config = config;
@@ -429,9 +432,19 @@ namespace Mirle.DB.Proc
                                 string sCmdSno = Convert.ToString(dtTmp.Rows[i]["CmdSno"]);
                                 string sRemark_Pre = Convert.ToString(dtTmp.Rows[i]["Remark"]);
                                 string sRemark = "";
-                                string sJobID = Convert.ToString(dtTmp.Rows[i]["jobID"]);
+                                string sJobID = Convert.ToString(dtTmp.Rows[i]["JobID"]);
+                                string sCmdMode = Convert.ToString(dtTmp.Rows[i]["CmdMode"]);
+                                string sBoxID = Convert.ToString(dtTmp.Rows[i]["BoxId"]);
+                                string sEquNo = Convert.ToString(dtTmp.Rows[i]["EquNO"]);
+                                string sLoc = Convert.ToString(dtTmp.Rows[i]["Loc"]);
+                                string sNewLoc = Convert.ToString(dtTmp.Rows[i]["NewLoc"]);
+                                int sShelfRow = 0 ;
+                                if (string.IsNullOrEmpty(sNewLoc) && sCmdMode == clsConstValue.CmdMode.L2L)
+                                    sShelfRow = Convert.ToInt32(sNewLoc.Substring(0, 2));
                                 CmdMstInfo nextCycleCmd = new CmdMstInfo();
                                 CmdMstInfo lastCycleCmd = new CmdMstInfo();
+                                CmdMstInfo TeachLocCmd = new CmdMstInfo();
+                                L2LCountInfo L2LCountInfo = new L2LCountInfo();
                                 if (!FunGetCommand(sCmdSno, ref lastCycleCmd))
                                 {
                                     sRemark = "Error: 取得CycleRun先前命令失敗.";
@@ -609,6 +622,220 @@ namespace Mirle.DB.Proc
                                     if (!CMD_MST.FunInsCmdMst(nextCycleCmd, ref sRemark, db))
                                     {
                                         db.TransactionCtrl(TransactionTypes.Rollback);
+                                        continue;
+                                    }
+                                }
+                                else if (sJobID == "TEACH_LOC_MOVING_BACK")
+                                {
+                                    if (!L2LCount.FunFinishL2LCount(sBoxID, clsConstValue.RoundSts.Teach, sLoc, ref sRemark, db))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        sRemark = $"Error: 完成L2LCount命令失敗, BoxId = {sBoxID} and cmdSno = {sCmdSno}.";
+                                        if (sRemark != sRemark_Pre)
+                                            CMD_MST.FunUpdateRemark(sCmdSno, sRemark, db);
+                                        continue;
+                                    }
+                                }
+                                else if (sJobID == "TEACH_LOC_MOVING")
+                                {
+                                    //尚未撰寫
+                                    //建立從校正儲位回原儲位命令
+                                    TeachLocCmd.Cmd_Sno = sno.FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
+                                    if (string.IsNullOrWhiteSpace(TeachLocCmd.Cmd_Sno))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        sRemark = $"送往校正儲位命令 取得序號失敗！ BoxId = {sBoxID} and jobId = {sCmdSno}.";
+                                        if (sRemark != sRemark_Pre)
+                                            CMD_MST.FunUpdateRemark(sCmdSno, sRemark, db);
+                                        continue;
+                                    }
+                                    TeachLocCmd.BoxID = sBoxID;
+                                    TeachLocCmd.Cmd_Mode = clsConstValue.CmdMode.L2L;
+                                    TeachLocCmd.CurDeviceID = "";
+                                    TeachLocCmd.CurLoc = "";
+                                    TeachLocCmd.End_Date = "";
+                                    TeachLocCmd.Loc = sNewLoc;
+                                    TeachLocCmd.Equ_No = sEquNo;
+                                    TeachLocCmd.EXP_Date = "";
+                                    TeachLocCmd.JobID = "TEACH_LOC_MOVING_BACK";
+                                    TeachLocCmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
+
+                                    TeachLocCmd.New_Loc = sLoc;
+
+                                    TeachLocCmd.Prty = "3";
+                                    TeachLocCmd.Remark = "";
+                                    TeachLocCmd.Stn_No = "";
+                                    TeachLocCmd.Host_Name = "WCS";
+                                    TeachLocCmd.Zone_ID = "";
+                                    TeachLocCmd.carrierType = sShelfRow < 9 ? "MAG" : "BIN";
+                                    TeachLocCmd.lotSize = "";
+
+                                    if (!CMD_MST.FunInsCmdMst(TeachLocCmd, ref sRemark, db))
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        if (sRemark != sRemark_Pre)
+                                            CMD_MST.FunUpdateRemark(sCmdSno, sRemark, db);
+                                        continue;
+                                    }
+                                }
+                                else if (sCmdMode == clsConstValue.CmdMode.StockOut)
+                                {
+                                    iRet = L2LCount.CheckHasL2LRecord(sBoxID, ref L2LCountInfo, ref sRemark, db);
+                                    if (iRet == DBResult.Success)
+                                    {
+                                        if(!L2LCount.FunFinishL2LCount(sBoxID, clsConstValue.RoundSts.StockOut, "", ref sRemark, db))
+                                        {
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            sRemark = $"Error: 完成L2LCount中命令失敗，BoxId = {sBoxID} and cmdSno = {sCmdSno}.";
+                                            if(sRemark != sRemark_Pre)
+                                                CMD_MST.FunUpdateRemark(sCmdSno, sRemark, db);
+                                            continue;
+                                        }
+                                    }
+                                    else if (iRet == DBResult.NoDataSelect)
+                                    {
+                                        //不做事
+                                    }
+                                    else
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        sRemark = $"Error: 取得L2LCount中命令失敗，BoxId = {sBoxID} and cmdSno = {sCmdSno}.";
+                                        if (sRemark != sRemark_Pre)
+                                            CMD_MST.FunUpdateRemark(sCmdSno, sRemark, db);
+                                        continue;
+                                    }
+                                }
+                                else if (sCmdMode == clsConstValue.CmdMode.L2L)
+                                {
+                                    iRet = L2LCount.CheckHasL2LRecord(sBoxID, ref L2LCountInfo, ref sRemark, db);
+                                    if (iRet == DBResult.NoDataSelect)
+                                    {
+                                        if (!L2LCount.FunInsL2LCount(sBoxID, sEquNo, sLoc, sNewLoc, ref sRemark, db))
+                                        {
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            sRemark = $"Error: 輸入新L2LCount中命令失敗，BoxId = {sBoxID} and cmdSno = {sCmdSno}.";
+                                            if (sRemark != sRemark_Pre)
+                                                CMD_MST.FunUpdateRemark(sCmdSno, sRemark, db);
+                                            continue;
+                                        }
+                                    }
+                                    else if (iRet == DBResult.Success)
+                                    {
+
+                                        if (!L2LCount.FunUpdL2LCount(sBoxID, (Convert.ToInt32(L2LCountInfo.Count) + 1).ToString(), sNewLoc, ref sRemark, db))
+                                        {
+                                            db.TransactionCtrl(TransactionTypes.Rollback);
+                                            sRemark = $"Error: 更新L2LCount中命令失敗，BoxId = {sBoxID} and cmdSno = {sCmdSno}.";
+                                            if (sRemark != sRemark_Pre)
+                                                CMD_MST.FunUpdateRemark(sCmdSno, sRemark, db);
+                                            continue;
+                                        }
+                                        if (Convert.ToInt32(L2LCountInfo.Count) >= 4)
+                                        {
+                                            //L2LCountInfo.Count == 4，因為L2LCountInfo.Count > 4的L2LCountInfo.RoundSts不該被選為「未完成紀錄」
+                                            //放入去校正儲位之庫對庫命令
+                                            //JobID == TEACH_LOC_MOVING
+                                            string sTeachLoc;
+
+                                            //選擇校正儲位
+                                            switch(sShelfRow)
+                                            {
+                                                case 1:
+                                                case 3:
+                                                    sTeachLoc = ConveyorDef.TeachLoc.M801Left;
+                                                    break;
+                                                case 2:
+                                                case 4:
+                                                    sTeachLoc = ConveyorDef.TeachLoc.M801Right;
+                                                    break;
+                                                case 5:
+                                                case 7:
+                                                    sTeachLoc = ConveyorDef.TeachLoc.M802Left;
+                                                    break;
+                                                case 6:
+                                                case 8:
+                                                    sTeachLoc = ConveyorDef.TeachLoc.M802Right;
+                                                    break;
+                                                case 9:
+                                                case 11:
+                                                    sTeachLoc = ConveyorDef.TeachLoc.B801Left;
+                                                    break;
+                                                case 10:
+                                                case 12:
+                                                    sTeachLoc = ConveyorDef.TeachLoc.B801Right;
+                                                    break;
+                                                case 13:
+                                                case 15:
+                                                    sTeachLoc = ConveyorDef.TeachLoc.B802Left;
+                                                    break;
+                                                case 14:
+                                                case 16:
+                                                    sTeachLoc = ConveyorDef.TeachLoc.B802Right;
+                                                    break;
+                                                case 17:
+                                                case 19:
+                                                    sTeachLoc = ConveyorDef.TeachLoc.B803Left;
+                                                    break;
+                                                case 18:
+                                                case 20:
+                                                    sTeachLoc = ConveyorDef.TeachLoc.B803Right;
+                                                    break;
+                                                default:
+                                                    sRemark = $"Error: 取得對應校正儲位失敗，ShelfId = {sNewLoc} and cmdSno = {sCmdSno}.";
+                                                    if (sRemark != sRemark_Pre)
+                                                        CMD_MST.FunUpdateRemark(sCmdSno, sRemark, db);
+                                                    continue;
+                                            }
+
+                                            //建立前往校正儲位命令
+                                            TeachLocCmd.Cmd_Sno = sno.FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
+                                            if (string.IsNullOrWhiteSpace(TeachLocCmd.Cmd_Sno))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                sRemark = $"送往校正儲位命令 取得序號失敗！ BoxId = {sBoxID} and jobId = {sCmdSno}.";
+                                                if (sRemark != sRemark_Pre)
+                                                    CMD_MST.FunUpdateRemark(sCmdSno, sRemark, db);
+                                                continue;
+                                            }
+                                            TeachLocCmd.BoxID = sBoxID;
+                                            TeachLocCmd.Cmd_Sts = clsConstValue.CmdSts.strCmd_Initial;
+                                            TeachLocCmd.Cmd_Mode = clsConstValue.CmdMode.L2L;
+                                            TeachLocCmd.CurDeviceID = "";
+                                            TeachLocCmd.CurLoc = "";
+                                            TeachLocCmd.End_Date = "";
+                                            TeachLocCmd.Loc = sNewLoc;
+                                            TeachLocCmd.Equ_No = sEquNo;
+                                            TeachLocCmd.EXP_Date = "";
+                                            TeachLocCmd.JobID = "TEACH_LOC_MOVING";
+                                            TeachLocCmd.NeedShelfToShelf = clsEnum.NeedL2L.N.ToString();
+                                            TeachLocCmd.Crt_Date = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                                            TeachLocCmd.New_Loc = sTeachLoc;
+
+                                            TeachLocCmd.Prty = "4";
+                                            TeachLocCmd.Remark = "";
+                                            TeachLocCmd.Stn_No = "";
+                                            TeachLocCmd.Host_Name = "WCS";
+                                            TeachLocCmd.Zone_ID = "";
+                                            TeachLocCmd.carrierType = sShelfRow < 9? "MAG" : "BIN";
+                                            TeachLocCmd.lotSize = "";
+
+                                            if(!CMD_MST.FunInsCmdMst(TeachLocCmd, ref sRemark, db))
+                                            {
+                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                if (sRemark != sRemark_Pre)
+                                                    CMD_MST.FunUpdateRemark(sCmdSno, sRemark, db);
+                                                continue;
+                                            }
+                                            
+                                        }
+                                    }
+                                    else
+                                    {
+                                        db.TransactionCtrl(TransactionTypes.Rollback);
+                                        sRemark = $"Error: 取得L2LCount中命令失敗，BoxId = {sBoxID} and cmdSno = {sCmdSno}.";
+                                        if (sRemark != sRemark_Pre)
+                                            CMD_MST.FunUpdateRemark(sCmdSno, sRemark, db);
                                         continue;
                                     }
                                 }

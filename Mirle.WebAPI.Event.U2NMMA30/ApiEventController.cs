@@ -59,6 +59,22 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CARRIER_TRANSFER start!");
             try
             {
+                //檢查輸入內容是否必要值為空
+
+                if (string.IsNullOrEmpty(Body.carrierId))
+                    throw new Exception($"Error: CarrierId為空，jobId = {Body.jobId}.");
+                else if (string.IsNullOrEmpty(Body.carrierType))
+                    throw new Exception($"Error: CarrierType為空，jobId = {Body.jobId}.");
+                else if (string.IsNullOrEmpty(Body.fromLocation))
+                    throw new Exception($"Error: FromLocation為空，jobId = {Body.jobId}.");
+                else if (string.IsNullOrEmpty(Body.toLocation))
+                    throw new Exception($"Error: ToLocation為空，jobId = {Body.jobId}");
+                else if (Body.fromLocation != ConveyorDef.WES_B800CV && !ConveyorDef.GetStations().Any(r => r.StnNo == Body.fromLocation))
+                    throw new Exception($"Error: FromLocation錯誤，fromLocation = {Body.fromLocation} and jobId = {Body.jobId}.");
+                else if (Body.toLocation != ConveyorDef.WES_B800CV && !ConveyorDef.GetStations().Any(r => r.StnNo == Body.toLocation))
+                    throw new Exception($"Error: ToLocation錯誤，toLocation = {Body.toLocation} and jobId = {Body.jobId}.");
+
+
                 CmdMstInfo cmd = new CmdMstInfo();
                 string strEM = "";
                 if (Body.priority == "1")
@@ -192,6 +208,20 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CARRIER_PUTAWAY_TRANSFER start!");
             try
             {
+                //檢查輸入內容是否必要值為空或錯誤
+                
+                if (string.IsNullOrEmpty(Body.carrierId))
+                    throw new Exception($"Error: CarrierId為空，jobId = {Body.jobId}");
+                else if (string.IsNullOrEmpty(Body.carrierType))
+                    throw new Exception($"Error: CarrierType為空，jobId = {Body.jobId}");
+                else if (string.IsNullOrEmpty(Body.fromPortId))
+                    throw new Exception($"Error: FromLocation為空，jobId = {Body.jobId}");
+                else if (string.IsNullOrEmpty(Body.toShelfId))
+                    throw new Exception($"Error: ToLocation為空，jobId = {Body.jobId}");
+                else if (Body.fromPortId != ConveyorDef.WES_B800CV && !ConveyorDef.GetStations().Any(r => r.StnNo == Body.fromPortId))
+                    throw new Exception($"Error: FromLocation錯誤，fromLocation = {Body.fromPortId} and jobId = {Body.jobId}.");
+
+
                 CmdMstInfo cmd = new CmdMstInfo();
                 string strEM = "";
                 if (Body.priority == "1")
@@ -280,6 +310,20 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CARRIER_RETRIEVE_TRANSFER start!");
             try
             {
+                //檢查輸入內容是否必要值為空
+                
+                if (string.IsNullOrEmpty(Body.carrierId))
+                    throw new Exception($"Error: CarrierId為空，jobId = {Body.jobId}");
+                else if (string.IsNullOrEmpty(Body.carrierType))
+                    throw new Exception($"Error: CarrierType為空，jobId = {Body.jobId}");
+                else if (string.IsNullOrEmpty(Body.fromShelfId))
+                    throw new Exception($"Error: FromLocation為空，jobId = {Body.jobId}");
+                else if (string.IsNullOrEmpty(Body.toLocation))
+                    throw new Exception($"Error: ToLocation為空，jobId = {Body.jobId}");
+                else if (Body.toLocation != ConveyorDef.WES_B800CV && !ConveyorDef.GetStations().Any(r => r.StnNo == Body.toLocation))
+                    throw new Exception($"Error: ToLocation錯誤，toLocation = {Body.toLocation} and jobId = {Body.jobId}.");
+
+
                 CmdMstInfo cmd = new CmdMstInfo();
                 string strEM = "";
                 if (Body.priority == "1")
@@ -399,6 +443,18 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CARRIER_SHELF_TRANSFER start!");
             try
             {
+                //檢查輸入內容是否必要值為空
+                
+                if (string.IsNullOrEmpty(Body.carrierId))
+                    throw new Exception($"Error: CarrierId為空，jobId = {Body.jobId}");
+                else if (string.IsNullOrEmpty(Body.carrierType))
+                    throw new Exception($"Error: CarrierType為空，jobId = {Body.jobId}");
+                else if (string.IsNullOrEmpty(Body.fromShelfId))
+                    throw new Exception($"Error: FromLocation為空，jobId = {Body.jobId}");
+                else if (string.IsNullOrEmpty(Body.toShelfId))
+                    throw new Exception($"Error: ToLocation為空，jobId = {Body.jobId}");
+
+
                 CmdMstInfo cmd = new CmdMstInfo();
                 string strEM = "";
                 if (Body.priority == "1")
@@ -512,6 +568,13 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>LOT_PUTAWAY_TRANSFER start!");
             try
             {
+                //檢查輸入內容是否必要值為空
+
+                if (string.IsNullOrEmpty(Body.lotId))
+                    throw new Exception($"Error: LotId為空，jobId = {Body.jobId}");
+                else if (string.IsNullOrEmpty(Body.fromPortId))
+                    throw new Exception($"Error: FromLocation為空，jobId = {Body.jobId}");
+
                 CmdMstInfo cmd = new CmdMstInfo();
                 string strEM = "";
                 if (Body.priority == "1")
@@ -521,6 +584,7 @@ namespace Mirle.WebAPI.Event
                 }
                 else
                 {
+
                     cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSNO);
                     if (string.IsNullOrWhiteSpace(cmd.Cmd_Sno))
                     {
@@ -657,6 +721,21 @@ namespace Mirle.WebAPI.Event
                     int[] toPortList = new int[4];
                     for (int i = 0; i < toPortList.Length; i++)
                         toPortList[i] = 0;
+                    foreach(var lot in Body.lotList)
+                    {
+                        //檢查輸入內容是否必要值為空
+
+                        if (string.IsNullOrEmpty(lot.lotId))
+                            throw new Exception($"Error: 存在LotId為空，jobId = {Body.jobId}");
+                        else if (string.IsNullOrEmpty(lot.fromShelfId))
+                            throw new Exception($"Error: 存在FromShelf為空，LotId = {lot.lotId} and jobId = {Body.jobId}");
+                        else if (string.IsNullOrEmpty(lot.toPortId))
+                            throw new Exception($"Error: 存在ToLocation為空，LotId = {lot.lotId} and jobId = {Body.jobId}");
+                        else if (lot.toPortId != ConveyorDef.WES_B800CV && !ConveyorDef.GetStations().Any(r => r.StnNo == lot.toPortId))
+                            throw new Exception($"Error: 存在ToLocation錯誤，LotId = {lot.lotId}, toLocation = {lot.toPortId} and jobId = {Body.jobId}.");
+
+                    }
+
 
                     foreach (var lot in Body.lotList)
                     {
@@ -1131,6 +1210,20 @@ namespace Mirle.WebAPI.Event
                     }
                     else if (Body.location == ConveyorDef.AGV.LO3_01.BufferName && Body.carrierType == clsConstValue.ControllerApi.CarrierType.Bin)
                     {
+                        //1220更改，上報 Empty ESDCarrier Unload，由WES下達回庫命令
+                        //待加入電梯上報之StnNo站口名
+                        EmptyESDCarrierUnloadInfo info = new EmptyESDCarrierUnloadInfo
+                        {
+                            carrierId = Body.barcode,
+                            location = ConveyorDef.AGV.LO3_01.StnNo
+                        };
+
+                        if(!clsAPI.GetAPI().GetEmptyESDCarrierUnload().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                        {
+                            throw new Exception($"Error: 傳送EmptyESDCarrierUnload to WES 失敗，BoxId = {Body.barcode}.");
+                        }
+
+                        //1220更改，取消
                         //設定為：生成空靜電箱回庫
                         string strEM = "";
                         cmd = new CmdMstInfo();
@@ -2287,6 +2380,8 @@ namespace Mirle.WebAPI.Event
                 }
 
                 string deviceId = con.DeviceId != "" ? con.DeviceId : con.ControllerID;
+                
+                //貨物到電梯內 或 AGV上
                 if(Body.position.Contains("LI2"))
                 {
                     con.BufferName = "LIFT5";
@@ -2296,6 +2391,11 @@ namespace Mirle.WebAPI.Event
                 {
                     con.BufferName = "LIFT4";
                     deviceId = con.BufferName+"C";
+                }
+                else if(Body.position == "AGV")
+                {
+                    con.BufferName = Body.position;
+                    deviceId = "AGV";
                 }
 
 
@@ -3380,7 +3480,20 @@ namespace Mirle.WebAPI.Event
                 EmptyShelfQueryReply reply = new EmptyShelfQueryReply();
                 if (!clsAPI.GetAPI().GetEmptyShelfQuery().FunReport(info, ref reply, clsAPI.GetWesApiConfig().IP))
                     throw new Exception($"Error: EmptyShelfQuery to WES fail, jobId = {Body.jobId}");
+                LotShelfReportInfo info_2 = new LotShelfReportInfo
+                {
+                    shelfId = reply.shelfId,
+                    shelfStatus = "IN",
+                    lotId = reply.lotIdCarrierId,
+                    disableLocation = clsConstValue.YesNo.No
+                };
 
+                string strEM = "";
+                if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunShelfReportToWes(Body.jobId, info_2, ref strEM))
+                    throw new Exception(strEM);
+
+                rMsg.stockerId = Body.stockerId;
+                rMsg.locationId = reply.shelfId;
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
 

@@ -10,6 +10,19 @@ namespace Mirle.Def.U2NMMA30
 {
     public class ConveyorDef
     {
+        public class TeachLoc
+        {
+            public static string M801Left = "";
+            public static string M801Right = "";
+            public static string M802Left = "";
+            public static string M802Right = "";
+            public static string B801Left = "";
+            public static string B801Right = "";
+            public static string B802Left = "";
+            public static string B802Right = "";
+            public static string B803Left = "";
+            public static string B803Right = "";
+        }
         public class E04
         {
             /// <summary>
@@ -1252,6 +1265,7 @@ namespace Mirle.Def.U2NMMA30
 
             Stations.Add(E04.LO1_02);
             Stations.Add(E04.LO1_07);
+            Stations.Add(AGV.LO3_01);
             Stations.Add(Box.B1_062);
             Stations.Add(Box.B1_067);
             Stations.Add(AGV.B1_070);

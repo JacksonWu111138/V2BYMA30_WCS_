@@ -28,19 +28,19 @@ namespace Mirle.Grid.U2NMMA30
         public class CMD_MST
         {
             public static readonly ColumnInfo CmdSno = new ColumnInfo { Index = 0, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Cmd_Sno, Width = 68 };
-            public static readonly ColumnInfo CmdMode = new ColumnInfo { Index = 1, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Cmd_Mode, Width = 60 };
+            public static readonly ColumnInfo CmdMode = new ColumnInfo { Index = 1, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Cmd_Mode, Width = 88 };
             public static readonly ColumnInfo CmdSts = new ColumnInfo { Index = 2, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Cmd_Sts, Width = 60 };
-            public static readonly ColumnInfo PRT = new ColumnInfo { Index = 3, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Prty, Width = 68 };
-            public static readonly ColumnInfo BoxId = new ColumnInfo { Index = 4, Name = DB.Fun.Parameter.clsCmd_Mst.Column.BoxID, Width = 200 };
+            public static readonly ColumnInfo PRT = new ColumnInfo { Index = 3, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Prty, Width = 50 };
+            public static readonly ColumnInfo BoxId = new ColumnInfo { Index = 4, Name = DB.Fun.Parameter.clsCmd_Mst.Column.BoxID, Width = 150 };
             public static readonly ColumnInfo CarrierType = new ColumnInfo { Index = 5, Name = DB.Fun.Parameter.clsCmd_Mst.Column.carrierType, Width = 100 };
-            public static readonly ColumnInfo StnNo = new ColumnInfo { Index = 6, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Stn_No, Width = 200 };
+            public static readonly ColumnInfo StnNo = new ColumnInfo { Index = 6, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Stn_No, Width = 100 };
             public static readonly ColumnInfo Loc = new ColumnInfo { Index = 7, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Loc, Width = 68 };
             public static readonly ColumnInfo NewLoc = new ColumnInfo { Index = 8, Name = DB.Fun.Parameter.clsCmd_Mst.Column.New_Loc, Width = 68 };
             public static readonly ColumnInfo EquNO = new ColumnInfo { Index = 9, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Equ_No, Width = 60 };
-            public static readonly ColumnInfo CurDeviceID = new ColumnInfo { Index = 10, Name = DB.Fun.Parameter.clsCmd_Mst.Column.CurDeviceID, Width = 80 };
+            public static readonly ColumnInfo CurDeviceID = new ColumnInfo { Index = 10, Name = DB.Fun.Parameter.clsCmd_Mst.Column.CurDeviceID, Width = 100 };
             public static readonly ColumnInfo CurLoc = new ColumnInfo { Index = 11, Name = DB.Fun.Parameter.clsCmd_Mst.Column.CurLoc, Width = 80 };
             public static readonly ColumnInfo Remark = new ColumnInfo { Index = 12, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Remark, Width = 500 };
-            public static readonly ColumnInfo JobID = new ColumnInfo { Index = 13, Name = DB.Fun.Parameter.clsCmd_Mst.Column.JobID, Width = 500 };
+            public static readonly ColumnInfo JobID = new ColumnInfo { Index = 13, Name = DB.Fun.Parameter.clsCmd_Mst.Column.JobID, Width = 300 };
             public static readonly ColumnInfo CrtDate = new ColumnInfo { Index = 14, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Create_Date, Width = 100 };
             public static readonly ColumnInfo ExpDate = new ColumnInfo { Index = 15, Name = DB.Fun.Parameter.clsCmd_Mst.Column.Expose_Date, Width = 100 };
             public static readonly ColumnInfo BoxStockOutAgv = new ColumnInfo { Index = 16, Name = DB.Fun.Parameter.clsCmd_Mst.Column.boxStockOutAgv, Width = 80 };

@@ -68,7 +68,7 @@ namespace Mirle.DB.Fun
                 BoxId = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.BoxID]),
                 EquNo = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.EquNo]),
                 RoundSts = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.RoundSts]),
-                L2LTimes = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.Count]),
+                Count = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.Count]),
                 HisLoc = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.HisLoc]),
                 CrtDate = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.Create_Date]),
                 ExpDate = Convert.ToString(drTmp[Parameter.clsL2LCount.Column.Update_Date]),
@@ -334,6 +334,8 @@ namespace Mirle.DB.Fun
             //產線
             else if (bufferName.Contains("S"))
                 return "SMTC";
+            else if (bufferName.Contains("LO1"))
+                return "E04";
             else
                 return "";
         }

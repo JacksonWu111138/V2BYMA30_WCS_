@@ -33,7 +33,7 @@ namespace Mirle.DB.Fun
             }
         }
 
-        public int CheckHasData(string BoxID, L2LCountInfo info, ref string strEM, DataBase.DB db)
+        public int CheckHasL2LRecord(string BoxID, ref L2LCountInfo info, ref string strEM, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
             try
@@ -124,8 +124,8 @@ namespace Mirle.DB.Fun
         {
             try
             {
-                string strSql = $"update {Parameter.clsL2LCount.TableName} set {Parameter.clsL2LCount.Column.RoundSts} = '{roundSts}' and " +
-                    $"{Parameter.clsL2LCount.Column.TeachLoc} = '{teachLoc}' where " +
+                string strSql = $"update {Parameter.clsL2LCount.TableName} set {Parameter.clsL2LCount.Column.RoundSts} = '{roundSts}', " +
+                    $"{Parameter.clsL2LCount.Column.TeachLoc} = '{teachLoc}', {Parameter.clsL2LCount.Column.Update_Date} = '{DateTime.Now:yyyy-MM-dd HH:mm:ss}'  where " +
                     $"{Parameter.clsL2LCount.Column.BoxID} = '{BoxID}' and {Parameter.clsL2LCount.Column.RoundSts} = '{clsConstValue.RoundSts.Happen}' ";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
                 {

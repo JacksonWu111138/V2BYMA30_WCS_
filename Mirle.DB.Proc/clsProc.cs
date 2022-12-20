@@ -371,7 +371,102 @@ namespace Mirle.DB.Proc
                                     }
                                     else
                                     {
-                                        if(sLoc_Start.DeviceId == sLoc_End.DeviceId)
+                                        if (cmd.Cmd_Sts == clsConstValue.CmdSts.strCmd_Initial)
+                                        {
+                                            var con = ConveyorDef.GetBuffer(sLoc_Start.LocationId);
+                                            string sCmdSno_CV = "";
+                                            if (!middle.CheckIsInReady(con, ref sCmdSno_CV))
+                                            {
+                                                sRemark = $"Error: {con.BufferName}並非送出Ready";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+                                            else if (sCmdSno_CV != "00000" && sCmdSno_CV != cmd.Cmd_Sno)
+                                            {
+                                                sRemark = $"Error: {con.BufferName}已被其他任務預約 => {sCmdSno_CV}";
+                                                if (sRemark != cmd.Remark)
+                                                {
+                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+
+                                                continue;
+                                            }
+                                            else
+                                            {
+                                                PositionReportInfo info = new PositionReportInfo
+                                                {
+                                                    carrierId = cmd.BoxID,
+                                                    inStock = clsConstValue.YesNo.No,
+                                                    jobId = cmd.JobID,
+                                                    location = sLoc_Start.LocationId
+                                                };
+
+                                                CVReceiveNewBinCmdInfo info_cv = new CVReceiveNewBinCmdInfo
+                                                {
+                                                    bufferId = con.BufferName,
+                                                    carrierType = cmd.carrierType,
+                                                    jobId = cmd.Cmd_Sno
+                                                };
+
+                                                if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
+                                                {
+                                                    sRemark = "Error: Begin失敗！";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
+                                                sRemark = $"預約{con.BufferName}";
+                                                if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    continue;
+                                                }
+
+                                                string deviceId = tool.GetDeviceId(con.BufferName);
+
+                                                if (!Cmd_Mst.FunUpdateCurLoc(cmd.Cmd_Sno, deviceId, con.BufferName, db))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    sRemark = $"Error: 更新CurLoc = {con.BufferName}失敗";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
+                                                if (!api.GetCV_ReceiveNewBinCmd().FunReport(info_cv, con.API.IP))
+                                                {
+                                                    db.TransactionCtrl(TransactionTypes.Rollback);
+                                                    sRemark = $"Error: 預約{con.BufferName}失敗";
+                                                    if (sRemark != cmd.Remark)
+                                                    {
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    }
+
+                                                    continue;
+                                                }
+
+
+                                                //放寬PositionReport之條件，不理會WES是否成功
+                                                if (Convert.ToInt32(cmd.Cmd_Sno) < 20000)
+                                                    api.GetPositionReport().FunReport(info, _wmsApi.IP);
+
+                                                db.TransactionCtrl(TransactionTypes.Commit);
+                                                return true;
+                                            }
+                                        }
+
+                                        if (sLoc_Start.DeviceId == sLoc_End.DeviceId)
                                         {//是電子料塔或AGV的命令//箱式倉內orASRSL2L命令
 
                                             string sDeviceID = "";
@@ -562,7 +657,8 @@ namespace Mirle.DB.Proc
 
 
                                                     //放寬PositionReport之條件，不理會WES是否成功
-                                                    api.GetPositionReport().FunReport(info, _wmsApi.IP);
+                                                    if(Convert.ToInt32(cmd.Cmd_Sno) < 20000)
+                                                        api.GetPositionReport().FunReport(info, _wmsApi.IP);
                                                     /*
                                                     if (!api.GetPositionReport().FunReport(info, _wmsApi.IP))
                                                     {
@@ -1127,8 +1223,9 @@ namespace Mirle.DB.Proc
                 dtTmp.Dispose();
             }
         }
-        public bool FunAsrsCmd_DoubleCV_StockIn_Proc(WMS.Proc.clsHost wms)
+        public bool FunAsrsCmd_DoubleCV_StockIn_Proc(WMS.Proc.clsHost wms, SignalHost CrnSignal, DeviceInfo device)
         {
+            if((CurrentStockInLoc + 3).ToString() != device.DeviceID) return true;
             DataTable dtTmp = new DataTable();
             try
             {
@@ -1165,10 +1262,6 @@ namespace Mirle.DB.Proc
                                                 {
                                                     if (emptyNo[(CurrentStockInLoc + count) % 3] > 0)
                                                     {
-
-                                                        
-                                                        
-
                                                         clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"成功取得空儲位於: Line{((CurrentStockInLoc + count) % 3).ToString()}");
                                                         if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                                         {

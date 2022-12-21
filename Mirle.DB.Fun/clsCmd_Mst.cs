@@ -191,7 +191,35 @@ namespace Mirle.DB.Fun
                 dtTmp = null;
             }
         }
-
+        public bool FunGetCommandByDestination(string Destination, ref DataTable dtTmp , DataBase.DB db)
+        {
+            try
+            {
+                dtTmp = new DataTable();
+                int iRet;
+                string strEM = "";
+                string strSql = $"select * from {Parameter.clsCmd_Mst.TableName} " +
+                    $"where ({Parameter.clsCmd_Mst.Column.Stn_No} = '{Destination}' and {Parameter.clsCmd_Mst.Column.Cmd_Mode} = '{clsConstValue.CmdMode.StockOut}') " +
+                    $"or ({Parameter.clsCmd_Mst.Column.New_Loc} = '{Destination}' and {Parameter.clsCmd_Mst.Column.Cmd_Mode} = '{clsConstValue.CmdMode.S2S}')";
+                iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
+                if (iRet == DBResult.Success || iRet == DBResult.NoDataSelect)
+                {
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                int errorLine = new System.Diagnostics.StackTrace(ex, true).GetFrame(0).GetFileLineNumber();
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, errorLine.ToString() + ":" + ex.Message);
+                return false;
+            }
+        }
         public bool FunGetCommandByJobID(string JobID, ref CmdMstInfo cmd, ref int iRet, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();

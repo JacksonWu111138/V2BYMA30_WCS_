@@ -46,7 +46,7 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork.DoubleCV
             {
                 if (bOnline)
                 {
-                    _wcs.GetProc().FunAsrsCmd_DoubleCV_StockIn_Proc(_wms, signal, device);
+                    _wcs.GetProc().FunAsrsCmd_DoubleCV_StockIn_Proc(_wms);
 
                     _wcs.GetProc().FunAsrsCmd_DoubleCV_Proc(device, clsTool.GetSqlLocation_ForIn(device),
                               router, _wms, middle, signal);

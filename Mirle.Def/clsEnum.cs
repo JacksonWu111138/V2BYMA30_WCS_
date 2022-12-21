@@ -188,7 +188,11 @@ namespace Mirle.Def
                 /// <summary>
                 /// 撿料口有空料架或靜電箱在Port上，已有搬送指令
                 /// </summary>
-                Processing = 2
+                Processing = 2,
+                /// <summary>
+                /// Port口禁用，不能自動派貨
+                /// </summary>
+                NotReady = 3
             }
         }
 

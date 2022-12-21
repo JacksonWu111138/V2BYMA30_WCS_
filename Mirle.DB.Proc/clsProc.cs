@@ -1223,9 +1223,8 @@ namespace Mirle.DB.Proc
                 dtTmp.Dispose();
             }
         }
-        public bool FunAsrsCmd_DoubleCV_StockIn_Proc(WMS.Proc.clsHost wms, SignalHost CrnSignal, DeviceInfo device)
+        public bool FunAsrsCmd_DoubleCV_StockIn_Proc(WMS.Proc.clsHost wms)
         {
-            if((CurrentStockInLoc + 3).ToString() != device.DeviceID) return true;
             DataTable dtTmp = new DataTable();
             try
             {

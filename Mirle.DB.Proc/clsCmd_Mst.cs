@@ -414,6 +414,47 @@ namespace Mirle.DB.Proc
             }
         }
 
+        public bool FunCheckMaximumNumberCmdToBuffer(string BufferName, int MaxNumber, ref string strEM)
+        {
+            DataTable dtTmp = new DataTable();
+            try
+            {
+                using (var db = clsGetDB.GetDB(_config))
+                {
+                    int iRet = clsGetDB.FunDbOpen(db);
+                    if (iRet == DBResult.Success)
+                    {
+                        CmdMstInfo cmd = new CmdMstInfo();
+                        
+                        if (CMD_MST.FunGetCommandByDestination(BufferName, ref dtTmp,  db))
+                        {
+                            if(dtTmp.Rows.Count < MaxNumber)
+                                return true;
+                            else
+                            {
+                                strEM = $"提醒：已有 {MaxNumber} 筆送往該站口({BufferName})的命令正在執行，不新增命令！";
+                                return false;
+                            }
+                        }
+                        strEM = $"Error: 依照終點取得命令失敗, Destination = {BufferName}.";
+                        throw new Exception(strEM);
+                        
+                    }
+                    else return false;
+                }
+            }
+
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+            finally
+            {
+                dtTmp = null;
+            }
+        }
 
         public bool FunMoveFinishCmdToHistory_Proc(bool PCBACycleRun, bool B800CycleRun)
         {

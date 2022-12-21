@@ -320,6 +320,16 @@ namespace Mirle.WebAPI.Event
                     throw new Exception($"Error: FromLocation為空，jobId = {Body.jobId}");
                 else if (string.IsNullOrEmpty(Body.toLocation))
                     throw new Exception($"Error: ToLocation為空，jobId = {Body.jobId}");
+
+                if(Body.toLocation.Contains(","))
+                {
+                    string[] toLocationList = Body.toLocation.Split(',');
+                    for(int i = 0; i < toLocationList.Length; i++)
+                    {
+                        if (toLocationList[i] != ConveyorDef.WES_B800CV && !ConveyorDef.GetStations().Any(r => r.StnNo == toLocationList[i]))
+                            throw new Exception($"Error: ToLocation錯誤，toLocation = {Body.toLocation} and jobId = {Body.jobId}.");
+                    }
+                }
                 else if (Body.toLocation != ConveyorDef.WES_B800CV && !ConveyorDef.GetStations().Any(r => r.StnNo == Body.toLocation))
                     throw new Exception($"Error: ToLocation錯誤，toLocation = {Body.toLocation} and jobId = {Body.jobId}.");
 
@@ -1132,6 +1142,23 @@ namespace Mirle.WebAPI.Event
                     }
                     else
                     {
+
+                        if(Body.location == ConveyorDef.Box.B1_142.BufferName || Body.location == ConveyorDef.Box.B1_147.BufferName)
+                        {
+                            //順途也要上報至MES至詢問「該箱是否完成搬運」
+                            CarrierReturnNextInfo checkInfo = new CarrierReturnNextInfo
+                            {
+                                carrierId = Body.barcode,
+                                fromLocation = con.StnNo,
+                                carrierType = clsConstValue.WesApi.CarrierType.Bin,
+                                isEmpty = clsConstValue.YesNo.Yes
+                            };
+                            CarrierReturnNextReply checkReply = new CarrierReturnNextReply();
+                            if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(checkInfo, ref checkReply, clsAPI.GetWesApiConfig().IP))
+                                throw new Exception($"Error: Carrier Return Next fail, 建料未完成或詢問是否完成撿料失敗");
+                        }
+
+
                         CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
                         {
                             jobId = cmd.Cmd_Sno,
@@ -1288,17 +1315,7 @@ namespace Mirle.WebAPI.Event
                     }
                     else
                     {
-                        //以下為無MES測試時使用
-                        /*
-                        rMsg.transactionId = "AUTO_" + rMsg.transactionId + "_ignore_CarrierReturnNext";
-                        rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
-                        rMsg.returnComment = "";
 
-                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
-                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<CARRIER_PUTAWAY_TRANSFER> <WCS Reply>\n{JsonConvert.SerializeObject(rMsg)}");
-                        return Json(rMsg);
-                        
-                        *///以上為無MES測試時使用
 
                         CarrierReturnNextInfo info = new CarrierReturnNextInfo
                         {
@@ -1956,6 +1973,8 @@ namespace Mirle.WebAPI.Event
             {
                 ConveyorInfo con = new ConveyorInfo();
                 con = ConveyorDef.GetBuffer(Body.location);
+                string strEM = "";
+                int MaxNumberOfcmd;
 
                 //是否要將Bcr改至撿料口，待討論
                 if (Body.location == "B1-061")
@@ -1965,36 +1984,61 @@ namespace Mirle.WebAPI.Event
 
                 if(Body.location == ConveyorDef.Line.A4_10.BufferName || Body.location == ConveyorDef.Line.A4_14.BufferName)
                 {
-                    EmptyMagazineLoadRequestInfo info = new EmptyMagazineLoadRequestInfo();
-                    info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(Body.location).Stn_No;
-                    info.jobId = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    MaxNumberOfcmd = 2;
 
-                    if (!clsAPI.GetAPI().GetEmptyMagazineLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                    if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunCheckMaximumNumberCmdToBuffer(con.BufferName, MaxNumberOfcmd, ref strEM))
                     {
-                        throw new Exception($"Error: EmptyMagazineLoadRequest to WES fail, location = {Body.location}.");
+                        EmptyMagazineLoadRequestInfo info = new EmptyMagazineLoadRequestInfo();
+                        info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(Body.location).Stn_No;
+                        info.jobId = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                        if (!clsAPI.GetAPI().GetEmptyMagazineLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                        {
+                            throw new Exception($"Error: EmptyMagazineLoadRequest to WES fail, location = {Body.location}.");
+                        }
                     }
+                    else
+                    {
+                        if(!strEM.Contains("提醒"))
+                            throw new Exception(strEM);
+                    }
+                    
                 }
                 else
                 {
-                    EmptyESDCarrierLoadRequestInfo info = new EmptyESDCarrierLoadRequestInfo
+                    if (con.ControllerID == clsControllerID.e04_ControllerID)
+                        MaxNumberOfcmd = 4;
+                    else MaxNumberOfcmd = 2;
+
+                    if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunCheckMaximumNumberCmdToBuffer(con.BufferName, MaxNumberOfcmd, ref strEM))
                     {
-                        location = con.StnNo,
-                        reqQty = Body.reqQty,
-                        withClapBoard = clsConstValue.YesNo.No
-                    };
-                    if (Body.location.Contains("B1"))
-                        info.jobId = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                    if (ConveyorDef.GetSharingNode().Any(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName))
-                    {
-                        info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                        EmptyESDCarrierLoadRequestInfo info = new EmptyESDCarrierLoadRequestInfo
+                        {
+                            location = con.StnNo,
+                            reqQty = Body.reqQty,
+                            withClapBoard = clsConstValue.YesNo.No
+                        };
+                        if (Body.location.Contains("B1"))
+                            info.jobId = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                        if (ConveyorDef.GetSharingNode().Any(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName))
+                        {
+                            info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                        }
+                        if (!clsAPI.GetAPI().GetEmptyESDCarrierLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                            throw new Exception($"Error: Send Empty ESDCarrier Load Request to WES fail, location = {Body.location}.");
                     }
-                    if (!clsAPI.GetAPI().GetEmptyESDCarrierLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
-                        throw new Exception($"Error: Send Empty ESDCarrier Load Request to WES fail, location = {Body.location}.");
+                    else
+                    {
+                        if (!strEM.Contains("提醒"))
+                            throw new Exception(strEM);
+                    }
                 }
                 
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
+                if (strEM.Contains("提醒"))
+                    rMsg.returnComment = strEM;
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>EMPTY_BIN_LOAD_REQUEST record end!");
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<EMPTY_BIN_LOAD_REQUEST> <WCS Reply>\n{JsonConvert.SerializeObject(rMsg)}");
@@ -3025,20 +3069,32 @@ namespace Mirle.WebAPI.Event
             {
                 ConveyorInfo con = new ConveyorInfo();
                 con = ConveyorDef.GetBuffer(Body.location);
-                EmptyMagazineLoadRequestInfo info = new EmptyMagazineLoadRequestInfo
-                {
-                    location = con.StnNo
-                };
-                if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
-                {
-                    info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
-                }
-                if (!clsAPI.GetAPI().GetEmptyMagazineLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
-                    throw new Exception($"Error: 傳送EmptyMagazineLoadRequest 至 WES 失敗, jobId = {info.jobId}");
+                string strEM = "";
+                int MaxNumberOfcmd = 3;
 
+                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunCheckMaximumNumberCmdToBuffer(con.BufferName, MaxNumberOfcmd, ref strEM))
+                {
+                    EmptyMagazineLoadRequestInfo info = new EmptyMagazineLoadRequestInfo
+                    {
+                        location = con.StnNo
+                    };
+                    if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                    {
+                        info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                    }
+                    if (!clsAPI.GetAPI().GetEmptyMagazineLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                        throw new Exception($"Error: 傳送EmptyMagazineLoadRequest 至 WES 失敗, jobId = {info.jobId}");
+                }
+                else
+                {
+                    if (!strEM.Contains("提醒"))
+                        throw new Exception(strEM);
+                }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
+                if (strEM.Contains("提醒"))
+                    rMsg.returnComment = strEM;
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_EMPTY_MAGAZINE_LOAD_REQUEST record end!");
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<SMTC_EMPTY_MAGAZINE_LOAD_REQUEST> <WCS Reply>\n{JsonConvert.SerializeObject(rMsg)}");
@@ -3134,19 +3190,33 @@ namespace Mirle.WebAPI.Event
             {
                 ConveyorInfo con = new ConveyorInfo();
                 con = ConveyorDef.GetBuffer(Body.location);
-                MagazineLoadRequestInfo info = new MagazineLoadRequestInfo();
-                info.location = con.StnNo;
-                if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                string strEM = "";
+                int MaxNumberOfcmd = 3;
+
+                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunCheckMaximumNumberCmdToBuffer(con.BufferName, MaxNumberOfcmd, ref strEM))
                 {
-                    info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                    MagazineLoadRequestInfo info = new MagazineLoadRequestInfo
+                    {
+                        location = con.StnNo
+                    };
+                    if (ConveyorDef.GetSharingNode().Where(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName).Any())
+                    {
+                        info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                    }
+
+                    if (!clsAPI.GetAPI().GetMagazineLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                        throw new Exception($"Error: 傳送MagazineLoadRequest 至 WES 失敗, jobId = {info.jobId}");
                 }
-
-                if (!clsAPI.GetAPI().GetMagazineLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
-                    throw new Exception($"Error: 傳送MagazineLoadRequest 至 WES 失敗, jobId = {info.jobId}");
-
+                else
+                {
+                    if (!strEM.Contains("提醒"))
+                        throw new Exception(strEM);
+                }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
+                if (strEM.Contains("提醒"))
+                    rMsg.returnComment = strEM;
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>SMTC_MAGAZINE_LOAD_REQUEST record end!");
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<SMTC_MAGAZINE_LOAD_REQUEST> <WCS Reply>\n{JsonConvert.SerializeObject(rMsg)}");
@@ -3179,6 +3249,7 @@ namespace Mirle.WebAPI.Event
             {
                 ConveyorInfo con = new ConveyorInfo();
                 con = ConveyorDef.GetBuffer(Body.stagePosition);
+                string strEM = "";
                 if (Body.stagePosition == ConveyorDef.AGV.E2_35.BufferName ||
                     Body.stagePosition == ConveyorDef.AGV.E2_36.BufferName ||
                     Body.stagePosition == ConveyorDef.AGV.E2_37.BufferName)
@@ -3193,22 +3264,38 @@ namespace Mirle.WebAPI.Event
                 }
                 else
                 {
-                    EmptyESDCarrierLoadRequestInfo info = new EmptyESDCarrierLoadRequestInfo
+                    int MaxNumberOfcmd;
+                    if (con.ControllerID == clsControllerID.e04_ControllerID)
+                        MaxNumberOfcmd = 4;
+                    else MaxNumberOfcmd = 2;
+
+                    if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunCheckMaximumNumberCmdToBuffer(con.BufferName, MaxNumberOfcmd, ref strEM))
                     {
-                        location = con.StnNo,
-                        reqQty = 1,
-                        withClapBoard = clsConstValue.YesNo.Yes
-                    };
-                    if (ConveyorDef.GetSharingNode().Any(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName))
-                    {
-                        info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                        EmptyESDCarrierLoadRequestInfo info = new EmptyESDCarrierLoadRequestInfo
+                        {
+                            location = con.StnNo,
+                            reqQty = 1,
+                            withClapBoard = clsConstValue.YesNo.Yes
+                        };
+                        if (ConveyorDef.GetSharingNode().Any(r => r.end.BufferName == con.BufferName || r.start.BufferName == con.BufferName))
+                        {
+                            info.location = ConveyorDef.GetTwoNodeOneStnnoByBufferName(con.BufferName).Stn_No;
+                        }
+                        if (!clsAPI.GetAPI().GetEmptyESDCarrierLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
+                            throw new Exception($"Error: EmptyESDCarrierLoadRequest to WES fail, jobId = {Body.jobId}.");
                     }
-                    if (!clsAPI.GetAPI().GetEmptyESDCarrierLoadRequest().FunReport(info, clsAPI.GetWesApiConfig().IP))
-                        throw new Exception($"Error: EmptyESDCarrierLoadRequest to WES fail, jobId = {Body.jobId}.");
+                    else
+                    {
+                        if (!strEM.Contains("提醒"))
+                            throw new Exception(strEM);
+                    }
+
                 }
 
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
+                if(strEM.Contains("提醒"))
+                    rMsg.returnComment = strEM;
 
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>STAGE_EMPTY_INFO record end!");
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<STAGE_EMPTY_INFO> <WCS Reply>\n{JsonConvert.SerializeObject(rMsg)}");

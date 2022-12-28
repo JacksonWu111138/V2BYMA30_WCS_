@@ -63,9 +63,11 @@ namespace Mirle.DB.Proc
                             {
                                 string sCmdSno = Convert.ToString(dtTmp.Rows[i]["CmdSno"]);
                                 string slotId = Convert.ToString(dtTmp.Rows[i]["lotId"]);
+                                string sJobId = Convert.ToString(dtTmp.Rows[i]["JobID"]);
 
                                 WCSCancelInfo info = new WCSCancelInfo
                                 {
+                                    jobId = sJobId,
                                     lotIdCarrierId = slotId,
                                     cancelType = clsConstValue.WesApi.CancelType.Lot_Retrieve
                                 };

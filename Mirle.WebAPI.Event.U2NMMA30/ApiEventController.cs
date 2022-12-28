@@ -647,6 +647,8 @@ namespace Mirle.WebAPI.Event
                     {
                         var cv_to = ConveyorDef.GetBuffer_ByStnNo(Body.fromPortId);
                         cmd.Stn_No = cv_to.BufferName;
+                        cmd.CurDeviceID = cv_to.DeviceId;
+                        cmd.CurLoc = cv_to.BufferName;
                     }
                     cmd.Host_Name = "WES";
                     cmd.Zone_ID = "";
@@ -2418,8 +2420,13 @@ namespace Mirle.WebAPI.Event
                     case "B1-146":
                         con = ConveyorDef.Box.B1_147;
                         break;
+                    case "CV":
+                        if(cmd.carrierType == clsConstValue.WesApi.CarrierType.Lot)
+                            con = ConveyorDef.Tower.E1_10;
+                        else
+                            con = ConveyorDef.GetBuffer(Body.position);
+                        break;
                     default:
-                        con = ConveyorDef.GetBuffer(Body.position);
                         break;
                 }
 
@@ -2461,6 +2468,10 @@ namespace Mirle.WebAPI.Event
                         location = con.StnNo != null ? con.StnNo : con.BufferName
                     };
 
+                    //於E1-10上即將入庫，位置使用"CV"上報WES
+                    if (Body.position == "CV")
+                        info.location = "CV";
+
                     if (!clsAPI.GetAPI().GetLotPositionReport().FunReport(info, clsAPI.GetWesApiConfig().IP))
                         throw new Exception($"Error: LotPositionReport to WES fail, jobId = {Body.jobId}.");
                 }
@@ -2488,12 +2499,13 @@ namespace Mirle.WebAPI.Event
                 {
                     //新生成的命令，待時序處理起點預約
                 }
-                else if ((cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut && Body.position == cmd.Stn_No) || 
-                         (cmd.Cmd_Mode == clsConstValue.CmdMode.S2S && Body.position == cmd.New_Loc) && 
+                else if (((cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut && Body.position == cmd.Stn_No) || 
+                         (cmd.Cmd_Mode == clsConstValue.CmdMode.S2S && Body.position == cmd.New_Loc)) && 
                          ConveyorDef.GetAGV_8FPort().Any(r => r.BufferName == Body.position) &&
-                         clsDB_Proc.GetDB_Object().GetMiddleCmd().FunGetMiddleCmdbyCommandID(Body.position, ref middle))
+                         clsDB_Proc.GetDB_Object().GetMiddleCmd().FunGetMiddleCmdbyCommandID(Body.jobId, ref middle))
                 {
                     //若為出庫or站對站命令終點 & 終點為AGVport口 & Middle 尚有該筆AGV命令未完成，則待AGV命令完成再更新cmdMst
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>POSITION_REPORT 該命令為AGV搬運終點，待AGV上報搬運完成後更新CurLocation！");
                 }
                 else
                 {
@@ -2607,7 +2619,7 @@ namespace Mirle.WebAPI.Event
                         {
                             if (clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCSTID(Body.rackId))
                             {
-                                string sRemark = "命令完成";
+                                string sRemark = "Remark: 命令完成";
                                 if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark))
                                 {
                                     strEM = $"Error: Update Middle cmdsts fail, jobId = {Body.jobId}.";

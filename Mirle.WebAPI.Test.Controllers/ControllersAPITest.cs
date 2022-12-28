@@ -7,8 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Mirle.DB.Object;
 using Mirle.Def;
+using Mirle.Def.U2NMMA30;
+using Mirle.Structure;
 using Mirle.WebAPI.Test.Controllers.ApiList;
+using Mirle.WebAPI.V2BYMA30.ReportInfo;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace Mirle.WebAPI.Test.Controllers
 {
@@ -135,6 +140,86 @@ namespace Mirle.WebAPI.Test.Controllers
         {
             CtrlEmptyBinLoadDone form = new CtrlEmptyBinLoadDone();
             form.Show();
+        }
+
+        private void CtrlBoxAGVStockIn_Click(object sender, EventArgs e)
+        {
+            ConveyorInfo[] BoxAgvList = new ConveyorInfo[3];
+            BoxAgvList[0] = ConveyorDef.AGV.B1_078;
+            BoxAgvList[1] = ConveyorDef.AGV.B1_074;
+            BoxAgvList[2] = ConveyorDef.AGV.B1_070;
+            bool isGetAgvPort = false;
+
+            for(int i = 0; i < BoxAgvList.Length; i ++)
+            {
+                BufferStatusQueryInfo stsInfo = new BufferStatusQueryInfo
+                {
+                    bufferId = BoxAgvList[i].BufferName
+                };
+                BufferStatusReply stsReply = new BufferStatusReply();
+                if(clsAPI.GetAPI().GetBufferStatusQuery().FunReport(stsInfo, clsAPI.GetBoxApiConfig().IP, ref stsReply))
+                {
+                    stsReply.jobId = stsReply.jobId.PadLeft(5, '0');
+                    int.TryParse(stsReply.ready, out var ready);
+                    if (stsReply.jobId == "00000" && ready == (int)clsEnum.ControllerApi.Ready.OutReady)
+                    {
+                        //可以送這個port口
+                        CVReceiveNewBinCmdInfo ReceiveInfo = new CVReceiveNewBinCmdInfo
+                        {
+                            jobId = "3000" + BoxAgvList[i].BufferName.Substring(5, 1),
+                            bufferId = BoxAgvList[i].BufferName,
+                            carrierType = clsConstValue.ControllerApi.CarrierType.Bin
+                        };
+                        if(!clsAPI.GetAPI().GetCV_ReceiveNewBinCmd().FunReport(ReceiveInfo, clsAPI.GetBoxApiConfig().IP))
+                        {
+                            continue;
+                        }
+
+                        BufferRollInfo RollInfo = new BufferRollInfo
+                        {
+                            jobId = ReceiveInfo.jobId,
+                            bufferId = BoxAgvList[i].BufferName
+                        };
+                        if(!clsAPI.GetAPI().GetBufferRoll().FunReport(RollInfo, clsAPI.GetBoxApiConfig().IP))
+                        {
+                            //清值
+                            BufferInitialInfo InitialInfo = new BufferInitialInfo
+                            {
+                                bufferId = BoxAgvList[i].BufferName
+                            };
+
+                            if(!clsAPI.GetAPI().GetBufferInitial().FunReport(InitialInfo, clsAPI.GetBoxApiConfig().IP))
+                            {
+                                //清值失敗後動作未定
+                            }
+                            continue;
+                        }
+
+                        string portLocation = "";
+                        switch(i)
+                        {
+                            case 0:
+                                portLocation = "右邊";
+                                break;
+                            case 1:
+                                portLocation = "中間";
+                                break;
+                            case 2:
+                                portLocation = "左邊";
+                                break;
+                        }
+
+                        MessageBox.Show($"請將靜電箱從{portLocation}AGV站口入庫", "手動入箱式倉", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                        isGetAgvPort = true;
+                        break;
+                    }
+                }
+            }
+            if(!isGetAgvPort)
+            {
+                MessageBox.Show($"暫時無可空閒之箱式倉AGV口，請稍後再試", "手動入箱式倉", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

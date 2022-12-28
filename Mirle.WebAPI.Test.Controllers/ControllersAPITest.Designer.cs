@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.CtrlEmptyBinLoadDone = new System.Windows.Forms.Button();
             this.CtrlBufferInitial = new System.Windows.Forms.Button();
             this.CtrlTransferCommandRequest = new System.Windows.Forms.Button();
             this.CtrlTaskCancel = new System.Windows.Forms.Button();
@@ -47,7 +48,7 @@
             this.CtrlBufferStatusQuery = new System.Windows.Forms.Button();
             this.CtrlBlockStatusQuery = new System.Windows.Forms.Button();
             this.CtrlBufferRollInfo = new System.Windows.Forms.Button();
-            this.CtrlEmptyBinLoadDone = new System.Windows.Forms.Button();
+            this.CtrlBoxAGVStockIn = new System.Windows.Forms.Button();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -87,6 +88,17 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 20F));
             this.tableLayoutPanel1.Size = new System.Drawing.Size(864, 354);
             this.tableLayoutPanel1.TabIndex = 0;
+            // 
+            // CtrlEmptyBinLoadDone
+            // 
+            this.CtrlEmptyBinLoadDone.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CtrlEmptyBinLoadDone.Location = new System.Drawing.Point(651, 213);
+            this.CtrlEmptyBinLoadDone.Name = "CtrlEmptyBinLoadDone";
+            this.CtrlEmptyBinLoadDone.Size = new System.Drawing.Size(210, 64);
+            this.CtrlEmptyBinLoadDone.TabIndex = 1;
+            this.CtrlEmptyBinLoadDone.Text = "EmptyBinLoadDone";
+            this.CtrlEmptyBinLoadDone.UseVisualStyleBackColor = true;
+            this.CtrlEmptyBinLoadDone.Click += new System.EventHandler(this.CtrlEmptyBinLoadDone_Click);
             // 
             // CtrlBufferInitial
             // 
@@ -286,22 +298,22 @@
             this.CtrlBufferRollInfo.UseVisualStyleBackColor = true;
             this.CtrlBufferRollInfo.Click += new System.EventHandler(this.CtrlBufferRollInfo_Click);
             // 
-            // CtrlEmptyBinLoadDone
+            // CtrlBoxAGVStockIn
             // 
-            this.CtrlEmptyBinLoadDone.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CtrlEmptyBinLoadDone.Location = new System.Drawing.Point(651, 213);
-            this.CtrlEmptyBinLoadDone.Name = "CtrlEmptyBinLoadDone";
-            this.CtrlEmptyBinLoadDone.Size = new System.Drawing.Size(210, 64);
-            this.CtrlEmptyBinLoadDone.TabIndex = 1;
-            this.CtrlEmptyBinLoadDone.Text = "EmptyBinLoadDone";
-            this.CtrlEmptyBinLoadDone.UseVisualStyleBackColor = true;
-            this.CtrlEmptyBinLoadDone.Click += new System.EventHandler(this.CtrlEmptyBinLoadDone_Click);
+            this.CtrlBoxAGVStockIn.Location = new System.Drawing.Point(730, 466);
+            this.CtrlBoxAGVStockIn.Name = "CtrlBoxAGVStockIn";
+            this.CtrlBoxAGVStockIn.Size = new System.Drawing.Size(209, 79);
+            this.CtrlBoxAGVStockIn.TabIndex = 1;
+            this.CtrlBoxAGVStockIn.Text = "箱式倉手動入庫";
+            this.CtrlBoxAGVStockIn.UseVisualStyleBackColor = true;
+            this.CtrlBoxAGVStockIn.Click += new System.EventHandler(this.CtrlBoxAGVStockIn_Click);
             // 
             // ControllersAPITest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 18F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1050, 592);
+            this.Controls.Add(this.CtrlBoxAGVStockIn);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Name = "ControllersAPITest";
             this.Text = "Controllers API Test";
@@ -332,6 +344,7 @@
         private System.Windows.Forms.Button CtrlTransferCommandRequest;
         private System.Windows.Forms.Button CtrlBufferInitial;
         private System.Windows.Forms.Button CtrlEmptyBinLoadDone;
+        private System.Windows.Forms.Button CtrlBoxAGVStockIn;
     }
 }
 

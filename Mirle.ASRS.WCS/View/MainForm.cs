@@ -931,6 +931,7 @@ namespace Mirle.ASRS.WCS.View
             middle = new MidHost(ConveyorDef.GetAllNode(), clInitSys.AgvApi_Config, PCBA, Box, 
                 ConveyorDef.DeviceID_AGV, ConveyorDef.DeviceID_Tower, clInitSys.DbConfig, clInitSys.AgvApi_Config, clInitSys.TowerApi_Config);
             FunAsrsCmdInit();
+            clsCraneSignal.Initial(CraneSignals[0], CraneSignals[1], CraneSignals[2], CraneSignals[3], CraneSignals[4]);
             _unityContainer = new UnityContainer();
             _unityContainer.RegisterInstance(new WCSController());
             _webApiHost = new WebApiHost(new Startup(_unityContainer), clInitSys.WcsApi_Config.IP);
@@ -1267,5 +1268,7 @@ namespace Mirle.ASRS.WCS.View
             clsCycleRunform form_3 = new clsCycleRunform();
             form_3.Show();
         }
+
+
     }
 }

@@ -135,7 +135,7 @@ namespace Mirle.DB.Proc
                                         continue;
                                     }
 
-                                    sRemark = "命令完成";
+                                    sRemark = "Remark: 命令完成";
                                     if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Finish_Wait, sRemark, db))
                                     {
                                         db.TransactionCtrl(TransactionTypes.Rollback);
@@ -397,13 +397,21 @@ namespace Mirle.DB.Proc
                                             }
                                             else
                                             {
-                                                PositionReportInfo info = new PositionReportInfo
+                                                LotPositionReportInfo LotCmdInfo = new LotPositionReportInfo();
+                                                PositionReportInfo CarrierCmdInfo = new PositionReportInfo();
+                                                if (cmd.carrierType == clsConstValue.WesApi.CarrierType.Lot)
                                                 {
-                                                    carrierId = cmd.BoxID,
-                                                    inStock = clsConstValue.YesNo.No,
-                                                    jobId = cmd.JobID,
-                                                    location = sLoc_Start.LocationId
-                                                };
+                                                    LotCmdInfo.location = sLoc_Start.LocationId;
+                                                    LotCmdInfo.jobId = cmd.JobID;
+                                                    LotCmdInfo.lotId = cmd.BoxID;
+                                                }
+                                                else
+                                                {
+                                                    CarrierCmdInfo.carrierId = cmd.BoxID;
+                                                    CarrierCmdInfo.inStock = clsConstValue.YesNo.No;
+                                                    CarrierCmdInfo.jobId = cmd.JobID;
+                                                    CarrierCmdInfo.location = sLoc_Start.LocationId;
+                                                }
 
                                                 CVReceiveNewBinCmdInfo info_cv = new CVReceiveNewBinCmdInfo
                                                 {
@@ -459,7 +467,16 @@ namespace Mirle.DB.Proc
 
                                                 //放寬PositionReport之條件，不理會WES是否成功
                                                 if (Convert.ToInt32(cmd.Cmd_Sno) < 20000)
-                                                    api.GetPositionReport().FunReport(info, _wmsApi.IP);
+                                                {
+                                                    if(cmd.carrierType != clsConstValue.WesApi.CarrierType.Lot)
+                                                    {
+                                                        api.GetPositionReport().FunReport(CarrierCmdInfo, _wmsApi.IP);
+                                                    }
+                                                    else
+                                                    {
+                                                        api.GetLotPositionReport().FunReport(LotCmdInfo, _wmsApi.IP);
+                                                    }
+                                                }
 
                                                 db.TransactionCtrl(TransactionTypes.Commit);
                                                 return true;
@@ -596,13 +613,21 @@ namespace Mirle.DB.Proc
                                                 }
                                                 else
                                                 {
-                                                    PositionReportInfo info = new PositionReportInfo
+                                                    LotPositionReportInfo LotCmdInfo = new LotPositionReportInfo();
+                                                    PositionReportInfo CarrierCmdInfo = new PositionReportInfo();
+                                                    if (cmd.carrierType == clsConstValue.WesApi.CarrierType.Lot)
                                                     {
-                                                        carrierId = cmd.BoxID,
-                                                        inStock = clsConstValue.YesNo.No,
-                                                        jobId = cmd.JobID,
-                                                        location = sLoc_Start.LocationId
-                                                    };
+                                                        LotCmdInfo.location = sLoc_Start.LocationId;
+                                                        LotCmdInfo.jobId = cmd.JobID;
+                                                        LotCmdInfo.lotId = cmd.BoxID;
+                                                    }
+                                                    else
+                                                    {
+                                                        CarrierCmdInfo.carrierId = cmd.BoxID;
+                                                        CarrierCmdInfo.inStock = clsConstValue.YesNo.No;
+                                                        CarrierCmdInfo.jobId = cmd.JobID;
+                                                        CarrierCmdInfo.location = sLoc_Start.LocationId;
+                                                    }
 
                                                     CVReceiveNewBinCmdInfo info_cv = new CVReceiveNewBinCmdInfo
                                                     {
@@ -657,9 +682,17 @@ namespace Mirle.DB.Proc
 
 
                                                     //放寬PositionReport之條件，不理會WES是否成功
-                                                    if(Convert.ToInt32(cmd.Cmd_Sno) < 20000)
-                                                        api.GetPositionReport().FunReport(info, _wmsApi.IP);
-                                                    /*
+                                                    if (Convert.ToInt32(cmd.Cmd_Sno) < 20000)
+                                                    {
+                                                        if (cmd.carrierType != clsConstValue.WesApi.CarrierType.Lot)
+                                                        {
+                                                            api.GetPositionReport().FunReport(CarrierCmdInfo, _wmsApi.IP);
+                                                        }
+                                                        else
+                                                        {
+                                                            api.GetLotPositionReport().FunReport(LotCmdInfo, _wmsApi.IP);
+                                                        }
+                                                    }/*
                                                     if (!api.GetPositionReport().FunReport(info, _wmsApi.IP))
                                                     {
                                                         db.TransactionCtrl(TransactionTypes.Rollback);
@@ -1223,8 +1256,12 @@ namespace Mirle.DB.Proc
                 dtTmp.Dispose();
             }
         }
-        public bool FunAsrsCmd_DoubleCV_StockIn_Proc(WMS.Proc.clsHost wms)
+        public bool FunAsrsCmd_DoubleCV_StockIn_Proc(WMS.Proc.clsHost wms, SignalHost box1CraneSignal, SignalHost box2CraneSignal, SignalHost box3CraneSignal)
         {
+            SignalHost[] craneSignal = new SignalHost[3];
+            craneSignal[0] = box1CraneSignal;
+            craneSignal[1] = box2CraneSignal;
+            craneSignal[2] = box3CraneSignal;
             DataTable dtTmp = new DataTable();
             try
             {
@@ -1238,6 +1275,7 @@ namespace Mirle.DB.Proc
                         {
                             for (int i = 0; i < dtTmp.Rows.Count; i++)
                             {
+                                
                                 CmdMstInfo cmd = tool.GetCommand(dtTmp.Rows[i]);
                                 string sRemark = "";
                                 if (cmd.Cmd_Mode == clsConstValue.CmdMode.StockIn)
@@ -1252,7 +1290,7 @@ namespace Mirle.DB.Proc
                                             for (int j = 0; j < 3; j++)
                                             {
                                                 emptyNo[j] = Convert.ToInt32(emptyLocDTTmp.Rows[0][j].ToString());
-                                                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"相識倉儲位取得空儲位數: Line{(j+3).ToString()} = {emptyNo[j]}");
+                                                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"相識倉儲位取得空儲位數: Crane {(j+3)} = {emptyNo[j]}");
                                             }
                                             if (string.IsNullOrWhiteSpace(cmd.Equ_No))
                                             {
@@ -1261,7 +1299,21 @@ namespace Mirle.DB.Proc
                                                 {
                                                     if (emptyNo[(CurrentStockInLoc + count) % 3] > 0)
                                                     {
-                                                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"成功取得空儲位於: Line{((CurrentStockInLoc + count) % 3).ToString()}");
+                                                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"成功取得空儲位於: Crane {((CurrentStockInLoc + count) % 3) + 3}");
+                                                        
+                                                        if (craneSignal[(CurrentStockInLoc + count) % 3].CrnMode != clsConstValue.Crane.Mode.Computer)
+                                                        {
+                                                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"Crane {((CurrentStockInLoc + count) % 3) + 3} 模式非電腦模式，選擇其他Crane. CraneMode = {craneSignal[(CurrentStockInLoc + count) % 3].CrnMode}.");
+                                                            continue;
+                                                        }
+                                                        else if (craneSignal[(CurrentStockInLoc + count) % 3].CrnSts != clsConstValue.Crane.Status.Busy &&
+                                                                 craneSignal[(CurrentStockInLoc + count) % 3].CrnSts != clsConstValue.Crane.Status.Idle &&
+                                                                 craneSignal[(CurrentStockInLoc + count) % 3].CrnSts != clsConstValue.Crane.Status.PlcCheck)
+                                                        {
+                                                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"Crane {((CurrentStockInLoc + count) % 3) + 3} 狀態非電腦模式可控狀態，選擇其他Crane. CraneStatus = {craneSignal[(CurrentStockInLoc + count) % 3].CrnSts}.");
+                                                            continue;
+                                                        }
+
                                                         if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                                         {
                                                             sRemark = "Error: Begin失敗！";
@@ -1283,7 +1335,7 @@ namespace Mirle.DB.Proc
                                                             db.TransactionCtrl(TransactionTypes.Rollback);
                                                             break;
                                                         }
-                                                        sRemark = $"箱式倉設定儲位Line完成, jobId = {cmd.Cmd_Sno}.";
+                                                        sRemark = $"箱式倉設定儲位CraneID完成, jobId = {cmd.Cmd_Sno}.";
                                                         if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
                                                         {
                                                             db.TransactionCtrl(TransactionTypes.Rollback);
@@ -1316,7 +1368,7 @@ namespace Mirle.DB.Proc
                                                 }
                                                 if(!getEquNo)
                                                 {
-                                                    sRemark = $"箱式倉暫無空閒儲位, jobId = {cmd.Cmd_Sno}.";
+                                                    sRemark = $"箱式倉暫無空閒儲位或可自動運作的Crane, jobId = {cmd.Cmd_Sno}.";
                                                     if (sRemark != cmd.Remark)
                                                     {
                                                         Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);

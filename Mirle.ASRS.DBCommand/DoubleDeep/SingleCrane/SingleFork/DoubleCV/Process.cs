@@ -9,6 +9,7 @@ using Mirle.MapController;
 using Mirle.Middle;
 using Mirle.EccsSignal;
 using Mirle.DB.Proc;
+using Mirle.DB.Object;
 
 namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork.DoubleCV
 {
@@ -46,7 +47,7 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork.DoubleCV
             {
                 if (bOnline)
                 {
-                    _wcs.GetProc().FunAsrsCmd_DoubleCV_StockIn_Proc(_wms);
+                    _wcs.GetProc().FunAsrsCmd_DoubleCV_StockIn_Proc(_wms, clsCraneSignal.GetBox1CraneSingnal(), clsCraneSignal.GetBox2CraneSingnal(), clsCraneSignal.GetBox3CraneSingnal());
 
                     _wcs.GetProc().FunAsrsCmd_DoubleCV_Proc(device, clsTool.GetSqlLocation_ForIn(device),
                               router, _wms, middle, signal);

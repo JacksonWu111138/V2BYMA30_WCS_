@@ -338,8 +338,8 @@ namespace Mirle.Def
 
         public enum AlarmSts
         {
-            OnGoing = 0,
-            Clear = 1
+            OnGoing = 1,
+            Clear = 0
         }
 
         public enum BCRReadStatus

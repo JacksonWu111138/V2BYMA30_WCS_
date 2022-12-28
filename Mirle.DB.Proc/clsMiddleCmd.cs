@@ -251,7 +251,7 @@ namespace Mirle.DB.Proc
                                 return false;
                             }
 
-                            sRemark = "Remark: 命令完成";
+                            sRemark = "命令完成";
                             if (!FunMiddleCmdUpdateCmdSts(sCmdSno, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark))
                             {
                                 db.TransactionCtrl(TransactionTypes.Rollback);

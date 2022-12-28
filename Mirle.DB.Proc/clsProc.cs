@@ -135,7 +135,7 @@ namespace Mirle.DB.Proc
                                         continue;
                                     }
 
-                                    sRemark = "Remark: 命令完成";
+                                    sRemark = "命令完成";
                                     if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Finish_Wait, sRemark, db))
                                     {
                                         db.TransactionCtrl(TransactionTypes.Rollback);
@@ -1313,7 +1313,7 @@ namespace Mirle.DB.Proc
                                                             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Debug, $"Crane {((CurrentStockInLoc + count) % 3) + 3} 狀態非電腦模式可控狀態，選擇其他Crane. CraneStatus = {craneSignal[(CurrentStockInLoc + count) % 3].CrnSts}.");
                                                             continue;
                                                         }
-
+                                                        
                                                         if (db.TransactionCtrl(TransactionTypes.Begin) != DBResult.Success)
                                                         {
                                                             sRemark = "Error: Begin失敗！";
@@ -1326,7 +1326,7 @@ namespace Mirle.DB.Proc
 
                                                         if (Cmd_Mst.FunUpdateEquNo(cmd.Cmd_Sno, (((CurrentStockInLoc + count) % 3) + 3).ToString(), db))
                                                         {
-                                                            CurrentStockInLoc++;
+                                                            CurrentStockInLoc = (CurrentStockInLoc + count + 1) % 3;
                                                             if (CurrentStockInLoc > 2)
                                                                 CurrentStockInLoc = 0;
                                                         }
@@ -1335,13 +1335,15 @@ namespace Mirle.DB.Proc
                                                             db.TransactionCtrl(TransactionTypes.Rollback);
                                                             break;
                                                         }
-                                                        sRemark = $"箱式倉設定儲位CraneID完成, jobId = {cmd.Cmd_Sno}.";
+                                                        sRemark = $"箱式倉設定儲位CraneID完成.";
                                                         if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
                                                         {
                                                             db.TransactionCtrl(TransactionTypes.Rollback);
                                                             break;
                                                         }
 
+                                                        //修正，由Normal程序預約buffer
+                                                        /*
                                                         CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
                                                         {
                                                             jobId = cmd.Cmd_Sno,
@@ -1360,6 +1362,7 @@ namespace Mirle.DB.Proc
                                                             db.TransactionCtrl(TransactionTypes.Rollback);
                                                             break;
                                                         }
+                                                        */
 
                                                         db.TransactionCtrl(TransactionTypes.Commit);
                                                         getEquNo = true;

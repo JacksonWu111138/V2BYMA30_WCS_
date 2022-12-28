@@ -623,8 +623,8 @@ namespace Mirle.DB.Fun
             try
             {
                 string strSql = $"update {Parameter.clsCmd_Mst.TableName} set " +
-                    $"{Parameter.clsCmd_Mst.Column.Remark} = N'" + sRemark + 
-                    $"' where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}'";
+                    $"{Parameter.clsCmd_Mst.Column.Remark} = N'{sRemark}'" + 
+                    $" where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}'";
 
                 string strEM = "";
                 if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
@@ -790,8 +790,8 @@ namespace Mirle.DB.Fun
             try
             {
                 string strSql = $"update {Parameter.clsCmd_Mst.TableName} set" +
-                    $" {Parameter.clsCmd_Mst.Column.Remark} = N'" + sRemark + 
-                    $"', {Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{sCmdSts}' ";
+                    $" {Parameter.clsCmd_Mst.Column.Remark} = N'{sRemark}'" +
+                    $" , {Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{sCmdSts}' ";
 
                 if(sCmdSts == clsConstValue.CmdSts.strCmd_Initial)
                 {
@@ -835,8 +835,8 @@ namespace Mirle.DB.Fun
             try
             {
                 string strSql = $"update {Parameter.clsCmd_Mst.TableName} set " +
-                    $"{Parameter.clsCmd_Mst.Column.Remark} = N'" + sRemark + 
-                    $"', {Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{sCmdSts}', {Parameter.clsCmd_Mst.Column.Stn_No} = '{sStnNo}' ";
+                    $"{Parameter.clsCmd_Mst.Column.Remark} = N'{sRemark}'" +
+                    $" , {Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{sCmdSts}', {Parameter.clsCmd_Mst.Column.Stn_No} = '{sStnNo}' ";
 
                 if (sCmdSts == clsConstValue.CmdSts.strCmd_Initial)
                 {
@@ -880,7 +880,7 @@ namespace Mirle.DB.Fun
             try
             {
                 string strSql = $"update {Parameter.clsCmd_Mst.TableName} set " +
-                    $"{Parameter.clsCmd_Mst.Column.Remark} = N'" + sRemark + $"', {Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{sCmdSts}' ";
+                    $"{Parameter.clsCmd_Mst.Column.Remark} = N'{sRemark}', {Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{sCmdSts}' ";
                 strSql += $", {Parameter.clsCmd_Mst.Column.Cmd_Abnormal} = '{abnormal.ToString()}' ";
 
                 if (sCmdSts == clsConstValue.CmdSts.strCmd_Initial)

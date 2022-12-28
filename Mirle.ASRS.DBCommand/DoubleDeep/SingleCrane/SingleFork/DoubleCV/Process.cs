@@ -47,7 +47,9 @@ namespace Mirle.ASRS.DBCommand.DoubleDeep.SingleCrane.SingleFork.DoubleCV
             {
                 if (bOnline)
                 {
-                    _wcs.GetProc().FunAsrsCmd_DoubleCV_StockIn_Proc(_wms, clsCraneSignal.GetBox1CraneSingnal(), clsCraneSignal.GetBox2CraneSingnal(), clsCraneSignal.GetBox3CraneSingnal());
+                    //三台箱式倉crane只要有一個crane執行續有跑入庫選擇即可
+                    if(device.DeviceID == "3")
+                        _wcs.GetProc().FunAsrsCmd_DoubleCV_StockIn_Proc(_wms, clsCraneSignal.GetBox1CraneSingnal(), clsCraneSignal.GetBox2CraneSingnal(), clsCraneSignal.GetBox3CraneSingnal());
 
                     _wcs.GetProc().FunAsrsCmd_DoubleCV_Proc(device, clsTool.GetSqlLocation_ForIn(device),
                               router, _wms, middle, signal);

@@ -424,6 +424,18 @@ namespace Mirle.DB.Fun
                             nextColumn = lastColumn - 3;
                             nextRow = lastRow;
                             nextLevel = lastLevel;
+
+                            //避開校正儲位(0200101, 0400101, 0600101, 0800101)
+                            if(lastRow == 1 && lastLevel == 1)
+                            {
+                                if (lastColumn == 5)
+                                    nextColumn = 3;
+                                else if(lastColumn == 7)
+                                {
+                                    nextColumn = 1;
+                                    nextLevel = 2;
+                                }
+                            }
                         }
                         else if (lastColumn == 8)
                         {

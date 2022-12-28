@@ -2619,7 +2619,7 @@ namespace Mirle.WebAPI.Event
                         {
                             if (clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCSTID(Body.rackId))
                             {
-                                string sRemark = "Remark: 命令完成";
+                                string sRemark = "命令完成";
                                 if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateCmdSts(Body.jobId, clsConstValue.CmdSts_MiddleCmd.strCmd_Finish_Wait, sRemark))
                                 {
                                     strEM = $"Error: Update Middle cmdsts fail, jobId = {Body.jobId}.";

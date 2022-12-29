@@ -2427,6 +2427,7 @@ namespace Mirle.WebAPI.Event
                             con = ConveyorDef.GetBuffer(Body.position);
                         break;
                     default:
+                        con = ConveyorDef.GetBuffer(Body.position);
                         break;
                 }
 
@@ -2499,8 +2500,11 @@ namespace Mirle.WebAPI.Event
                 {
                     //新生成的命令，待時序處理起點預約
                 }
-                else if (((cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut && Body.position == cmd.Stn_No) || 
-                         (cmd.Cmd_Mode == clsConstValue.CmdMode.S2S && Body.position == cmd.New_Loc)) && 
+                else if (
+                         (
+                         (cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut && Body.position == cmd.Stn_No) || 
+                         (cmd.Cmd_Mode == clsConstValue.CmdMode.S2S && Body.position == cmd.New_Loc)
+                         ) && 
                          ConveyorDef.GetAGV_8FPort().Any(r => r.BufferName == Body.position) &&
                          clsDB_Proc.GetDB_Object().GetMiddleCmd().FunGetMiddleCmdbyCommandID(Body.jobId, ref middle))
                 {

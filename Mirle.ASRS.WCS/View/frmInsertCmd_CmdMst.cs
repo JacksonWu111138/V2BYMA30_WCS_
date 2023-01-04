@@ -103,6 +103,10 @@ namespace Mirle.ASRS.WCS.View
             switch (cbbCmdMode.Text.Trim().Split(':')[0])
             {
                 case clsConstValue.CmdMode.StockIn:
+                    if (string.IsNullOrWhiteSpace(txtLoc.Text) ||
+                        string.IsNullOrWhiteSpace(txtStnNo.Text))
+                        return false;
+                    else return true;
                 case clsConstValue.CmdMode.StockOut:
                     if (string.IsNullOrWhiteSpace(txtEquNo.Text) ||
                         string.IsNullOrWhiteSpace(txtLoc.Text) ||

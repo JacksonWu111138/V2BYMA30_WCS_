@@ -89,8 +89,6 @@ namespace Mirle.DB.Proc
                                     TimeSpan ts = ts1.Subtract(ts2).Duration();
                                     if (ts.TotalSeconds < 60) continue;
                                 }
-                                
-
 
                                 string sRemark = "";
                                 Location Start = null; Location End = null;
@@ -356,6 +354,23 @@ namespace Mirle.DB.Proc
                                 {
                                     if (Cmd_Mst.FunCheckWriteToMiddle(cmd.Cmd_Sno, db)) continue;
 
+                                    string sDate1 = cmd.updateFailTime;
+
+                                    if (!string.IsNullOrEmpty(sDate1))
+                                    {
+                                        string sClsTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                                        TimeSpan ts1 = new TimeSpan(DateTime.ParseExact(sDate1,
+                                                               "yyyy-MM-dd HH:mm:ss",
+                                                               System.Globalization.CultureInfo.InvariantCulture
+                                                               ).Ticks);
+                                        TimeSpan ts2 = new TimeSpan(DateTime.ParseExact(sClsTime,
+                                                               "yyyy-MM-dd HH:mm:ss",
+                                                               System.Globalization.CultureInfo.InvariantCulture
+                                                               ).Ticks);
+                                        TimeSpan ts = ts1.Subtract(ts2).Duration();
+                                        if (ts.TotalSeconds < 10) continue;
+                                    }
+
                                     Location sLoc_Start = null; Location sLoc_End = null;
                                     bool bCheck = Router.GetPath(Start, End, ref sLoc_Start, ref sLoc_End);
                                     if (bCheck == false)
@@ -516,8 +531,27 @@ namespace Mirle.DB.Proc
                                                 conveyor_To = ConveyorDef.GetBuffer(sLoc_End.LocationId);
                                             }
 
-                                            if (!Routdef.CheckSourceIsOK_NonASRS(cmd, sLoc_Start, middle, conveyor, db)) continue;
-                                            if (!Routdef.CheckDestinationIsOK_NonASRS(cmd, sLoc_End, middle, conveyor_To, db)) continue;
+                                            if (!Routdef.CheckSourceIsOK_NonASRS(cmd, sLoc_Start, middle, conveyor, db))
+                                            {
+                                                if(!Cmd_Mst.FunUpdateupdateFailTimeWithoutRemark(cmd.Cmd_Sno, db))
+                                                {
+                                                    sRemark = $"Error: 更新詢問起點({sLoc_Start.LocationId})失敗時間失敗!";
+                                                    if (sRemark != cmd.Remark)
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+                                                continue;
+                                            }
+                                            
+                                            if (!Routdef.CheckDestinationIsOK_NonASRS(cmd, sLoc_End, middle, conveyor_To, db))
+                                            {
+                                                if (!Cmd_Mst.FunUpdateupdateFailTimeWithoutRemark(cmd.Cmd_Sno, db))
+                                                {
+                                                    sRemark = $"Error: 更新詢問終點({sLoc_End.LocationId})失敗時間失敗!";
+                                                    if (sRemark != cmd.Remark)
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                }
+                                                continue;
+                                            }
                                             MiddleCmd middleCmd = new MiddleCmd();
                                             if (MiddleCmd.CheckHasMiddleCmdByCmdSno(cmd.Cmd_Sno, db) == DBResult.Success) continue;
                                             if (!MiddleCmd.FunGetMiddleCmd_NonASRS(cmd, sLoc_Start, sLoc_End, ref middleCmd, sDeviceID, db)) continue;
@@ -1335,12 +1369,26 @@ namespace Mirle.DB.Proc
                                                             db.TransactionCtrl(TransactionTypes.Rollback);
                                                             break;
                                                         }
+                                                        //預約CV由正常程序預約，初始CmdSts
                                                         sRemark = $"箱式倉設定儲位CraneID完成.";
-                                                        if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
+                                                        if (string.IsNullOrEmpty(cmd.CurLoc))
                                                         {
-                                                            db.TransactionCtrl(TransactionTypes.Rollback);
-                                                            break;
+                                                            if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Initial, sRemark, db))
+                                                            {
+                                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                                break;
+                                                            }
                                                         }
+                                                        else
+                                                        {
+                                                            if (!Cmd_Mst.FunUpdateCmdSts(cmd.Cmd_Sno, clsConstValue.CmdSts.strCmd_Running, sRemark, db))
+                                                            {
+                                                                db.TransactionCtrl(TransactionTypes.Rollback);
+                                                                break;
+                                                            }
+                                                        }
+
+                                                        
 
                                                         //修正，由Normal程序預約buffer
                                                         /*

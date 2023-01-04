@@ -373,7 +373,7 @@ namespace Mirle.DB.Fun
             {
                 string strEM = "";
                 string strSql = $"select * from {Parameter.clsMiddleCmd.TableName} where " +
-                    $"{Parameter.clsMiddleCmd.Column.CommandID} == '" + CmdSno + "'";
+                    $"{Parameter.clsMiddleCmd.Column.CommandID} = '{CmdSno}'";
                 int iRet = db.GetDataTable(strSql, ref dtTmp, ref strEM);
                 if (iRet != DBResult.Success && iRet != DBResult.NoDataSelect)
                 {

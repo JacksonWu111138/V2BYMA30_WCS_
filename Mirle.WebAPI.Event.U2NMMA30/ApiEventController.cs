@@ -1116,12 +1116,19 @@ namespace Mirle.WebAPI.Event
 
                         throw new Exception($"Error: 目前抵達命令終點，稍後等待命令清除！ jobId = {cmd.Cmd_Sno}.");
                     }
+                    else if (Body.location == ConveyorDef.Box.B1_054.BufferName && cmd.Cmd_Mode == clsConstValue.CmdMode.S2S && 
+                             (cmd.New_Loc == ConveyorDef.AGV.B1_070.BufferName || cmd.New_Loc == ConveyorDef.AGV.B1_074.BufferName || cmd.New_Loc == ConveyorDef.AGV.B1_070.BufferName))
+                    {
+                        throw new Exception($"Error: 箱式倉站對站命令尚未結束，稍後等待命令清除！ jobId = {cmd.Cmd_Sno}.");
+                    }
 
                     if(
+                       (
                        ((Body.location == ConveyorDef.Box.B1_037.BufferName || Body.location == ConveyorDef.Box.B1_117.BufferName) && cmd.Equ_No == "3") ||
                        ((Body.location == ConveyorDef.Box.B1_041.BufferName || Body.location == ConveyorDef.Box.B1_121.BufferName) && cmd.Equ_No == "4") ||
                        ((Body.location == ConveyorDef.Box.B1_045.BufferName || Body.location == ConveyorDef.Box.B1_125.BufferName) && cmd.Equ_No == "5")
-                        && cmd.Cmd_Mode == clsConstValue.CmdMode.StockIn 
+                       )
+                       && cmd.Cmd_Mode == clsConstValue.CmdMode.StockIn 
                        )
                     {
                         clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{cmd.Cmd_Sno}>This BCRCheck 是入庫命令在正確流道上，等待箱式倉入庫時序處理.");
@@ -1145,7 +1152,7 @@ namespace Mirle.WebAPI.Event
                     else
                     {
 
-                        if(Body.location == ConveyorDef.Box.B1_142.BufferName || Body.location == ConveyorDef.Box.B1_147.BufferName)
+                        if((Body.location == ConveyorDef.Box.B1_142.BufferName || Body.location == ConveyorDef.Box.B1_147.BufferName) && cmd.Cmd_Mode == clsConstValue.CmdMode.StockOut)
                         {
                             //順途也要上報至MES至詢問「該箱是否完成搬運」
                             CarrierReturnNextInfo checkInfo = new CarrierReturnNextInfo
@@ -1240,7 +1247,7 @@ namespace Mirle.WebAPI.Event
                     else if (Body.location == ConveyorDef.AGV.LO3_01.BufferName && Body.carrierType == clsConstValue.ControllerApi.CarrierType.Bin)
                     {
                         //1220更改，上報 Empty ESDCarrier Unload，由WES下達回庫命令
-                        //待加入電梯上報之StnNo站口名
+                        //加入名稱電梯LO3_01名稱為 LIFT5
                         EmptyESDCarrierUnloadInfo info = new EmptyESDCarrierUnloadInfo
                         {
                             carrierId = Body.barcode,
@@ -1254,6 +1261,7 @@ namespace Mirle.WebAPI.Event
 
                         //1220更改，取消
                         //設定為：生成空靜電箱回庫
+                        /*
                         string strEM = "";
                         cmd = new CmdMstInfo();
                         cmd.Cmd_Sno = clsDB_Proc.GetDB_Object().GetSNO().FunGetSeqNo(clsEnum.enuSnoType.CMDSUO);
@@ -1301,6 +1309,7 @@ namespace Mirle.WebAPI.Event
 
                         if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                             throw new Exception(strEM);
+                        */
                     }
                     else if (Body.location == ConveyorDef.E04.LO1_07.BufferName)
                     {

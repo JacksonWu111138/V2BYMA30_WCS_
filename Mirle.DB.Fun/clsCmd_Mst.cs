@@ -132,13 +132,14 @@ namespace Mirle.DB.Fun
                 return DBResult.Exception;
             }
         }
+        
         public int FunGetB800StockInOrL2LCommand(ref DataTable dtTmp, DataBase.DB db)
         {
             try
             {
                 string strEM = "";
                 string strSql = $"select * from {Parameter.clsCmd_Mst.TableName} where ";
-                strSql += $"{Parameter.clsCmd_Mst.Column.carrierType} in ('{clsConstValue.ControllerApi.CarrierType.Bin}') ";
+                strSql += $"{Parameter.clsCmd_Mst.Column.carrierType} in ('{clsConstValue.ControllerApi.CarrierType.Bin}', '{clsConstValue.WesApi.CarrierType.Bin}') ";
                 //strSql += $"or ({Parameter.clsCmd_Mst.Column.Cmd_Sts} = '{clsConstValue.CmdSts.strCmd_Running}' and " +
                 //    $"{Parameter.clsCmd_Mst.Column.CurDeviceID} = '{EquNo}' and " +
                 //    $"{Parameter.clsCmd_Mst.Column.CurLoc} in ({StockInLoc_Sql}))";
@@ -158,6 +159,7 @@ namespace Mirle.DB.Fun
                 return DBResult.Exception;
             }
         }
+        
         public bool FunGetCommand(string sCmdSno, ref CmdMstInfo cmd, ref int iRet, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
@@ -191,6 +193,7 @@ namespace Mirle.DB.Fun
                 dtTmp = null;
             }
         }
+        
         public bool FunGetCommandByDestination(string Destination, ref DataTable dtTmp , DataBase.DB db)
         {
             try
@@ -220,6 +223,7 @@ namespace Mirle.DB.Fun
                 return false;
             }
         }
+        
         public bool FunGetCommandByJobID(string JobID, ref CmdMstInfo cmd, ref int iRet, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
@@ -253,6 +257,7 @@ namespace Mirle.DB.Fun
                 dtTmp = null;
             }
         }
+        
         public bool FunGetCommandByCmdSno(string sCmdSno, ref CmdMstInfo cmd, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
@@ -286,6 +291,7 @@ namespace Mirle.DB.Fun
                 dtTmp = null;
             }
         }
+        
         public int FunGetCommand_byBoxID(string sBoxID, ref CmdMstInfo cmd, DataBase.DB db)
         {
             DataTable dtTmp = new DataTable();
@@ -675,6 +681,7 @@ namespace Mirle.DB.Fun
                 return false;
             }
         }
+        
         public bool FunUpdateupdateFailTime(string sCmdSno, string sRemark, DataBase.DB db)
         {
             try
@@ -682,6 +689,35 @@ namespace Mirle.DB.Fun
                 string strSql = $"update {Parameter.clsCmd_Mst.TableName} set " +
                     $"{Parameter.clsCmd_Mst.Column.updateFailTime} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +
                     $"', {Parameter.clsCmd_Mst.Column.Remark} = N'{sRemark}' ";
+                strSql += $", {Parameter.clsCmd_Mst.Column.Expose_Date} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
+                strSql += $" where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}' ";
+
+                string strEM = "";
+                if (db.ExecuteSQL(strSql, ref strEM) == DBResult.Success)
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, strSql);
+                    return true;
+                }
+                else
+                {
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Error, strSql + " => " + strEM);
+                    return false;
+                }
+            }
+            catch (Exception ex)
+            {
+                var cmet = System.Reflection.MethodBase.GetCurrentMethod();
+                clsWriLog.Log.subWriteExLog(cmet.DeclaringType.FullName + "." + cmet.Name, ex.Message);
+                return false;
+            }
+        }
+        
+        public bool FunUpdateupdateFailTimeWithoutRemark(string sCmdSno, DataBase.DB db)
+        {
+            try
+            {
+                string strSql = $"update {Parameter.clsCmd_Mst.TableName} set " +
+                    $"{Parameter.clsCmd_Mst.Column.updateFailTime} = '{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")}'";
                 strSql += $", {Parameter.clsCmd_Mst.Column.Expose_Date} = '" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "' ";
                 strSql += $" where {Parameter.clsCmd_Mst.Column.Cmd_Sno} = '{sCmdSno}' ";
 

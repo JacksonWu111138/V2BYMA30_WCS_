@@ -393,9 +393,11 @@ namespace Mirle.DB.Proc
                                             if (!middle.CheckIsInReady(con, ref sCmdSno_CV))
                                             {
                                                 sRemark = $"Error: {con.BufferName}並非送出Ready";
-                                                if (sRemark != cmd.Remark)
+                                                if(!Cmd_Mst.FunUpdateupdateFailTime(cmd.Cmd_Sno, sRemark, db))
                                                 {
-                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    sRemark = $"Error: 更新詢問起點({sLoc_Start.LocationId})失敗時間失敗!";
+                                                    if (sRemark != cmd.Remark)
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
                                                 }
 
                                                 continue;
@@ -403,10 +405,13 @@ namespace Mirle.DB.Proc
                                             else if (sCmdSno_CV != "00000" && sCmdSno_CV != cmd.Cmd_Sno)
                                             {
                                                 sRemark = $"Error: {con.BufferName}已被其他任務預約 => {sCmdSno_CV}";
-                                                if (sRemark != cmd.Remark)
+                                                if (!Cmd_Mst.FunUpdateupdateFailTime(cmd.Cmd_Sno, sRemark, db))
                                                 {
-                                                    Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                    sRemark = $"Error: 更新詢問起點({sLoc_Start.LocationId})失敗時間失敗!";
+                                                    if (sRemark != cmd.Remark)
+                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
                                                 }
+                                                
 
                                                 continue;
                                             }
@@ -471,10 +476,13 @@ namespace Mirle.DB.Proc
                                                 {
                                                     db.TransactionCtrl(TransactionTypes.Rollback);
                                                     sRemark = $"Error: 預約{con.BufferName}失敗";
-                                                    if (sRemark != cmd.Remark)
+                                                    if (!Cmd_Mst.FunUpdateupdateFailTime(cmd.Cmd_Sno, sRemark, db))
                                                     {
-                                                        Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
+                                                        sRemark = $"Error: 更新預約起點({sLoc_Start.LocationId})失敗時間失敗!";
+                                                        if (sRemark != cmd.Remark)
+                                                            Cmd_Mst.FunUpdateRemark(cmd.Cmd_Sno, sRemark, db);
                                                     }
+                                                    
 
                                                     continue;
                                                 }

@@ -1166,8 +1166,7 @@ namespace Mirle.WebAPI.Event
                             if (!clsAPI.GetAPI().GetCarrierReturnNext().FunReport(checkInfo, ref checkReply, clsAPI.GetWesApiConfig().IP))
                                 throw new Exception($"Error: Carrier Return Next fail, 建料未完成或詢問是否完成撿料失敗");
                         }
-
-
+                        
                         CVReceiveNewBinCmdInfo info = new CVReceiveNewBinCmdInfo
                         {
                             jobId = cmd.Cmd_Sno,
@@ -1178,6 +1177,16 @@ namespace Mirle.WebAPI.Event
                         con = ConveyorDef.GetBuffer(Body.location);
                         if (!clsAPI.GetAPI().GetCV_ReceiveNewBinCmd().FunReport(info, con.API.IP))
                             throw new Exception($"Error: CV_RECEIVE_NEW_BIN fail. jobId = {Body.jobId}");
+
+                        if (Body.location == ConveyorDef.Tower.E1_04.BufferName)
+                        {
+                            rMsg.returnCode = clsConstValue.ApiReturnCode.Waitretry;
+                            rMsg.returnComment = "";
+
+                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST record end!");
+                            clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<BCR_CHECK_REQUEST> <WCS Reply>\n{JsonConvert.SerializeObject(rMsg)}");
+                            return Json(rMsg);
+                        }
                     }
                     
                 }
@@ -1310,6 +1319,10 @@ namespace Mirle.WebAPI.Event
                         if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                             throw new Exception(strEM);
                         */
+                    }
+                    else if (Body.location == ConveyorDef.AGV.LO3_01.BufferName && Body.carrierType == clsConstValue.ControllerApi.CarrierType.Mag)
+                    {
+
                     }
                     else if (Body.location == ConveyorDef.E04.LO1_07.BufferName)
                     {
@@ -1495,244 +1508,226 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CMD_DESTINATION_CHECK start!");
             try
             {
-                //不會有Middle的命令需要CmdDestinationCheck
-                //if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().CheckHasMiddleCmdbyCmdSno(Body.jobId))
-                //{
-                    CmdMstInfo cmd = new CmdMstInfo();
-                    if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
-                        throw new Exception($"Error: CMDMST與middle都沒有此命令, jobId = {Body.jobId}.");
-                    else if (cmd.Cmd_Mode == CmdMode.StockOut)
+                CmdMstInfo cmd = new CmdMstInfo();
+                if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand(Body.jobId, ref cmd))
+                    throw new Exception($"Error: CMDMST與middle都沒有此命令, jobId = {Body.jobId}.");
+                else if (cmd.Cmd_Mode == CmdMode.StockOut)
+                {
+                    if (cmd.Stn_No.Contains(","))
                     {
-                        if (cmd.Stn_No.Contains(","))
+                        string[] locations = cmd.Stn_No.Split(',');
+
+                        //找尋當下閒置的撿料口
+                        BufferStatusQueryInfo info = new BufferStatusQueryInfo
                         {
-                            string[] locations = cmd.Stn_No.Split(',');
+                            jobId = cmd.Cmd_Sno
+                        };
+                        BufferStatusReply bufferStatusReply = new BufferStatusReply();
 
-                            //找尋當下閒置的撿料口
-                            BufferStatusQueryInfo info = new BufferStatusQueryInfo
-                            {
-                                jobId = cmd.Cmd_Sno
-                            };
-                            BufferStatusReply bufferStatusReply = new BufferStatusReply();
+                        bool isFindLocation = false;
+                        for (int i = 0; i < locations.Length; i++)
+                        {
+                            info.bufferId = locations[i];
+                            if (!clsAPI.GetAPI().GetBufferStatusQuery().FunReport(info, clsAPI.GetBoxApiConfig().IP, ref bufferStatusReply))
+                                throw new Exception($"Error: 詢問箱式倉撿料口失敗, jobId = {cmd.Cmd_Sno}.");
 
-                            bool isFindLocation = false;
-                            for (int i = 0; i < locations.Length; i++)
+                            //判斷撿料口若無命令序號則為空閒
+                            if(bufferStatusReply.jobId == "00000" || string.IsNullOrEmpty(bufferStatusReply.jobId))
                             {
-                                /*
                                 if (locations[i] == ConveyorDef.Box.B1_147.BufferName)
                                     rMsg.toLocation = "B1-146";
                                 else if (locations[i] == ConveyorDef.Box.B1_142.BufferName)
                                     rMsg.toLocation = "B1-141";
                                 isFindLocation = true;
-                                break;*/
-                                info.bufferId = locations[i];
-                                if (!clsAPI.GetAPI().GetBufferStatusQuery().FunReport(info, clsAPI.GetBoxApiConfig().IP, ref bufferStatusReply))
-                                    throw new Exception($"Error: 詢問箱式倉撿料口失敗, jobId = {cmd.Cmd_Sno}.");
-
-                                //判斷撿料口若無命令序號則為空閒
-                                if(bufferStatusReply.jobId == "00000" || string.IsNullOrEmpty(bufferStatusReply.jobId))
-                                {
-                                    if (locations[i] == ConveyorDef.Box.B1_147.BufferName)
-                                        rMsg.toLocation = "B1-146";
-                                    else if (locations[i] == ConveyorDef.Box.B1_142.BufferName)
-                                        rMsg.toLocation = "B1-141";
-                                    isFindLocation = true;
-                                    break;
-                                }
-                            }
-
-                            if (!isFindLocation)
-                            {
-                                rMsg.toLocation = "GO";
+                                break;
                             }
                         }
-                        else if ((cmd.Stn_No != ConveyorDef.Box.B1_062.BufferName && cmd.Stn_No != ConveyorDef.Box.B1_067.BufferName &&
-                                cmd.Stn_No != ConveyorDef.Box.B1_142.BufferName && cmd.Stn_No != ConveyorDef.Box.B1_147.BufferName) &&
-                                !ConveyorDef.GetLifetNode_List().Any(r => r.BufferName == Body.location))
+
+                        if (!isFindLocation)
                         {
-                            if (cmd.boxStockOutAgv == "")
-                            {
-                                cmd.boxStockOutAgv = ConveyorDef.GetB800CVOut().BufferName;
-                                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateboxStockOutAgv(Body.jobId, cmd.boxStockOutAgv))
-                                    rMsg.toLocation = cmd.boxStockOutAgv;
-                                else
-                                    throw new Exception($"Error: 更新boxStockOutAgv失敗, jobId = {Body.jobId}.");
-                            }
-                            else
-                            {
+                            rMsg.toLocation = "GO";
+                        }
+                    }
+                    else if ((cmd.Stn_No != ConveyorDef.Box.B1_062.BufferName && cmd.Stn_No != ConveyorDef.Box.B1_067.BufferName &&
+                            cmd.Stn_No != ConveyorDef.Box.B1_142.BufferName && cmd.Stn_No != ConveyorDef.Box.B1_147.BufferName) &&
+                            !ConveyorDef.GetLifetNode_List().Any(r => r.BufferName == Body.location))
+                    {
+                        if (cmd.boxStockOutAgv == "")
+                        {
+                            cmd.boxStockOutAgv = ConveyorDef.GetB800CVOut().BufferName;
+                            if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateboxStockOutAgv(Body.jobId, cmd.boxStockOutAgv))
                                 rMsg.toLocation = cmd.boxStockOutAgv;
-                            }
+                            else
+                                throw new Exception($"Error: 更新boxStockOutAgv失敗, jobId = {Body.jobId}.");
                         }
-                        else if (cmd.Stn_No == ConveyorDef.Box.B1_062.BufferName)
+                        else
                         {
-                            rMsg.toLocation = "B1-061";
+                            rMsg.toLocation = cmd.boxStockOutAgv;
                         }
-                        else if (cmd.Stn_No == ConveyorDef.Box.B1_067.BufferName)
+                    }
+                    else if (cmd.Stn_No == ConveyorDef.Box.B1_062.BufferName)
+                    {
+                        rMsg.toLocation = "B1-061";
+                    }
+                    else if (cmd.Stn_No == ConveyorDef.Box.B1_067.BufferName)
+                    {
+                        rMsg.toLocation = "B1-066";
+                    }
+                    else if (cmd.Stn_No == ConveyorDef.Box.B1_142.BufferName)
+                    {
+                        rMsg.toLocation = "B1-141";
+                    }
+                    else if (cmd.Stn_No == ConveyorDef.Box.B1_147.BufferName)
+                    {
+                        rMsg.toLocation = "B1-146";
+                    }
+                    else if (ConveyorDef.GetLifetNode_List().Any(r => r.BufferName == Body.location))
+                    {
+                        if (cmd.Stn_No == ConveyorDef.E04.LO1_07.BufferName)
                         {
-                            rMsg.toLocation = "B1-066";
+                            rMsg.toLocation = ConveyorDef.E04.LO1_07.BufferName;
                         }
-                        else if (cmd.Stn_No == ConveyorDef.Box.B1_142.BufferName)
+                        else if (ConveyorDef.GetSharingNode3F().Any(r => r.end.BufferName == cmd.Stn_No || r.start.BufferName == cmd.Stn_No)
+                            || ConveyorDef.GetNode_3F().Any(r => r.BufferName == cmd.Stn_No))
+                            rMsg.toLocation = ConveyorDef.AGV.LO4_04.BufferName;
+                        else if (ConveyorDef.GetSharingNode5F().Any(r => r.end.BufferName == cmd.Stn_No || r.start.BufferName == cmd.Stn_No)
+                            || ConveyorDef.GetNode_5F().Any(r => r.BufferName == cmd.Stn_No))
+                            rMsg.toLocation = ConveyorDef.AGV.LO5_04.BufferName;
+                        else if (ConveyorDef.GetSharingNode6F().Any(r => r.end.BufferName == cmd.Stn_No || r.start.BufferName == cmd.Stn_No)
+                            || ConveyorDef.GetNode_6F().Any(r => r.BufferName == cmd.Stn_No))
+                            rMsg.toLocation = ConveyorDef.AGV.LO6_04.BufferName;
+                        else
+                            rMsg.toLocation = ConveyorDef.AGV.LO3_01.BufferName;
+                    }
+                }
+                else if (cmd.Cmd_Mode == CmdMode.StockIn)
+                {
+                    if (cmd.CurLoc == "CVIN")
+                    {
+                        if (cmd.Loc != "Shelf")
                         {
-                            rMsg.toLocation = "B1-141";
-                        }
-                        else if (cmd.Stn_No == ConveyorDef.Box.B1_147.BufferName)
-                        {
-                            rMsg.toLocation = "B1-146";
-                        }
-                        else if (ConveyorDef.GetLifetNode_List().Any(r => r.BufferName == Body.location))
-                        {
-                            if (cmd.Stn_No == ConveyorDef.E04.LO1_07.BufferName)
+                            int temp = Convert.ToInt32(cmd.Loc.Substring(0, 2));
+                            if (temp > 8 && temp <= 12)
                             {
-                                rMsg.toLocation = ConveyorDef.E04.LO1_07.BufferName;
+                                if (Body.location == ConveyorDef.Box.B1_037.BufferName)
+                                    rMsg.toLocation = ConveyorDef.Box.B1_031.BufferName;
+                                else
+                                    rMsg.toLocation = ConveyorDef.Box.B1_111.BufferName;
                             }
-                            else if (ConveyorDef.GetSharingNode3F().Any(r => r.end.BufferName == cmd.Stn_No || r.start.BufferName == cmd.Stn_No)
-                                || ConveyorDef.GetNode_3F().Any(r => r.BufferName == cmd.Stn_No))
+                            else if (temp > 12 && temp <= 16)
+                            {
+                                if (Body.location == ConveyorDef.Box.B1_041.BufferName)
+                                    rMsg.toLocation = ConveyorDef.Box.B1_019.BufferName;
+                                else
+                                    rMsg.toLocation = ConveyorDef.Box.B1_099.BufferName;
+                            }
+                            else if (temp > 16 && temp <= 20)
+                            {
+                                if (Body.location == ConveyorDef.Box.B1_045.BufferName)
+                                    rMsg.toLocation = ConveyorDef.Box.B1_007.BufferName;
+                                else
+                                    rMsg.toLocation = ConveyorDef.Box.B1_087.BufferName;
+                            }
+                        }
+                    }
+                    else if (cmd.CurLoc == "CVWT")
+                    {
+                        if (cmd.Loc != "Shelf")
+                        {
+                            int temp = Convert.ToInt32(cmd.Loc.Substring(0, 2));
+                            if (temp == 10 || temp == 11)
+                            {
+                                if (Body.location == ConveyorDef.Box.B1_037.BufferName)
+                                    rMsg.toLocation = ConveyorDef.Box.B1_033.BufferName;
+                                else
+                                    rMsg.toLocation = ConveyorDef.Box.B1_113.BufferName;
+                            }
+                            else if (temp == 9 || temp == 12)
+                            {
+                                if (Body.location == ConveyorDef.Box.B1_037.BufferName)
+                                    rMsg.toLocation = ConveyorDef.Box.B1_036.BufferName;
+                                else
+                                    rMsg.toLocation = ConveyorDef.Box.B1_116.BufferName;
+                            }
+                            else if (temp == 14 || temp == 15)
+                            {
+                                if (Body.location == ConveyorDef.Box.B1_041.BufferName)
+                                    rMsg.toLocation = ConveyorDef.Box.B1_021.BufferName;
+                                else
+                                    rMsg.toLocation = ConveyorDef.Box.B1_101.BufferName;
+                            }
+                            else if (temp == 13 || temp == 16)
+                            {
+                                if (Body.location == ConveyorDef.Box.B1_041.BufferName)
+                                    rMsg.toLocation = ConveyorDef.Box.B1_024.BufferName;
+                                else
+                                    rMsg.toLocation = ConveyorDef.Box.B1_104.BufferName;
+                            }
+                            else if (temp == 18 || temp == 19)
+                            {
+                                if (Body.location == ConveyorDef.Box.B1_045.BufferName)
+                                    rMsg.toLocation = ConveyorDef.Box.B1_009.BufferName;
+                                else
+                                    rMsg.toLocation = ConveyorDef.Box.B1_089.BufferName;
+                            }
+                            else if (temp == 17 || temp == 20)
+                            {
+                                if (Body.location == ConveyorDef.Box.B1_045.BufferName)
+                                    rMsg.toLocation = ConveyorDef.Box.B1_012.BufferName;
+                                else
+                                    rMsg.toLocation = ConveyorDef.Box.B1_092.BufferName;
+                            }
+                        }
+                    }
+                    else
+                        rMsg.toLocation = "GO";
+                }
+                else if (cmd.Cmd_Mode == CmdMode.S2S)
+                {
+                    if (ConveyorDef.GetLifetNode_List().Any(r => r.BufferName == Body.location))
+                    {
+                        //Lift4C只有兩樓交換
+                        if(Body.location == ConveyorDef.E04.LO1_02.BufferName)
+                        {
+                            rMsg.toLocation = ConveyorDef.AGV.LO2_04.BufferName;
+                        }
+                        else if (Body.location == "LO2-02")
+                        {
+                            rMsg.toLocation = ConveyorDef.E04.LO1_07.BufferName;
+                        }
+                        else //Lift5C
+                        {
+                            if (ConveyorDef.GetSharingNode3F().Any(r => r.end.BufferName == cmd.New_Loc || r.start.BufferName == cmd.New_Loc) ||
+                                ConveyorDef.GetNode_3F().Any(r => r.BufferName == cmd.New_Loc))
                                 rMsg.toLocation = ConveyorDef.AGV.LO4_04.BufferName;
-                            else if (ConveyorDef.GetSharingNode5F().Any(r => r.end.BufferName == cmd.Stn_No || r.start.BufferName == cmd.Stn_No)
-                                || ConveyorDef.GetNode_5F().Any(r => r.BufferName == cmd.Stn_No))
+                            else if (ConveyorDef.GetSharingNode5F().Any(r => r.end.BufferName == cmd.New_Loc || r.start.BufferName == cmd.New_Loc) ||
+                                    ConveyorDef.GetNode_5F().Any(r => r.BufferName == cmd.New_Loc))
                                 rMsg.toLocation = ConveyorDef.AGV.LO5_04.BufferName;
-                            else if (ConveyorDef.GetSharingNode6F().Any(r => r.end.BufferName == cmd.Stn_No || r.start.BufferName == cmd.Stn_No)
-                                || ConveyorDef.GetNode_6F().Any(r => r.BufferName == cmd.Stn_No))
+                            else if (ConveyorDef.GetSharingNode6F().Any(r => r.end.BufferName == cmd.New_Loc || r.start.BufferName == cmd.New_Loc) || 
+                                    ConveyorDef.GetNode_6F().Any(r => r.BufferName == cmd.New_Loc))
                                 rMsg.toLocation = ConveyorDef.AGV.LO6_04.BufferName;
                             else
                                 rMsg.toLocation = ConveyorDef.AGV.LO3_01.BufferName;
                         }
                     }
-                    else if (cmd.Cmd_Mode == CmdMode.StockIn)
+                    else if ((cmd.New_Loc != ConveyorDef.Box.B1_062.BufferName && cmd.New_Loc != ConveyorDef.Box.B1_067.BufferName &&
+                            cmd.New_Loc != ConveyorDef.Box.B1_142.BufferName && cmd.New_Loc != ConveyorDef.Box.B1_147.BufferName) &&
+                            !ConveyorDef.GetLifetNode_List().Where(r => r.BufferName == Body.location).Any())
                     {
-                        if (cmd.CurLoc == "CVIN")
+                        if (cmd.boxStockOutAgv == "")
                         {
-                            if (cmd.Loc != "Shelf")
-                            {
-                                int temp = Convert.ToInt32(cmd.Loc.Substring(0, 2));
-                                if (temp > 8 && temp <= 12)
-                                {
-                                    if (Body.location == ConveyorDef.Box.B1_037.BufferName)
-                                        rMsg.toLocation = ConveyorDef.Box.B1_031.BufferName;
-                                    else
-                                        rMsg.toLocation = ConveyorDef.Box.B1_111.BufferName;
-                                }
-                                else if (temp > 12 && temp <= 16)
-                                {
-                                    if (Body.location == ConveyorDef.Box.B1_041.BufferName)
-                                        rMsg.toLocation = ConveyorDef.Box.B1_019.BufferName;
-                                    else
-                                        rMsg.toLocation = ConveyorDef.Box.B1_099.BufferName;
-                                }
-                                else if (temp > 16 && temp <= 20)
-                                {
-                                    if (Body.location == ConveyorDef.Box.B1_045.BufferName)
-                                        rMsg.toLocation = ConveyorDef.Box.B1_007.BufferName;
-                                    else
-                                        rMsg.toLocation = ConveyorDef.Box.B1_087.BufferName;
-                                }
-                            }
-                        }
-                        else if (cmd.CurLoc == "CVWT")
-                        {
-                            if (cmd.Loc != "Shelf")
-                            {
-                                int temp = Convert.ToInt32(cmd.Loc.Substring(0, 2));
-                                if (temp == 10 || temp == 11)
-                                {
-                                    if (Body.location == ConveyorDef.Box.B1_037.BufferName)
-                                        rMsg.toLocation = ConveyorDef.Box.B1_033.BufferName;
-                                    else
-                                        rMsg.toLocation = ConveyorDef.Box.B1_113.BufferName;
-                                }
-                                else if (temp == 9 || temp == 12)
-                                {
-                                    if (Body.location == ConveyorDef.Box.B1_037.BufferName)
-                                        rMsg.toLocation = ConveyorDef.Box.B1_036.BufferName;
-                                    else
-                                        rMsg.toLocation = ConveyorDef.Box.B1_116.BufferName;
-                                }
-                                else if (temp == 14 || temp == 15)
-                                {
-                                    if (Body.location == ConveyorDef.Box.B1_041.BufferName)
-                                        rMsg.toLocation = ConveyorDef.Box.B1_021.BufferName;
-                                    else
-                                        rMsg.toLocation = ConveyorDef.Box.B1_101.BufferName;
-                                }
-                                else if (temp == 13 || temp == 16)
-                                {
-                                    if (Body.location == ConveyorDef.Box.B1_041.BufferName)
-                                        rMsg.toLocation = ConveyorDef.Box.B1_024.BufferName;
-                                    else
-                                        rMsg.toLocation = ConveyorDef.Box.B1_104.BufferName;
-                                }
-                                else if (temp == 18 || temp == 19)
-                                {
-                                    if (Body.location == ConveyorDef.Box.B1_045.BufferName)
-                                        rMsg.toLocation = ConveyorDef.Box.B1_009.BufferName;
-                                    else
-                                        rMsg.toLocation = ConveyorDef.Box.B1_089.BufferName;
-                                }
-                                else if (temp == 17 || temp == 20)
-                                {
-                                    if (Body.location == ConveyorDef.Box.B1_045.BufferName)
-                                        rMsg.toLocation = ConveyorDef.Box.B1_012.BufferName;
-                                    else
-                                        rMsg.toLocation = ConveyorDef.Box.B1_092.BufferName;
-                                }
-                            }
+                            cmd.boxStockOutAgv = ConveyorDef.GetB800CVOut().BufferName;
+                            if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateboxStockOutAgv(Body.jobId, cmd.boxStockOutAgv))
+                                rMsg.toLocation = cmd.boxStockOutAgv;
+                            else
+                                throw new Exception($"Error: 更新boxStockOutAgv失敗, jobId = {Body.jobId}.");
                         }
                         else
-                            rMsg.toLocation = "GO";
-                    }
-                    else if (cmd.Cmd_Mode == CmdMode.S2S)
-                    {
-                        if (ConveyorDef.GetLifetNode_List().Any(r => r.BufferName == Body.location))
                         {
-                            //Lift4C只有兩樓交換
-                            if(Body.location == ConveyorDef.E04.LO1_02.BufferName)
-                            {
-                                rMsg.toLocation = ConveyorDef.AGV.LO2_04.BufferName;
-                            }
-                            else if (Body.location == "LO2-02")
-                            {
-                                rMsg.toLocation = ConveyorDef.E04.LO1_07.BufferName;
-                            }
-                            else //Lift5C
-                            {
-                                if (ConveyorDef.GetSharingNode3F().Any(r => r.end.BufferName == cmd.New_Loc || r.start.BufferName == cmd.New_Loc) ||
-                                    ConveyorDef.GetNode_3F().Any(r => r.BufferName == cmd.New_Loc))
-                                    rMsg.toLocation = ConveyorDef.AGV.LO4_04.BufferName;
-                                else if (ConveyorDef.GetSharingNode5F().Any(r => r.end.BufferName == cmd.New_Loc || r.start.BufferName == cmd.New_Loc) ||
-                                        ConveyorDef.GetNode_5F().Any(r => r.BufferName == cmd.New_Loc))
-                                    rMsg.toLocation = ConveyorDef.AGV.LO5_04.BufferName;
-                                else if (ConveyorDef.GetSharingNode6F().Any(r => r.end.BufferName == cmd.New_Loc || r.start.BufferName == cmd.New_Loc) || 
-                                        ConveyorDef.GetNode_6F().Any(r => r.BufferName == cmd.New_Loc))
-                                    rMsg.toLocation = ConveyorDef.AGV.LO6_04.BufferName;
-                                else
-                                    rMsg.toLocation = ConveyorDef.AGV.LO3_01.BufferName;
-                            }
-                        }
-                        else if ((cmd.New_Loc != ConveyorDef.Box.B1_062.BufferName && cmd.New_Loc != ConveyorDef.Box.B1_067.BufferName &&
-                                cmd.New_Loc != ConveyorDef.Box.B1_142.BufferName && cmd.New_Loc != ConveyorDef.Box.B1_147.BufferName) &&
-                                !ConveyorDef.GetLifetNode_List().Where(r => r.BufferName == Body.location).Any())
-                        {
-                            if (cmd.boxStockOutAgv == "")
-                            {
-                                cmd.boxStockOutAgv = ConveyorDef.GetB800CVOut().BufferName;
-                                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunUpdateboxStockOutAgv(Body.jobId, cmd.boxStockOutAgv))
-                                    rMsg.toLocation = cmd.boxStockOutAgv;
-                                else
-                                    throw new Exception($"Error: 更新boxStockOutAgv失敗, jobId = {Body.jobId}.");
-                            }
-                            else
-                            {
-                                rMsg.toLocation = cmd.boxStockOutAgv;
-                            }
+                            rMsg.toLocation = cmd.boxStockOutAgv;
                         }
                     }
-                //}
-                //else
-                //{
-                //    MiddleCmd middle = new MiddleCmd();
-                //    if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunGetMiddleCmdbyCommandID(Body.jobId, ref middle))
-                //        throw new Exception($"Error: Get middle command fail jobId: {Body.jobId}");
-                //    rMsg.toLocation = middle.Destination;
-                //}
+                }
                 rMsg.returnCode = clsConstValue.ApiReturnCode.Success;
                 rMsg.returnComment = "";
                 clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>CMD_DESTINATION_CHECK record end!");
@@ -1987,7 +1982,7 @@ namespace Mirle.WebAPI.Event
                 string strEM = "";
                 int MaxNumberOfcmd;
 
-                //是否要將Bcr改至撿料口，待討論
+                //是否要將Bcr改至撿料口，待討論//後不移動
                 if (Body.location == "B1-061")
                     con = ConveyorDef.Box.B1_062;
                 else if (Body.location == "B1-066")
@@ -3392,6 +3387,36 @@ namespace Mirle.WebAPI.Event
             clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>TASK_COMPLETE start!");
             try
             {
+
+                # region 20230109增加詢問該站口stockBar是否正常下降(貨物定位)_未實裝
+                /*
+                ConveyorInfo con = new ConveyorInfo();
+                MiddleCmd middleCmd = new MiddleCmd();
+                if(!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunGetMiddleCmdbyCommandID(Body.jobId, ref middleCmd))
+                    throw new Exception($"Error: 取得 middleCmd By CommandID 失敗, jobId = {Body.jobId}.");
+                
+                con = ConveyorDef.GetBuffer(middleCmd.Destination);
+                if(string.IsNullOrEmpty(con.API.IP))
+                    throw new Exception($"Error: 取得 AGV命令終點對應Controller IP 失敗, 終點buffer = {middleCmd.Destination}.");
+
+                clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>TASK_COMPLETE 詢問Buffer Stock Bar Status, Buffer = {middleCmd.Destination}.");
+               
+                BufferStatusQueryInfo statusQueryInfo = new BufferStatusQueryInfo
+                {
+                    bufferId = middleCmd.Destination
+                };
+                BufferStatusReply statusReply = new BufferStatusReply();
+
+                if (!clsAPI.GetAPI().GetBufferStatusQuery().FunReport(statusQueryInfo, con.API.IP, ref statusReply))
+                    throw new Exception($"Error: 傳送BufferStatusQuery詢問AGV命令終點狀態失敗, jobId = {Body.jobId} and buffer = {con.BufferName}");
+                else
+                    clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>TASK_COMPLETE  成功詢問Buffer Stock Bar Status, Buffer = {middleCmd.Destination}.");
+
+                if (statusReply.stbSts != ((int)clsEnum.StbStatus.Down).ToString())
+                    throw new Exception($"Error: AGV命令終點Port口Stock Bar非下降，請稍後再試或聯絡人員處理，jobId = {Body.jobId}, Buffer = {con.BufferName} and stbSts = {statusReply.stbSts}.");
+                */
+
+                #endregion
                 //AGV命令在middle層
                 string strEM = "";
                 if (!clsDB_Proc.GetDB_Object().GetMiddleCmd().FunMiddleCmdUpdateFinishByCommanId(Body.jobId, ref strEM))
@@ -3471,7 +3496,7 @@ namespace Mirle.WebAPI.Event
                 con = ConveyorDef.GetBuffer(Body.position);
 
                 //判斷此buffer是否預約過
-                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand_byBoxID("UNKNOWM_BIN_" + Body.position + "_1", ref cmd) == DBResult.Success)
+                if (clsDB_Proc.GetDB_Object().GetCmd_Mst().FunGetCommand_byBoxID("UNKNOWN_" + Body.position + "_1", ref cmd) == DBResult.Success)
                     doubleUnknownBin = true;
 
                 cmd = new CmdMstInfo();
@@ -3481,7 +3506,7 @@ namespace Mirle.WebAPI.Event
                     throw new Exception($"<{Body.jobId}>取得序號失敗！");
                 }
 
-                cmd.BoxID = "UNKNOWM_BIN_" + Body.position;
+                cmd.BoxID = "UNKNOWN_" + Body.position;
                 cmd.BoxID = doubleUnknownBin ? cmd.BoxID + "_2" : cmd.BoxID + "_1";
                 cmd.Cmd_Mode = clsConstValue.CmdMode.S2S;
                 cmd.CurDeviceID = "";
@@ -3527,7 +3552,7 @@ namespace Mirle.WebAPI.Event
 
                 cmd.Host_Name = "WCS";
                 cmd.Zone_ID = "";
-                cmd.carrierType = clsConstValue.ControllerApi.CarrierType.Bin;
+                cmd.carrierType = Body.carrierType == clsConstValue.ControllerApi.CarrierType.Mag ? clsConstValue.WesApi.CarrierType.Mag : clsConstValue.WesApi.CarrierType.Bin;
 
                 if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                     throw new Exception(strEM);

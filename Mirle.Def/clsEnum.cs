@@ -385,6 +385,12 @@ namespace Mirle.Def
             OUT = 2
         }
 
+        public enum StbStatus
+        {
+            Up = 0,
+            Down = 1
+        }
+
         public enum LocSts_Double
         {
             /// <summary>

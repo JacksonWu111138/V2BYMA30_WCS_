@@ -9,5 +9,6 @@ namespace Mirle.WebAPI.Event.U2NMMA30.Models
     public class UnknownBinLeaveInfo : BaseInfo
     {
         public string position { get; set; }
+        public string carrierType { get; set; }
     }
 }

@@ -1269,7 +1269,7 @@ namespace Mirle.WebAPI.Event
                         }
 
                         //1220更改，取消
-                        //設定為：生成空靜電箱回庫
+                        #region WCS自行生成空靜電箱回庫命令
                         /*
                         string strEM = "";
                         cmd = new CmdMstInfo();
@@ -1319,9 +1319,20 @@ namespace Mirle.WebAPI.Event
                         if (!clsDB_Proc.GetDB_Object().GetCmd_Mst().FunInsCmdMst(cmd, ref strEM))
                             throw new Exception(strEM);
                         */
+                        #endregion
                     }
                     else if (Body.location == ConveyorDef.AGV.LO3_01.BufferName && Body.carrierType == clsConstValue.ControllerApi.CarrierType.Mag)
                     {
+                        clsWriLog.Log.FunWriLog(WriLog.clsLog.Type.Trace, $"<{Body.jobId}>BCR_CHECK_REQUEST 電梯口檢測到空Mag須回庫");
+
+                        EmptyMagazineUnloadInfo emptyMagUnload = new EmptyMagazineUnloadInfo
+                        {
+                            carrierId = Body.barcode,
+                            location = ConveyorDef.AGV.LO3_01.StnNo
+                        };
+
+                        if (!clsAPI.GetAPI().GetEmptyMagazineUnload().FunReport(emptyMagUnload, clsAPI.GetWesApiConfig().IP))
+                            throw new Exception($"Error: 上WES報EmptyMagzineUnload失敗, CarrierID = {emptyMagUnload.carrierId} and location = {emptyMagUnload.location}.");
 
                     }
                     else if (Body.location == ConveyorDef.E04.LO1_07.BufferName)
